@@ -47,3 +47,8 @@ public/*.mp4
 public/*.webm
 public/*.wav
 public/*.mp3
+
+# local scripts / artifacts
+check-token.cjs
+scripts/blob-map.json
+scripts/upload_blobs.mjs.bak.*
