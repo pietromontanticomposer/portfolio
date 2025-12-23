@@ -1,0 +1,38 @@
+import Link from "next/link";
+
+export default function Header() {
+  return (
+    <header className="sticky top-0 z-40 bg-transparent/60 backdrop-blur-sm">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4 sm:px-10 lg:px-16">
+        <Link href="/" className="group flex items-center gap-3">
+          <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs font-semibold tracking-[0.2em] text-[color:var(--foreground)] shadow-[0_10px_30px_rgba(0,0,0,0.2)] transition group-hover:border-white/20">
+            PM
+          </span>
+          <span className="flex flex-col leading-tight">
+            <span className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--muted)]">
+              Composer
+            </span>
+            <span className="text-base font-semibold text-[color:var(--foreground)]">
+              Pietro Montanti
+            </span>
+          </span>
+        </Link>
+
+        <nav className="hidden items-center gap-6 text-sm text-[color:var(--muted)] sm:flex">
+          <Link href="#work" className="transition hover:text-[color:var(--foreground)]">
+            Projects
+          </Link>
+          <Link href="#servizi" className="transition hover:text-[color:var(--foreground)]">
+            Services
+          </Link>
+          <Link
+            href="mailto:pietromontanticomposer@gmail.com"
+            className="rounded-full border border-black/10 px-4 py-2 text-[color:var(--foreground)] transition hover:border-black/30"
+          >
+            Contact
+          </Link>
+        </nav>
+      </div>
+    </header>
+  );
+}
