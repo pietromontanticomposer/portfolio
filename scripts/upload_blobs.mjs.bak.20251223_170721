@@ -1,0 +1,165 @@
+import dotenv from "dotenv";
+import fs from "fs";
+import path from "path";
+import { put } from "@vercel/blob";
+
+dotenv.config({ path: ".env.local" });
+
+const root = process.cwd();
+const envPath = path.join(root, ".env.local");
+
+const loadToken = () => {
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    return process.env.BLOB_READ_WRITE_TOKEN;
+  }
+  const env = fs.readFileSync(envPath, "utf8");
+  const line = env.split("\n").find((l) => l.startsWith("BLOB_READ_WRITE_TOKEN="));
+  if (!line) {
+    throw new Error("BLOB_READ_WRITE_TOKEN not found in .env.local");
+  }
+  return line.split("=").slice(1).join("=").replace(/^\"|\"$/g, "");
+};
+
+const allowedExt = new Set([
+  ".mp3",
+  ".wav",
+  ".mp4",
+  ".webm",
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".svg",
+]);
+
+const walk = (dir) => {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  return entries.flatMap((entry) => {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) return walk(full);
+    return [full];
+  });
+};
+
+const collectFiles = () => {
+  const files = [];
+  const publicDir = path.join(root, "public");
+  const uploadsDir = path.join(publicDir, "uploads");
+  const partnersDir = path.join(publicDir, "partners");
+
+  if (fs.existsSync(uploadsDir)) {
+    files.push(...walk(uploadsDir));
+  }
+  if (fs.existsSync(partnersDir)) {
+    files.push(...walk(partnersDir));
+  }
+
+  const extraFiles = [
+    path.join(publicDir, "background.mp4"),
+    path.join(publicDir, "background.webm"),
+    path.join(publicDir, "background-poster.jpg"),
+  ];
+  extraFiles.forEach((file) => {
+    if (fs.existsSync(file)) files.push(file);
+  });
+
+  return files.filter((file) => allowedExt.has(path.extname(file).toLowerCase()));
+};
+
+const buildMappings = async () => {
+  const token = loadToken();
+  const files = collectFiles();
+  const outPath = path.join(root, "scripts", "blob-map.json");
+  const mappings = fs.existsSync(outPath)
+    ? JSON.parse(fs.readFileSync(outPath, "utf8"))
+    : {};
+
+  const filterArg = process.argv.find((arg) => arg.startsWith("--filter="));
+  const filter = filterArg ? filterArg.split("=").slice(1).join("=") : null;
+
+  const filteredFiles = filter
+    ? files.filter((file) => file.includes(filter))
+    : files;
+
+  const uploadsWithoutTracks =
+    filter === "public/uploads"
+      ? filteredFiles.filter((file) => !file.includes(`${path.sep}tracks${path.sep}`))
+      : filteredFiles;
+
+  const finalFiles = uploadsWithoutTracks;
+
+  process.stdout.write(`cwd: ${process.cwd()}\n`);
+  process.stdout.write(`root: ${root}\n`);
+  process.stdout.write(`outPath: ${outPath}\n`);
+  process.stdout.write(`files: ${files.length}, filtered: ${finalFiles.length}\n`);
+  process.stdout.write(`first 3: ${finalFiles.slice(0, 3).join(", ")}\n`);
+
+  if (!finalFiles.length) {
+    throw new Error("No files matched filter.");
+  }
+
+  const firstFile = finalFiles[0];
+  const firstRel = path.relative(path.join(root, "public"), firstFile).replace(/\\/g, "/");
+  const firstPathname = firstRel.split("/").map(encodeURIComponent).join("/");
+  if (!mappings[`/${firstRel}`]) {
+    process.stdout.write(`Smoke upload ${firstPathname}...\n`);
+    try {
+      const firstBuffer = fs.readFileSync(firstFile);
+      const smoke = await Promise.race([
+        put(firstPathname, firstBuffer, {
+          access: "public",
+          addRandomSuffix: false,
+          token,
+        }),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error(`Timeout smoke upload ${firstPathname}`)), 1800000)
+        ),
+      ]);
+      process.stdout.write(`Smoke URL: ${smoke.url}\n`);
+      mappings[`/${firstRel}`] = smoke.url;
+      fs.writeFileSync(outPath, JSON.stringify(mappings, null, 2));
+    } catch (error) {
+      console.error("Smoke upload failed:", error);
+      process.exit(1);
+    }
+  }
+
+  for (const file of finalFiles) {
+    const rel = path.relative(path.join(root, "public"), file).replace(/\\/g, "/");
+    const pathname = rel.split("/").map(encodeURIComponent).join("/");
+    if (mappings[`/${rel}`]) {
+      process.stdout.write(`Skip ${pathname}\n`);
+      continue;
+    }
+    process.stdout.write(`Uploading ${pathname}...\n`);
+    try {
+      const { size } = fs.statSync(file);
+      const payload = size <= 25 * 1024 * 1024
+        ? fs.readFileSync(file)
+        : fs.createReadStream(file);
+      const upload = put(pathname, payload, {
+        access: "public",
+        addRandomSuffix: false,
+        token,
+      });
+      const result = await Promise.race([
+        upload,
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error(`Timeout uploading ${pathname}`)), 1800000)
+        ),
+      ]);
+      mappings[`/${rel}`] = result.url;
+      process.stdout.write(`Uploaded ${pathname}\n`);
+      fs.writeFileSync(outPath, JSON.stringify(mappings, null, 2));
+    } catch (error) {
+      console.error(`Upload failed for ${pathname}:`, error);
+      process.exit(1);
+    }
+  }
+
+  process.stdout.write(`Saved mapping to ${outPath}\n`);
+};
+
+buildMappings().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

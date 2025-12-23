@@ -81,6 +81,22 @@ export default function AudioPlayer({
     wsRef.current = ws;
     ws.setVolume(volume);
 
+    let resizeObserver: ResizeObserver | null = null;
+    const syncWidth = () => {
+      if (!containerRef.current) return;
+      ws.setOptions({ width: containerRef.current.clientWidth });
+    };
+    if (typeof ResizeObserver !== "undefined") {
+      resizeObserver = new ResizeObserver(() => {
+        syncWidth();
+      });
+      resizeObserver.observe(containerRef.current);
+    } else {
+      window.addEventListener("resize", syncWidth);
+    }
+    // Ensure correct width after initial layout.
+    requestAnimationFrame(syncWidth);
+
     const safeSrc = encodeURI(src);
     const cached = peaksCache.get(safeSrc);
     const loadResult = cached ? ws.load(safeSrc, cached.peaks, cached.duration) : ws.load(safeSrc);
@@ -133,6 +149,8 @@ export default function AudioPlayer({
     });
 
     return () => {
+      if (resizeObserver) resizeObserver.disconnect();
+      window.removeEventListener("resize", syncWidth);
       setIsReady(false);
       cancelIdle(idleId);
       try {

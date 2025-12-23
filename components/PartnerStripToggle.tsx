@@ -1,18 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import AutoScrollStrip from "./AutoScrollStrip";
-import PosterCard from "./PosterCard";
+import PartnerAutoScrollStrip from "./PartnerAutoScrollStrip";
 
-type Poster = {
-  slug: string;
-  title: string;
-  year?: string;
-  tag?: string;
-  image?: string;
+type Partner = {
+  name: string;
+  image: string;
 };
 
-export default function StripToggle({ posters }: { posters: Poster[] }) {
+export default function PartnerStripToggle({ partners }: { partners: Partner[] }) {
   const [view, setView] = useState<"strip" | "grid">("strip");
 
   const isStrip = view === "strip";
@@ -47,20 +43,14 @@ export default function StripToggle({ posters }: { posters: Poster[] }) {
 
       {isStrip ? (
         <div className="strip-toggle-strip">
-          <AutoScrollStrip posters={posters} />
+          <PartnerAutoScrollStrip partners={partners} />
         </div>
       ) : (
         <div className="strip-toggle-grid">
-          <div className="poster-grid-gridview">
-            {posters.map((p) => (
-              <div key={p.slug}>
-                <PosterCard
-                  title={p.title}
-                  year={p.year}
-                  tag={p.tag}
-                  image={p.image}
-                  href={`/portfolio/${p.slug}`}
-                />
+          <div className="partner-grid-gridview">
+            {partners.map((p) => (
+              <div key={p.name} className="partner-card partner-card-tile">
+                <img src={p.image} alt={p.name} loading="lazy" decoding="async" />
               </div>
             ))}
           </div>

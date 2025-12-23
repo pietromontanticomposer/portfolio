@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.env*.local
+public/uploads/
+public/posters/
+public/partners/
+public/*.mp4
+public/*.webm
+public/*.wav
+public/*.mp3

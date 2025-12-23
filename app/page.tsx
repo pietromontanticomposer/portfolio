@@ -1,4 +1,5 @@
 import StripToggle from "../components/StripToggle";
+import PartnerStripToggle from "../components/PartnerStripToggle";
 import TrackPlayer from "../components/TrackPlayer";
 import { projects } from '../data/projects'
 
@@ -12,6 +13,25 @@ export default function Home() {
     tag: p.tag || 'Poster',
     image: p.image,
   }));
+
+  const partners = [
+    { name: 'Akeron Film', image: '/partners/akeron-film.png' },
+    { name: 'Quinta Parete', image: '/partners/quinta-parete.png' },
+    { name: 'Cassa Rurale AltoGarda Rovereto', image: '/partners/cassa-rurale-altogarda-rovereto.png' },
+    { name: 'Fondazione Caritro', image: '/partners/fondazione-caritro.png' },
+    { name: 'Fondazione Museo storico del Trentino', image: '/partners/fondazione-museo-storico-del-trentino.png' },
+    { name: 'Cooperativa Amalia Guardini', image: '/partners/cooperativa-amalia-guardini.png' },
+    { name: 'Comunità della Vallagarina', image: '/partners/comunit-della-vallagarina.png' },
+    { name: 'Comune di Soave', image: '/partners/comune-di-soave.png' },
+    { name: 'Comune di Rovereto', image: '/partners/comune-di-rovereto.png' },
+    { name: 'MITAG Museo Storico Italiano della Guerra', image: '/partners/mitag-museo-storico-italiano-della-guerra.png' },
+    { name: 'Pro Loco Soave', image: '/partners/pro-loco-soave.png' },
+    { name: 'Etika Energia', image: '/partners/etika.png' },
+    { name: 'Evotek', image: '/partners/evotek.png' },
+    { name: 'In Tavola', image: '/partners/in-tavola.png' },
+    { name: 'Movie Art Pro', image: '/partners/movie-art-pro.png' },
+    { name: 'Marina di Venezia Camping Village', image: '/partners/marina-di-venezia-camping-village.png' },
+  ];
 
   const selectedTracks = [
     {
@@ -164,6 +184,9 @@ export default function Home() {
               </div>
               <div className="partner-grid mt-6">
                 <div className="partner-card">
+                  <img src="/partners/akeron-film.png" alt="Akeron Film" loading="lazy" decoding="async" />
+                </div>
+                <div className="partner-card">
                   <img src="/partners/quinta-parete.png" alt="Quinta Parete" loading="lazy" decoding="async" />
                 </div>
                 <div className="partner-card">
@@ -173,16 +196,37 @@ export default function Home() {
                   <img src="/partners/fondazione-caritro.png" alt="Fondazione Caritro" loading="lazy" decoding="async" />
                 </div>
                 <div className="partner-card">
+                  <img src="/partners/fondazione-museo-storico-del-trentino.png" alt="Fondazione Museo storico del Trentino" loading="lazy" decoding="async" />
+                </div>
+                <div className="partner-card">
                   <img src="/partners/cooperativa-amalia-guardini.png" alt="Cooperativa Amalia Guardini" loading="lazy" decoding="async" />
                 </div>
                 <div className="partner-card">
                   <img src="/partners/comunit-della-vallagarina.png" alt="Comunità della Vallagarina" loading="lazy" decoding="async" />
                 </div>
                 <div className="partner-card">
+                  <img src="/partners/comune-di-soave.png" alt="Comune di Soave" loading="lazy" decoding="async" />
+                </div>
+                <div className="partner-card">
                   <img src="/partners/comune-di-rovereto.png" alt="Comune di Rovereto" loading="lazy" decoding="async" />
                 </div>
                 <div className="partner-card">
                   <img src="/partners/mitag-museo-storico-italiano-della-guerra.png" alt="MITAG Museo Storico Italiano della Guerra" loading="lazy" decoding="async" />
+                </div>
+                <div className="partner-card">
+                  <img src="/partners/pro-loco-soave.png" alt="Pro Loco Soave" loading="lazy" decoding="async" />
+                </div>
+                <div className="partner-card">
+                  <img src="/partners/etika.png" alt="Etika Energia" loading="lazy" decoding="async" />
+                </div>
+                <div className="partner-card">
+                  <img src="/partners/evotek.png" alt="Evotek" loading="lazy" decoding="async" />
+                </div>
+                <div className="partner-card">
+                  <img src="/partners/in-tavola.png" alt="In Tavola" loading="lazy" decoding="async" />
+                </div>
+                <div className="partner-card">
+                  <img src="/partners/movie-art-pro.png" alt="Movie Art Pro" loading="lazy" decoding="async" />
                 </div>
                 <div className="partner-card">
                   <img src="/partners/marina-di-venezia-camping-village.png" alt="Marina di Venezia Camping Village" loading="lazy" decoding="async" />
