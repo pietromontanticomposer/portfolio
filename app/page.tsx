@@ -1,95 +1,89 @@
 import StripToggle from "../components/StripToggle";
 import PartnerStripToggle from "../components/PartnerStripToggle";
 import TrackPlayer from "../components/TrackPlayer";
+import Image from 'next/image';
 import { projects } from '../data/projects'
 
+// Move arrays outside component to prevent recreation on every render
+const posters = projects.map((p) => ({
+  slug: p.slug,
+  title: p.title,
+  year: p.year,
+  tag: p.tag || 'Poster',
+  image: p.image,
+}));
+
+const partners = [
+  { name: 'Akeron Film', image: '/partners/akeron-film.png' },
+  { name: 'Cassa Rurale AltoGarda Rovereto', image: '/partners/cassa_rurale_alto_garda_rovereto.png' },
+  { name: 'Fondazione Caritro', image: '/partners/fondazione_caritro.png' },
+  { name: 'Fondazione Museo storico del Trentino', image: '/partners/fondazione-museo-storico-del-trentino.png' },
+  { name: 'Cooperativa Amalia Guardini', image: '/partners/cooperativa_amalia_guardini.png' },
+  { name: 'Comunità della Vallagarina', image: '/partners/comunita_della_vallagarina.png' },
+  { name: 'Comune di Soave', image: '/partners/comune-di-soave.png' },
+  { name: 'Comune di Rovereto', image: '/partners/comune_di_rovereto.png' },
+  { name: 'Pro Loco Soave', image: '/partners/pro-loco-soave.png' },
+  { name: 'Etika Energia', image: '/partners/etika.png' },
+  { name: 'Evotek', image: '/partners/evotek.png' },
+  { name: 'In Tavola', image: '/partners/in-tavola.png' },
+  { name: 'Movie Art Pro', image: '/partners/movie-art-pro.png' },
+  { name: 'Marina di Venezia Camping Village', image: '/partners/marina_di_venezia.png' },
+];
+
+const selectedTracks = [
+  {
+    file: '/uploads/tracks/selected tracks/My Crown, My Ambition, My Queen.mp3',
+    context: 'My Crown, My Ambition, My Queen',
+    cover: '/uploads/copertina album/copertina claudio re.jpg',
+  },
+  {
+    file: "/uploads/tracks/selected tracks/What If A Man Cant Regret.mp3",
+    context: "What If A Man Can't Regret",
+    cover: '/uploads/copertina album/copertina claudio re.jpg',
+  },
+  {
+    file: '/uploads/tracks/selected tracks/The Spectre.mp3',
+    context: 'The Spectre',
+    cover: '/uploads/copertina album/copertina claudio re.jpg',
+  },
+  {
+    file: '/uploads/tracks/selected tracks/Ending Titles.mp3',
+    context: 'Ending Titles',
+    cover: '/uploads/copertina album/copertina soggetto obsoleto.jpg',
+  },
+  {
+    file: '/uploads/tracks/selected tracks/Obsolete Subject And Past Times.mp3',
+    context: 'Obsolete Subject And Past Times',
+    cover: '/uploads/copertina album/copertina soggetto obsoleto.jpg',
+  },
+  {
+    file: '/uploads/tracks/selected tracks/Il mio ritmo.mp3',
+    context: 'Il mio ritmo',
+    cover: "/uploads/copertina album/copertina l'appartamento.jpeg",
+  },
+  {
+    file: "/uploads/tracks/selected tracks/The Mothers Tale.mp3",
+    context: "The Mother's Tale",
+    cover: '/uploads/copertina album/copertina la sonata del caos.jpg',
+  },
+  {
+    file: "/uploads/tracks/selected tracks/Talias Farewell.mp3",
+    context: "Talia's Farewell",
+    cover: '/uploads/copertina album/copertina la sonata del caos.jpg',
+  },
+  {
+    file: '/uploads/tracks/selected tracks/Convivium.mp3',
+    context: 'Convivium',
+    cover: '/uploads/copertina album/copertina i veneti antichi.png',
+  },
+  {
+    file: '/uploads/tracks/selected tracks/The Battle.mp3',
+    context: 'The Battle',
+    cover: '/uploads/copertina album/copertina i veneti antichi.png',
+  },
+];
+
 export default function Home() {
-  
-  // Use the projects defined in data/projects to populate the homepage strip
-  const posters = projects.map((p) => ({
-    slug: p.slug,
-    title: p.title,
-    year: p.year,
-    tag: p.tag || 'Poster',
-    image: p.image,
-  }));
-
-  const partners = [
-    { name: 'Akeron Film', image: '/partners/akeron-film.png' },
-    { name: 'Quinta Parete', image: '/partners/quinta-parete.png' },
-    { name: 'Cassa Rurale AltoGarda Rovereto', image: '/partners/cassa-rurale-altogarda-rovereto.png' },
-    { name: 'Fondazione Caritro', image: '/partners/fondazione-caritro.png' },
-    { name: 'Fondazione Museo storico del Trentino', image: '/partners/fondazione-museo-storico-del-trentino.png' },
-    { name: 'Cooperativa Amalia Guardini', image: '/partners/cooperativa-amalia-guardini.png' },
-    { name: 'Comunità della Vallagarina', image: '/partners/comunit-della-vallagarina.png' },
-    { name: 'Comune di Soave', image: '/partners/comune-di-soave.png' },
-    { name: 'Comune di Rovereto', image: '/partners/comune-di-rovereto.png' },
-    { name: 'MITAG Museo Storico Italiano della Guerra', image: '/partners/mitag-museo-storico-italiano-della-guerra.png' },
-    { name: 'Pro Loco Soave', image: '/partners/pro-loco-soave.png' },
-    { name: 'Etika Energia', image: '/partners/etika.png' },
-    { name: 'Evotek', image: '/partners/evotek.png' },
-    { name: 'In Tavola', image: '/partners/in-tavola.png' },
-    { name: 'Movie Art Pro', image: '/partners/movie-art-pro.png' },
-    { name: 'Marina di Venezia Camping Village', image: '/partners/marina-di-venezia-camping-village.png' },
-  ];
-
-  const selectedTracks = [
-    {
-      file: '/uploads/tracks/Selected Tracks/The Storm.mp3',
-      context: 'The Storm',
-      cover: '/uploads/copertina album/copertina claudio re.jpg',
-    },
-    {
-      file: '/uploads/tracks/Selected Tracks/My Crown, My Ambition, My Queen.mp3',
-      context: 'My Crown, My Ambition, My Queen',
-      cover: '/uploads/copertina album/copertina claudio re.jpg',
-    },
-    {
-      file: "/uploads/tracks/Selected Tracks/What If A Man Can't Regret.mp3",
-      context: "What If A Man Can't Regret",
-      cover: '/uploads/copertina album/copertina claudio re.jpg',
-    },
-    {
-      file: '/uploads/tracks/Selected Tracks/The Spectre.mp3',
-      context: 'The Spectre',
-      cover: '/uploads/copertina album/copertina claudio re.jpg',
-    },
-    {
-      file: '/uploads/tracks/Selected Tracks/Ending Titles.wav',
-      context: 'Ending Titles',
-      cover: '/uploads/copertina album/copertina soggetto obsoleto.jpg',
-    },
-    {
-      file: '/uploads/tracks/Selected Tracks/Obsolete Subject And Past Times.wav',
-      context: 'Obsolete Subject And Past Times',
-      cover: '/uploads/copertina album/copertina soggetto obsoleto.jpg',
-    },
-    {
-      file: '/uploads/tracks/Selected Tracks/Il mio ritmo.wav',
-      context: 'Il mio ritmo',
-      cover: "/uploads/copertina album/copertina l'appartamento.jpeg",
-    },
-    {
-      file: '/uploads/tracks/Selected Tracks/The Mother’s Tale.wav',
-      context: 'The Mother’s Tale',
-      cover: '/uploads/copertina album/copertina la sonata del caos.jpg',
-    },
-    {
-      file: '/uploads/tracks/Selected Tracks/Talia’s Farewell.wav',
-      context: 'Talia’s Farewell',
-      cover: '/uploads/copertina album/copertina la sonata del caos.jpg',
-    },
-    {
-      file: '/uploads/tracks/Selected Tracks/Convivium.mp3',
-      context: 'Convivium',
-      cover: '/uploads/copertina album/copertina i veneti antichi.png',
-    },
-    {
-      file: '/uploads/tracks/Selected Tracks/The Battle.wav',
-      context: 'The Battle',
-      cover: '/uploads/copertina album/copertina i veneti antichi.png',
-    },
-  ];
 
   return (
     <div className="relative min-h-screen">
@@ -136,8 +130,10 @@ export default function Home() {
         <section id="work" className="w-full overflow-visible">
           <span id="work-grid" className="sr-only" />
           <div className="scroll-shell">
-            <div className="scroll-shell-label">
-              Selected Film Posters
+            <div className="w-full flex justify-center">
+              <h3 className="section-title text-2xl text-[color:var(--foreground)]">
+                Selected Film Posters
+              </h3>
             </div>
             <StripToggle posters={posters} />
           </div>
@@ -147,11 +143,13 @@ export default function Home() {
           <section className="flex flex-col gap-8">
             <div className="card-shell overflow-hidden">
               <div className="bio-grid gap-6">
-                <div className="bio-photo">
-                  <img
+                <div className="bio-photo relative">
+                  <Image
                     src="/uploads/foto-sito.jpg"
                     alt="Portrait"
-                    className="h-full w-full object-cover"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 </div>
                 <div className="p-8">
@@ -176,61 +174,15 @@ export default function Home() {
 
             <div className="section-divider" aria-hidden="true" />
 
-            <section className="card-shell p-8">
-              <div className="flex items-center justify-between">
-                <h3 className="section-title text-2xl text-[color:var(--foreground)]">
-                  Collaborations
-                </h3>
-              </div>
-              <div className="partner-grid mt-6">
-                <div className="partner-card">
-                  <img src="/partners/akeron-film.png" alt="Akeron Film" loading="lazy" decoding="async" />
+            <section className="w-full overflow-visible">
+              <span id="collaborations" className="sr-only" />
+              <div className="scroll-shell">
+                <div className="w-full flex justify-center">
+                  <h3 className="section-title text-2xl text-[color:var(--foreground)]">
+                    Collaborations
+                  </h3>
                 </div>
-                <div className="partner-card">
-                  <img src="/partners/quinta-parete.png" alt="Quinta Parete" loading="lazy" decoding="async" />
-                </div>
-                <div className="partner-card">
-                  <img src="/partners/cassa-rurale-altogarda-rovereto.png" alt="Cassa Rurale AltoGarda Rovereto" loading="lazy" decoding="async" />
-                </div>
-                <div className="partner-card">
-                  <img src="/partners/fondazione-caritro.png" alt="Fondazione Caritro" loading="lazy" decoding="async" />
-                </div>
-                <div className="partner-card">
-                  <img src="/partners/fondazione-museo-storico-del-trentino.png" alt="Fondazione Museo storico del Trentino" loading="lazy" decoding="async" />
-                </div>
-                <div className="partner-card">
-                  <img src="/partners/cooperativa-amalia-guardini.png" alt="Cooperativa Amalia Guardini" loading="lazy" decoding="async" />
-                </div>
-                <div className="partner-card">
-                  <img src="/partners/comunit-della-vallagarina.png" alt="Comunità della Vallagarina" loading="lazy" decoding="async" />
-                </div>
-                <div className="partner-card">
-                  <img src="/partners/comune-di-soave.png" alt="Comune di Soave" loading="lazy" decoding="async" />
-                </div>
-                <div className="partner-card">
-                  <img src="/partners/comune-di-rovereto.png" alt="Comune di Rovereto" loading="lazy" decoding="async" />
-                </div>
-                <div className="partner-card">
-                  <img src="/partners/mitag-museo-storico-italiano-della-guerra.png" alt="MITAG Museo Storico Italiano della Guerra" loading="lazy" decoding="async" />
-                </div>
-                <div className="partner-card">
-                  <img src="/partners/pro-loco-soave.png" alt="Pro Loco Soave" loading="lazy" decoding="async" />
-                </div>
-                <div className="partner-card">
-                  <img src="/partners/etika.png" alt="Etika Energia" loading="lazy" decoding="async" />
-                </div>
-                <div className="partner-card">
-                  <img src="/partners/evotek.png" alt="Evotek" loading="lazy" decoding="async" />
-                </div>
-                <div className="partner-card">
-                  <img src="/partners/in-tavola.png" alt="In Tavola" loading="lazy" decoding="async" />
-                </div>
-                <div className="partner-card">
-                  <img src="/partners/movie-art-pro.png" alt="Movie Art Pro" loading="lazy" decoding="async" />
-                </div>
-                <div className="partner-card">
-                  <img src="/partners/marina-di-venezia-camping-village.png" alt="Marina di Venezia Camping Village" loading="lazy" decoding="async" />
-                </div>
+                <PartnerStripToggle partners={partners} />
               </div>
             </section>
 
@@ -243,7 +195,7 @@ export default function Home() {
               <div className="mt-6">
                 <TrackPlayer
                   tracks={selectedTracks}
-                  coverSrc={selectedTracks[0]?.cover ?? '/uploads/foto-sito.jpg'}
+                  coverSrc={selectedTracks[0]?.cover ?? 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/uploads/foto-sito.jpg'}
                 />
               </div>
             </section>

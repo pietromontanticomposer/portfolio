@@ -4,34 +4,34 @@ export const projects = [
     title: 'Claudio Re',
     year: '2020',
     tag: 'Short',
-    image: '/uploads/locandina claudio re.jpg',
-    largeImage: '/uploads/locandina claudio re.jpg',
+    image: '/posters/poster claudio re.jpg',
+    largeImage: '/posters/poster claudio re.jpg',
     description: `Claudio Re is a short film directed by Marco Martini, inspired by Hamlet and centered on the psychological unraveling of King Claudius after committing murder to secure his throne.
   The score employs a dark hybrid orchestral language, blending traditional orchestration with ancient instruments to create a tense, timeless atmosphere.
-  Both composition and dark, restrained mix were shaped to emphasize the film’s black-and-white imagery, reinforcing Claudius’ guilt and paranoia and amplifying his fear of being killed in turn. The music acts as an internal pressure, exposing the fracture between his public authority and inner collapse.`,
+  Both composition and dark, restrained mix were shaped to emphasize the film's black-and-white imagery, reinforcing Claudius' guilt and paranoia and amplifying his fear of being killed in turn. The music acts as an internal pressure, exposing the fracture between his public authority and inner collapse.`,
     tracks: [
       {
-        file: '/uploads/tracks/Claudio Re/The Storm.mp3',
+        file: "/uploads/tracks/musiche claudio re/The Storm.mp3",
         context: 'The Storm',
       },
       {
-        file: '/uploads/tracks/Claudio Re/My Crown, My Ambition, My Queen.mp3',
+        file: "/uploads/tracks/musiche claudio re/My Crown, My Ambition, My Queen.mp3",
         context: 'My Crown, My Ambition, My Queen',
       },
       {
-        file: "/uploads/tracks/Claudio Re/What If A Man Can't Regret.mp3",
+        file: "/uploads/tracks/musiche claudio re/What If A Man Cant Regret.mp3",
         context: "What If A Man Can't Regret",
       },
       {
-        file: '/uploads/tracks/Claudio Re/The Spectre.mp3',
+        file: "/uploads/tracks/musiche claudio re/The Spectre.mp3",
         context: 'The Spectre',
       },
       {
-        file: "/uploads/tracks/Claudio Re/King's Lament.mp3",
+        file: "/uploads/tracks/musiche claudio re/Kings Lament.mp3",
         context: "King's Lament",
       },
       {
-        file: '/uploads/tracks/Claudio Re/My Sin Is Rotten.mp3',
+        file: "/uploads/tracks/musiche claudio re/My Sin Is Rotten.mp3",
         context: 'My Sin Is Rotten',
       },
     ],
@@ -41,23 +41,23 @@ export const projects = [
     title: 'Soggetto Obsoleto',
     year: '2021',
     tag: 'Short',
-    image: '/uploads/locandina soggetto obsoleto.jpg',
-    largeImage: '/uploads/locandina soggetto obsoleto.jpg',
+    image: '/posters/poster soggetto obsoleto.jpg',
+    largeImage: '/posters/poster soggetto obsoleto.jpg',
     description: `Soggetto Obsoleto is a short film directed by Nicola Pegg, set in a dystopian society where individuals are periodically evaluated according to their social usefulness and risk being declared "obsolete."
   The score is deliberately absent throughout most of the film and enters only in the final section, during the closing dialogue between father and son.
   Music is used as a moment of emotional revelation, introducing intimacy and humanity after prolonged restraint, and marking a clear contrast between the impersonal system that governs the story and the private bond at its core.`,
     videoEmbed: 'https://www.youtube.com/embed/hoA5rKr7sZU',
     tracks: [
       {
-        file: '/uploads/tracks/Soggetto Obsoleto/Ending Titles.wav',
+        file: "/uploads/tracks/musiche soggetto obsoleto/Ending Titles.mp3",
         context: 'Ending Titles',
       },
       {
-        file: '/uploads/tracks/Soggetto Obsoleto/Obsolete Subject And Past Times.wav',
+        file: "/uploads/tracks/musiche soggetto obsoleto/Obsolete Subject And Past Times.mp3",
         context: 'Obsolete Subject And Past Times',
       },
       {
-        file: '/uploads/tracks/Soggetto Obsoleto/Sitting On The Seashore.wav',
+        file: "/uploads/tracks/musiche soggetto obsoleto/Sitting On The Seashore.mp3",
         context: 'Sitting On The Seashore',
       },
     ],
@@ -67,19 +67,19 @@ export const projects = [
     title: 'I Veneti Antichi',
     year: '2024',
     tag: 'Documentary',
-    image: '/uploads/i veneti antichi.jpg',
-    largeImage: '/uploads/i veneti antichi.jpg',
+    image: '/posters/poster i veneti antichi.jpg',
+    largeImage: '/posters/poster i veneti antichi.jpg',
     description: `I Veneti Antichi – Riding the Myth is a historical docu-film directed by Tommaso Giusto and produced by Akeron Film, dedicated to the ancient Veneti civilization and their mythic and cultural imagination.
   I composed the music for the battle sequences and the ritual banquet scenes, working on two distinct registers: on one side a tighter, more rhythmic writing to support the conflict, on the other a more ceremonial and evocative musical framework for communal moments.
   The score accompanies the cinematic reconstructions, reinforcing the epic tone of the story while maintaining narrative clarity and an educational purpose.`,
     videoEmbed: 'https://www.youtube.com/embed/hdsvIv3zoDQ',
     tracks: [
       {
-        file: '/uploads/tracks/I Veneti Antichi/Convivium.mp3',
+        file: "/uploads/tracks/musiche i veneti antichi/Convivium.mp3",
         context: 'Convivium — main theme, strings and light percussion.',
       },
       {
-        file: '/uploads/tracks/I Veneti Antichi/The Battle.wav',
+        file: "/uploads/tracks/musiche i veneti antichi/The Battle.mp3",
         context: 'The Battle — orchestral suite.',
       },
     ],
@@ -89,8 +89,8 @@ export const projects = [
     title: 'I Found You',
     year: '2020',
     tag: 'Short',
-    image: '/uploads/locandina i found you.jpg',
-    largeImage: '/uploads/locandina i found you.jpg',
+    image: '/posters/poster i found you.jpg',
+    largeImage: '/posters/poster i found you.jpg',
     description: `I Found You is an independent horror film directed by Diego Carli, set in an abandoned villa where two young girls engage in a seemingly innocent game that gradually reveals its dangerous nature.
   The score follows a classic horror underscore approach, designed to support the slow transition from innocence to unease, focusing on underlying tension rather than overt shocks.
   The music works through restraint and subtle development, enhancing silence, anticipation, and small timbral shifts to intensify the sense of threat without pre-empting the visual narrative.`,
@@ -101,25 +101,25 @@ export const projects = [
     title: "L'Appartamento",
     year: '2022',
     tag: 'Feature',
-    image: '/uploads/locandina l\'appartamento.jpg',
-    largeImage: '/uploads/locandina l\'appartamento.jpg',
+    image: "/posters/poster l'appartamento.jpg",
+    largeImage: "/posters/poster l'appartamento.jpg",
     description: `L'Appartamento is a social docu-film directed by Federico Scienza and Manuela Boezio, telling the experience of the Io Abito project and the paths toward autonomy of people with vulnerabilities in everyday apartment life.
   The score was conceived as a discreet, non-invasive support, intended to accompany real moments without guiding or amplifying emotion. The music works by subtraction, respecting the pace of the story and leaving space for voices, silences, and the community dimension of the film.`,
     tracks: [
       {
-        file: "/uploads/tracks/L'appartamento/Il mio ritmo.wav",
+        file: "/uploads/tracks/musiche lappartamento/Il mio ritmo.mp3",
         context: 'Il mio ritmo — main theme, solo piano.',
       },
       {
-        file: "/uploads/tracks/L'appartamento/Nonostante tutto.wav",
+        file: "/uploads/tracks/musiche lappartamento/Nonostante tutto.mp3",
         context: 'Nonostante tutto — atmospheric textures.',
       },
       {
-        file: "/uploads/tracks/L'appartamento/Come sono, dove sono.wav",
+        file: "/uploads/tracks/musiche lappartamento/Come sono, dove sono.mp3",
         context: 'Come sono, dove sono — intimate cue.',
       },
       {
-        file: "/uploads/tracks/L'appartamento/Occhi chiusi, cuore aperto.wav",
+        file: "/uploads/tracks/musiche lappartamento/Occhi chiusi, cuore aperto.mp3",
         context: 'Occhi chiusi, cuore aperto — closing theme.',
       },
     ],
@@ -129,31 +129,31 @@ export const projects = [
     title: 'La Sonata del Caos',
     year: '2023',
     tag: 'Documentary',
-    image: '/uploads/locandina la sonata del caos.jpg',
-    largeImage: '/uploads/locandina la sonata del caos.jpg',
+    image: '/posters/poster la sonata del caos.jpg',
+    largeImage: '/posters/poster la sonata del caos.jpg',
     description: `La Sonata del Caos is a fantasy short film directed by Eleonora Valentino, set in a space suspended between reality and folklore, where the presence of the Banshee embodies the theme of death and the inevitable.
   The score is built around a main leitmotif associated with the Banshee, which returns throughout the film in different forms and orchestrations, adapting to the protagonist's narrative and psychological shifts.
   Alongside this central theme, I developed secondary leitmotifs tied to characters and phases of the story, creating a coherent musical structure that follows the short's emotional evolution without resorting to redundant commentary`,
     tracks: [
       {
-        file: '/uploads/tracks/La Sonata Del Caos/A Close Encounter In The Wood.wav',
+        file: "/uploads/tracks/musiche la sonata del caos/A Close Encounter In The Wood.mp3",
         context: 'A Close Encounter In The Wood — orchestral suite.',
       },
       {
-        file: '/uploads/tracks/La Sonata Del Caos/Something Threatening.wav',
+        file: "/uploads/tracks/musiche la sonata del caos/Something Threatening.mp3",
         context: 'Something Threatening — tension and percussion.',
       },
       {
-        file: '/uploads/tracks/La Sonata Del Caos/Waiting.wav',
+        file: "/uploads/tracks/musiche la sonata del caos/Waiting.mp3",
         context: 'Waiting — suspended atmosphere.',
       },
       {
-        file: '/uploads/tracks/La Sonata Del Caos/The Mother’s Tale.wav',
-        context: 'The Mother’s Tale — narrative theme.',
+        file: "/uploads/tracks/musiche la sonata del caos/The Mothers Tale.mp3",
+        context: "The Mother's Tale — narrative theme.",
       },
       {
-        file: '/uploads/tracks/La Sonata Del Caos/Talia’s Farewell.wav',
-        context: 'Talia’s Farewell — emotional finale.',
+        file: "/uploads/tracks/musiche la sonata del caos/Talias Farewell.mp3",
+        context: "Talia's Farewell — emotional finale.",
       },
     ],
   },
@@ -162,8 +162,8 @@ export const projects = [
     title: 'Meridiana',
     year: '2021',
     tag: 'Short',
-    image: '/uploads/locandina meridiana.jpeg',
-    largeImage: '/uploads/locandina meridiana.jpeg',
+    image: '/posters/poster meridiana.jpeg',
+    largeImage: '/posters/poster meridiana.jpeg',
     description: `Poetic short film with acoustic and ambient sounds. Music conceived for wide visual openings.`,
     tracks: [],
   },
@@ -172,8 +172,8 @@ export const projects = [
     title: 'Freak Shakespeare',
     year: '2019',
     tag: 'Theatre',
-    image: '/uploads/locandina Freak Shakespeare.png',
-    largeImage: '/uploads/locandina Freak Shakespeare.png',
+    image: '/posters/poster freak shakespeare.png',
+    largeImage: '/posters/poster freak shakespeare.png',
     description: `Theatre production with original music. Hybrid style between electronic and classical instruments.`,
     tracks: [],
   },
@@ -182,8 +182,8 @@ export const projects = [
     title: "Una Piccola, Stupida, Inutile Storia D'Amore",
     year: '2022',
     tag: 'Feature',
-    image: '/uploads/Locandina Una Piccola, Stupida, Inutile Storia D\'Amore.jpeg',
-    largeImage: '/uploads/Locandina Una Piccola, Stupida, Inutile Storia D\'Amore.jpeg',
+    image: '/uploads/copertina album/copertina una piccola, stupida, inutile storia d\'amore.png',
+    largeImage: '/uploads/copertina album/copertina una piccola, stupida, inutile storia d\'amore.png',
     description: `Feature film with intimate arrangements and light rhythms. Focus on the relationships between characters.`,
     tracks: [
       {
