@@ -44,7 +44,7 @@ export default async function ProjectPage({ params }: Params) {
     <main style={{ padding: '2rem 1rem' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
         <Link href="/">
-          <button className="modal-close">Back Home</button>
+          <button className="hero-btn hero-btn-secondary modal-close">Back Home</button>
         </Link>
 
         <div className="page-panel">
@@ -175,7 +175,7 @@ export default async function ProjectPage({ params }: Params) {
 
         <div style={{ marginTop: '1.5rem' }}>
           <Link href="/">
-            <button className="modal-close">Back Home</button>
+            <button className="hero-btn hero-btn-secondary modal-close">Back Home</button>
           </Link>
         </div>
       </div>
