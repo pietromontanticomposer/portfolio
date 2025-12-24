@@ -92,25 +92,10 @@ export default async function ProjectPage({ params }: Params) {
               <div className="card-shell" style={{ padding: '1rem' }}>
                 <h3 className="section-title text-2xl text-[color:var(--foreground)]" style={{ margin: '0 0 0.75rem' }}>Soundtrack</h3>
                 <div className="tracks">
-                  {project.tracks.every((t) => 'file' in t && !!t.file) &&
-                  (project.slug === 'claudio-re' ||
-                    project.slug === 'soggetto-obsoleto' ||
-                    project.slug === 'i-veneti-antichi' ||
-                    project.slug === 'la-sonata-del-caos' ||
-                    project.slug === 'l-appartamento') ? (
+                  {project.tracks.every((t) => 'file' in t && !!t.file) ? (
                     <TrackPlayer
                       tracks={project.tracks as { file: string; context: string }[]}
-                      coverSrc={
-                        project.slug === 'claudio-re'
-                          ? '/optimized/uploads/copertina album/copertina claudio re.webp'
-                          : project.slug === 'soggetto-obsoleto'
-                          ? '/optimized/uploads/copertina album/copertina soggetto obsoleto.webp'
-                          : project.slug === 'l-appartamento'
-                          ? "/optimized/uploads/copertina album/copertina l'appartamento.webp"
-                          : project.slug === 'la-sonata-del-caos'
-                          ? '/optimized/uploads/copertina album/copertina la sonata del caos.webp'
-                          : '/optimized/uploads/copertina album/copertina i veneti antichi.webp'
-                      }
+                      coverSrc={project.image ?? project.largeImage ?? '/optimized/uploads/copertina album/copertina claudio re.webp'}
                     />
                   ) : (
                     project.tracks.map((t, i) => {
