@@ -100,6 +100,10 @@ export default function BackgroundVideo() {
     });
 
     observer.observe(video);
+    // Try immediately in case the IntersectionObserver callback isn't
+    // dispatched synchronously for this element — this helps start playback
+    // on browsers that allow autoplay when muted.
+    tryPlay();
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
@@ -114,12 +118,13 @@ export default function BackgroundVideo() {
       <video
         ref={videoRef}
         className="bg-video"
+        autoPlay
+        preload="auto"
         muted
         loop
         playsInline
         disablePictureInPicture
         controlsList="nodownload noremoteplayback"
-        preload="none"
         poster="/background-poster.jpg"
         aria-hidden="true"
         style={{

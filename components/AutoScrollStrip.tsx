@@ -96,11 +96,13 @@ export default function AutoScrollStrip({ posters }: { posters: Poster[] }) {
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Subscribe to animation coordinator
+    // Subscribe to animation coordinator, but DO NOT pause on hover
     const unsubscribe = animationCoordinator.subscribe((state) => {
-      isAnimationActive = state === 'active';
+      // Ignore hover state for poster strip, always keep animation active
+      isAnimationActive = true;
+      // Optionally, you can still reset lastTime if needed
       if (!isAnimationActive) {
-        lastTime = null; // Reset to avoid jumps when resuming
+        lastTime = null;
       }
     });
 

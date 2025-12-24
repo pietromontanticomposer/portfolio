@@ -69,8 +69,14 @@ export default function PartnerAutoScrollStrip({ partners }: { partners: Partner
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
+    // Subscribe to animation coordinator but DO NOT pause on hover/pointer
+    // Keep the partner strip animation running even when the global coordinator
+    // temporarily pauses for pointer movement (hover). This mirrors the
+    // behavior used by `AutoScrollStrip` which explicitly ignores hover.
     const unsubscribe = animationCoordinator.subscribe((state) => {
-      isAnimationActive = state === 'active';
+      // Always allow animation for partner strip
+      isAnimationActive = true;
+      // If we ever wanted to honor pauses, we would set lastTime here.
       if (!isAnimationActive) {
         lastTime = null;
       }
