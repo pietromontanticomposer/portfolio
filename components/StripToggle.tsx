@@ -12,7 +12,26 @@ type Poster = {
   image?: string;
 };
 
-export default function StripToggle({ posters }: { posters: Poster[] }) {
+export function ToggleButton({ view, onToggle }: { view: "strip" | "grid"; onToggle: () => void }) {
+  return (
+    <div className="strip-toggle-controls">
+      <button
+        aria-pressed={view === "grid"}
+        onClick={onToggle}
+        className={`strip-toggle-button strip-toggle-icon ${view === "grid" ? "is-active" : ""}`}
+        title={view === "strip" ? "Apri griglia" : "Torna a scorrimento"}
+      >
+        {view === "strip" ? (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="7" height="7" rx="2" fill="currentColor"/><rect x="13" y="4" width="7" height="7" rx="2" fill="currentColor"/><rect x="4" y="13" width="7" height="7" rx="2" fill="currentColor"/><rect x="13" y="13" width="7" height="7" rx="2" fill="currentColor"/></svg>
+        ) : (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="4" rx="2" fill="currentColor"/></svg>
+        )}
+      </button>
+    </div>
+  );
+}
+
+function StripToggle({ posters }: { posters: Poster[] }) {
   const [view, setView] = useState<"strip" | "grid">("strip");
 
   const isStrip = view === "strip";
@@ -69,3 +88,6 @@ export default function StripToggle({ posters }: { posters: Poster[] }) {
     </div>
   );
 }
+
+// Memoize to prevent unnecessary re-renders when parent updates
+export default React.memo(StripToggle);

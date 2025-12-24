@@ -2,13 +2,11 @@
 
 import React, { useState } from "react";
 import PartnerAutoScrollStrip from "./PartnerAutoScrollStrip";
+import Image from "next/image";
 
-type Partner = {
-  name: string;
-  image: string;
-};
+type Partner = { name: string; image: string };
 
-export default function PartnerStripToggle({ partners }: { partners: Partner[] }) {
+function PartnerStripToggle({ partners }: { partners: Partner[] }) {
   const [view, setView] = useState<"strip" | "grid">("strip");
 
   const isStrip = view === "strip";
@@ -49,8 +47,8 @@ export default function PartnerStripToggle({ partners }: { partners: Partner[] }
         <div className="strip-toggle-grid">
           <div className="partner-grid-gridview">
             {partners.map((p) => (
-              <div key={p.name} className="partner-card partner-card-tile">
-                <img src={p.image} alt={p.name} loading="lazy" decoding="async" />
+              <div key={p.name}>
+                <Image src={p.image} alt={p.name} width={140} height={70} className="object-contain" loading="lazy" decoding="async" />
               </div>
             ))}
           </div>
@@ -59,3 +57,6 @@ export default function PartnerStripToggle({ partners }: { partners: Partner[] }
     </div>
   );
 }
+
+// Memoize to prevent unnecessary re-renders when parent updates
+export default React.memo(PartnerStripToggle);

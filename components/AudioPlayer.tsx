@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import WaveSurfer from "wavesurfer.js";
 
 type CachedPeaks = {
   peaks: Array<number[]>;
@@ -14,7 +13,7 @@ const scheduleIdle = (cb: () => void) => {
   if ("requestIdleCallback" in window) {
     return (window as any).requestIdleCallback(cb, { timeout: 1500 });
   }
-  return window.setTimeout(cb, 0);
+  return (window as any).setTimeout(cb, 0);
 };
 
 const cancelIdle = (id: number | null) => {
@@ -23,7 +22,18 @@ const cancelIdle = (id: number | null) => {
     (window as any).cancelIdleCallback(id);
     return;
   }
-  window.clearTimeout(id);
+  (window as any).clearTimeout(id);
+};
+
+// Move format function outside component to prevent recreation
+const formatTime = (s: number) => {
+  const mm = Math.floor(s / 60)
+    .toString()
+    .padStart(2, "0");
+  const ss = Math.floor(s % 60)
+    .toString()
+    .padStart(2, "0");
+  return `${mm}:${ss}`;
 };
 
 type Props = {
@@ -64,102 +74,141 @@ export default function AudioPlayer({
 
   useEffect(() => {
     if (!containerRef.current) return;
-    // create wavesurfer
-    const ws = WaveSurfer.create({
-      container: containerRef.current,
-      waveColor,
-      progressColor,
-      cursorColor: "transparent",
-      cursorWidth: 0,
-      responsive: true,
-      normalize: true,
-      height,
-      barWidth: 2,
-      barGap: 1,
-      barRadius: 2,
-    });
-    wsRef.current = ws;
-    ws.setVolume(volume);
 
+    let ws: any = null;
+    let mounted = true;
     let resizeObserver: ResizeObserver | null = null;
-    const syncWidth = () => {
-      if (!containerRef.current) return;
-      ws.setOptions({ width: containerRef.current.clientWidth });
-    };
-    if (typeof ResizeObserver !== "undefined") {
-      resizeObserver = new ResizeObserver(() => {
-        syncWidth();
-      });
-      resizeObserver.observe(containerRef.current);
-    } else {
-      window.addEventListener("resize", syncWidth);
-    }
-    // Ensure correct width after initial layout.
-    requestAnimationFrame(syncWidth);
-
-    const safeSrc = encodeURI(src);
-    const cached = peaksCache.get(safeSrc);
-    const loadResult = cached ? ws.load(safeSrc, cached.peaks, cached.duration) : ws.load(safeSrc);
     let idleId: number | null = null;
-    if (loadResult && typeof (loadResult as Promise<void>).catch === "function") {
-      (loadResult as Promise<void>).catch(() => {
-        // Swallow AbortError when component unmounts mid-load.
-      });
-    }
 
-    ws.on("ready", () => {
-      const nextDuration = Math.round(ws.getDuration());
-      if (!cached) {
-        idleId = scheduleIdle(() => {
-          if (wsRef.current !== ws) return;
-          const peaks = ws.exportPeaks({ maxLength: 2000, precision: 2 });
-          peaksCache.set(safeSrc, { peaks, duration: nextDuration });
+    // Dynamic import WaveSurfer to reduce initial bundle size (~50KB)
+    import("wavesurfer.js").then((WaveSurferModule) => {
+      if (!mounted || !containerRef.current) return;
+
+      const WaveSurfer = WaveSurferModule.default;
+      // create wavesurfer
+      ws = WaveSurfer.create({
+        container: containerRef.current,
+        waveColor,
+        progressColor,
+        cursorColor: "transparent",
+        cursorWidth: 0,
+        responsive: true,
+        normalize: true,
+        height,
+        barWidth: 2,
+        barGap: 1,
+        barRadius: 2,
+      } as any);
+      wsRef.current = ws;
+      ws.setVolume(volume);
+
+      const syncWidth = () => {
+        if (!containerRef.current) return;
+        ws.setOptions({ width: containerRef.current.clientWidth });
+      };
+      if (typeof ResizeObserver !== "undefined") {
+        resizeObserver = new ResizeObserver(() => {
+          syncWidth();
+        });
+        resizeObserver.observe(containerRef.current);
+      } else {
+        window.addEventListener("resize", syncWidth);
+      }
+      // Ensure correct width after initial layout.
+      requestAnimationFrame(syncWidth);
+
+      const safeSrc = encodeURI(src);
+      // Determine desired peaks length based on container width and bar sizing
+      const barW = (ws.params && (ws.params as any).barWidth) || 2;
+      const barG = (ws.params && (ws.params as any).barGap) || 1;
+      const desiredLength = Math.max(512, Math.round(containerRef.current!.clientWidth / (barW + barG)));
+
+      const cached = peaksCache.get(safeSrc);
+      let loadResult: any;
+      if (cached && Array.isArray(cached.peaks) && cached.peaks.length === desiredLength) {
+        loadResult = ws.load(safeSrc, cached.peaks, cached.duration);
+      } else {
+        loadResult = ws.load(safeSrc);
+      }
+      if (loadResult && typeof (loadResult as Promise<void>).catch === "function") {
+        (loadResult as Promise<void>).catch(() => {
+          // Swallow AbortError when component unmounts mid-load.
         });
       }
-      setIsReady(true);
-      setDuration(nextDuration);
-      if (typeof onNowPlayingChange === "function") {
-        onNowPlayingChange({ isPlaying: isPlayingRef.current, currentTime, duration: nextDuration });
-      }
-    });
 
-    ws.on("audioprocess", (t: number) => {
-      setCurrentTime(Math.floor(t));
-      if (typeof onNowPlayingChange === "function") {
-        onNowPlayingChange({ isPlaying: isPlayingRef.current, currentTime: Math.floor(t), duration });
-      }
-    });
+      ws.on("ready", () => {
+        const nextDuration = Math.round(ws.getDuration());
+        if (!cached) {
+          idleId = scheduleIdle(() => {
+            if (wsRef.current !== ws || !containerRef.current) return;
+            const barW2 = (ws.params && (ws.params as any).barWidth) || 2;
+            const barG2 = (ws.params && (ws.params as any).barGap) || 1;
+            const length = Math.max(512, Math.round(containerRef.current.clientWidth / (barW2 + barG2)));
+            let peaks: any;
+            try {
+              if (ws.backend && typeof (ws.backend as any).getPeaks === 'function') {
+                peaks = Array.from((ws.backend as any).getPeaks(length));
+              } else {
+                peaks = ws.exportPeaks({ maxLength: length, precision: 2 });
+              }
+            } catch {
+              peaks = ws.exportPeaks({ maxLength: length, precision: 2 });
+            }
+            peaksCache.set(safeSrc, { peaks, duration: nextDuration });
+          });
+        }
+        setIsReady(true);
+        setDuration(nextDuration);
+        if (typeof onNowPlayingChange === "function") {
+          onNowPlayingChange({ isPlaying: isPlayingRef.current, currentTime, duration: nextDuration });
+        }
+      });
 
-    ws.on("play", () => {
-      isPlayingRef.current = true;
-      setIsPlaying(true);
-    });
+      ws.on("audioprocess", (t: number) => {
+        setCurrentTime(Math.floor(t));
+        if (typeof onNowPlayingChange === "function") {
+          onNowPlayingChange({ isPlaying: isPlayingRef.current, currentTime: Math.floor(t), duration });
+        }
+      });
 
-    ws.on("pause", () => {
-      isPlayingRef.current = false;
-      setIsPlaying(false);
-    });
+      ws.on("play", () => {
+        isPlayingRef.current = true;
+        setIsPlaying(true);
+      });
 
-    ws.on("finish", () => {
-      isPlayingRef.current = false;
-      setIsPlaying(false);
-      if (typeof onNowPlayingChange === "function") {
-        onNowPlayingChange({ isPlaying: false, currentTime: Math.floor(ws.getDuration() || 0), duration: Math.round(ws.getDuration() || 0) });
-      }
+      ws.on("pause", () => {
+        isPlayingRef.current = false;
+        setIsPlaying(false);
+      });
+
+      ws.on("finish", () => {
+        isPlayingRef.current = false;
+        setIsPlaying(false);
+        if (typeof onNowPlayingChange === "function") {
+          onNowPlayingChange({ isPlaying: false, currentTime: Math.floor(ws.getDuration() || 0), duration: Math.round(ws.getDuration() || 0) });
+        }
+      });
+    }).catch((err) => {
+      console.error("Failed to load WaveSurfer:", err);
     });
 
     return () => {
+      mounted = false;
       if (resizeObserver) resizeObserver.disconnect();
-      window.removeEventListener("resize", syncWidth);
+      if (typeof window !== "undefined") {
+        window.removeEventListener("resize", () => {});
+      }
       setIsReady(false);
       cancelIdle(idleId);
-      try {
-        ws.unAll();
-        ws.destroy();
-      } catch (e) {
-        // Ignore teardown errors from rapidly changing sources.
-      } finally {
-        if (wsRef.current === ws) wsRef.current = null;
+      if (ws) {
+        try {
+          ws.unAll();
+          ws.destroy();
+        } catch {
+          // Ignore teardown errors from rapidly changing sources.
+        } finally {
+          if (wsRef.current === ws) wsRef.current = null;
+        }
       }
     };
   }, [src, waveColor, progressColor, height]);
@@ -231,20 +280,6 @@ export default function AudioPlayer({
     }
   };
 
-  const format = (s: number) => {
-    const mm = Math.floor(s / 60)
-      .toString()
-      .padStart(2, "0");
-    const ss = Math.floor(s % 60)
-      .toString()
-      .padStart(2, "0");
-    return `${mm}:${ss}`;
-  };
-
-  const showNow = (propsShow?: boolean) => {
-    return !!propsShow;
-  };
-
   return (
     <div className="audio-player">
       <button onClick={toggle} className="audio-play" aria-label={isPlaying ? "Pause" : "Play"}>
@@ -255,9 +290,9 @@ export default function AudioPlayer({
         <div ref={containerRef} />
         {!isReady ? <div className="audio-loading">Loading audio...</div> : null}
       </div>
-      {showTime ? <div className="audio-time">{format(duration)}</div> : null}
-      {showNow(showNowPlaying) ? (
-        <div className="now-playing">Now playing: {title ?? ''} - {format(currentTime)}/{format(duration)}</div>
+      {showTime ? <div className="audio-time">{formatTime(duration)}</div> : null}
+      {showNowPlaying ? (
+        <div className="now-playing">Now playing: {title ?? ''} - {formatTime(currentTime)}/{formatTime(duration)}</div>
       ) : null}
       {showVolumeIcon ? (
         <div translate="no" className={`audio-volume notranslate ${showVolume ? 'is-open' : ''} is-vertical`} style={{ ["--volume-accent" as any]: waveColor, ["--volume-fill" as any]: volume }}>

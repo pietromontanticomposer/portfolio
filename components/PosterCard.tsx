@@ -1,5 +1,6 @@
 import React from "react";
 import Link from 'next/link'
+import Image from 'next/image'
 
 type PosterProps = {
   title: string;
@@ -10,7 +11,7 @@ type PosterProps = {
   onClick?: () => void;
 };
 
-export default function PosterCard({ title, year, tag, image, href = "#", onClick }: PosterProps) {
+function PosterCard({ title, year, tag, image, href = "#", onClick }: PosterProps) {
   const normalized = title ? title.toLowerCase().replace(/[^a-z0-9]/g, '') : '';
   const isFreak = normalized.includes('freakshakespeare') || (title || '').toLowerCase().includes('freak shakespeare');
   const safeImage = image ? encodeURI(image).replace(/'/g, "%27") : undefined;
@@ -25,9 +26,17 @@ export default function PosterCard({ title, year, tag, image, href = "#", onClic
   const renderPosterImage = () => {
     if (safeImage) {
       return (
-        <div className="poster-image mt-4">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={safeImage} alt={title} loading="lazy" decoding="async" className="poster-img" />
+        <div className="poster-image mt-4 relative">
+          <Image
+            src={safeImage}
+            alt={title}
+            width={400}
+            height={600}
+            className="poster-img"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
       );
     }
@@ -90,3 +99,6 @@ export default function PosterCard({ title, year, tag, image, href = "#", onClic
     </a>
   );
 }
+
+// Memoize to prevent unnecessary re-renders
+export default React.memo(PosterCard);

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
+import Image from 'next/image';
 
 type Partner = {
   name: string;
@@ -45,29 +46,39 @@ export default function PartnerAutoScrollStrip({ partners }: { partners: Partner
       if (offset >= firstSetWidth) {
         offset -= firstSetWidth;
       }
-      track.style.transform = `translate3d(${-offset}px, 0, 0)`;
+      track!.style.transform = `translate3d(${-offset}px, 0, 0)`;
 
       rafRef.current = requestAnimationFrame(step);
     }
 
-    track.style.transform = "translateX(0px)";
+    track!.style.transform = "translateX(0px)";
     rafRef.current = requestAnimationFrame(step);
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       window.removeEventListener("resize", updateWidth);
-      track.style.transform = "";
+      track!.style.transform = "";
     };
   }, [partners]);
 
-  const renderItems = (items: Partner[]) =>
+  // Memoize to prevent unnecessary recreations
+  const renderItems = useCallback((items: Partner[]) =>
     items.map((p, idx) => (
       <div key={`${p.name}-${idx}`} className="w-fit">
-        <div className="partner-strip-card">
-          <img src={p.image} alt={p.name} loading="lazy" decoding="async" />
+        <div className="partner-strip-card relative">
+          <Image
+            src={p.image}
+            alt={p.name}
+            width={120}
+            height={60}
+            className="object-contain"
+            sizes="120px"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
       </div>
-    ));
+    )), []);
 
   return (
     <div className="scroll-strip mt-6" ref={containerRef}>

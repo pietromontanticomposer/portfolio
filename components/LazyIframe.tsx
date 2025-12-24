@@ -47,7 +47,9 @@ export default function LazyIframe({
                 if (!params.has('show_reposts')) params.set('show_reposts', 'false');
                 return url.toString();
               }
-            } catch (e) {}
+            } catch {
+              // ignore
+            }
             return src;
           })()}
           title={title}
