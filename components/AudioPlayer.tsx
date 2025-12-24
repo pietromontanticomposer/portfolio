@@ -100,6 +100,7 @@ export default function AudioPlayer({
         barWidth: 2,
         barGap: 1,
         barRadius: 2,
+        backend: 'MediaElement',
       } as any);
       wsRef.current = ws;
       ws.setVolume(volume);
