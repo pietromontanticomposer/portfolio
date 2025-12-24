@@ -52,3 +52,11 @@ public/*.mp3
 check-token.cjs
 scripts/blob-map.json
 scripts/upload_blobs.mjs.bak.*
+
+# Ignore local media backups
+scripts/uploads-backup/
+public/uploads/tracks/
+*.wav
+*.mp3
+*.aiff
+*.flac
