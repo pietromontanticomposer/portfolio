@@ -11,27 +11,27 @@ export const projects = [
   Both composition and dark, restrained mix were shaped to emphasize the film's black-and-white imagery, reinforcing Claudius' guilt and paranoia and amplifying his fear of being killed in turn. The music acts as an internal pressure, exposing the fracture between his public authority and inner collapse.`,
     tracks: [
       {
-        file: "/uploads/tracks/musiche claudio re/The Storm.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-claudio-re/The-Storm.mp3",
         context: 'The Storm',
       },
       {
-        file: "/uploads/tracks/musiche claudio re/My Crown, My Ambition, My Queen.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-claudio-re/My-Crown-My-Ambition-My-Queen.mp3",
         context: 'My Crown, My Ambition, My Queen',
       },
       {
-        file: "/uploads/tracks/musiche claudio re/What If A Man Cant Regret.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-claudio-re/What-If-A-Man-Cant-Regret-alt.mp3",
         context: "What If A Man Can't Regret",
       },
       {
-        file: "/uploads/tracks/musiche claudio re/The Spectre.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-claudio-re/The-Spectre.mp3",
         context: 'The Spectre',
       },
       {
-        file: "/uploads/tracks/musiche claudio re/Kings Lament.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-claudio-re/Kings-Lament.mp3",
         context: "King's Lament",
       },
       {
-        file: "/uploads/tracks/musiche claudio re/My Sin Is Rotten.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-claudio-re/My-Sin-Is-Rotten.mp3",
         context: 'My Sin Is Rotten',
       },
     ],
@@ -49,15 +49,15 @@ export const projects = [
     videoEmbed: 'https://www.youtube.com/embed/hoA5rKr7sZU',
     tracks: [
       {
-        file: "/uploads/tracks/musiche soggetto obsoleto/Ending Titles.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-soggetto-obsoleto/Ending-Titles.mp3",
         context: 'Ending Titles',
       },
       {
-        file: "/uploads/tracks/musiche soggetto obsoleto/Obsolete Subject And Past Times.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-soggetto-obsoleto/Obsolete-Subject-And-Past-Times.mp3",
         context: 'Obsolete Subject And Past Times',
       },
       {
-        file: "/uploads/tracks/musiche soggetto obsoleto/Sitting On The Seashore.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-soggetto-obsoleto/Sitting-On-The-Seashore.mp3",
         context: 'Sitting On The Seashore',
       },
     ],
@@ -75,11 +75,11 @@ export const projects = [
     videoEmbed: 'https://www.youtube.com/embed/hdsvIv3zoDQ',
     tracks: [
       {
-        file: "/uploads/tracks/musiche i veneti antichi/Convivium.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-i-veneti-antichi/Convivium.mp3",
         context: 'Convivium — main theme, strings and light percussion.',
       },
       {
-        file: "/uploads/tracks/musiche i veneti antichi/The Battle.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-i-veneti-antichi/The-Battle.mp3",
         context: 'The Battle — orchestral suite.',
       },
     ],
@@ -107,19 +107,19 @@ export const projects = [
   The score was conceived as a discreet, non-invasive support, intended to accompany real moments without guiding or amplifying emotion. The music works by subtraction, respecting the pace of the story and leaving space for voices, silences, and the community dimension of the film.`,
     tracks: [
       {
-        file: "/uploads/tracks/musiche lappartamento/Il mio ritmo.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-lappartamento/Il-mio-ritmo-alt.mp3",
         context: 'Il mio ritmo — main theme, solo piano.',
       },
       {
-        file: "/uploads/tracks/musiche lappartamento/Nonostante tutto.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-lappartamento/Nonostante-tutto-alt.mp3",
         context: 'Nonostante tutto — atmospheric textures.',
       },
       {
-        file: "/uploads/tracks/musiche lappartamento/Come sono, dove sono.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-lappartamento/Come-sono-dove-sono-alt.mp3",
         context: 'Come sono, dove sono — intimate cue.',
       },
       {
-        file: "/uploads/tracks/musiche lappartamento/Occhi chiusi, cuore aperto.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-lappartamento/Occhi-chiusi-cuore-aperto-alt.mp3",
         context: 'Occhi chiusi, cuore aperto — closing theme.',
       },
     ],
@@ -136,23 +136,23 @@ export const projects = [
   Alongside this central theme, I developed secondary leitmotifs tied to characters and phases of the story, creating a coherent musical structure that follows the short's emotional evolution without resorting to redundant commentary`,
     tracks: [
       {
-        file: "/uploads/tracks/musiche la sonata del caos/A Close Encounter In The Wood.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-la-sonata-del-caos/A-Close-Encounter-In-The-Wood.mp3",
         context: 'A Close Encounter In The Wood — orchestral suite.',
       },
       {
-        file: "/uploads/tracks/musiche la sonata del caos/Something Threatening.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-la-sonata-del-caos/Something-Threatening.mp3",
         context: 'Something Threatening — tension and percussion.',
       },
       {
-        file: "/uploads/tracks/musiche la sonata del caos/Waiting.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-la-sonata-del-caos/Waiting.mp3",
         context: 'Waiting — suspended atmosphere.',
       },
       {
-        file: "/uploads/tracks/musiche la sonata del caos/The Mothers Tale.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-la-sonata-del-caos/The-Mothers-Tale-alt.mp3",
         context: "The Mother's Tale — narrative theme.",
       },
       {
-        file: "/uploads/tracks/musiche la sonata del caos/Talias Farewell.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-la-sonata-del-caos/Talias-Farewell-alt.mp3",
         context: "Talia's Farewell — emotional finale.",
       },
     ],
@@ -203,15 +203,15 @@ export const projects = [
   The music makes frequent use of dominant seventh harmonies that resolve back onto the same chord, creating a sensation of apparent resolution that never truly moves forward. This harmonic loop reinforces the illusion of control and relief typical of addictive behavior. Underlying synth drones act as a persistent noise floor, representing the unresolved inner pressure the character attempts to suppress. The score avoids true catharsis, aligning with the film’s ending as the character ultimately returns to gambling.`,
     tracks: [
       {
-        file: "/uploads/tracks/musiche freefall/Ludopathy.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-freefall/Ludopathy.mp3",
         context: 'Ludopathy',
       },
       {
-        file: "/uploads/tracks/musiche freefall/Restarting The Loop.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-freefall/Restarting-The-Loop.mp3",
         context: 'Restarting The Loop',
       },
       {
-        file: "/uploads/tracks/musiche freefall/The Responsibilities We All Have.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-freefall/The-Responsibilities-We-All-Have.mp3",
         context: 'The Responsibilities We All Have',
       },
     ],
@@ -226,19 +226,19 @@ export const projects = [
   The score aligns with this corrupted point of view: the music appears ordered, controlled and deceptively positive, suggesting clarity and emotional balance where none truly exist. By adopting the protagonist’s internal logic, the music amplifies the psychological horror, exposing the fracture between apparent rationality and moral collapse.`,
     tracks: [
       {
-        file: "/uploads/tracks/musiche polvere sotto al tappeto/Dust Under the Rug.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-polvere-sotto-al-tappeto/Dust-Under-the-Rug.mp3",
         context: 'Dust Under the Rug',
       },
       {
-        file: "/uploads/tracks/musiche polvere sotto al tappeto/Good Morning, Love.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-polvere-sotto-al-tappeto/Good-Morning-Love.mp3",
         context: 'Good Morning, Love',
       },
       {
-        file: "/uploads/tracks/musiche polvere sotto al tappeto/Projection ⧸ Reflection.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-polvere-sotto-al-tappeto/Projection-Reflection.mp3",
         context: 'Projection ⧸ Reflection',
       },
       {
-        file: "/uploads/tracks/musiche polvere sotto al tappeto/Rationalization.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-polvere-sotto-al-tappeto/Rationalization.mp3",
         context: 'Rationalization',
       },
       {
@@ -246,7 +246,7 @@ export const projects = [
         context: "She's Not Here Anymore",
       },
       {
-        file: "/uploads/tracks/musiche polvere sotto al tappeto/Trigger Point.mp3",
+        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-polvere-sotto-al-tappeto/Trigger-Point.mp3",
         context: 'Trigger Point',
       },
     ],

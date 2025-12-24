@@ -106,7 +106,6 @@ export default function BackgroundVideo() {
       <video
         ref={videoRef}
         className="bg-video"
-        {...(shouldLoadSrc ? { src: "/background.mp4" } : {})}
         muted
         loop
         playsInline
@@ -119,7 +118,14 @@ export default function BackgroundVideo() {
           transform: 'translateZ(0)',
           willChange: 'auto'
         }}
-      />
+      >
+        {shouldLoadSrc && (
+          <>
+            <source src="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/videos/background.webm" type="video/webm" />
+            <source src="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/videos/background.mp4" type="video/mp4" />
+          </>
+        )}
+      </video>
       <div className="bg-video-overlay" aria-hidden="true" />
     </>
   );

@@ -32,52 +32,52 @@ const partners = [
 
 const selectedTracks = [
   {
-    file: '/uploads/tracks/selected tracks/My Crown, My Ambition, My Queen.mp3',
+    file: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/My-Crown-My-Ambition-My-Queen.mp3',
     context: 'My Crown, My Ambition, My Queen',
     cover: '/optimized/uploads/copertina album/copertina claudio re.webp',
   },
   {
-    file: "/uploads/tracks/selected tracks/What If A Man Cant Regret.mp3",
+    file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/What-If-A-Man-Cant-Regret-alt.mp3",
     context: "What If A Man Can't Regret",
     cover: '/optimized/uploads/copertina album/copertina claudio re.webp',
   },
   {
-    file: '/uploads/tracks/selected tracks/The Spectre.mp3',
+    file: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/The-Spectre.mp3',
     context: 'The Spectre',
     cover: '/optimized/uploads/copertina album/copertina claudio re.webp',
   },
   {
-    file: '/uploads/tracks/selected tracks/Ending Titles.mp3',
+    file: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/Ending-Titles.mp3',
     context: 'Ending Titles',
     cover: '/optimized/uploads/copertina album/copertina soggetto obsoleto.webp',
   },
   {
-    file: '/uploads/tracks/selected tracks/Obsolete Subject And Past Times.mp3',
+    file: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/Obsolete-Subject-And-Past-Times.mp3',
     context: 'Obsolete Subject And Past Times',
     cover: '/optimized/uploads/copertina album/copertina soggetto obsoleto.webp',
   },
   {
-    file: '/uploads/tracks/selected tracks/Il mio ritmo.mp3',
+    file: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/Il-mio-ritmo.mp3',
     context: 'Il mio ritmo',
     cover: "/optimized/uploads/copertina album/copertina l'appartamento.webp",
   },
   {
-    file: "/uploads/tracks/selected tracks/The Mothers Tale.mp3",
+    file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/The-Mothers-Tale-alt.mp3",
     context: "The Mother's Tale",
     cover: '/optimized/uploads/copertina album/copertina la sonata del caos.webp',
   },
   {
-    file: "/uploads/tracks/selected tracks/Talias Farewell.mp3",
+    file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/Talias-Farewell-alt.mp3",
     context: "Talia's Farewell",
     cover: '/optimized/uploads/copertina album/copertina la sonata del caos.webp',
   },
   {
-    file: '/uploads/tracks/selected tracks/Convivium.mp3',
+    file: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/Convivium.mp3',
     context: 'Convivium',
     cover: '/optimized/uploads/copertina album/copertina i veneti antichi.webp',
   },
   {
-    file: '/uploads/tracks/selected tracks/The Battle.mp3',
+    file: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/The-Battle.mp3',
     context: 'The Battle',
     cover: '/optimized/uploads/copertina album/copertina i veneti antichi.webp',
   },
