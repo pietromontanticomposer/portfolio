@@ -70,8 +70,8 @@ main {
   background: rgba(8, 12, 20, 0.85);
   box-shadow: 0 20px 50px var(--shadow);
   border-radius: 20px;
-  backdrop-filter: blur(6px);
-  /* Reduced box-shadow blur from 70px to 50px for better performance */
+  backdrop-filter: blur(5px);
+  /* Reduced box-shadow blur from 70px to 50px and backdrop-blur from 6px to 5px for better performance */
 }
 
 .section-title {
@@ -133,7 +133,7 @@ main {
   box-shadow: 0 18px 50px rgba(2,6,23,0.55);
   border-radius: 20px;
   padding: 2.2rem 1.6rem;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(5px);
 }
 
 @media (min-width: 640px) {
@@ -148,7 +148,7 @@ main {
   box-shadow: 0 18px 50px rgba(2,6,23,0.55);
   border-radius: 20px;
   padding: 1.6rem;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(5px);
   margin: 1rem 0 1.4rem;
 }
 
@@ -426,7 +426,7 @@ main {
   /* subtle translucent panel to separate from background */
   background: rgba(2,6,23,0.55);
   border-radius: 20px;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(5px);
   box-shadow: 0 18px 50px rgba(2,6,23,0.45);
 }
 
@@ -470,7 +470,7 @@ main {
   border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.06);
   box-shadow: 0 18px 50px rgba(2,6,23,0.45);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(5px);
 }
 
 .strip-toggle-button {
@@ -604,6 +604,10 @@ main {
   transform-style: preserve-3d;
   backface-visibility: hidden;
   transition: transform 320ms cubic-bezier(.2,.9,.2,1), box-shadow 320ms ease, filter 320ms ease;
+}
+
+.poster-wrapper:hover .poster-image,
+.poster-wrapper:focus-within .poster-image {
   will-change: transform, box-shadow;
 }
 

@@ -47,9 +47,18 @@ export default function TrackPlayer({
   const [nowPlaying, setNowPlaying] = useState<{ isPlaying: boolean; currentTime: number; duration: number }>({ isPlaying: false, currentTime: 0, duration: 0 });
   const [hasPlayed, setHasPlayed] = useState(false);
 
+  // Preload only current + next track metadata
   useEffect(() => {
     let isMounted = true;
-    const audios = tracks.map((track, index) => {
+    const audios: { audio: HTMLAudioElement; onMeta: () => void; index: number }[] = [];
+
+    // Load current and next track only
+    const indicesToLoad = [currentIndex, currentIndex + 1].filter(
+      (idx) => idx < tracks.length && durations[idx] === undefined
+    );
+
+    indicesToLoad.forEach((index) => {
+      const track = tracks[index];
       const audio = new Audio(encodeURI(track.file));
       audio.preload = "metadata";
       const onMeta = () => {
@@ -59,7 +68,7 @@ export default function TrackPlayer({
       audio.addEventListener("loadedmetadata", onMeta);
       audio.addEventListener("error", onMeta);
       audio.load();
-      return { audio, onMeta };
+      audios.push({ audio, onMeta, index });
     });
 
     return () => {
@@ -69,7 +78,7 @@ export default function TrackPlayer({
         audio.removeEventListener("error", onMeta);
       });
     };
-  }, [tracks]);
+  }, [tracks, currentIndex, durations]);
 
   const currentTrack = useMemo(() => tracks[currentIndex], [tracks, currentIndex]);
 

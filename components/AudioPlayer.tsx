@@ -71,6 +71,8 @@ export default function AudioPlayer({
   const audioToggleRef = useRef<HTMLButtonElement | null>(null);
   const popoverRef = useRef<HTMLLabelElement | null>(null);
   const isDraggingRef = useRef(false);
+  const currentTimeRef = useRef(0);
+  const lastUpdateTimeRef = useRef(0);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -165,9 +167,17 @@ export default function AudioPlayer({
       });
 
       ws.on("audioprocess", (t: number) => {
-        setCurrentTime(Math.floor(t));
-        if (typeof onNowPlayingChange === "function") {
-          onNowPlayingChange({ isPlaying: isPlayingRef.current, currentTime: Math.floor(t), duration });
+        const now = performance.now();
+        const flooredTime = Math.floor(t);
+        currentTimeRef.current = flooredTime;
+
+        // Throttle updates to 4-5 times per second (200-250ms)
+        if (now - lastUpdateTimeRef.current >= 200 && flooredTime !== currentTime) {
+          lastUpdateTimeRef.current = now;
+          setCurrentTime(flooredTime);
+          if (typeof onNowPlayingChange === "function") {
+            onNowPlayingChange({ isPlaying: isPlayingRef.current, currentTime: flooredTime, duration });
+          }
         }
       });
 
@@ -175,7 +185,6 @@ export default function AudioPlayer({
         isPlayingRef.current = true;
         setIsPlaying(true);
       });
-
       ws.on("pause", () => {
         isPlayingRef.current = false;
         setIsPlaying(false);

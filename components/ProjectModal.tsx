@@ -44,7 +44,7 @@ export default function ProjectModal({
         <div className="modal-body">
           <div className="modal-media">
             {project.videoEmbed ? (
-              <div className="video-wrapper">
+              <div className="video-wrapper" style={{ aspectRatio: '16 / 9' }}>
                 <iframe
                   src={project.videoEmbed}
                   title={`${project.title} clip`}
@@ -56,7 +56,7 @@ export default function ProjectModal({
               </div>
             ) : null}
             {project.largeImage ? (
-              <div style={{ position: 'relative', width: '100%', height: 'auto' }}>
+              <div style={{ position: 'relative', width: '100%', height: 'auto', aspectRatio: '1100 / 620' }}>
                 <Image src={project.largeImage} alt={`${project.title} still`} className="modal-large-image" width={1100} height={620} style={{ width: '100%', height: 'auto' }} loading="lazy" decoding="async" />
               </div>
             ) : null}

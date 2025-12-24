@@ -5,6 +5,10 @@ let isScrolling = false;
 
 export default function ScrollPerformance() {
   useEffect(() => {
+    // Only activate on mobile devices (touch-based)
+    const isMobile = window.matchMedia('(pointer: coarse)').matches;
+    if (!isMobile) return;
+
     let scrollTimeout: NodeJS.Timeout;
     let rafId: number;
 

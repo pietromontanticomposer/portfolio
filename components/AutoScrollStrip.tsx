@@ -95,7 +95,7 @@ export default function AutoScrollStrip({ posters }: { posters: Poster[] }) {
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     function step(time: number) {
-      // Only animate if visible AND tab is active
+      // Only animate if visible AND tab is active (scroll sempre)
       if (!isReducedMotion.current && isVisible && isTabVisible) {
         if (lastTime === null) lastTime = time;
         const delta = Math.min((time - lastTime) / 1000, 0.05);

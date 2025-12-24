@@ -23,6 +23,8 @@ export default function PartnerAutoScrollStrip({ partners }: { partners: Partner
     let offset = 0;
     let currentSpeed = speed;
     let firstSetWidth = Math.max(1, track.scrollWidth / 2);
+    let isVisible = true;
+    let isTabVisible = !document.hidden;
 
     const updateWidth = () => {
       firstSetWidth = Math.max(1, track.scrollWidth / 2);
@@ -32,32 +34,68 @@ export default function PartnerAutoScrollStrip({ partners }: { partners: Partner
     imgNodes.forEach((img) => {
       if (!img.complete) img.addEventListener("load", updateWidth, { once: true });
     });
-    window.addEventListener("resize", updateWidth);
+
+    let resizeTimeout: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(updateWidth, 100);
+    };
+
+    window.addEventListener("resize", handleResize, { passive: true } as AddEventListenerOptions);
     requestAnimationFrame(updateWidth);
 
-    function step(time: number) {
-      if (lastTime === null) lastTime = time;
-      const delta = Math.min((time - lastTime) / 1000, 0.05);
-      lastTime = time;
+    // IntersectionObserver to pause when out of viewport
+    const visibilityObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isVisible = entry.isIntersecting;
+          if (!isVisible) {
+            lastTime = null;
+          }
+        });
+      },
+      { threshold: 0.01 }
+    );
+    visibilityObserver.observe(container);
 
-      currentSpeed += (speed - currentSpeed) * Math.min(1, delta * 8);
-      offset += currentSpeed * delta;
-
-      if (offset >= firstSetWidth) {
-        offset -= firstSetWidth;
+    // Pause when tab hidden
+    const handleVisibilityChange = () => {
+      isTabVisible = !document.hidden;
+      if (!isTabVisible) {
+        lastTime = null;
       }
-      track!.style.transform = `translate3d(${-offset}px, 0, 0)`;
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    function step(time: number) {
+      // Only animate if visible AND tab is active (scroll sempre)
+      if (isVisible && isTabVisible) {
+        if (lastTime === null) lastTime = time;
+        const delta = Math.min((time - lastTime) / 1000, 0.05);
+        lastTime = time;
+
+        currentSpeed += (speed - currentSpeed) * Math.min(1, delta * 8);
+        offset += currentSpeed * delta;
+
+        if (offset >= firstSetWidth) {
+          offset -= firstSetWidth;
+        }
+        track!.style.transform = `translate3d(${-offset}px, 0, 0)`;
+      }
 
       rafRef.current = requestAnimationFrame(step);
     }
 
-    track!.style.transform = "translateX(0px)";
+    track.style.transform = "translate3d(0, 0, 0)";
     rafRef.current = requestAnimationFrame(step);
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      window.removeEventListener("resize", updateWidth);
-      track!.style.transform = "";
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(resizeTimeout);
+      visibilityObserver.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      track.style.transform = "";
     };
   }, [partners]);
 

@@ -60,3 +60,4 @@ public/uploads/tracks/
 *.mp3
 *.aiff
 *.flac
+scripts/uploads-backup/

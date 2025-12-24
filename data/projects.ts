@@ -182,8 +182,8 @@ export const projects = [
     title: "Una Piccola, Stupida, Inutile Storia D'Amore",
     year: '2022',
     tag: 'Feature',
-    image: '/optimized/uploads/copertina album/copertina una piccola, stupida, inutile storia d\'amore.webp',
-    largeImage: '/optimized/uploads/copertina album/copertina una piccola, stupida, inutile storia d\'amore.webp',
+    image: '/optimized/posters/poster  una piccola, stupida, inutile storia d\'amore.webp',
+    largeImage: '/optimized/posters/poster  una piccola, stupida, inutile storia d\'amore.webp',
     description: `Feature film with intimate arrangements and light rhythms. Focus on the relationships between characters.`,
     tracks: [
       {
