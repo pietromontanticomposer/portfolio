@@ -94,20 +94,7 @@ export const projects = [
     description: `I Found You is an independent horror film directed by Diego Carli, set in an abandoned villa where two young girls engage in a seemingly innocent game that gradually reveals its dangerous nature.
   The score follows a classic horror underscore approach, designed to support the slow transition from innocence to unease, focusing on underlying tension rather than overt shocks.
   The music works through restraint and subtle development, enhancing silence, anticipation, and small timbral shifts to intensify the sense of threat without pre-empting the visual narrative.`,
-    tracks: [
-      {
-        file: "/uploads/tracks/musiche freefall/Ludopathy.mp3",
-        context: 'Ludopathy',
-      },
-      {
-        file: "/uploads/tracks/musiche freefall/Restarting The Loop.mp3",
-        context: 'Restarting The Loop',
-      },
-      {
-        file: "/uploads/tracks/musiche freefall/The Responsibilities We All Have.mp3",
-        context: 'The Responsibilities We All Have',
-      },
-    ],
+    tracks: [],
   },
   {
     slug: 'l-appartamento',
@@ -178,32 +165,7 @@ export const projects = [
     image: '/optimized/posters/poster meridiana.avif',
     largeImage: '/optimized/posters/poster meridiana.avif',
     description: `Poetic short film with acoustic and ambient sounds. Music conceived for wide visual openings.`,
-    tracks: [
-      {
-        file: "/uploads/tracks/musiche polvere sotto al tappeto/Dust Under the Rug.mp3",
-        context: 'Dust Under the Rug',
-      },
-      {
-        file: "/uploads/tracks/musiche polvere sotto al tappeto/Good Morning, Love.mp3",
-        context: 'Good Morning, Love',
-      },
-      {
-        file: "/uploads/tracks/musiche polvere sotto al tappeto/Projection ⧸ Reflection.mp3",
-        context: 'Projection ⧸ Reflection',
-      },
-      {
-        file: "/uploads/tracks/musiche polvere sotto al tappeto/Rationalization.mp3",
-        context: 'Rationalization',
-      },
-      {
-        file: "/uploads/tracks/musiche polvere sotto al tappeto/She’s Not Here Anymore.mp3",
-        context: "She's Not Here Anymore",
-      },
-      {
-        file: "/uploads/tracks/musiche polvere sotto al tappeto/Trigger Point.mp3",
-        context: 'Trigger Point',
-      },
-    ],
+    tracks: [],
   },
   {
     slug: 'freak-shakespeare',
@@ -239,7 +201,20 @@ export const projects = [
     description: `Free / Fall is a short film directed by Francesco La Barbera and Daniele Murgia, exploring gambling addiction through the subjective collapse of a young man trapped in a repetitive cycle of compulsion and avoidance.
   The score is built around synths, piano and strings, shifting between major and minor tonalities to mirror the dopamine highs and emotional lows characteristic of addiction. In moments of heightened internal conflict, these harmonic shifts are deliberately dissonant against the surrounding melodic material, generating friction that reflects the character’s psychological instability.
   The music makes frequent use of dominant seventh harmonies that resolve back onto the same chord, creating a sensation of apparent resolution that never truly moves forward. This harmonic loop reinforces the illusion of control and relief typical of addictive behavior. Underlying synth drones act as a persistent noise floor, representing the unresolved inner pressure the character attempts to suppress. The score avoids true catharsis, aligning with the film’s ending as the character ultimately returns to gambling.`,
-    tracks: [],
+    tracks: [
+      {
+        file: "/uploads/tracks/musiche freefall/Ludopathy.mp3",
+        context: 'Ludopathy',
+      },
+      {
+        file: "/uploads/tracks/musiche freefall/Restarting The Loop.mp3",
+        context: 'Restarting The Loop',
+      },
+      {
+        file: "/uploads/tracks/musiche freefall/The Responsibilities We All Have.mp3",
+        context: 'The Responsibilities We All Have',
+      },
+    ],
   },
   {
     slug: 'polvere-sotto-al-tappeto',
@@ -249,7 +224,32 @@ export const projects = [
     description: `Polvere sotto al tappeto is a dramatic horror short film directed by Gianluca Volpe, centered on a man who murders his partner after discovering her betrayal and constructs a network of narcissistic justifications to legitimize his act.
   The narrative unfolds entirely from the protagonist’s subjective perspective, with the voice in his head taking the form of his murdered partner, collapsing guilt, denial and self-absolution into a single distorted inner dialogue.
   The score aligns with this corrupted point of view: the music appears ordered, controlled and deceptively positive, suggesting clarity and emotional balance where none truly exist. By adopting the protagonist’s internal logic, the music amplifies the psychological horror, exposing the fracture between apparent rationality and moral collapse.`,
-    tracks: [],
+    tracks: [
+      {
+        file: "/uploads/tracks/musiche polvere sotto al tappeto/Dust Under the Rug.mp3",
+        context: 'Dust Under the Rug',
+      },
+      {
+        file: "/uploads/tracks/musiche polvere sotto al tappeto/Good Morning, Love.mp3",
+        context: 'Good Morning, Love',
+      },
+      {
+        file: "/uploads/tracks/musiche polvere sotto al tappeto/Projection ⧸ Reflection.mp3",
+        context: 'Projection ⧸ Reflection',
+      },
+      {
+        file: "/uploads/tracks/musiche polvere sotto al tappeto/Rationalization.mp3",
+        context: 'Rationalization',
+      },
+      {
+        file: "/uploads/tracks/musiche polvere sotto al tappeto/She’s Not Here Anymore.mp3",
+        context: "She's Not Here Anymore",
+      },
+      {
+        file: "/uploads/tracks/musiche polvere sotto al tappeto/Trigger Point.mp3",
+        context: 'Trigger Point',
+      },
+    ],
   },
   {
     slug: 'non-ce-casa-in-paradiso',
