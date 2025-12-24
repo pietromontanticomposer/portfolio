@@ -94,7 +94,20 @@ export const projects = [
     description: `I Found You is an independent horror film directed by Diego Carli, set in an abandoned villa where two young girls engage in a seemingly innocent game that gradually reveals its dangerous nature.
   The score follows a classic horror underscore approach, designed to support the slow transition from innocence to unease, focusing on underlying tension rather than overt shocks.
   The music works through restraint and subtle development, enhancing silence, anticipation, and small timbral shifts to intensify the sense of threat without pre-empting the visual narrative.`,
-    tracks: [],
+    tracks: [
+      {
+        file: "/uploads/tracks/musiche freefall/Ludopathy.mp3",
+        context: 'Ludopathy',
+      },
+      {
+        file: "/uploads/tracks/musiche freefall/Restarting The Loop.mp3",
+        context: 'Restarting The Loop',
+      },
+      {
+        file: "/uploads/tracks/musiche freefall/The Responsibilities We All Have.mp3",
+        context: 'The Responsibilities We All Have',
+      },
+    ],
   },
   {
     slug: 'l-appartamento',
@@ -165,7 +178,32 @@ export const projects = [
     image: '/optimized/posters/poster meridiana.avif',
     largeImage: '/optimized/posters/poster meridiana.avif',
     description: `Poetic short film with acoustic and ambient sounds. Music conceived for wide visual openings.`,
-    tracks: [],
+    tracks: [
+      {
+        file: "/uploads/tracks/musiche polvere sotto al tappeto/Dust Under the Rug.mp3",
+        context: 'Dust Under the Rug',
+      },
+      {
+        file: "/uploads/tracks/musiche polvere sotto al tappeto/Good Morning, Love.mp3",
+        context: 'Good Morning, Love',
+      },
+      {
+        file: "/uploads/tracks/musiche polvere sotto al tappeto/Projection ⧸ Reflection.mp3",
+        context: 'Projection ⧸ Reflection',
+      },
+      {
+        file: "/uploads/tracks/musiche polvere sotto al tappeto/Rationalization.mp3",
+        context: 'Rationalization',
+      },
+      {
+        file: "/uploads/tracks/musiche polvere sotto al tappeto/She’s Not Here Anymore.mp3",
+        context: "She's Not Here Anymore",
+      },
+      {
+        file: "/uploads/tracks/musiche polvere sotto al tappeto/Trigger Point.mp3",
+        context: 'Trigger Point',
+      },
+    ],
   },
   {
     slug: 'freak-shakespeare',
@@ -182,8 +220,8 @@ export const projects = [
     title: "Una Piccola, Stupida, Inutile Storia D'Amore",
     year: '2022',
     tag: 'Feature',
-    image: '/uploads/copertina album/copertina una piccola, stupida, inutile storia d\'amore.png',
-    largeImage: '/uploads/copertina album/copertina una piccola, stupida, inutile storia d\'amore.png',
+    image: '/optimized/uploads/copertina album/copertina una piccola, stupida, inutile storia d\'amore.webp',
+    largeImage: '/optimized/uploads/copertina album/copertina una piccola, stupida, inutile storia d\'amore.webp',
     description: `Feature film with intimate arrangements and light rhythms. Focus on the relationships between characters.`,
     tracks: [
       {
