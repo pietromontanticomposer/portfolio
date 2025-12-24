@@ -95,7 +95,7 @@ export default async function ProjectPage({ params }: Params) {
                   {project.tracks.every((t) => 'file' in t && !!t.file) ? (
                     <TrackPlayer
                       tracks={project.tracks as { file: string; context: string }[]}
-                      coverSrc={project.image ?? project.largeImage ?? '/optimized/uploads/copertina album/copertina claudio re.webp'}
+                      coverSrc={project.image ?? project.largeImage ?? ''}
                     />
                   ) : (
                     project.tracks.map((t, i) => {

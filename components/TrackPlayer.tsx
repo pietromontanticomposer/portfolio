@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import AudioPlayer from "./AudioPlayer";
 
@@ -75,14 +75,25 @@ export default function TrackPlayer({
 
   const safeCoverSrc = useMemo(() => {
     const src = currentTrack?.cover ?? coverSrc;
+    if (!src) return '';
     return encodeURI(src).replace(/'/g, "%27");
   }, [currentTrack?.cover, coverSrc]);
+
+  // Memoize callback to prevent AudioPlayer re-renders
+  const handleNowPlayingChange = useCallback((d: { isPlaying: boolean; currentTime: number; duration: number }) => {
+    setNowPlaying(d);
+    if (d.isPlaying && !hasPlayed) setHasPlayed(true);
+  }, [hasPlayed]);
 
   return (
     <div className="track-player">
       <div className="track-player-cover-wrap">
         <div className="track-player-cover">
-          <Image src={safeCoverSrc} alt="Cover art" fill sizes="140px" priority />
+          {safeCoverSrc ? (
+            <Image src={safeCoverSrc} alt="Cover art" fill sizes="140px" />
+          ) : (
+            <div className="track-player-cover-empty" />
+          )}
         </div>
         {hasPlayed ? (
           <div className="track-player-now">
@@ -100,10 +111,7 @@ export default function TrackPlayer({
           showTime={false}
           title={getTitle(currentTrack.context)}
           showNowPlaying={false}
-          onNowPlayingChange={(d) => {
-            setNowPlaying(d);
-            if (d.isPlaying && !hasPlayed) setHasPlayed(true);
-          }}
+          onNowPlayingChange={handleNowPlayingChange}
         />
       </div>
       <div className="track-player-list" role="list">
@@ -117,12 +125,16 @@ export default function TrackPlayer({
             <span className="track-row-title">
               {showRowCover ? (
                 <span className="track-row-thumb" aria-hidden="true">
-                  <Image
-                    src={encodeURI(track.cover ?? rowCoverSrc ?? coverSrc).replace(/'/g, "%27")}
-                    alt=""
-                    width={36}
-                    height={52}
-                  />
+                  {(track.cover ?? rowCoverSrc ?? coverSrc) ? (
+                    <Image
+                      src={encodeURI(track.cover ?? rowCoverSrc ?? coverSrc).replace(/'/g, "%27")}
+                      alt=""
+                      width={36}
+                      height={52}
+                    />
+                  ) : (
+                    <span className="track-row-thumb-empty" />
+                  )}
                 </span>
               ) : null}
               {index === currentIndex ? (
