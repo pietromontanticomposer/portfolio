@@ -3,7 +3,7 @@ import React from "react";
 import Image from 'next/image'
 import LazyIframe from './LazyIframe'
 import AudioPlayer from './AudioPlayer'
-import TrackPlayer from './TrackPlayer'
+import TrackPlayer from './TrackPlayerClient'
 
 type Track = {
   embedUrl?: string;
@@ -57,7 +57,7 @@ export default function ProjectModal({
             ) : null}
             {project.largeImage ? (
               <div style={{ position: 'relative', width: '100%', height: 'auto' }}>
-                <Image src={project.largeImage} alt={`${project.title} still`} className="modal-large-image" width={1100} height={620} style={{ width: '100%', height: 'auto' }} />
+                <Image src={project.largeImage} alt={`${project.title} still`} className="modal-large-image" width={1100} height={620} style={{ width: '100%', height: 'auto' }} loading="lazy" decoding="async" />
               </div>
             ) : null}
           </div>
@@ -79,15 +79,15 @@ export default function ProjectModal({
 
             {project.tracks && project.tracks.length > 0 && (
               <div className="tracks">
-                {project.tracks.every((t) => t.file) && (project.slug === 'claudio-re' || project.slug === 'soggetto-obsoleto' || project.slug === 'l-appartamento') ? (
+                {project.tracks.every((t) => 'file' in t && !!t.file) && (project.slug === 'claudio-re' || project.slug === 'soggetto-obsoleto' || project.slug === 'l-appartamento') ? (
                   <TrackPlayer
                     tracks={project.tracks as { file: string; context: string }[]}
                     coverSrc={
                       project.slug === 'claudio-re'
-                        ? '/uploads/copertina album/copertina claudio re.jpg'
+                        ? '/optimized/uploads/copertina album/copertina claudio re.webp'
                         : project.slug === 'l-appartamento'
-                        ? "/uploads/locandina l'appartamento.jpg"
-                        : '/uploads/copertina album/copertina soggetto obsoleto.jpg'
+                        ? "/optimized/uploads/copertina album/copertina l'appartamento.webp"
+                        : '/optimized/uploads/copertina album/copertina soggetto obsoleto.webp'
                     }
                   />
                 ) : (
@@ -101,8 +101,8 @@ export default function ProjectModal({
                             waveColor="#22d3ee"
                             progressColor="#0891b2"
                           />
-                        ) : (
-                          <LazyIframe src={t.embedUrl} title={`track-${i}`} height={t.height ?? 120} />
+                          ) : (
+                          <LazyIframe src={t.embedUrl as string} title={`track-${i}`} height={t.height ?? 120} />
                         )}
                       </div>
                     </div>

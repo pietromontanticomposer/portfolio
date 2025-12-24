@@ -1,6 +1,6 @@
 import StripToggle from "../components/StripToggle";
 import PartnerStripToggle from "../components/PartnerStripToggle";
-import TrackPlayer from "../components/TrackPlayer";
+import TrackPlayer from '../components/TrackPlayerClient';
 import Image from 'next/image';
 import { projects } from '../data/projects'
 
@@ -34,52 +34,52 @@ const selectedTracks = [
   {
     file: '/uploads/tracks/selected tracks/My Crown, My Ambition, My Queen.mp3',
     context: 'My Crown, My Ambition, My Queen',
-    cover: '/uploads/copertina album/copertina claudio re.jpg',
+    cover: '/optimized/uploads/copertina album/copertina claudio re.webp',
   },
   {
     file: "/uploads/tracks/selected tracks/What If A Man Cant Regret.mp3",
     context: "What If A Man Can't Regret",
-    cover: '/uploads/copertina album/copertina claudio re.jpg',
+    cover: '/optimized/uploads/copertina album/copertina claudio re.webp',
   },
   {
     file: '/uploads/tracks/selected tracks/The Spectre.mp3',
     context: 'The Spectre',
-    cover: '/uploads/copertina album/copertina claudio re.jpg',
+    cover: '/optimized/uploads/copertina album/copertina claudio re.webp',
   },
   {
     file: '/uploads/tracks/selected tracks/Ending Titles.mp3',
     context: 'Ending Titles',
-    cover: '/uploads/copertina album/copertina soggetto obsoleto.jpg',
+    cover: '/optimized/uploads/copertina album/copertina soggetto obsoleto.webp',
   },
   {
     file: '/uploads/tracks/selected tracks/Obsolete Subject And Past Times.mp3',
     context: 'Obsolete Subject And Past Times',
-    cover: '/uploads/copertina album/copertina soggetto obsoleto.jpg',
+    cover: '/optimized/uploads/copertina album/copertina soggetto obsoleto.webp',
   },
   {
     file: '/uploads/tracks/selected tracks/Il mio ritmo.mp3',
     context: 'Il mio ritmo',
-    cover: "/uploads/copertina album/copertina l'appartamento.jpeg",
+    cover: "/optimized/uploads/copertina album/copertina l'appartamento.webp",
   },
   {
     file: "/uploads/tracks/selected tracks/The Mothers Tale.mp3",
     context: "The Mother's Tale",
-    cover: '/uploads/copertina album/copertina la sonata del caos.jpg',
+    cover: '/optimized/uploads/copertina album/copertina la sonata del caos.webp',
   },
   {
     file: "/uploads/tracks/selected tracks/Talias Farewell.mp3",
     context: "Talia's Farewell",
-    cover: '/uploads/copertina album/copertina la sonata del caos.jpg',
+    cover: '/optimized/uploads/copertina album/copertina la sonata del caos.webp',
   },
   {
     file: '/uploads/tracks/selected tracks/Convivium.mp3',
     context: 'Convivium',
-    cover: '/uploads/copertina album/copertina i veneti antichi.png',
+    cover: '/optimized/uploads/copertina album/copertina i veneti antichi.webp',
   },
   {
     file: '/uploads/tracks/selected tracks/The Battle.mp3',
     context: 'The Battle',
-    cover: '/uploads/copertina album/copertina i veneti antichi.png',
+    cover: '/optimized/uploads/copertina album/copertina i veneti antichi.webp',
   },
 ];
 
@@ -145,10 +145,12 @@ export default function Home() {
               <div className="bio-grid gap-6">
                 <div className="bio-photo relative">
                   <Image
-                    src="/uploads/foto-sito.jpg"
+                    src="/optimized/uploads/foto-sito.webp"
                     alt="Portrait"
                     fill
                     className="object-cover"
+                    loading="lazy"
+                    decoding="async"
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 </div>
@@ -195,7 +197,7 @@ export default function Home() {
               <div className="mt-6">
                 <TrackPlayer
                   tracks={selectedTracks}
-                  coverSrc={selectedTracks[0]?.cover ?? 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/uploads/foto-sito.jpg'}
+                  coverSrc={selectedTracks[0]?.cover ?? 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/foto-sito.webp'}
                 />
               </div>
             </section>
