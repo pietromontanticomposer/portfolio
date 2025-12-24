@@ -1,10 +1,12 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { animationCoordinator } from "../lib/AnimationCoordinator";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [canBlur, setCanBlur] = useState(true); // Disable blur during interactions
 
   useEffect(() => {
     // Check if desktop (>= 768px)
@@ -33,15 +35,21 @@ export default function Header() {
 
     window.addEventListener('scroll', onScroll, { passive: true });
 
+    // Disable blur during user interactions for better performance
+    const unsubscribe = animationCoordinator.subscribe((state) => {
+      setCanBlur(state === 'active');
+    });
+
     return () => {
       window.removeEventListener('scroll', onScroll);
       mediaQuery.removeEventListener('change', handleMediaChange);
       if (rafId) cancelAnimationFrame(rafId);
+      unsubscribe();
     };
   }, [scrolled]);
 
   return (
-    <header className={`sticky top-0 z-40 bg-transparent/60 ${scrolled && isDesktop ? 'backdrop-blur-sm' : ''}`}>
+    <header className={`sticky top-0 z-40 bg-transparent/60 ${scrolled && isDesktop && canBlur ? 'backdrop-blur-sm' : ''}`}>
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4 sm:px-10 lg:px-16">
         <Link href="/" className="group flex items-center gap-3">
           <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs font-semibold tracking-[0.2em] text-[color:var(--foreground)] shadow-[0_10px_30px_rgba(0,0,0,0.2)] transition group-hover:border-white/20">

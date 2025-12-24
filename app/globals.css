@@ -34,6 +34,12 @@ body {
   overflow-x: hidden;
 }
 
+/* Performance: disable expensive GPU effects during user interactions */
+body.animating-paused * {
+  will-change: auto !important;
+  backdrop-filter: none !important;
+}
+
 main {
   position: relative;
 }

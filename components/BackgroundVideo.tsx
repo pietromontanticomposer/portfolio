@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from 'react';
+import { animationCoordinator } from '../lib/AnimationCoordinator';
 
 export default function BackgroundVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -65,32 +66,38 @@ export default function BackgroundVideo() {
     if (!shouldLoadSrc || !videoRef.current) return;
 
     const video = videoRef.current;
+    let isIntersecting = false;
+    let isAnimationAllowed = true;
 
-    // Play/pause based on visibility + tab visibility
+    const tryPlay = () => {
+      if (isIntersecting && !document.hidden && isAnimationAllowed) {
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    };
+
+    // Intersection observer
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && !document.hidden) {
-            video.play().catch(() => {});
-          } else {
-            video.pause();
-          }
+          isIntersecting = entry.isIntersecting;
+          tryPlay();
         });
       },
       { threshold: 0.1 }
     );
 
+    // Tab visibility
     const handleVisibilityChange = () => {
-      if (document.hidden) {
-        video.pause();
-      } else if (videoRef.current) {
-        const rect = video.getBoundingClientRect();
-        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-        if (isVisible) {
-          video.play().catch(() => {});
-        }
-      }
+      tryPlay();
     };
+
+    // Animation coordinator - pause video during user interactions
+    const unsubscribe = animationCoordinator.subscribe((state) => {
+      isAnimationAllowed = state === 'active';
+      tryPlay();
+    });
 
     observer.observe(video);
     document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -98,6 +105,7 @@ export default function BackgroundVideo() {
     return () => {
       observer.disconnect();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      unsubscribe();
     };
   }, [shouldLoadSrc]);
 

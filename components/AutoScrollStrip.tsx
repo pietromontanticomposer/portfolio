@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useRef } from "react";
 import PosterCard from "./PosterCard";
+import { animationCoordinator } from "../lib/AnimationCoordinator";
 
 type Poster = {
   slug: string;
@@ -51,6 +52,7 @@ export default function AutoScrollStrip({ posters }: { posters: Poster[] }) {
     let firstSetWidth = Math.max(1, track.scrollWidth / 2);
     let isVisible = true;
     let isTabVisible = !document.hidden;
+    let isAnimationActive = true; // Controlled by AnimationCoordinator
 
     const updateWidth = () => {
       firstSetWidth = Math.max(1, track.scrollWidth / 2);
@@ -94,9 +96,17 @@ export default function AutoScrollStrip({ posters }: { posters: Poster[] }) {
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
+    // Subscribe to animation coordinator
+    const unsubscribe = animationCoordinator.subscribe((state) => {
+      isAnimationActive = state === 'active';
+      if (!isAnimationActive) {
+        lastTime = null; // Reset to avoid jumps when resuming
+      }
+    });
+
     function step(time: number) {
-      // Only animate if visible AND tab is active (scroll sempre)
-      if (!isReducedMotion.current && isVisible && isTabVisible) {
+      // Only animate if: reduced motion off, visible, tab active, AND coordinator allows
+      if (!isReducedMotion.current && isVisible && isTabVisible && isAnimationActive) {
         if (lastTime === null) lastTime = time;
         const delta = Math.min((time - lastTime) / 1000, 0.05);
         lastTime = time;
@@ -124,6 +134,9 @@ export default function AutoScrollStrip({ posters }: { posters: Poster[] }) {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       window.removeEventListener("resize", handleResize);
       clearTimeout(resizeTimeout);
+      visibilityObserver.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      unsubscribe();
       if (track) track.style.transform = "";
     };
   }, [posters]);

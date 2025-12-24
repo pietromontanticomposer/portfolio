@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useRef } from "react";
 import Image from 'next/image';
+import { animationCoordinator } from "../lib/AnimationCoordinator";
 
 type Partner = {
   name: string;
@@ -25,6 +26,7 @@ export default function PartnerAutoScrollStrip({ partners }: { partners: Partner
     let firstSetWidth = Math.max(1, track.scrollWidth / 2);
     let isVisible = true;
     let isTabVisible = !document.hidden;
+    let isAnimationActive = true;
 
     const updateWidth = () => {
       firstSetWidth = Math.max(1, track.scrollWidth / 2);
@@ -67,9 +69,16 @@ export default function PartnerAutoScrollStrip({ partners }: { partners: Partner
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
+    const unsubscribe = animationCoordinator.subscribe((state) => {
+      isAnimationActive = state === 'active';
+      if (!isAnimationActive) {
+        lastTime = null;
+      }
+    });
+
     function step(time: number) {
-      // Only animate if visible AND tab is active (scroll sempre)
-      if (isVisible && isTabVisible) {
+      // Only animate if visible AND tab active AND coordinator allows
+      if (isVisible && isTabVisible && isAnimationActive) {
         if (lastTime === null) lastTime = time;
         const delta = Math.min((time - lastTime) / 1000, 0.05);
         lastTime = time;
@@ -95,6 +104,7 @@ export default function PartnerAutoScrollStrip({ partners }: { partners: Partner
       clearTimeout(resizeTimeout);
       visibilityObserver.disconnect();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      unsubscribe();
       track.style.transform = "";
     };
   }, [partners]);
