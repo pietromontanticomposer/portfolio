@@ -41,8 +41,9 @@ main {
 .grain {
   background-image: radial-gradient(rgba(240, 248, 255, 0.08) 0.6px, transparent 0.6px);
   background-size: 6px 6px;
-  opacity: 0.25;
+  opacity: 0.15;
   mix-blend-mode: screen;
+  /* Reduced opacity from 0.25 to 0.15 for lighter effect */
 }
 
 .headline {
@@ -66,24 +67,45 @@ main {
 
 .card-shell {
   border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(8, 12, 20, 0.6);
-  box-shadow: 0 28px 70px var(--shadow);
+  background: rgba(8, 12, 20, 0.85);
+  box-shadow: 0 20px 50px var(--shadow);
   border-radius: 20px;
   backdrop-filter: blur(6px);
+  /* Reduced box-shadow blur from 70px to 50px for better performance */
 }
 
 .section-title {
   font-family: var(--font-bodoni), serif;
-  position: relative;
+  position: relative !important;
+  display: inline-block !important;
   letter-spacing: -0.015em;
 }
 
 .section-title::after {
   content: "";
-  display: block;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -0.45rem;
   width: 80px;
   height: 1px;
-  margin-top: 0.4rem;
+  background: linear-gradient(90deg, rgba(255,255,255,0.45), transparent);
+}
+
+/* Ensure titles inside card-shell position the underline under the text itself */
+.card-shell .section-title {
+  display: inline-block !important;
+  position: relative !important;
+}
+.card-shell .section-title::after {
+  /* same styling but scoped to card-shell to avoid layout interference */
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -0.45rem;
+  width: 80px;
+  height: 1px;
   background: linear-gradient(90deg, rgba(255,255,255,0.45), transparent);
 }
 
@@ -106,7 +128,7 @@ main {
 }
 
 .hero-panel {
-  background: rgba(5, 8, 14, 0.45);
+  background: rgba(5, 8, 14, 0.75);
   border: 1px solid rgba(255,255,255,0.08);
   box-shadow: 0 18px 50px rgba(2,6,23,0.55);
   border-radius: 20px;
@@ -121,7 +143,7 @@ main {
 }
 
 .page-panel {
-  background: rgba(5, 8, 14, 0.45);
+  background: rgba(5, 8, 14, 0.75);
   border: 1px solid rgba(255,255,255,0.08);
   box-shadow: 0 18px 50px rgba(2,6,23,0.55);
   border-radius: 20px;
@@ -197,6 +219,8 @@ main {
   height: 2px;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
 }
+
+/* (bio-name removed) underline handled by .section-title */
 
 .hero-subtitle {
   text-shadow: 0 8px 20px rgba(4, 6, 12, 0.45);
@@ -326,27 +350,29 @@ main {
 
 .partner-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.2rem 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
   align-items: center;
   justify-items: center;
 }
 
 .partner-card {
+  position: relative;
+  width: 250px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 92px;
+  height: 160px;
   padding: 0.25rem 0.5rem;
+  background: transparent;
 }
 
 .partner-card img {
-  max-width: 100%;
-  max-height: 52px;
+  max-width: 240px;
+  max-height: 150px;
   object-fit: contain;
-  opacity: 1 !important;
-  filter: none !important;
 }
+
 
 
 @media (max-width: 900px) {
@@ -398,7 +424,7 @@ main {
   margin-left: calc(50% - 46vw);
   margin-right: 1.5rem;
   /* subtle translucent panel to separate from background */
-  background: rgba(2,6,23,0.26);
+  background: rgba(2,6,23,0.55);
   border-radius: 20px;
   backdrop-filter: blur(6px);
   box-shadow: 0 18px 50px rgba(2,6,23,0.45);
@@ -440,7 +466,7 @@ main {
 .strip-toggle-grid {
   margin: 0 1.5rem;
   padding: 2rem;
-  background: rgba(2,6,23,0.26);
+  background: rgba(2,6,23,0.55);
   border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.06);
   box-shadow: 0 18px 50px rgba(2,6,23,0.45);
@@ -497,10 +523,19 @@ main {
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
 }
 
-.scroll-strip .poster-card {
-  box-shadow:
-    0 22px 50px rgba(2, 6, 23, 0.55),
-    0 10px 20px rgba(0, 0, 0, 0.35);
+.scroll-strip .partner-card {
+  width: 250px;
+  height: 160px;
+  border-radius: 10px;
+  background: transparent;
+  box-shadow: 0 26px 60px var(--shadow);
+  display: block;
+  padding: 0;
+  color: var(--foreground);
+  position: relative;
+  overflow: visible;
+  margin: 0 1rem;
+  max-width: 250px;
 }
 
 .scroll-shell {
@@ -763,6 +798,55 @@ main {
   .poster-grid-gridview .poster-card { width: 100%; }
 }
 
+/* Grid view for partners: large, evenly sized cards */
+.partner-grid-gridview {
+  display: grid;
+  gap: 32px;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: start;
+  justify-items: center;
+}
+
+.partner-grid-gridview > div {
+  display: flex;
+  justify-content: center;
+}
+
+.partner-grid-gridview .partner-card {
+  width: 250px;
+  max-width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    0 26px 60px rgba(2, 6, 23, 0.55),
+    0 12px 24px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(8, 12, 20, 0.4);
+  margin: 0; /* remove extra margins inside grid cells */
+  aspect-ratio: auto;
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+
+.partner-grid-gridview .partner-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,0.18);
+  box-shadow: 0 32px 70px rgba(2, 6, 23, 0.6);
+}
+
+@media (max-width: 1200px) {
+  .partner-grid-gridview {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .partner-grid-gridview .partner-card { width: 220px; }
+}
+
+@media (max-width: 720px) {
+  .partner-grid-gridview {
+    grid-template-columns: 1fr;
+  }
+  .partner-grid-gridview .partner-card { width: 100%; }
+}
+
 .poster-wrapper { width: 100%; }
 
 @keyframes floatSlow {
@@ -794,8 +878,9 @@ main {
 }
 
 .fade-in {
-  animation: fadeUp 0.9s ease-out both;
-  will-change: opacity, transform;
+  animation: fadeUp 0.6s ease-out both;
+  /* Reduced from 0.9s to 0.6s for snappier feel */
+  /* will-change removed - only use during animation */
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -885,7 +970,22 @@ video::cue {
 }
 .modal-header { display:flex; justify-content: space-between; align-items: center; gap: 1rem; }
 .modal-title { font-family: var(--font-bodoni); font-size: 1.4rem; }
-.modal-close { background: transparent; border: 1px solid rgba(255,255,255,0.06); color: var(--muted); padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; }
+/* Make modal-close visually match hero-btn hero-btn-secondary */
+.modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  transition: transform 150ms ease, border-color 150ms ease, background 150ms ease;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(8, 12, 20, 0.35);
+  color: var(--foreground);
+  cursor: pointer;
+}
 
 .modal-body { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 1rem; }
 @media (min-width: 900px) { .modal-body { grid-template-columns: 2fr 1fr; } }
