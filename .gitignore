@@ -30,3 +30,11 @@ next-env.d.ts
 .vercel
 .env*.local
 # local blob maps (never commit)
+
+# local media workflow (never commit)
+asset_inbox/
+_blob_inbox/
+_blob_done/
+scripts/blob-urls.json
+.env.local
+.DS_Store
