@@ -2,11 +2,12 @@
 .env
 .env.*
 !.env.example
+.env.local
 
 # vercel
 .vercel/
 
-# next build
+# build
 .next/
 out/
 dist/
@@ -24,34 +25,18 @@ dev.log
 # OS
 .DS_Store
 
-# local media workflow (never commit)
+# local media workflow
 asset_inbox/
 _blob_inbox/
 _blob_done/
 _local_media/
 scripts/blob-urls.json
-.env.local
 
-# legacy local media (if present)
-public/uploads/
-public/media/_legacy/
-public/media/audio/
-
-# build
-.next/
-out/
-dist/
-
-# deps
-node_modules/
-
-# env
-.env.local
-
-# local media (never commit)
-_local_media/
-_blob_inbox/
-_blob_done/
-
-# OS
-.DS_Store
+# external static assets (hosted on blob/CDN)
+public/posters/
+public/partners/
+public/optimized/
+public/media/
+public/background*.mp4
+public/background*.webm
+public/background-poster.jpg
