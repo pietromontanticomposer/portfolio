@@ -6,11 +6,11 @@
     "dev": "next dev -p 4000",
     "build": "next build",
     "start": "next start -p 4000",
-    "lint": "eslint"
+    "lint": "eslint",
+    "blob:sync": "DOTENV_CONFIG_PATH=.env.local node scripts/blob-sync.mjs asset_inbox portfolio --manifest scripts/blob-urls.json"
   },
   "dependencies": {
     "@vercel/blob": "^2.0.0",
-    "dotenv": "^17.2.3",
     "next": "16.1.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -21,6 +21,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^17.2.3",
     "eslint": "^9",
     "eslint-config-next": "16.1.0",
     "tailwindcss": "^4",

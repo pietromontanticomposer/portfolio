@@ -27,3 +27,6 @@ tmp/
 scripts/blob-urls.json
 # TypeScript / Next generated
 next-env.d.ts
+.vercel
+.env*.local
+# local blob maps (never commit)
