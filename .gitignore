@@ -36,3 +36,22 @@ scripts/blob-urls.json
 public/uploads/
 public/media/_legacy/
 public/media/audio/
+
+# build
+.next/
+out/
+dist/
+
+# deps
+node_modules/
+
+# env
+.env.local
+
+# local media (never commit)
+_local_media/
+_blob_inbox/
+_blob_done/
+
+# OS
+.DS_Store
