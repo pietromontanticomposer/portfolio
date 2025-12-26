@@ -262,7 +262,3 @@ export const projects = [
     tracks: [],
   },
 ];
-        {
-          file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-polvere-sotto-al-tappeto/Shes-Not-Here-Anymore.mp3",
-          context: "She's Not Here Anymore",
-        },
