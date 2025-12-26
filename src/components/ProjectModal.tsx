@@ -84,10 +84,10 @@ export default function ProjectModal({
                     tracks={project.tracks as { file: string; context: string }[]}
                     coverSrc={
                       project.slug === 'claudio-re'
-                        ? '/optimized/uploads/copertina album/copertina claudio re.webp'
+                        ? 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp'
                         : project.slug === 'l-appartamento'
-                        ? "/optimized/uploads/copertina album/copertina l'appartamento.webp"
-                        : '/optimized/uploads/copertina album/copertina soggetto obsoleto.webp'
+                        ? "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20l%27appartamento.webp"
+                        : 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20soggetto%20obsoleto.webp'
                     }
                   />
                 ) : (

@@ -55,7 +55,7 @@ export default function TrackPlayerSection({ tracks }: Props) {
         {shouldLoad ? (
           <TrackPlayer
             tracks={tracks}
-            coverSrc={tracks[0]?.cover ?? '/optimized/uploads/foto-sito.webp'}
+            coverSrc={tracks[0]?.cover ?? 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/foto-sito.webp'}
           />
         ) : (
           <div className="track-player-skeleton" style={{ minHeight: '400px' }}>

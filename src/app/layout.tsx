@@ -43,7 +43,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="preload" as="image" href="/background-poster.jpg" />
+        <link rel="preload" as="image" href="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/videos/background-poster.jpg" />
       </head>
       <body
         className={`${bodoni.variable} ${workSans.variable} ${jetbrainsMono.variable} antialiased`}

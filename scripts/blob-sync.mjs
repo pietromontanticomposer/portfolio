@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
+import { spawnSync } from 'child_process';
 import { list, put } from '@vercel/blob';
 
 function argValue(flag, fallback) {
@@ -9,14 +10,15 @@ function argValue(flag, fallback) {
 }
 
 const INBOX = process.argv[2] || 'asset_inbox';
-const PREFIX = process.argv[3] || 'portfolio';
+const RAW_PREFIX = argValue('--prefix', (process.argv[3] && !process.argv[3].startsWith('--')) ? process.argv[3] : '');
+const PREFIX = RAW_PREFIX.replace(/^\/+|\/+$/g, '');
 const MANIFEST_PATH = argValue('--manifest', 'scripts/blob-urls.json');
 const OVERWRITE = process.argv.includes('--overwrite');
 
 const EXTENSIONS = new Set([
   '.mp3', '.wav', '.aiff', '.flac',
   '.mp4', '.webm',
-  '.png', '.jpg', '.jpeg'
+  '.png', '.jpg', '.jpeg', '.webp', '.avif'
 ]);
 
 function walk(dir, out = []) {
@@ -71,22 +73,31 @@ let skipped = 0;
 
 for (const abs of files) {
   const rel = path.relative(INBOX, abs).split(path.sep).join('/');
-  const pathname = `${PREFIX}/${rel}`;
+  const pathname = PREFIX ? `${PREFIX}/${rel}` : rel;
 
   if (remote.has(pathname) && !OVERWRITE) {
     skipped++;
     continue;
   }
 
-  const res = await put(pathname, fs.createReadStream(abs), {
-    access: 'public',
-    addRandomSuffix: false,
-    allowOverwrite: OVERWRITE
-  });
+  try {
+    const res = await put(pathname, fs.readFileSync(abs), {
+      access: 'public',
+      addRandomSuffix: false,
+      allowOverwrite: OVERWRITE
+    });
 
-  manifest[pathname] = res.url;
-  console.log(`OK ${pathname} -> ${res.url}`);
-  uploaded++;
+    manifest[pathname] = res.url;
+    console.log(`OK ${pathname} -> ${res.url}`);
+    uploaded++;
+  } catch (err) {
+    const args = ['blob', 'put', abs, '--pathname', pathname, '--no-color'];
+    if (OVERWRITE) args.push('--force');
+    const res = spawnSync('vercel', args, { stdio: 'inherit' });
+    if (res.status !== 0) throw err;
+    console.log(`OK ${pathname} -> uploaded via vercel CLI`);
+    uploaded++;
+  }
 }
 
 saveManifest(MANIFEST_PATH, manifest);

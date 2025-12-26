@@ -4,8 +4,8 @@ export const projects = [
     title: 'Claudio Re',
     year: '2020',
     tag: 'Short',
-    image: '/optimized/posters/poster claudio re.avif',
-    largeImage: '/optimized/posters/poster claudio re.avif',
+    image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20claudio%20re.avif',
+    largeImage: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20claudio%20re.avif',
     description: `Claudio Re is a short film directed by Marco Martini, inspired by Hamlet and centered on the psychological unraveling of King Claudius after committing murder to secure his throne.
   The score employs a dark hybrid orchestral language, blending traditional orchestration with ancient instruments to create a tense, timeless atmosphere.
   Both composition and dark, restrained mix were shaped to emphasize the film's black-and-white imagery, reinforcing Claudius' guilt and paranoia and amplifying his fear of being killed in turn. The music acts as an internal pressure, exposing the fracture between his public authority and inner collapse.`,
@@ -41,8 +41,8 @@ export const projects = [
     title: 'Soggetto Obsoleto',
     year: '2021',
     tag: 'Short',
-    image: '/optimized/posters/poster soggetto obsoleto.webp',
-    largeImage: '/optimized/posters/poster soggetto obsoleto.webp',
+    image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20soggetto%20obsoleto.webp',
+    largeImage: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20soggetto%20obsoleto.webp',
     description: `Soggetto Obsoleto is a short film directed by Nicola Pegg, set in a dystopian society where individuals are periodically evaluated according to their social usefulness and risk being declared "obsolete."
   The score is deliberately absent throughout most of the film and enters only in the final section, during the closing dialogue between father and son.
   Music is used as a moment of emotional revelation, introducing intimacy and humanity after prolonged restraint, and marking a clear contrast between the impersonal system that governs the story and the private bond at its core.`,
@@ -67,8 +67,8 @@ export const projects = [
     title: 'I Veneti Antichi',
     year: '2024',
     tag: 'Documentary',
-    image: '/optimized/posters/poster i veneti antichi.avif',
-    largeImage: '/optimized/posters/poster i veneti antichi.avif',
+    image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20i%20veneti%20antichi.avif',
+    largeImage: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20i%20veneti%20antichi.avif',
     description: `I Veneti Antichi – Riding the Myth is a historical docu-film directed by Tommaso Giusto and produced by Akeron Film, dedicated to the ancient Veneti civilization and their mythic and cultural imagination.
   I composed the music for the battle sequences and the ritual banquet scenes, working on two distinct registers: on one side a tighter, more rhythmic writing to support the conflict, on the other a more ceremonial and evocative musical framework for communal moments.
   The score accompanies the cinematic reconstructions, reinforcing the epic tone of the story while maintaining narrative clarity and an educational purpose.`,
@@ -89,8 +89,8 @@ export const projects = [
     title: 'I Found You',
     year: '2020',
     tag: 'Short',
-    image: '/optimized/posters/poster i found you.webp',
-    largeImage: '/optimized/posters/poster i found you.webp',
+    image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20i%20found%20you.webp',
+    largeImage: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20i%20found%20you.webp',
     description: `I Found You is an independent horror film directed by Diego Carli, set in an abandoned villa where two young girls engage in a seemingly innocent game that gradually reveals its dangerous nature.
   The score follows a classic horror underscore approach, designed to support the slow transition from innocence to unease, focusing on underlying tension rather than overt shocks.
   The music works through restraint and subtle development, enhancing silence, anticipation, and small timbral shifts to intensify the sense of threat without pre-empting the visual narrative.`,
@@ -101,8 +101,8 @@ export const projects = [
     title: "L'Appartamento",
     year: '2022',
     tag: 'Feature',
-    image: "/optimized/posters/poster l'appartamento.webp",
-    largeImage: "/optimized/posters/poster l'appartamento.webp",
+    image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20l%27appartamento.webp",
+    largeImage: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20l%27appartamento.webp",
     description: `L'Appartamento is a social docu-film directed by Federico Scienza and Manuela Boezio, telling the experience of the Io Abito project and the paths toward autonomy of people with vulnerabilities in everyday apartment life.
   The score was conceived as a discreet, non-invasive support, intended to accompany real moments without guiding or amplifying emotion. The music works by subtraction, respecting the pace of the story and leaving space for voices, silences, and the community dimension of the film.`,
     tracks: [
@@ -129,8 +129,8 @@ export const projects = [
     title: 'La Sonata del Caos',
     year: '2023',
     tag: 'Documentary',
-    image: '/optimized/posters/poster la sonata del caos.avif',
-    largeImage: '/optimized/posters/poster la sonata del caos.avif',
+    image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20la%20sonata%20del%20caos.avif',
+    largeImage: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20la%20sonata%20del%20caos.avif',
     description: `La Sonata del Caos is a fantasy short film directed by Eleonora Valentino, set in a space suspended between reality and folklore, where the presence of the Banshee embodies the theme of death and the inevitable.
   The score is built around a main leitmotif associated with the Banshee, which returns throughout the film in different forms and orchestrations, adapting to the protagonist's narrative and psychological shifts.
   Alongside this central theme, I developed secondary leitmotifs tied to characters and phases of the story, creating a coherent musical structure that follows the short's emotional evolution without resorting to redundant commentary`,
@@ -162,8 +162,8 @@ export const projects = [
     title: 'Meridiana',
     year: '2021',
     tag: 'Short',
-    image: '/optimized/posters/poster meridiana.avif',
-    largeImage: '/optimized/posters/poster meridiana.avif',
+    image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20meridiana.avif',
+    largeImage: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20meridiana.avif',
     description: `Poetic short film with acoustic and ambient sounds. Music conceived for wide visual openings.`,
     tracks: [],
   },
@@ -172,8 +172,8 @@ export const projects = [
     title: 'Freak Shakespeare',
     year: '2019',
     tag: 'Theatre',
-    image: '/optimized/posters/poster freak shakespeare.avif',
-    largeImage: '/optimized/posters/poster freak shakespeare.avif',
+    image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20freak%20shakespeare.avif',
+    largeImage: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20freak%20shakespeare.avif',
     description: `Theatre production with original music. Hybrid style between electronic and classical instruments.`,
     tracks: [],
   },
@@ -182,8 +182,8 @@ export const projects = [
     title: "Una Piccola, Stupida, Inutile Storia D'Amore",
     year: '2022',
     tag: 'Feature',
-    image: '/optimized/posters/poster  una piccola, stupida, inutile storia d\'amore.webp',
-    largeImage: '/optimized/posters/poster  una piccola, stupida, inutile storia d\'amore.webp',
+    image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20%20una%20piccola%2C%20stupida%2C%20inutile%20storia%20d%27amore.webp',
+    largeImage: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20%20una%20piccola%2C%20stupida%2C%20inutile%20storia%20d%27amore.webp',
     description: `Feature film with intimate arrangements and light rhythms. Focus on the relationships between characters.`,
     tracks: [
       {

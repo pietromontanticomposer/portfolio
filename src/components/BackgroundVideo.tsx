@@ -150,7 +150,7 @@ export default function BackgroundVideo() {
     <div aria-hidden="true">
       <img
         ref={posterRef}
-        src="/background-poster.jpg"
+        src="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/videos/background-poster.jpg"
         alt=""
         decoding="async"
         loading="eager"

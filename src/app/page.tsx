@@ -34,52 +34,52 @@ const selectedTracks = [
   {
     file: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/My-Crown-My-Ambition-My-Queen.mp3',
     context: 'My Crown, My Ambition, My Queen',
-    cover: '/optimized/uploads/copertina album/copertina claudio re.webp',
+    cover: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp',
   },
   {
     file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/What-If-A-Man-Cant-Regret-alt.mp3",
     context: "What If A Man Can't Regret",
-    cover: '/optimized/uploads/copertina album/copertina claudio re.webp',
+    cover: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp',
   },
   {
     file: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/The-Spectre.mp3',
     context: 'The Spectre',
-    cover: '/optimized/uploads/copertina album/copertina claudio re.webp',
+    cover: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp',
   },
   {
     file: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/Ending-Titles.mp3',
     context: 'Ending Titles',
-    cover: '/optimized/uploads/copertina album/copertina soggetto obsoleto.webp',
+    cover: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20soggetto%20obsoleto.webp',
   },
   {
     file: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/Obsolete-Subject-And-Past-Times.mp3',
     context: 'Obsolete Subject And Past Times',
-    cover: '/optimized/uploads/copertina album/copertina soggetto obsoleto.webp',
+    cover: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20soggetto%20obsoleto.webp',
   },
   {
     file: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/Il-mio-ritmo.mp3',
     context: 'Il mio ritmo',
-    cover: "/optimized/uploads/copertina album/copertina l'appartamento.webp",
+    cover: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20l%27appartamento.webp",
   },
   {
     file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/The-Mothers-Tale-alt.mp3",
     context: "The Mother's Tale",
-    cover: '/optimized/uploads/copertina album/copertina la sonata del caos.webp',
+    cover: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20la%20sonata%20del%20caos.webp',
   },
   {
     file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/Talias-Farewell-alt.mp3",
     context: "Talia's Farewell",
-    cover: '/optimized/uploads/copertina album/copertina la sonata del caos.webp',
+    cover: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20la%20sonata%20del%20caos.webp',
   },
   {
     file: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/Convivium.mp3',
     context: 'Convivium',
-    cover: '/optimized/uploads/copertina album/copertina i veneti antichi.webp',
+    cover: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20i%20veneti%20antichi.webp',
   },
   {
     file: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/selected-tracks/The-Battle.mp3',
     context: 'The Battle',
-    cover: '/optimized/uploads/copertina album/copertina i veneti antichi.webp',
+    cover: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20i%20veneti%20antichi.webp',
   },
 ];
 
@@ -145,7 +145,7 @@ export default function Home() {
               <div className="bio-grid gap-6">
                 <div className="bio-photo relative">
                   <Image
-                    src="/optimized/uploads/foto-sito.webp"
+                    src="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/foto-sito.webp"
                     alt="Portrait"
                     fill
                     className="object-cover"
