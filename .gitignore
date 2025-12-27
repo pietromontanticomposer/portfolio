@@ -1,3 +1,14 @@
+.DS_Store
+.next/
+node_modules/
+.vercel/
+public/uploads/
+public/hls/
+uploads-backup/
+asset_inbox/
+_blob_done/
+upload-test.mjs
+*.log
 # env
 .env
 .env.*

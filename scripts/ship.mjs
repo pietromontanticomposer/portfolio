@@ -73,6 +73,22 @@ if (!dirty) {
   process.exit(0);
 }
 
-run('git', ['add', '-A']);
+// Aggiungi soltanto i file di configurazione / metadata, non l'intero albero.
+const safeFiles = [
+  'package.json',
+  'package-lock.json',
+  'next.config.ts',
+  'next-env.d.ts',
+  'scripts/ship.mjs'
+];
+
+// Verifica quali di questi esistono prima di aggiungerli
+const toAdd = safeFiles.filter((f) => fs.existsSync(path.join(root, f)));
+if (toAdd.length === 0) {
+  console.log('Nessun file "sicuro" da aggiungere. Annullamento commit.');
+  process.exit(0);
+}
+
+run('git', ['add', ...toAdd]);
 run('git', ['commit', '-m', msg]);
 run('git', ['push']);
