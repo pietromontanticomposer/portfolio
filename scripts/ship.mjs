@@ -29,8 +29,40 @@ const msg = process.argv.slice(2).join(' ').trim() || 'chore: update';
 
 if (hasInboxFiles(inbox)) {
   run('npm', ['run', 'blob:sync']);
+  run('npm', ['run', 'blob:replace']);
 } else {
   console.log('asset_inbox vuota: salto upload blob.');
+}
+
+if (hasInboxFiles(inbox)) {
+  const done = path.join(root, '_blob_done');
+  fs.mkdirSync(done, { recursive: true });
+  const stack = [inbox];
+  while (stack.length) {
+    const current = stack.pop();
+    const entries = fs.readdirSync(current, { withFileTypes: true });
+    for (const e of entries) {
+      const abs = path.join(current, e.name);
+      const rel = path.relative(inbox, abs);
+      const target = path.join(done, rel);
+      if (e.isDirectory()) {
+        stack.push(abs);
+      } else {
+        fs.mkdirSync(path.dirname(target), { recursive: true });
+        fs.renameSync(abs, target);
+      }
+    }
+  }
+  // Clean up empty dirs in asset_inbox.
+  const prune = [inbox];
+  while (prune.length) {
+    const dir = prune.pop();
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    for (const e of entries) {
+      if (e.isDirectory()) prune.push(path.join(dir, e.name));
+    }
+    if (fs.readdirSync(dir).length === 0) fs.rmdirSync(dir);
+  }
 }
 
 const status = spawnSync('git', ['status', '--porcelain'], { encoding: 'utf8' });

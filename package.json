@@ -3,15 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 4000",
+    "dev": "node node_modules/next/dist/bin/next dev --webpack -p 4000",
     "build": "next build",
-    "start": "next start -p 4000",
+    "start": "node node_modules/next/dist/bin/next start -p 4000",
     "lint": "eslint",
     "blob:sync": "DOTENV_CONFIG_PATH=.env.local node scripts/blob-sync.mjs asset_inbox --manifest scripts/blob-urls.json",
+    "blob:replace": "node scripts/replace-blob-urls.mjs",
     "ship": "node scripts/ship.mjs"
   },
   "dependencies": {
     "@vercel/blob": "^2.0.0",
+    "hls.js": "^1.6.15",
     "next": "16.1.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
