@@ -1,0 +1,37 @@
+{
+  "name": "my-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "node node_modules/next/dist/bin/next dev -p 4000",
+    "build": "next build",
+    "start": "node node_modules/next/dist/bin/next start -p 4000",
+    "lint": "eslint",
+    "lhci:local": "lhci autorun --collect.url=http://localhost:4000",
+    "blob:sync": "DOTENV_CONFIG_PATH=.env.local node scripts/blob-sync.mjs asset_inbox --manifest scripts/blob-urls.json",
+    "blob:replace": "node scripts/replace-blob-urls.mjs",
+    "blob:verify": "node scripts/verify-blob-urls.mjs",
+    "ship": "node scripts/ship.mjs",
+    "inbox:add": "node scripts/inbox-add.mjs",
+    "ship:media": "node scripts/ship-all.mjs"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.0.0",
+    "hls.js": "^1.6.15",
+    "next": "16.1.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "wavesurfer.js": "^7.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "dotenv": "^17.2.3",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

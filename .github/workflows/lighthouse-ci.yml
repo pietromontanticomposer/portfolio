@@ -1,0 +1,44 @@
+name: Lighthouse CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lighthouse:
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install LHCI
+        run: npm install -g @lhci/cli@0.10 || true
+
+      - name: Run Lighthouse CI against production
+        env:
+          SITE_URL: ${{ secrets.SITE_URL }}
+          LHCI_STRICT: ${{ secrets.LHCI_STRICT }}
+        run: |
+          if [ -z "$SITE_URL" ]; then
+            echo "Skipping Lighthouse CI: SITE_URL secret not set."
+            exit 0
+          fi
+          # Run 3 runs and assert thresholds defined in .lighthouserc.json
+          set +e
+          lhci autorun --collect.url=$SITE_URL
+          STATUS=$?
+          if [ "$STATUS" -ne 0 ] && [ "$LHCI_STRICT" = "true" ]; then
+            exit $STATUS
+          fi
+          if [ "$STATUS" -ne 0 ]; then
+            echo "Lighthouse CI failed but is non-blocking (set LHCI_STRICT=true to fail the workflow)."
+          fi
+          exit 0

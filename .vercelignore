@@ -1,0 +1,14 @@
+_blob_done/
+asset_inbox/
+_blob_inbox/
+_blob_inbox_done/
+node_modules/
+public/optimized/
+public/hls/
+public/uploads/
+public/posters/
+public/partners/
+public/media/
+public/background*.mp4
+public/background*.webm
+public/background-poster.jpg
