@@ -1,0 +1,17 @@
+{
+  "titolare": "Pietro Montanti",
+  "email_contatto": "pietromontanticomposer@gmail.com",
+  "hosting": "Vercel",
+  "finalita": [
+    "Fornire il sito web e i contenuti richiesti.",
+    "Gestire richieste di contatto inviate via email."
+  ],
+  "diritti": [
+    "Accesso ai dati personali",
+    "Rettifica o aggiornamento",
+    "Cancellazione",
+    "Limitazione del trattamento",
+    "Opposizione al trattamento",
+    "Portabilita dei dati"
+  ]
+}

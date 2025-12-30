@@ -1,0 +1,51 @@
+public/uploads/
+public/hls/
+uploads-backup/
+asset_inbox/
+_blob_done/
+upload-test.mjs
+*.log
+
+# env
+.env
+.env.*
+!.env.example
+.env.local
+
+# vercel
+.vercel/
+
+# build
+.next/
+out/
+dist/
+
+# deps
+node_modules/
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+dev.log
+
+# OS
+.DS_Store
+
+# local media workflow
+_blob_inbox/
+_blob_done/
+_local_media/
+scripts/blob-urls.json
+
+# external static assets (hosted on blob/CDN)
+public/posters/
+public/partners/
+public/optimized/
+public/media/
+public/background*.mp4
+public/background*.webm
+public/background-poster.jpg
+.vercel
+.env*.local

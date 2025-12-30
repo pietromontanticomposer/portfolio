@@ -74,14 +74,6 @@ if (ensureRemote.status !== 0) {
   run('git', ['remote', 'add', 'origin', DEFAULT_REMOTE]);
 }
 
-const status = spawnSync('git', ['status', '--porcelain'], { encoding: 'utf8' });
-const dirty = (status.stdout || '').trim().length > 0;
-
-if (!dirty) {
-  console.log('Nessuna modifica da committare.');
-  process.exit(0);
-}
-
 // Aggiungi solo codice e configurazione del progetto.
 const safeRoots = [
   'app',
@@ -91,6 +83,11 @@ const safeRoots = [
   'public',
   'scripts',
   '.github',
+  '.gitignore',
+  '.lighthouseci',
+  'check-token.cjs',
+  'content',
+  'privacy.config.json',
   'package.json',
   'package-lock.json',
   'next.config.ts',
@@ -108,6 +105,18 @@ if (toAdd.length === 0) {
   process.exit(0);
 }
 
+const status = spawnSync('git', ['status', '--porcelain'], { encoding: 'utf8' });
+const statusLines = (status.stdout || '').trim().split('\n').filter(Boolean);
+const isSafePath = (filePath) =>
+  toAdd.some((rootPath) => filePath === rootPath || filePath.startsWith(`${rootPath}/`));
+const dirty = statusLines.some((line) => isSafePath(line.slice(3).trim()));
+
+if (!dirty) {
+  console.log('Nessuna modifica da committare.');
+  process.exit(0);
+}
+
 run('git', ['add', '-A', '--', ...toAdd]);
 run('git', ['commit', '-m', msg]);
 run('git', ['push', '--force']);
+run('vercel', ['--prod', '--confirm']);
