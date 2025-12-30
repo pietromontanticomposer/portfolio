@@ -92,11 +92,11 @@ export default function Home() {
   ];
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen page-root">
       <MediaPreload images={preloadImages} />
       <div className="pointer-events-none absolute inset-0 grain z-10" />
-      <div className="pointer-events-none absolute -top-40 right-[-80px] h-96 w-96 rounded-full bg-[color:var(--accent)]/20 blur-3xl float z-10" />
-      <div className="pointer-events-none absolute bottom-[-180px] left-[-120px] h-[30rem] w-[30rem] rounded-full bg-[color:var(--accent-2)]/70 blur-3xl z-10" />
+      <div className="pointer-events-none absolute -top-40 right-[-80px] h-96 w-96 rounded-full bg-[color:var(--accent)]/20 blur-3xl float z-10 max-lg:right-0 max-lg:h-[70vw] max-lg:w-[70vw]" />
+      <div className="pointer-events-none absolute bottom-[-180px] left-[-120px] h-[30rem] w-[30rem] rounded-full bg-[color:var(--accent-2)]/70 blur-3xl z-10 max-lg:left-0 max-lg:h-[70vw] max-lg:w-[70vw]" />
 
       <main className="relative z-20 mx-auto flex min-h-screen max-w-7xl flex-col gap-12 px-6 py-12 lg:px-20">
         <header className="relative z-40">
@@ -162,8 +162,8 @@ export default function Home() {
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 </div>
-                <div className="p-8">
-                  <h2 className="section-title mt-3 text-3xl text-[color:var(--foreground)]">
+                <div className="p-5 sm:p-8">
+                  <h2 className="section-title mt-3 text-2xl sm:text-3xl text-[color:var(--foreground)]">
                     Pietro Montanti
                   </h2>
                   <p className="bio-text mt-4 text-sm leading-7 text-[color:var(--muted)]">
