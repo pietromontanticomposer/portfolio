@@ -145,7 +145,6 @@ export default function AudioPlayer({
           progressColor,
           cursorColor: "transparent",
           cursorWidth: 0,
-          responsive: true,
           normalize: true,
           height,
           barWidth: 2,

@@ -148,7 +148,7 @@ export default function Home() {
 
         <div className="grid gap-10">
           <section className="flex flex-col gap-8">
-            <div className="card-shell overflow-hidden">
+            <div className="card-shell overflow-hidden cv-auto">
               <div className="bio-grid gap-6">
                 <div className="bio-photo relative">
                   <Image
@@ -184,7 +184,7 @@ export default function Home() {
 
             <div className="section-divider" aria-hidden="true" />
 
-            <section className="w-full overflow-visible">
+            <section className="w-full overflow-visible cv-auto">
               <span id="collaborations" className="sr-only" />
               <div className="scroll-shell">
                 <div className="w-full flex justify-center">
@@ -196,7 +196,7 @@ export default function Home() {
               </div>
             </section>
 
-            <section id="selected-tracks" className="card-shell p-8">
+            <section id="selected-tracks" className="card-shell p-8 cv-auto">
               <div className="section-header flex items-center justify-between">
                 <h3 className="section-title text-2xl text-[color:var(--foreground)]">
                   Selected Tracks
