@@ -40,6 +40,7 @@
   "exclude": [
     "node_modules",
     "public/video",
-    "public/hls"
+    "public/hls",
+    "_blob_done"
   ]
 }
