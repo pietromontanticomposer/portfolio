@@ -606,6 +606,9 @@ main {
     align-items: center;
     margin-top: 1rem;
   }
+  .hero-actions .contact-popover {
+    width: min(100%, 280px);
+  }
   .hero-btn {
     width: min(100%, 280px);
     padding: 0.7rem 1rem;
@@ -1956,15 +1959,20 @@ video::cue {
   }
   .audio-player {
     width: 100%;
-    flex-wrap: wrap;
-    gap: 12px;
+    display: grid;
+    grid-template-columns: 52px 1fr 44px;
+    align-items: center;
+    column-gap: 12px;
   }
   .track-player-list {
     padding-left: 0;
   }
   .audio-wave {
-    order: 3;
-    width: 100%;
+    grid-column: 2;
+    min-width: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
     padding-right: 0;
     min-height: 120px;
   }
@@ -1974,19 +1982,25 @@ video::cue {
   }
   .audio-wave canvas {
     width: 100% !important;
+    display: block;
+  }
+  .audio-wave wave {
+    width: 100% !important;
+    display: block;
   }
   .audio-play {
-    order: 1;
+    grid-column: 1;
+    justify-self: start;
   }
   .audio-volume {
-    position: static;
+    grid-column: 3;
+    justify-self: end;
+    position: relative;
     transform: none;
-    order: 2;
-    margin-left: auto;
-    order: 4;
+    margin-left: 0;
   }
   .audio-time {
-    order: 4;
+    grid-column: 1 / -1;
     width: 100%;
     text-align: right;
     font-size: 12px;

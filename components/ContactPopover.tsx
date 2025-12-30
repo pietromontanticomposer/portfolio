@@ -109,7 +109,7 @@ export default function ContactPopover({
   const buttonClasses = buttonClassName ?? "hero-btn hero-btn-secondary";
 
   return (
-    <div className="relative inline-flex" ref={wrapperRef}>
+    <div className="relative inline-flex contact-popover" ref={wrapperRef}>
       <button
         type="button"
         className={buttonClasses}
