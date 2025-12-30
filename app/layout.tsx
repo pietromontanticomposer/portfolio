@@ -44,7 +44,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const SHOW_BG_VIDEO = true;
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>

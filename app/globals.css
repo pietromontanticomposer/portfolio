@@ -1570,17 +1570,24 @@ video::cue {
 .track-player-wave { grid-area: wave; min-width: 0; }
 .audio-player {
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  gap: 0.6rem;
   padding: 0.4rem 0.2rem;
   flex: 1;
   min-width: 0;
 }
 /* ensure player is a positioning context so volume popover doesn't affect layout */
 .audio-player { position: relative; }
+.audio-player-row {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 8px;
+  width: 100%;
+}
 .audio-play {
-  width: 52px;
-  height: 52px;
+  width: 56px;
+  height: 56px;
   border-radius: 999px;
   border: 0;
   background: #5b4bff;
@@ -1656,7 +1663,34 @@ video::cue {
 }
 .audio-icon.is-pause::before { left: 1px; }
 .audio-icon.is-pause::after { right: 1px; }
-.audio-wave { flex: 1; min-width: 0; position: relative; z-index: 0; padding-right: 120px; }
+.audio-wave {
+  min-width: 0;
+  width: 100%;
+  height: 56px;
+  position: relative;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  line-height: 0;
+  justify-self: stretch;
+}
+.audio-wave-container {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.audio-wave-container wave,
+.audio-wave-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+.audio-wave-container > div {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+}
 .audio-wave > * { position: relative; z-index: 0; }
 .audio-loading {
   position: absolute;
@@ -1705,8 +1739,9 @@ video::cue {
   align-items: center;
   justify-content: center;
   position: relative;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
+  margin-left: 0;
 }
 .audio-volume-toggle .audio-volume-svg { display: block; width: 22px; height: 22px; color: var(--volume-accent, #6d4bff); }
 .audio-volume-toggle:focus-visible {
@@ -1851,12 +1886,14 @@ video::cue {
 }
 
 .audio-volume {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  position: relative;
+  right: auto;
+  top: auto;
+  transform: none;
   display: inline-flex;
   align-items: center;
+  justify-self: end;
+  margin-left: 0;
   z-index: 10; /* icon above waveform but below slider */
 }
 .audio-volume-toggle {
@@ -1957,56 +1994,32 @@ video::cue {
     text-align: center;
     width: 100%;
   }
-  .audio-player {
+  .track-player-wave .audio-player {
     width: 100%;
-    display: grid;
-    grid-template-columns: 52px 1fr 44px;
-    align-items: center;
-    column-gap: 12px;
   }
   .track-player-list {
     padding-left: 0;
   }
-  .audio-wave {
-    grid-column: 2;
-    min-width: 0;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    padding-right: 0;
-    min-height: 120px;
+  .track-player-wave .audio-player-row {
+    column-gap: 8px;
   }
-  .audio-wave > div {
-    width: 100% !important;
-    min-height: 120px;
+  .track-player-wave .audio-wave {
+    height: 56px;
   }
-  .audio-wave canvas {
-    width: 100% !important;
-    display: block;
+  .track-player-wave .audio-play {
+    width: 56px;
+    height: 56px;
   }
-  .audio-wave wave {
-    width: 100% !important;
-    display: block;
-  }
-  .audio-play {
-    grid-column: 1;
-    justify-self: start;
-  }
-  .audio-volume {
-    grid-column: 3;
+  .track-player-wave .audio-volume {
     justify-self: end;
-    position: relative;
-    transform: none;
-    margin-left: 0;
   }
-  .audio-time {
-    grid-column: 1 / -1;
+  .track-player-wave .audio-time {
     width: 100%;
     text-align: right;
     font-size: 12px;
   }
-  .audio-play,
-  .audio-volume {
+  .track-player-wave .audio-play,
+  .track-player-wave .audio-volume {
     align-self: center;
   }
 }

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import ContactPopover from "./ContactPopover";
-import ManageCookiesButton from "./ManageCookiesButton";
 
 export default function Footer() {
   return (
@@ -83,7 +82,6 @@ export default function Footer() {
           <div className="flex gap-4 justify-center">
             <Link href="/privacy-policy" className="hover:underline">Privacy Policy</Link>
             <Link href="/cookie-policy" className="hover:underline">Cookie Policy</Link>
-            <ManageCookiesButton className="hover:underline" />
           </div>
         </div>
       </div>

@@ -42,7 +42,6 @@ type Props = {
   src: string;
   waveColor?: string;
   progressColor?: string;
-  height?: number;
   showTime?: boolean;
   showVolumeIcon?: boolean;
   title?: string;
@@ -50,11 +49,12 @@ type Props = {
   onNowPlayingChange?: (data: { isPlaying: boolean; currentTime: number; duration: number }) => void;
 };
 
+const WAVE_HEIGHT = 56;
+
 export default function AudioPlayer({
   src,
   waveColor = "#60a5fa",
   progressColor = "#1e3a8a",
-  height = 80,
   showTime = true,
   showVolumeIcon = true,
   title,
@@ -146,7 +146,7 @@ export default function AudioPlayer({
           cursorColor: "transparent",
           cursorWidth: 0,
           normalize: true,
-          height,
+          height: WAVE_HEIGHT,
           barWidth: 2,
           barGap: 1,
           barRadius: 2,
@@ -168,15 +168,20 @@ export default function AudioPlayer({
         );
         ws.setVolume(volumeRef.current);
 
+        let lastWidth = 0;
         const syncWidth = () => {
           if (!containerRef.current) return;
-          ws.setOptions({ width: containerRef.current.clientWidth });
+          const parent = containerRef.current.parentElement;
+          const nextWidth = parent?.clientWidth ?? containerRef.current.clientWidth;
+          if (!nextWidth || nextWidth === lastWidth) return;
+          lastWidth = nextWidth;
+          ws.setOptions({ width: nextWidth, height: WAVE_HEIGHT });
         };
         if (typeof ResizeObserver !== "undefined") {
           resizeObserver = new ResizeObserver(() => {
             syncWidth();
           });
-          resizeObserver.observe(containerRef.current);
+          resizeObserver.observe(containerRef.current.parentElement ?? containerRef.current);
         } else {
           resizeHandler = syncWidth;
           window.addEventListener("resize", resizeHandler);
@@ -322,7 +327,7 @@ export default function AudioPlayer({
       }
       AudioManager.unregister(playerIdRef.current);
     };
-  }, [src, waveColor, progressColor, height, shouldInit]);
+  }, [src, waveColor, progressColor, shouldInit]);
 
   useEffect(() => {
     if (!wsRef.current) return;
@@ -405,61 +410,63 @@ export default function AudioPlayer({
 
   return (
     <div
-      className="audio-player"
+      className={`audio-player ${showVolume ? "is-volume-open" : ""}`}
       onPointerEnter={requestInit}
       onFocus={requestInit}
     >
-      <button onClick={toggle} className="audio-play" aria-label={isPlaying ? "Pause" : "Play"}>
-        <span className={`audio-icon ${isPlaying ? "is-pause" : "is-play"}`} aria-hidden="true" />
-        <span className="sr-only">{isPlaying ? "Pause" : "Play"}</span>
-      </button>
-      <div className="audio-wave">
-        <div ref={containerRef} />
-        {!isReady ? <div className="audio-loading">Loading audio...</div> : null}
+      <div className="audio-player-row">
+        <button onClick={toggle} className="audio-play" aria-label={isPlaying ? "Pause" : "Play"}>
+          <span className={`audio-icon ${isPlaying ? "is-pause" : "is-play"}`} aria-hidden="true" />
+          <span className="sr-only">{isPlaying ? "Pause" : "Play"}</span>
+        </button>
+        <div className="audio-wave">
+          <div ref={containerRef} className="audio-wave-container" />
+          {!isReady ? <div className="audio-loading">Loading audio...</div> : null}
+        </div>
+        {showVolumeIcon ? (
+          <div translate="no" className={`audio-volume notranslate ${showVolume ? 'is-open' : ''} is-vertical`} style={{ ["--volume-accent" as any]: waveColor, ["--volume-fill" as any]: volume }}>
+            <button
+              type="button"
+              className="audio-volume-toggle"
+              aria-label="Volume"
+              aria-expanded={showVolume}
+              ref={audioToggleRef}
+              onClick={toggleVolumePopover}
+            >
+              <svg className="audio-volume-svg" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+                <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" />
+                <path d="M14.5 8.5a3.5 3.5 0 010 7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                <path d="M17.5 6a6 6 0 010 12" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+              </svg>
+            </button>
+            <label
+              ref={popoverRef}
+              className={`audio-volume-slider notranslate ${showVolume ? "is-open" : ""}`}
+              aria-hidden={!showVolume}
+              style={{ ["--volume-fill" as any]: volume }}
+              onPointerDown={onPointerDown}
+              translate="no"
+              data-no-translate="1"
+            >
+              <span className="sr-only">Volume</span>
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.01}
+                value={volume}
+                onChange={(event) => setVolume(Number(event.target.value))}
+                aria-label="Volume"
+                style={{ pointerEvents: 'none' }}
+              />
+              <span translate="no" className="slider-thumb notranslate" aria-hidden="true" />
+            </label>
+          </div>
+        ) : null}
       </div>
       {showTime ? <div className="audio-time">{formatTime(duration)}</div> : null}
       {showNowPlaying ? (
         <div className="now-playing">Now playing: {title ?? ''} - {formatTime(currentTime)}/{formatTime(duration)}</div>
-      ) : null}
-      {showVolumeIcon ? (
-        <div translate="no" className={`audio-volume notranslate ${showVolume ? 'is-open' : ''} is-vertical`} style={{ ["--volume-accent" as any]: waveColor, ["--volume-fill" as any]: volume }}>
-          <button
-            type="button"
-            className="audio-volume-toggle"
-            aria-label="Volume"
-            aria-expanded={showVolume}
-            ref={audioToggleRef}
-            onClick={toggleVolumePopover}
-          >
-            <svg className="audio-volume-svg" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-              <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" />
-              <path d="M14.5 8.5a3.5 3.5 0 010 7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-              <path d="M17.5 6a6 6 0 010 12" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-            </svg>
-          </button>
-          <label
-            ref={popoverRef}
-            className={`audio-volume-slider notranslate ${showVolume ? "is-open" : ""}`}
-            aria-hidden={!showVolume}
-            style={{ ["--volume-fill" as any]: volume }}
-            onPointerDown={onPointerDown}
-            translate="no"
-            data-no-translate="1"
-          >
-            <span className="sr-only">Volume</span>
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step={0.01}
-              value={volume}
-              onChange={(event) => setVolume(Number(event.target.value))}
-              aria-label="Volume"
-              style={{ pointerEvents: 'none' }}
-            />
-            <span translate="no" className="slider-thumb notranslate" aria-hidden="true" />
-          </label>
-        </div>
       ) : null}
     </div>
   );

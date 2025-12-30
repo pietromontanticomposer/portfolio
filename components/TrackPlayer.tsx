@@ -116,7 +116,6 @@ export default function TrackPlayer({
           src={currentTrack.file}
           waveColor={waveColor}
           progressColor={progressColor}
-          height={92}
           showTime={false}
           title={getTitle(currentTrack.context)}
           showNowPlaying={false}
