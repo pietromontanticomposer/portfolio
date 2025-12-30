@@ -15,52 +15,53 @@ type Poster = {
 export default function AutoScrollStrip({ posters }: { posters: Poster[] }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
-  const rafRef = useRef<number | null>(null);
   const isReducedMotion = useRef(false);
-
-  useEffect(() => {
-    // Check for reduced motion preference
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    isReducedMotion.current = mediaQuery.matches;
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      isReducedMotion.current = e.matches;
-      if (e.matches && rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-        if (trackRef.current) {
-          trackRef.current.style.transform = 'translate3d(0, 0, 0)';
-        }
-      }
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
 
   useEffect(() => {
     const container = containerRef.current;
     const track = trackRef.current;
-    if (!container || !track || isReducedMotion.current) return;
+    if (!container || !track) return;
 
-    // Ensure we have duplicated content so we can loop seamlessly
-    // Use translateX to create infinite scroll effect (more reliable than scrollLeft).
-    let lastTime: number | null = null;
     const speed = 72; // px/s fixed speed for consistent scroll
-    let offset = 0;
-    let currentSpeed = speed;
-    let firstSetWidth = Math.max(1, track.scrollWidth / 2);
-    let isAnimationActive = true; // Controlled by AnimationCoordinator
+    let isAnimationActive = true;
     let isVisible = true;
     let isTabVisible = !document.hidden;
-    let idleTimer: number | null = null;
 
     const updateWidth = () => {
-      firstSetWidth = Math.max(1, track.scrollWidth / 2);
+      const firstSetWidth = Math.max(1, track.scrollWidth / 2);
+      const duration = firstSetWidth / speed;
+      track.style.setProperty("--scroll-width", `${firstSetWidth}px`);
+      track.style.setProperty("--scroll-offset", `${-firstSetWidth}px`);
+      track.style.setProperty("--scroll-duration", `${duration}s`);
     };
     const scheduleUpdateWidth = () => {
       requestAnimationFrame(updateWidth);
     };
+
+    const applyAnimationState = () => {
+      if (isReducedMotion.current) {
+        track.removeAttribute("data-auto-scroll");
+        track.style.animationPlayState = "paused";
+        track.style.transform = "translate3d(0, 0, 0)";
+        return;
+      }
+
+      track.setAttribute("data-auto-scroll", "true");
+      const shouldRun = isVisible && isTabVisible && isAnimationActive;
+      track.style.animationPlayState = shouldRun ? "running" : "paused";
+    };
+
+    const mediaQuery = window.matchMedia
+      ? window.matchMedia("(prefers-reduced-motion: reduce)")
+      : null;
+    const handleMotionChange = (e: MediaQueryListEvent) => {
+      isReducedMotion.current = e.matches;
+      applyAnimationState();
+    };
+    if (mediaQuery) {
+      isReducedMotion.current = mediaQuery.matches;
+      mediaQuery.addEventListener("change", handleMotionChange);
+    }
 
     const imgNodes = Array.from(track.querySelectorAll("img"));
     imgNodes.forEach((img) => {
@@ -76,15 +77,14 @@ export default function AutoScrollStrip({ posters }: { posters: Poster[] }) {
 
     window.addEventListener("resize", handleResize, { passive: true } as AddEventListenerOptions);
     requestAnimationFrame(updateWidth);
+    updateWidth();
 
     // Pause when out of viewport
     const visibilityObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           isVisible = entry.isIntersecting;
-          if (!isVisible) {
-            lastTime = null;
-          }
+          applyAnimationState();
         });
       },
       { threshold: 0.01 }
@@ -93,67 +93,33 @@ export default function AutoScrollStrip({ posters }: { posters: Poster[] }) {
 
     const handleVisibilityChange = () => {
       isTabVisible = !document.hidden;
-      if (!isTabVisible) {
-        lastTime = null;
-      }
+      applyAnimationState();
     };
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
     // Subscribe to animation coordinator
     const unsubscribe = animationCoordinator.subscribe((state) => {
       isAnimationActive = state === "active";
-      if (!isAnimationActive) {
-        lastTime = null;
-      }
+      applyAnimationState();
     });
 
-    const scheduleIdle = () => {
-      if (idleTimer !== null) return;
-      idleTimer = window.setTimeout(() => {
-        idleTimer = null;
-        rafRef.current = requestAnimationFrame(step);
-      }, 200);
-    };
-
-    function step(time: number) {
-      // Only animate if: reduced motion off AND coordinator allows
-      if (!isReducedMotion.current && isAnimationActive && isVisible && isTabVisible) {
-        if (lastTime === null) lastTime = time;
-        const delta = Math.min((time - lastTime) / 1000, 0.05);
-        lastTime = time;
-
-        // Subtle easing to smooth frame-to-frame variation without changing average speed.
-        currentSpeed += (speed - currentSpeed) * Math.min(1, delta * 8);
-        offset += currentSpeed * delta;
-
-        if (offset >= firstSetWidth) {
-          offset -= firstSetWidth;
-        }
-
-        // Use translate3d for GPU acceleration
-        track!.style.transform = `translate3d(${-offset}px, 0, 0)`;
-      }
-
-      if (!isReducedMotion.current && isAnimationActive && isVisible && isTabVisible) {
-        rafRef.current = requestAnimationFrame(step);
-      } else {
-        scheduleIdle();
-      }
-    }
-
-    // Start at 0
-    track.style.transform = "translate3d(0, 0, 0)";
-    rafRef.current = requestAnimationFrame(step);
+    applyAnimationState();
 
     return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      if (idleTimer !== null) window.clearTimeout(idleTimer);
       window.removeEventListener("resize", handleResize);
       clearTimeout(resizeTimeout);
       visibilityObserver.disconnect();
       document.removeEventListener("visibilitychange", handleVisibilityChange);
+      if (mediaQuery) mediaQuery.removeEventListener("change", handleMotionChange);
       unsubscribe();
-      if (track) track.style.transform = "";
+      if (track) {
+        track.removeAttribute("data-auto-scroll");
+        track.style.animationPlayState = "";
+        track.style.transform = "";
+        track.style.removeProperty("--scroll-width");
+        track.style.removeProperty("--scroll-offset");
+        track.style.removeProperty("--scroll-duration");
+      }
     };
   }, [posters]);
 

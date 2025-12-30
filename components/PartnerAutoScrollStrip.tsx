@@ -12,25 +12,29 @@ type Partner = {
 export default function PartnerAutoScrollStrip({ partners }: { partners: Partner[] }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
-  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     const container = containerRef.current;
     const track = trackRef.current;
     if (!container || !track) return;
 
-    let lastTime: number | null = null;
     const speed = 60; // px/s
-    let offset = 0;
-    let currentSpeed = speed;
-    let firstSetWidth = Math.max(1, track.scrollWidth / 2);
     let isVisible = true;
     let isTabVisible = !document.hidden;
     let isAnimationActive = true;
-    let idleTimer: number | null = null;
 
     const updateWidth = () => {
-      firstSetWidth = Math.max(1, track.scrollWidth / 2);
+      const firstSetWidth = Math.max(1, track.scrollWidth / 2);
+      const duration = firstSetWidth / speed;
+      track.style.setProperty("--scroll-width", `${firstSetWidth}px`);
+      track.style.setProperty("--scroll-offset", `${-firstSetWidth}px`);
+      track.style.setProperty("--scroll-duration", `${duration}s`);
+    };
+
+    const applyAnimationState = () => {
+      const shouldRun = isVisible && isTabVisible && isAnimationActive;
+      track.setAttribute("data-auto-scroll", "true");
+      track.style.animationPlayState = shouldRun ? "running" : "paused";
     };
 
     const imgNodes = Array.from(track.querySelectorAll("img"));
@@ -46,15 +50,14 @@ export default function PartnerAutoScrollStrip({ partners }: { partners: Partner
 
     window.addEventListener("resize", handleResize, { passive: true } as AddEventListenerOptions);
     requestAnimationFrame(updateWidth);
+    updateWidth();
 
     // IntersectionObserver to pause when out of viewport
     const visibilityObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           isVisible = entry.isIntersecting;
-          if (!isVisible) {
-            lastTime = null;
-          }
+          applyAnimationState();
         });
       },
       { threshold: 0.01 }
@@ -64,63 +67,30 @@ export default function PartnerAutoScrollStrip({ partners }: { partners: Partner
     // Pause when tab hidden
     const handleVisibilityChange = () => {
       isTabVisible = !document.hidden;
-      if (!isTabVisible) {
-        lastTime = null;
-      }
+      applyAnimationState();
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     // Subscribe to animation coordinator
     const unsubscribe = animationCoordinator.subscribe((state) => {
       isAnimationActive = state === "active";
-      if (!isAnimationActive) {
-        lastTime = null;
-      }
+      applyAnimationState();
     });
 
-    const scheduleIdle = () => {
-      if (idleTimer !== null) return;
-      idleTimer = window.setTimeout(() => {
-        idleTimer = null;
-        rafRef.current = requestAnimationFrame(step);
-      }, 200);
-    };
-
-    function step(time: number) {
-      // Only animate if visible AND tab active AND coordinator allows
-      if (isVisible && isTabVisible && isAnimationActive) {
-        if (lastTime === null) lastTime = time;
-        const delta = Math.min((time - lastTime) / 1000, 0.05);
-        lastTime = time;
-
-        currentSpeed += (speed - currentSpeed) * Math.min(1, delta * 8);
-        offset += currentSpeed * delta;
-
-        if (offset >= firstSetWidth) {
-          offset -= firstSetWidth;
-        }
-        track!.style.transform = `translate3d(${-offset}px, 0, 0)`;
-      }
-
-      if (isVisible && isTabVisible && isAnimationActive) {
-        rafRef.current = requestAnimationFrame(step);
-      } else {
-        scheduleIdle();
-      }
-    }
-
-    track.style.transform = "translate3d(0, 0, 0)";
-    rafRef.current = requestAnimationFrame(step);
+    applyAnimationState();
 
     return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      if (idleTimer !== null) window.clearTimeout(idleTimer);
       window.removeEventListener("resize", handleResize);
       clearTimeout(resizeTimeout);
       visibilityObserver.disconnect();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       unsubscribe();
+      track.removeAttribute("data-auto-scroll");
+      track.style.animationPlayState = "";
       track.style.transform = "";
+      track.style.removeProperty("--scroll-width");
+      track.style.removeProperty("--scroll-offset");
+      track.style.removeProperty("--scroll-duration");
     };
   }, [partners]);
 

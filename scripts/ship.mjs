@@ -110,4 +110,4 @@ if (toAdd.length === 0) {
 
 run('git', ['add', '-A', '--', ...toAdd]);
 run('git', ['commit', '-m', msg]);
-run('git', ['push', '--force-with-lease']);
+run('git', ['push', '--force']);
