@@ -2,6 +2,7 @@ import StripToggle from "../components/StripToggle";
 import PartnerStripToggle from "../components/PartnerStripToggle";
 import TrackPlayer from '../components/TrackPlayerClient';
 import MediaPreload from "../components/MediaPreload";
+import ContactPopover from "../components/ContactPopover";
 import Image from 'next/image';
 import { projects } from '../data/projects'
 
@@ -118,7 +119,7 @@ export default function Home() {
             <div className="hero-actions">
               <a href="#work-grid" className="hero-btn hero-btn-secondary">Film</a>
               <a href="#selected-tracks" className="hero-btn hero-btn-secondary">Selected Works</a>
-              <a href="mailto:pietromontanticomposer@gmail.com?subject=Project%20Inquiry" className="hero-btn hero-btn-secondary">Contact</a>
+              <ContactPopover />
             </div>
             <div className="hero-credits" aria-label="Credits">
               <span className="hero-credits-line" aria-hidden="true" />

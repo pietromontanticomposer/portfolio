@@ -61,7 +61,7 @@ body::after {
   body::after { display: none; }
 }
 
-/* content-visibility disabled to avoid any scroll-time re-rendering. */
+/* content-visibility: enabled on desktop for below-the-fold sections. */
 
 /* Performance: disable expensive GPU effects during user interactions */
 body.animating-paused * {
@@ -123,6 +123,31 @@ body.is-scrolling .poster-card::after {
   filter: none !important;
 }
 
+@media (min-width: 1024px) {
+  body.is-scrolling .hero-panel,
+  body.is-scrolling .page-panel,
+  body.is-scrolling .card-shell,
+  body.is-scrolling .scroll-strip,
+  body.is-scrolling .strip-toggle,
+  body.is-scrolling .strip-toggle-grid,
+  body.is-scrolling .scroll-shell,
+  body.is-scrolling .track-player,
+  body.is-scrolling .selected-track-group,
+  body.is-scrolling .poster-grid-gridview .poster-card,
+  body.is-scrolling .partner-grid-gridview .partner-card,
+  body.is-scrolling .modal-panel {
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+
+  body.is-scrolling .poster-image,
+  body.is-scrolling .portfolio-poster,
+  body.is-scrolling .poster-card::after,
+  body.is-scrolling .audio-play {
+    filter: none !important;
+  }
+}
+
 @media (max-width: 768px), (pointer: coarse) {
   .card-shell,
   .page-panel,
@@ -151,9 +176,11 @@ main {
   position: relative;
 }
 
-.cv-auto {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 900px;
+@media (min-width: 1024px) {
+  .cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 900px;
+  }
 }
 
 .grain {
@@ -162,6 +189,28 @@ main {
   opacity: 0.15;
   mix-blend-mode: screen;
   /* Reduced opacity from 0.25 to 0.15 for lighter effect */
+}
+
+@media (min-width: 1024px) {
+  .scroll-shell,
+  .strip-toggle,
+  .strip-toggle-grid,
+  .poster-grid-gridview,
+  .partner-grid-gridview,
+  .card-shell,
+  .page-panel,
+  .hero-panel,
+  .track-player,
+  .selected-track-group,
+  .selected-track-list,
+  .selected-track-row,
+  .modal-panel {
+    contain: layout;
+  }
+
+  .modal-overlay {
+    contain: paint;
+  }
 }
 
 .headline {
@@ -927,6 +976,12 @@ main {
   transition: transform 320ms cubic-bezier(.2,.9,.2,1), box-shadow 320ms ease, filter 320ms ease;
 }
 
+@media (min-width: 1024px) {
+  .poster-image {
+    transition: transform 320ms cubic-bezier(.2,.9,.2,1);
+  }
+}
+
 .poster-wrapper:hover .poster-image,
 .poster-wrapper:focus-within .poster-image {
   will-change: transform, box-shadow;
@@ -1147,6 +1202,12 @@ main {
   transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
 }
 
+@media (min-width: 1024px) {
+  .poster-grid-gridview .poster-card {
+    transition: transform 200ms ease, border-color 200ms ease;
+  }
+}
+
 .poster-grid-gridview .poster-card:hover {
   transform: translateY(-4px);
   border-color: rgba(255,255,255,0.18);
@@ -1276,6 +1337,12 @@ main {
   margin: 0; /* remove extra margins inside grid cells */
   aspect-ratio: auto;
   transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+
+@media (min-width: 1024px) {
+  .partner-grid-gridview .partner-card {
+    transition: transform 200ms ease, border-color 200ms ease;
+  }
 }
 
 .partner-grid-gridview .partner-card:hover {
@@ -1521,9 +1588,37 @@ video::cue {
   box-shadow: 0 14px 24px rgba(2,6,23,0.6);
   transition: transform 160ms ease, filter 160ms ease;
 }
+
+@media (min-width: 1024px) {
+  .audio-play {
+    position: relative;
+    transition: transform 160ms ease;
+  }
+
+  .audio-play::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    transition: opacity 160ms ease;
+    pointer-events: none;
+  }
+}
 .audio-play:hover {
   transform: translateY(-1px);
   filter: brightness(1.05);
+}
+
+@media (min-width: 1024px) {
+  .audio-play:hover {
+    filter: none;
+  }
+
+  .audio-play:hover::after {
+    opacity: 0.18;
+  }
 }
 .audio-play:focus-visible {
   outline: 2px solid rgba(79,70,229,0.6);

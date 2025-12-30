@@ -1,3 +1,5 @@
+import ContactPopover from "./ContactPopover";
+
 export default function Footer() {
   return (
     <footer className="mt-12 border-t border-black/10 bg-transparent px-6 py-10 sm:px-10 lg:px-16">
@@ -12,13 +14,10 @@ export default function Footer() {
           </div>
 
           <div className="col-span-1 flex justify-center">
-            <a
-              href="mailto:pietromontanticomposer@gmail.com"
-              aria-label="Contact Pietro Montanti"
-              className="inline-flex items-center justify-center rounded-md border border-[color:var(--muted)] bg-transparent px-6 py-3 text-base font-medium text-[color:var(--foreground)] hover:bg-[color:var(--muted)]/6"
-            >
-              Contact Me
-            </a>
+            <ContactPopover
+              buttonLabel="Contact Me"
+              buttonClassName="appearance-none inline-flex items-center justify-center rounded-md border border-[color:var(--muted)] bg-transparent px-6 py-3 text-base font-medium text-[color:var(--foreground)] hover:bg-[color:var(--muted)]/6"
+            />
           </div>
 
           <div className="col-span-1 text-right">
@@ -49,13 +48,10 @@ export default function Footer() {
           </div>
 
           <div className="flex justify-center">
-            <a
-              href="mailto:pietromontanticomposer@gmail.com"
-              aria-label="Contact Pietro Montanti"
-              className="inline-flex items-center justify-center rounded-md border border-[color:var(--muted)] bg-transparent px-5 py-3 text-base font-medium text-[color:var(--foreground)] hover:bg-[color:var(--muted)]/6"
-            >
-              Contact Me
-            </a>
+            <ContactPopover
+              buttonLabel="Contact Me"
+              buttonClassName="appearance-none inline-flex items-center justify-center rounded-md border border-[color:var(--muted)] bg-transparent px-5 py-3 text-base font-medium text-[color:var(--foreground)] hover:bg-[color:var(--muted)]/6"
+            />
           </div>
 
           <div className="flex justify-center">

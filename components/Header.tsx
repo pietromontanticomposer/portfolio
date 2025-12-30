@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { animationCoordinator } from "../lib/AnimationCoordinator";
+import ContactPopover from "./ContactPopover";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -72,12 +73,10 @@ export default function Header() {
           <Link href="#servizi" className="transition hover:text-[color:var(--foreground)]">
             Services
           </Link>
-          <Link
-            href="mailto:pietromontanticomposer@gmail.com"
-            className="rounded-full border border-black/10 px-4 py-2 text-[color:var(--foreground)] transition hover:border-black/30"
-          >
-            Contact
-          </Link>
+          <ContactPopover
+            buttonLabel="Contact"
+            buttonClassName="appearance-none bg-transparent rounded-full border border-black/10 px-4 py-2 text-[color:var(--foreground)] transition hover:border-black/30"
+          />
         </nav>
       </div>
     </header>
