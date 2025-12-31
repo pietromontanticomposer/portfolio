@@ -82,7 +82,7 @@ export default async function ProjectPage({ params }: Params) {
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
-                  loading="eager"
+                  loading="lazy"
                 />
               </div>
             </div>
@@ -136,7 +136,7 @@ export default async function ProjectPage({ params }: Params) {
                                   return embedUrl;
                                 })()}
                                 title={`track-${i}`}
-                                loading="eager"
+                                loading="lazy"
                               />
                             ) : (
                               <LazyIframe

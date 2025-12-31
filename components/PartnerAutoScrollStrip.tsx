@@ -98,7 +98,7 @@ export default function PartnerAutoScrollStrip({ partners }: { partners: Partner
   const renderItems = useCallback((items: Partner[]) =>
     items.map((p, idx) => (
       <div key={`${p.name}-${idx}`} className="w-fit">
-        <div className="partner-strip-card relative">
+        <div className="partner-card partner-strip-card relative">
           <Image
             src={p.image}
             alt={p.name}

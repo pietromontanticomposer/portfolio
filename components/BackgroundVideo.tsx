@@ -3,6 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import Hls from "hls.js";
 
+const DEBUG_BG =
+  process.env.NEXT_PUBLIC_BG_DEBUG === "1" ||
+  process.env.NEXT_PUBLIC_BG_DEBUG === "true";
+
 export default function BackgroundVideo() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [shouldLoadSrc, setShouldLoadSrc] = useState(false);
@@ -43,6 +47,7 @@ export default function BackgroundVideo() {
 
     // Diagnostic logging to help debug playback issues
     const log = (...args: any[]) => {
+      if (!DEBUG_BG) return;
       try {
         // eslint-disable-next-line no-console
         console.debug('[BackgroundVideo]', ...args);
@@ -51,7 +56,11 @@ export default function BackgroundVideo() {
 
     const logError = (...args: any[]) => {
       try {
-        // eslint-disable-next-line no-console
+        if (!DEBUG_BG) {
+          // eslint-disable-next-line no-console
+          console.error('[BackgroundVideo]', ...args);
+          return;
+        }
         const videoState = video
           ? { readyState: video.readyState, networkState: video.networkState, src: (video as any).currentSrc || video.src }
           : null;
@@ -67,8 +76,14 @@ export default function BackgroundVideo() {
             }
           }
         });
+        // eslint-disable-next-line no-console
         console.error('[BackgroundVideo]', ...args, { videoState, serialized });
       } catch {}
+    };
+    const isPowerSaveAbort = (err: any) => {
+      const name = err?.name ? String(err.name) : "";
+      const message = err?.message ? String(err.message).toLowerCase() : "";
+      return name === "AbortError" && message.includes("paused to save power");
     };
 
     let hls: Hls | null = null;
@@ -240,6 +255,10 @@ export default function BackgroundVideo() {
           .then(() => log('video.play() succeeded'))
           .catch((err) => {
             if (err?.name === "NotSupportedError") return;
+            if (isPowerSaveAbort(err)) {
+              log('video.play() blocked by power saver', err);
+              return;
+            }
             logError('video.play() rejected', err, { paused: video.paused, readyState: video.readyState, networkState: video.networkState });
           });
       }
