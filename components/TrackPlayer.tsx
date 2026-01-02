@@ -12,6 +12,7 @@ type Track = {
 type Props = {
   tracks: Track[];
   coverSrc: string;
+  displayDurations?: Array<number | null>;
   waveColor?: string;
   progressColor?: string;
   showRowCover?: boolean;
@@ -37,6 +38,7 @@ const getTitle = (context: string) => {
 export default function TrackPlayer({
   tracks,
   coverSrc,
+  displayDurations,
   waveColor = "#5b4bff",
   progressColor = "#4338ca",
   showRowCover = false,
@@ -106,7 +108,7 @@ export default function TrackPlayer({
         </div>
         {hasPlayed ? (
           <div className="track-player-now">
-            Now playing: {getTitle(currentTrack.context)} - {formatTime(nowPlaying.currentTime)}/{formatTime(durations[currentIndex] ?? nowPlaying.duration)}
+            Now playing: {getTitle(currentTrack.context)} - {formatTime(nowPlaying.currentTime)}/{formatTime(displayDurations?.[currentIndex] ?? durations[currentIndex] ?? nowPlaying.duration)}
           </div>
         ) : null}
       </div>
@@ -150,7 +152,9 @@ export default function TrackPlayer({
               ) : null}
               {getTitle(track.context)}
             </span>
-            <span className="track-row-time">{formatTime(durations[index])}</span>
+            <span className="track-row-time">
+              {formatTime(displayDurations?.[index] ?? durations[index])}
+            </span>
           </button>
         ))}
       </div>
