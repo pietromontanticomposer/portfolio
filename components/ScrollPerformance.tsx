@@ -5,26 +5,31 @@ let isScrolling = false;
 
 export default function ScrollPerformance() {
   useEffect(() => {
-    let scrollTimeout: NodeJS.Timeout;
-    let rafId: number;
+    let scrollTimeout: ReturnType<typeof setTimeout>;
+    let ticking = false;
 
     const handleScroll = () => {
+      ticking = false;
+
       if (!isScrolling) {
         isScrolling = true;
         document.body.classList.add('is-scrolling');
       }
 
       clearTimeout(scrollTimeout);
+      // Aggressive debounce for maximum performance
       scrollTimeout = setTimeout(() => {
         isScrolling = false;
         document.body.classList.remove('is-scrolling');
-      }, 150);
+      }, 100);
     };
 
-    // Use RAF for better performance
+    // Throttled scroll using ticking flag - more efficient than RAF cancel/request
     const onScroll = () => {
-      if (rafId) cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(handleScroll);
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(handleScroll);
+      }
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -32,7 +37,6 @@ export default function ScrollPerformance() {
     return () => {
       window.removeEventListener('scroll', onScroll);
       clearTimeout(scrollTimeout);
-      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
 

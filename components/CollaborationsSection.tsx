@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef } from "react";
-import Image from 'next/image';
+import Image from "next/image";
+import React, { memo, useCallback, useEffect, useRef } from "react";
 import { animationCoordinator } from "../lib/AnimationCoordinator";
 
 type Partner = {
@@ -9,7 +9,7 @@ type Partner = {
   image: string;
 };
 
-export default function PartnerAutoScrollStrip({ partners }: { partners: Partner[] }) {
+function CollaborationsSection({ partners }: { partners: Partner[] }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
 
@@ -50,9 +50,7 @@ export default function PartnerAutoScrollStrip({ partners }: { partners: Partner
 
     window.addEventListener("resize", handleResize, { passive: true } as AddEventListenerOptions);
     requestAnimationFrame(updateWidth);
-    updateWidth();
 
-    // IntersectionObserver to pause when out of viewport
     const visibilityObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -64,14 +62,12 @@ export default function PartnerAutoScrollStrip({ partners }: { partners: Partner
     );
     visibilityObserver.observe(container);
 
-    // Pause when tab hidden
     const handleVisibilityChange = () => {
       isTabVisible = !document.hidden;
       applyAnimationState();
     };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    // Subscribe to animation coordinator
     const unsubscribe = animationCoordinator.subscribe((state) => {
       isAnimationActive = state === "active";
       applyAnimationState();
@@ -83,7 +79,7 @@ export default function PartnerAutoScrollStrip({ partners }: { partners: Partner
       window.removeEventListener("resize", handleResize);
       clearTimeout(resizeTimeout);
       visibilityObserver.disconnect();
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       unsubscribe();
       track.removeAttribute("data-auto-scroll");
       track.style.animationPlayState = "";
@@ -94,31 +90,40 @@ export default function PartnerAutoScrollStrip({ partners }: { partners: Partner
     };
   }, [partners]);
 
-  // Memoize to prevent unnecessary recreations
-  const renderItems = useCallback((items: Partner[]) =>
-    items.map((p, idx) => (
-      <div key={`${p.name}-${idx}`} className="w-fit">
-        <div className="partner-card partner-strip-card relative">
+  const renderItems = useCallback(
+    (items: Partner[]) =>
+      items.map((p, idx) => (
+        <div key={`${p.name}-${idx}`} className="flex items-center justify-center mx-6" style={{ width: "120px", height: "60px" }}>
           <Image
             src={p.image}
             alt={p.name}
             width={120}
             height={60}
-            className="object-contain"
+            className="object-contain max-h-full opacity-70 hover:opacity-100 transition-opacity"
             sizes="120px"
             loading="lazy"
             decoding="async"
           />
         </div>
-      </div>
-    )), []);
+      )),
+    []
+  );
 
   return (
-    <div className="scroll-strip mt-6" ref={containerRef}>
-      <div className="scroll-track" ref={trackRef}>
-        {renderItems(partners)}
-        {renderItems(partners)}
+    <section className="card-shell p-6 sm:p-8">
+      <div className="section-header flex items-center justify-between">
+        <h3 className="section-title text-2xl text-[color:var(--foreground)]">
+          Collaborations
+        </h3>
       </div>
-    </div>
+      <div className="scroll-strip mt-6 flex items-center" ref={containerRef}>
+        <div className="scroll-track flex items-center" ref={trackRef}>
+          {renderItems(partners)}
+          {renderItems(partners)}
+        </div>
+      </div>
+    </section>
   );
 }
+
+export default memo(CollaborationsSection);

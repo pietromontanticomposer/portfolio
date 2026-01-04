@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
-import PosterCard from "../../components/PosterCard";
+import StripToggle from "../../components/StripToggle";
 import { projects } from "../../data/projects";
 import { placeholderProjects } from "../../data/placeholders";
 
 export const metadata: Metadata = {
-  title: "Portfolio",
+  title: "Projects",
+  description: "All projects and selected poster work by Pietro Montanti.",
+  openGraph: {
+    title: "Projects",
+    description: "All projects and selected poster work by Pietro Montanti.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Projects",
+    description: "All projects and selected poster work by Pietro Montanti.",
+  },
 };
 
 const posters = projects.map((p, index) => {
@@ -18,12 +28,12 @@ const posters = projects.map((p, index) => {
   };
 });
 
-export default function PortfolioPage() {
+export default function ProjectsPage() {
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-16 lg:px-20">
       <header>
         <h1 className="section-title text-4xl text-[color:var(--foreground)]">
-          Portfolio
+          Projects
         </h1>
         <p className="mt-3 text-sm text-[color:var(--muted)]">
           Full list of projects and curated poster work.
@@ -31,19 +41,7 @@ export default function PortfolioPage() {
       </header>
 
       <section className="w-full overflow-visible">
-        <div className="poster-grid-gridview">
-          {posters.map((poster) => (
-            <div key={poster.slug}>
-              <PosterCard
-                title={poster.title}
-                year={poster.year}
-                tag={poster.tag}
-                image={poster.image}
-                href={`/portfolio/${poster.slug}`}
-              />
-            </div>
-          ))}
-        </div>
+        <StripToggle posters={posters} />
       </section>
     </main>
   );

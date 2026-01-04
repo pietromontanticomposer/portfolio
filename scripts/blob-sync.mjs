@@ -2,7 +2,7 @@ import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import { spawnSync } from 'child_process';
-import { list, put } from '@vercel/blob';
+import { head, put, BlobNotFoundError } from '@vercel/blob';
 
 const root = process.cwd();
 
@@ -50,18 +50,22 @@ function saveManifest(p, obj) {
   fs.writeFileSync(p, JSON.stringify(obj, null, 2) + '\n', 'utf8');
 }
 
-async function listAll(prefix) {
-  const map = new Map();
-  let cursor;
-  while (true) {
-    const page = await list({ prefix, cursor });
-    for (const b of page.blobs) {
-      if (b.pathname) map.set(b.pathname, b.url || '');
+const remoteCache = new Map();
+
+async function getRemote(pathname) {
+  if (remoteCache.has(pathname)) return remoteCache.get(pathname);
+  try {
+    const res = await head(pathname);
+    const url = res?.url || '';
+    remoteCache.set(pathname, url);
+    return url;
+  } catch (err) {
+    if (err instanceof BlobNotFoundError || err?.name === 'BlobNotFoundError') {
+      remoteCache.set(pathname, '');
+      return '';
     }
-    if (!page.cursor) break;
-    cursor = page.cursor;
+    throw err;
   }
-  return map;
 }
 
 let sourceDir = INBOX;
@@ -83,7 +87,6 @@ if (!files.length) {
 }
 
 const manifest = loadManifest(MANIFEST_PATH);
-const remote = await listAll(PREFIX);
 
 let uploaded = 0;
 let skipped = 0;
@@ -92,13 +95,18 @@ for (const abs of files) {
   const rel = path.relative(sourceDir, abs).split(path.sep).join('/');
   const pathname = PREFIX ? `${PREFIX}/${rel}` : rel;
 
-  if (remote.has(pathname) && !OVERWRITE) {
-    const existingUrl = remote.get(pathname);
-    if (existingUrl) {
-      manifest[pathname] = existingUrl;
-    }
+  if (!OVERWRITE && manifest[pathname]) {
     skipped++;
     continue;
+  }
+
+  if (!OVERWRITE) {
+    const existingUrl = await getRemote(pathname);
+    if (existingUrl) {
+      manifest[pathname] = existingUrl;
+      skipped++;
+      continue;
+    }
   }
 
   try {

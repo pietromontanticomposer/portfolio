@@ -14,7 +14,10 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
     "public/hls/**",
+    "public/uploads/video/_hls/**",
     "scripts/**",
+    "_blob_done/**",
+    "_blob_inbox/**",
   ]),
 ]);
 

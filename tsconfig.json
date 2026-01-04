@@ -41,6 +41,7 @@
     "node_modules",
     "public/video",
     "public/hls",
+    "public/uploads/video/_hls",
     "_blob_done"
   ]
 }

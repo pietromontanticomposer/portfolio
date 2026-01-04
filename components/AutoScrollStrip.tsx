@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { memo, useCallback, useEffect, useRef } from "react";
 import PosterCard from "./PosterCard";
 import { animationCoordinator } from "../lib/AnimationCoordinator";
 
@@ -10,9 +10,10 @@ type Poster = {
   year?: string;
   tag?: string;
   image?: string;
+  href?: string;
 };
 
-export default function AutoScrollStrip({ posters }: { posters: Poster[] }) {
+function AutoScrollStrip({ posters }: { posters: Poster[] }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const isReducedMotion = useRef(false);
@@ -68,7 +69,6 @@ export default function AutoScrollStrip({ posters }: { posters: Poster[] }) {
       if (!img.complete) img.addEventListener("load", scheduleUpdateWidth, { once: true });
     });
 
-    // Use passive listener for better scroll performance
     let resizeTimeout: NodeJS.Timeout;
     const handleResize = () => {
       clearTimeout(resizeTimeout);
@@ -77,9 +77,7 @@ export default function AutoScrollStrip({ posters }: { posters: Poster[] }) {
 
     window.addEventListener("resize", handleResize, { passive: true } as AddEventListenerOptions);
     requestAnimationFrame(updateWidth);
-    updateWidth();
 
-    // Pause when out of viewport
     const visibilityObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -97,7 +95,6 @@ export default function AutoScrollStrip({ posters }: { posters: Poster[] }) {
     };
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    // Subscribe to animation coordinator
     const unsubscribe = animationCoordinator.subscribe((state) => {
       isAnimationActive = state === "active";
       applyAnimationState();
@@ -123,8 +120,6 @@ export default function AutoScrollStrip({ posters }: { posters: Poster[] }) {
     };
   }, [posters]);
 
-  // render two copies for seamlessness, using PosterCard so items are clickable
-  // Memoize to prevent unnecessary recreations
   const renderItems = useCallback((items: Poster[]) => {
     return items.map((p, idx) => (
       <div key={`${p.slug}-${idx}`} className="w-fit">
@@ -134,7 +129,7 @@ export default function AutoScrollStrip({ posters }: { posters: Poster[] }) {
             year={p.year}
             tag={p.tag}
             image={p.image}
-            href={`/portfolio/${p.slug}`}
+            href={p.href ?? `/portfolio/${p.slug}`}
           />
         </div>
       </div>
@@ -150,3 +145,5 @@ export default function AutoScrollStrip({ posters }: { posters: Poster[] }) {
     </div>
   );
 }
+
+export default memo(AutoScrollStrip);

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useId, useRef, useState } from "react";
+import React, { memo, useEffect, useId, useRef, useState } from "react";
 
 const EMAIL = "pietromontanticomposer@gmail.com";
 const SUBJECT = "Project Inquiry";
@@ -46,19 +46,22 @@ type ContactPopoverProps = {
   buttonClassName?: string;
   panelClassName?: string;
   align?: "center" | "left" | "right";
+  panelId?: string;
 };
 
-export default function ContactPopover({
+function ContactPopover({
   buttonLabel = "Contact",
   buttonClassName,
   panelClassName,
   align = "center",
+  panelId,
 }: ContactPopoverProps) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const timeoutRef = useRef<number | null>(null);
-  const panelId = useId();
+  const generatedId = useId();
+  const resolvedPanelId = panelId ?? generatedId;
 
   useEffect(() => {
     if (!open) return;
@@ -115,7 +118,7 @@ export default function ContactPopover({
         className={buttonClasses}
         aria-haspopup="dialog"
         aria-expanded={open}
-        aria-controls={panelId}
+        aria-controls={resolvedPanelId}
         onClick={() => setOpen((prev) => !prev)}
       >
         {buttonLabel}
@@ -123,7 +126,7 @@ export default function ContactPopover({
 
       {open ? (
         <div
-          id={panelId}
+          id={resolvedPanelId}
           role="dialog"
           aria-label="Contact options"
           className={`absolute top-full z-50 mt-3 w-[min(92vw,360px)] rounded-2xl border border-white/10 bg-[color:var(--card)]/95 p-4 shadow-[0_20px_50px_rgba(2,6,23,0.55)] backdrop-blur-sm ${panelAlignment} ${panelClassName ?? ""}`}
@@ -132,23 +135,23 @@ export default function ContactPopover({
             <button
               type="button"
               onClick={handleCopy}
-              className="w-full rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--foreground)] transition hover:bg-white/10"
+              className="hero-btn hero-btn-secondary btn-compact w-full"
             >
-              {copied ? "Copiato" : "Copia email"}
+              {copied ? "Copied" : "Copy email"}
             </button>
             <a
               href={buildMailtoHref()}
-              className="w-full rounded-full border border-white/15 bg-white/5 px-4 py-2 text-center text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--foreground)] transition hover:bg-white/10"
+              className="hero-btn hero-btn-secondary btn-compact w-full"
             >
-              Apri email
+              Open email
             </a>
             <a
               href={buildGmailHref()}
               target="_blank"
               rel="noreferrer"
-              className="w-full rounded-full border border-white/15 bg-white/5 px-4 py-2 text-center text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--foreground)] transition hover:bg-white/10"
+              className="hero-btn hero-btn-secondary btn-compact w-full"
             >
-              Apri Gmail
+              Open Gmail
             </a>
             <p className="pt-2 text-center text-xs text-[color:var(--muted)]" aria-live="polite">
               {EMAIL}
@@ -159,3 +162,5 @@ export default function ContactPopover({
     </div>
   );
 }
+
+export default memo(ContactPopover);

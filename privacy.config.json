@@ -3,15 +3,15 @@
   "email_contatto": "pietromontanticomposer@gmail.com",
   "hosting": "Vercel",
   "finalita": [
-    "Fornire il sito web e i contenuti richiesti.",
-    "Gestire richieste di contatto inviate via email."
+    "Provide the website and requested content.",
+    "Handle contact requests sent via email."
   ],
   "diritti": [
-    "Accesso ai dati personali",
-    "Rettifica o aggiornamento",
-    "Cancellazione",
-    "Limitazione del trattamento",
-    "Opposizione al trattamento",
-    "Portabilita dei dati"
+    "Access to personal data",
+    "Rectification or update",
+    "Erasure",
+    "Restriction of processing",
+    "Objection to processing",
+    "Data portability"
   ]
 }

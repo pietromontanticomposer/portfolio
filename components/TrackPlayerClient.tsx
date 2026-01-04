@@ -18,7 +18,7 @@ export default function TrackPlayerClient(props: any) {
           observer.disconnect();
         }
       },
-      { rootMargin: "300px 0px" }
+      { rootMargin: "150px 0px" } // Reduced from 300px for less aggressive preloading
     );
 
     observer.observe(node);
@@ -34,7 +34,6 @@ export default function TrackPlayerClient(props: any) {
           setLoadedComp(() => (mod && (mod as any).default) || mod);
         })
         .catch((err) => {
-          // eslint-disable-next-line no-console
           console.error('[TrackPlayerClient] failed to load TrackPlayer', err);
         });
     }

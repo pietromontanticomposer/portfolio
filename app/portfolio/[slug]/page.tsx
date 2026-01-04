@@ -1,28 +1,40 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react'
-import Link from 'next/link'
-import { projects } from '../../../data/projects'
-import { notFound } from 'next/navigation'
-import type { Metadata } from 'next'
-import LazyIframe from '../../../components/LazyIframe'
-import Image from 'next/image'
-import AudioPlayer from '../../../components/AudioPlayer'
-import TrackPlayer from '../../../components/TrackPlayerClient'
+import type { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
+import { notFound } from "next/navigation";
+import LazyIframe from "../../../components/LazyIframe";
+import AudioPlayer from "../../../components/AudioPlayer";
+import TrackPlayer from "../../../components/TrackPlayerClient";
+import { projects } from "../../../data/projects";
 
-type Params = { params: { slug: string } | Promise<{ slug: string }> }
+type Params = { params: { slug: string } | Promise<{ slug: string }> };
+
+type Track = {
+  context: string;
+  file?: string;
+  embedUrl?: string;
+  height?: number;
+};
+
+const getParagraphs = (text?: string) =>
+  String(text ?? "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
 
 export function generateStaticParams() {
-  return projects.map((project) => ({ slug: project.slug }))
+  return projects.map((project) => ({ slug: project.slug }));
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
-  const resolvedParams = await Promise.resolve(params)
-  const project = projects.find((p) => p.slug === resolvedParams.slug)
-  if (!project) return {}
+  const resolvedParams = await Promise.resolve(params);
+  const project = projects.find((p) => p.slug === resolvedParams.slug);
+  if (!project) return {};
 
-  const title = `${project.title} — Pietro Montanti`
-  const description = project.description?.split('\n')[0] ?? 'Project by Pietro Montanti.'
-  const image = project.image ?? project.largeImage
+  const title = `${project.title} — Pietro Montanti`;
+  const description =
+    project.description?.split("\n")[0] ?? "Project by Pietro Montanti.";
+  const image = project.image ?? project.largeImage;
 
   return {
     title,
@@ -31,155 +43,105 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       title,
       description,
       images: image ? [{ url: image }] : undefined,
-      type: 'article',
+      type: "article",
     },
-  }
+  };
 }
 
 export default async function ProjectPage({ params }: Params) {
-  const resolvedParams = await Promise.resolve(params)
-  const project = projects.find((p) => p.slug === resolvedParams.slug)
-  if (!project) return notFound()
+  const resolvedParams = await Promise.resolve(params);
+  const project = projects.find((p) => p.slug === resolvedParams.slug);
+  if (!project) return notFound();
+
+  const paragraphs = getParagraphs(project.description);
+  const tracks = (project.tracks ?? []) as Track[];
+  const allFileTracks = tracks.length > 0 && tracks.every((track) => !!track.file);
+  const coverSrc = project.image ?? project.largeImage ?? "";
 
   return (
-    <main style={{ padding: '2rem 1rem' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-        <Link href="/">
-          <button className="hero-btn hero-btn-secondary modal-close back-home">Back Home</button>
-        </Link>
-
-        <div className="page-panel">
-          <h1 className="headline section-title" style={{ fontSize: '2rem', margin: '0 0 0.8rem' }}>{project.title}</h1>
-
-          <div className="project-meta">
-            <span>Role: Composer</span>
-            <span>Format: {project.tag ?? 'Project'}</span>
-            <span>Year: {project.year ?? '—'}</span>
-          </div>
-
-          <div className="modal-desc" style={{ maxWidth: 900 }}>
-            {String(project.description)
-              .split('\n')
-              .map((line, i) =>
-                line.trim() ? (
-                  <p key={i} style={{ margin: '0 0 0.6rem' }}>
-                    {line.trim()}
-                  </p>
-                ) : (
-                  <br key={i} />
-                ),
-              )}
-          </div>
+    <main className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-16 lg:px-20">
+      <section className="page-panel">
+        <h1 className="headline section-title text-3xl text-[color:var(--foreground)]">
+          {project.title}
+        </h1>
+        <div className="project-meta">
+          <span>Role: Composer</span>
+          <span>Format: {project.tag ?? "Project"}</span>
+          <span>Year: {project.year ?? "—"}</span>
         </div>
+        <div className="modal-desc space-y-3 text-sm">
+          {paragraphs.map((paragraph, index) => (
+            <p key={`${project.slug}-paragraph-${index}`}>{paragraph}</p>
+          ))}
+        </div>
+      </section>
 
-        <div style={{ marginTop: '1.25rem', display: 'grid', gap: '1rem' }}>
-          {project.videoEmbed ? (
-            <div className="card-shell" style={{ padding: '1rem' }}>
-              <div className="video-wrapper">
-                <iframe
-                  src={project.videoEmbed}
-                  title={`${project.title} clip`}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  loading="lazy"
-                />
-              </div>
-            </div>
-          ) : null}
+      {project.videoEmbed ? (
+        <section className="card-shell p-6 sm:p-8">
+          <div className="video-wrapper">
+            <iframe
+              src={project.videoEmbed}
+              title={`${project.title} clip`}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              loading="lazy"
+            />
+          </div>
+        </section>
+      ) : null}
 
-          {project.tracks && project.tracks.length > 0 && (
-            <div style={{ marginTop: '0.75rem' }}>
-              <div className="card-shell" style={{ padding: '1rem' }}>
-                <h3 className="section-title text-2xl text-[color:var(--foreground)]" style={{ margin: '0 0 0.75rem' }}>Soundtrack</h3>
-                <div className="tracks">
-                  {project.tracks.every((t) => 'file' in t && !!t.file) ? (
-                    <TrackPlayer
-                      tracks={project.tracks as { file: string; context: string }[]}
-                      coverSrc={project.image ?? project.largeImage ?? ''}
-                    />
-                  ) : (
-                    project.tracks.map((t, i) => {
-                      const embedUrl = 'embedUrl' in t ? t.embedUrl : undefined
-
-                      return (
-                        <div key={i} className="track">
-                          <div className="track-context">{t.context}</div>
-                          <div className="track-embed">
-                            {'file' in t && t.file ? (
-                              <AudioPlayer
-                                src={t.file}
-                                waveColor="#22d3ee"
-                                progressColor="#0891b2"
-                              />
-                            ) : project.slug === 'claudio-re' ? (
-                              <iframe
-                                width="100%"
-                                height={typeof (t as any).height === 'number' ? (t as any).height : 120}
-                                scrolling="no"
-                                frameBorder="no"
-                                src={(() => {
-                                  try {
-                                    if (typeof embedUrl === 'string' && embedUrl.includes('w.soundcloud.com/player')) {
-                                      const url = new URL(embedUrl);
-                                      const params = url.searchParams;
-                                      if (!params.has('visual')) params.set('visual', 'false');
-                                      if (!params.has('show_artwork')) params.set('show_artwork', 'true');
-                                      if (!params.has('show_comments')) params.set('show_comments', 'false');
-                                      if (!params.has('show_user')) params.set('show_user', 'false');
-                                      if (!params.has('show_reposts')) params.set('show_reposts', 'false');
-                                      return url.toString();
-                                    }
-                                  } catch {
-                                    // ignore
-                                  }
-                                  return embedUrl;
-                                })()}
-                                title={`track-${i}`}
-                                loading="lazy"
-                              />
-                            ) : (
-                              <LazyIframe
-                                src={embedUrl as string}
-                                title={`track-${i}`}
-                                height={typeof (t as any).height === 'number' ? (t as any).height : 120}
-                                allow={undefined}
-                              />
-                            )}
-                          </div>
-                        </div>
-                      )
-                    })
-                  )}
+      {tracks.length > 0 ? (
+        <section className="card-shell p-6 sm:p-8">
+          <h3 className="section-title text-2xl text-[color:var(--foreground)]">
+            Soundtrack
+          </h3>
+          <div className="tracks">
+            {allFileTracks ? (
+              <TrackPlayer
+                tracks={tracks as { file: string; context: string }[]}
+                coverSrc={coverSrc}
+              />
+            ) : (
+              tracks.map((track, index) => (
+                <div key={`${track.context}-${index}`} className="track">
+                  <div className="track-context">{track.context}</div>
+                  <div className="track-embed">
+                    {track.file ? (
+                      <AudioPlayer
+                        src={track.file}
+                        waveColor="#22d3ee"
+                        progressColor="#0891b2"
+                      />
+                    ) : track.embedUrl ? (
+                      <LazyIframe
+                        src={track.embedUrl}
+                        title={`track-${index}`}
+                        height={track.height ?? 120}
+                        allow={undefined}
+                      />
+                    ) : null}
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
+              ))
+            )}
+          </div>
+        </section>
+      ) : null}
 
-          {project.largeImage && (
-            <div className="card-shell" style={{ padding: '1rem' }}>
-              <div style={{ position: 'relative', width: '100%', height: 'auto' }}>
-                <Image
-                  src={project.largeImage}
-                  alt={`${project.title} still`}
-                  className="modal-large-image"
-                  width={1100}
-                  height={620}
-                  style={{ width: '100%', height: 'auto' }}
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div style={{ marginTop: '1.5rem' }}>
-          <Link href="/">
-            <button className="hero-btn hero-btn-secondary modal-close back-home">Back Home</button>
-          </Link>
-        </div>
-      </div>
+      {project.largeImage ? (
+        <section className="card-shell p-6 sm:p-8">
+          <Image
+            src={project.largeImage}
+            alt={`${project.title} still`}
+            className="modal-large-image h-auto w-full"
+            width={1100}
+            height={620}
+            loading="lazy"
+            decoding="async"
+          />
+        </section>
+      ) : null}
     </main>
-  )
+  );
 }

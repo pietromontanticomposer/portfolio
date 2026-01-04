@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useRef, useState } from "react";
-import Hls from "hls.js";
 
 const DEBUG_BG =
   process.env.NEXT_PUBLIC_BG_DEBUG === "1" ||
@@ -11,33 +10,14 @@ export default function BackgroundVideo() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [shouldLoadSrc, setShouldLoadSrc] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const isPlayingRef = useRef(false);
   const hasLoadedRef = useRef(false);
 
-  // Load when visible; keep only user agent preferences as opt-outs.
+  // Load immediately to ensure background video starts playing.
   useEffect(() => {
-    const prefersReducedMotion =
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const saveData = (navigator as any).connection?.saveData;
-
-    if (prefersReducedMotion || saveData) return;
     if (hasLoadedRef.current) return;
     hasLoadedRef.current = true;
-    const node = videoRef.current;
-    if (!node || !("IntersectionObserver" in window)) {
-      setShouldLoadSrc(true);
-      return;
-    }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          setShouldLoadSrc(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "200px 0px" }
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
+    setShouldLoadSrc(true);
   }, []);
 
   // Attach sources and attempt playback
@@ -49,7 +29,6 @@ export default function BackgroundVideo() {
     const log = (...args: any[]) => {
       if (!DEBUG_BG) return;
       try {
-        // eslint-disable-next-line no-console
         console.debug('[BackgroundVideo]', ...args);
       } catch {}
     };
@@ -57,7 +36,6 @@ export default function BackgroundVideo() {
     const logError = (...args: any[]) => {
       try {
         if (!DEBUG_BG) {
-          // eslint-disable-next-line no-console
           console.error('[BackgroundVideo]', ...args);
           return;
         }
@@ -76,7 +54,6 @@ export default function BackgroundVideo() {
             }
           }
         });
-        // eslint-disable-next-line no-console
         console.error('[BackgroundVideo]', ...args, { videoState, serialized });
       } catch {}
     };
@@ -85,14 +62,42 @@ export default function BackgroundVideo() {
       const message = err?.message ? String(err.message).toLowerCase() : "";
       return name === "AbortError" && message.includes("paused to save power");
     };
+    const isAbortDuringLoad = (err: any) => {
+      const name = err?.name ? String(err.name) : "";
+      const message = err?.message ? String(err.message).toLowerCase() : "";
+      return name === "AbortError" && message.includes("interrupted by a new load request");
+    };
 
-    let hls: Hls | null = null;
+    let hls: any = null;
+    let HlsClass: any = null;
     let connectionChangeHandler: (() => void) | null = null;
     let lastTime = 0;
     let lastAdvance = performance.now();
     let lastRecoverAt = 0;
     let stallCount = 0;
     let hasSource = false;
+    let mounted = true;
+
+    const tryPlayImmediate = () => {
+      if (!hasSource || !mounted) return;
+      try {
+        video.muted = true;
+      } catch {}
+      const p = video.play();
+      if (p && typeof (p as Promise<void>).then === "function") {
+        (p as Promise<void>)
+          .then(() => log('video.play() succeeded'))
+          .catch((err) => {
+            if (err?.name === "NotSupportedError") return;
+            if (isPowerSaveAbort(err)) {
+              log('video.play() blocked by power saver', err);
+              return;
+            }
+            if (isAbortDuringLoad(err)) return;
+            logError('video.play() rejected', err, { paused: video.paused, readyState: video.readyState, networkState: video.networkState });
+          });
+      }
+    };
 
     try {
       video.muted = true;
@@ -111,164 +116,160 @@ export default function BackgroundVideo() {
         process.env.NEXT_PUBLIC_BG_HLS_URL ||
         "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/hls/background/master.m3u8";
 
-      if (Hls.isSupported()) {
-        hls = new Hls({
-          enableWorker: true,
-          lowLatencyMode: false,
-          capLevelToPlayerSize: true,
-          startLevel: 0,
-          backBufferLength: 2,
-          maxBufferLength: 5,
-          maxMaxBufferLength: 10,
-          maxBufferSize: 6 * 1000 * 1000,
-          maxBufferHole: 0.5,
-          abrBandWidthFactor: 0.65,
-          abrBandWidthUpFactor: 0.55,
-          fragLoadingTimeOut: 10000,
-          fragLoadingMaxRetry: 6,
-          fragLoadingRetryDelay: 800,
-          fragLoadingMaxRetryTimeout: 8000,
-          manifestLoadingMaxRetry: 6,
-          manifestLoadingRetryDelay: 800,
-          manifestLoadingMaxRetryTimeout: 8000,
-        });
-        hls.loadSource(hlsUrl);
-        hls.attachMedia(video);
-        hasSource = true;
-        const chooseCapLevel = () => {
-          if (!hls) return;
+      // Dynamic import HLS.js to reduce initial bundle (~80KB)
+      import("hls.js").then((HlsModule) => {
+        if (!mounted) return;
+        HlsClass = HlsModule.default;
+
+        if (HlsClass.isSupported()) {
+          hls = new HlsClass({
+            enableWorker: true,
+            lowLatencyMode: false,
+            capLevelToPlayerSize: true,
+            startLevel: 0,
+            backBufferLength: 1,
+            maxBufferLength: 3,
+            maxMaxBufferLength: 6,
+            maxBufferSize: 3 * 1000 * 1000,
+            maxBufferHole: 0.5,
+            abrBandWidthFactor: 0.65,
+            abrBandWidthUpFactor: 0.55,
+            fragLoadingTimeOut: 10000,
+            fragLoadingMaxRetry: 4,
+            fragLoadingRetryDelay: 1000,
+            fragLoadingMaxRetryTimeout: 8000,
+            manifestLoadingMaxRetry: 4,
+            manifestLoadingRetryDelay: 1000,
+            manifestLoadingMaxRetryTimeout: 8000,
+          });
+          hls.loadSource(hlsUrl);
+          hls.attachMedia(video);
+          hasSource = true;
+
+          const chooseCapLevel = () => {
+            if (!hls) return;
+            const conn = (navigator as any).connection;
+            const downlink = typeof conn?.downlink === "number" ? conn.downlink : null;
+            const saveData = !!conn?.saveData;
+            const isLowPower =
+              window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+              window.matchMedia("(pointer: coarse)").matches;
+            const vw = video.videoWidth || video.clientWidth || window.innerWidth;
+
+            let maxHeight = 720;
+            if (saveData) {
+              maxHeight = 360;
+            } else if (downlink !== null) {
+              if (downlink <= 1.5) maxHeight = 360;
+              else if (downlink <= 3) maxHeight = 540;
+              else if (downlink <= 6) maxHeight = 720;
+              else maxHeight = 900;
+            } else if (isLowPower) {
+              maxHeight = 540;
+            }
+
+            const limit = Math.min(maxHeight, vw);
+            const level = hls.levels?.findIndex(
+              (l: any) => (l?.height ?? 0) > 0 && (l?.height ?? 0) <= limit
+            );
+            if (typeof level === "number" && level >= 0) {
+              hls.autoLevelCapping = level;
+            }
+          };
+
+          hls.on(HlsClass.Events.MANIFEST_PARSED, chooseCapLevel);
+          hls.on(HlsClass.Events.MEDIA_ATTACHED, () => log('HLS MEDIA_ATTACHED'));
+          hls.on(HlsClass.Events.BUFFER_APPENDED, () => log('HLS BUFFER_APPENDED'));
           const conn = (navigator as any).connection;
-          const downlink = typeof conn?.downlink === "number" ? conn.downlink : null;
-          const saveData = !!conn?.saveData;
-          const isLowPower =
-            window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-            window.matchMedia("(pointer: coarse)").matches;
-          const vw = video.videoWidth || video.clientWidth || window.innerWidth;
-
-          let maxHeight = 720;
-          if (saveData) {
-            maxHeight = 360;
-          } else if (downlink !== null) {
-            if (downlink <= 1.5) maxHeight = 360;
-            else if (downlink <= 3) maxHeight = 540;
-            else if (downlink <= 6) maxHeight = 720;
-            else maxHeight = 900;
-          } else if (isLowPower) {
-            maxHeight = 540;
+          if (conn && typeof conn.addEventListener === "function") {
+            connectionChangeHandler = chooseCapLevel;
+            conn.addEventListener("change", connectionChangeHandler);
           }
 
-          const limit = Math.min(maxHeight, vw);
-          const level = hls.levels?.findIndex(
-            (l) => (l?.height ?? 0) > 0 && (l?.height ?? 0) <= limit
-          );
-          if (typeof level === "number" && level >= 0) {
-            hls.autoLevelCapping = level;
-          }
-        };
+          hls.on(HlsClass.Events.ERROR, (_event: any, data: any) => {
+            try {
+              const info = {
+                type: data?.type,
+                details: data?.details,
+                fatal: data?.fatal,
+                response: data?.response
+                  ? {
+                    url: (data.response as any)?.url || (data.response as any)?.uri,
+                    code: (data.response as any)?.code,
+                    text: (data.response as any)?.text
+                  }
+                  : null,
+                context: data?.context
+                  ? {
+                      fragUrl: (data.context as any)?.frag?.url,
+                      fragByteRange: (data.context as any)?.frag?.byteRange,
+                      loader: (data.context as any)?.loader?.url,
+                      type: (data.context as any)?.type,
+                    }
+                  : null,
+              };
+              log('HLS ERROR EVENT', info, _event);
+            } catch (e) {
+              logError('Error serializing HLS error', e, data);
+            }
 
-        hls.on(Hls.Events.MANIFEST_PARSED, chooseCapLevel);
-        hls.on(Hls.Events.MEDIA_ATTACHED, () => log('HLS MEDIA_ATTACHED'));
-        hls.on(Hls.Events.BUFFER_APPENDED, () => log('HLS BUFFER_APPENDED'));
-        const conn = (navigator as any).connection;
-        if (conn && typeof conn.addEventListener === "function") {
-          connectionChangeHandler = chooseCapLevel;
-          conn.addEventListener("change", connectionChangeHandler);
+            if (data?.details === HlsClass.ErrorDetails.BUFFER_STALLED_ERROR) {
+              hls?.startLoad();
+              tryPlayImmediate();
+              return;
+            }
+
+            if (!data?.fatal) {
+              log('HLS non-fatal error', data);
+              return;
+            }
+
+            logError('HLS fatal error', data);
+            if (data.type === HlsClass.ErrorTypes.NETWORK_ERROR) {
+              hls?.startLoad();
+            } else if (data.type === HlsClass.ErrorTypes.MEDIA_ERROR) {
+              hls?.recoverMediaError();
+            } else {
+              try {
+                hls?.destroy();
+              } catch (e) {
+                logError('Error destroying HLS instance', e);
+              }
+            }
+          });
+
+          // Start playback after HLS is ready
+          tryPlayImmediate();
+        } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+          // Safari: native HLS
+          try {
+            video.src = hlsUrl;
+            hasSource = true;
+            tryPlayImmediate();
+          } catch {}
         }
 
-        hls.on(Hls.Events.ERROR, (_event, data) => {
-          try {
-            const info = {
-              type: data?.type,
-              details: data?.details,
-              fatal: data?.fatal,
-              response: data?.response
-                ? {
-                  url: (data.response as any)?.url || (data.response as any)?.uri,
-                  code: (data.response as any)?.code,
-                  text: (data.response as any)?.text
-                }
-                : null,
-              context: data?.context
-                ? {
-                    fragUrl: (data.context as any)?.frag?.url,
-                    fragByteRange: (data.context as any)?.frag?.byteRange,
-                    loader: (data.context as any)?.loader?.url,
-                    type: (data.context as any)?.type,
-                  }
-                : null,
-            };
-            log('HLS ERROR EVENT', info, _event);
-          } catch (e) {
-            logError('Error serializing HLS error', e, data);
-          }
+        if (hasSource) {
+          video.preload = "metadata";
+          video.load();
+        }
+      }).catch((err) => {
+        logError('Failed to load HLS.js', err);
+      });
 
-          if (data?.details === Hls.ErrorDetails.BUFFER_STALLED_ERROR) {
-            hls?.startLoad();
-            tryPlayImmediate();
-            return;
-          }
-
-          if (!data?.fatal) {
-            log('HLS non-fatal error', data);
-            return;
-          }
-
-          logError('HLS fatal error', data);
-          if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
-            hls?.startLoad();
-          } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
-            hls?.recoverMediaError();
-          } else {
-            try {
-              hls?.destroy();
-            } catch (e) {
-              logError('Error destroying HLS instance', e);
-            }
-          }
-        });
-      } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-        // Safari: native HLS
-        try {
-          video.src = hlsUrl;
-          hasSource = true;
-        } catch {}
-      } else {
-        // fallback - do not force MP4 here; let HLS or the browser decide
-      }
-
-      if (hasSource) {
-        video.preload = "metadata";
-        video.load();
-      }
     } catch {
       // ignore
     }
 
-    const tryPlayImmediate = () => {
-      if (!hasSource) return;
-      try {
-        video.muted = true;
-      } catch {}
-      const p = video.play();
-      if (p && typeof (p as Promise<void>).then === "function") {
-        (p as Promise<void>)
-          .then(() => log('video.play() succeeded'))
-          .catch((err) => {
-            if (err?.name === "NotSupportedError") return;
-            if (isPowerSaveAbort(err)) {
-              log('video.play() blocked by power saver', err);
-              return;
-            }
-            logError('video.play() rejected', err, { paused: video.paused, readyState: video.readyState, networkState: video.networkState });
-          });
-      }
-    };
-
     const onPlaying = () => {
+      isPlayingRef.current = true;
       setIsPlaying(true);
       lastAdvance = performance.now();
     };
-    const onPause = () => setIsPlaying(false);
+    const onPause = () => {
+      isPlayingRef.current = false;
+      setIsPlaying(false);
+    };
     const onCanPlay = () => tryPlayImmediate();
     const onCanPlayThrough = () => tryPlayImmediate();
     const onWaiting = () => setTimeout(() => tryPlayImmediate(), 250);
@@ -280,13 +281,13 @@ export default function BackgroundVideo() {
       }
     };
 
-    video.addEventListener("playing", onPlaying);
-    video.addEventListener("pause", onPause);
-    video.addEventListener("canplay", onCanPlay);
-    video.addEventListener("canplaythrough", onCanPlayThrough);
-    video.addEventListener("waiting", onWaiting);
-    video.addEventListener("stalled", onStalled);
-    video.addEventListener("timeupdate", onTimeUpdate);
+    video.addEventListener("playing", onPlaying, { passive: true });
+    video.addEventListener("pause", onPause, { passive: true });
+    video.addEventListener("canplay", onCanPlay, { passive: true });
+    video.addEventListener("canplaythrough", onCanPlayThrough, { passive: true });
+    video.addEventListener("waiting", onWaiting, { passive: true });
+    video.addEventListener("stalled", onStalled, { passive: true });
+    video.addEventListener("timeupdate", onTimeUpdate, { passive: true });
     const onError = (e: Event) => {
       try {
         const mediaError = video.error;
@@ -294,7 +295,6 @@ export default function BackgroundVideo() {
           ? { code: mediaError.code, message: mediaError.message }
           : null;
         if (mediaError?.code === 4) return;
-        // eslint-disable-next-line no-console
         console.error('[BackgroundVideo] video element error', e, {
           readyState: video.readyState,
           networkState: video.networkState,
@@ -304,29 +304,18 @@ export default function BackgroundVideo() {
     };
     video.addEventListener("error", onError);
 
-    tryPlayImmediate();
-    requestAnimationFrame(() => {
-      tryPlayImmediate();
-      if ("requestIdleCallback" in window) {
-        (window as any).requestIdleCallback(() => tryPlayImmediate(), {
-          timeout: 800,
-        });
-      } else {
-        setTimeout(() => tryPlayImmediate(), 500);
-      }
-    });
-
+    // Watchdog interval optimized for smooth performance
     const watchdogId = window.setInterval(() => {
       if (document.hidden) return;
-      if (video.paused || video.seeking || !isPlaying) return;
+      if (video.paused || video.seeking || !isPlayingRef.current) return;
       const sinceAdvance = performance.now() - lastAdvance;
-      if (sinceAdvance < 4000) return;
+      if (sinceAdvance < 7000) return;
       const now = performance.now();
-      if (now - lastRecoverAt < 3000) return;
+      if (now - lastRecoverAt < 5000) return;
       lastRecoverAt = now;
       stallCount += 1;
       try {
-        if (hls) {
+        if (hls && HlsClass) {
           if (stallCount % 3 === 0) {
             hls.stopLoad();
             hls.detachMedia();
@@ -343,9 +332,10 @@ export default function BackgroundVideo() {
         }
         tryPlayImmediate();
       } catch {}
-    }, 4000);
+    }, 7000);
 
     return () => {
+      mounted = false;
       video.removeEventListener("playing", onPlaying);
       video.removeEventListener("pause", onPause);
       video.removeEventListener("canplay", onCanPlay);
@@ -366,27 +356,6 @@ export default function BackgroundVideo() {
       }
     };
   }, [shouldLoadSrc]);
-
-  // Render only poster when reduced-motion or save-data is requested
-  const prefersReducedMotion =
-    typeof window !== "undefined" &&
-    window.matchMedia &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const saveData =
-    typeof navigator !== "undefined" && (navigator as any).connection?.saveData;
-
-  if (prefersReducedMotion || saveData) {
-    return (
-      <>
-        <div
-          className={`bg-video-poster`}
-          style={{ backgroundImage: `url('https://4glkq64bdlmmple5.public.blob.vercel-storage.com/background-poster.jpg')` }}
-          aria-hidden="true"
-        />
-        <div className="bg-video-overlay" aria-hidden="true" />
-      </>
-    );
-  }
 
   return (
     <>

@@ -41,11 +41,11 @@ export default function CookiePolicyPage() {
         Cookie Policy
       </h1>
       <p className="mt-4 text-sm leading-7 text-[color:var(--muted)]">
-        Questa pagina elenca solo i cookie tecnici effettivamente impostati al primo caricamento.
+        This page lists only the technical cookies actually set on the first load.
       </p>
       {scanData?.generatedAt ? (
         <p className="mt-2 text-xs text-[color:var(--muted)]">
-          Ultimo controllo: {scanData.generatedAt}
+          Last check: {scanData.generatedAt}
         </p>
       ) : null}
 
@@ -55,7 +55,7 @@ export default function CookiePolicyPage() {
         </p>
       ) : cookies.length === 0 ? (
         <p className="mt-6 text-sm text-[color:var(--muted)]">
-          Nessun cookie tecnico rilevato al primo caricamento.
+          No technical cookies detected on the first load.
         </p>
       ) : (
         <div className="mt-6 space-y-4 text-sm text-[color:var(--muted)]">

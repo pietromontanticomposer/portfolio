@@ -17,6 +17,13 @@ let configError: string | null = null;
 
 const isEmpty = (value: string) => !value || value.trim().length === 0;
 const isTodo = (value: string) => /todo/i.test(value);
+const fieldLabels = {
+  titolare: "data controller",
+  email_contatto: "contact email",
+  hosting: "hosting",
+  finalita: "purposes of processing",
+  diritti: "data subject rights",
+} as const;
 
 try {
   const raw = fs.readFileSync(configPath, "utf8");
@@ -26,23 +33,23 @@ try {
   if (!parsed || typeof parsed !== "object") {
     errors.push("Config missing or invalid JSON.");
   } else {
-    if (isEmpty(parsed.titolare) || isTodo(parsed.titolare)) errors.push("titolare");
-    if (isEmpty(parsed.email_contatto) || isTodo(parsed.email_contatto)) errors.push("email_contatto");
-    if (isEmpty(parsed.hosting) || isTodo(parsed.hosting)) errors.push("hosting");
+    if (isEmpty(parsed.titolare) || isTodo(parsed.titolare)) errors.push(fieldLabels.titolare);
+    if (isEmpty(parsed.email_contatto) || isTodo(parsed.email_contatto)) errors.push(fieldLabels.email_contatto);
+    if (isEmpty(parsed.hosting) || isTodo(parsed.hosting)) errors.push(fieldLabels.hosting);
 
     const finalita = Array.isArray(parsed.finalita) ? parsed.finalita : [];
     if (finalita.length === 0 || finalita.some((item) => isEmpty(item) || isTodo(item))) {
-      errors.push("finalita");
+      errors.push(fieldLabels.finalita);
     }
 
     const diritti = Array.isArray(parsed.diritti) ? parsed.diritti : [];
     if (diritti.length === 0 || diritti.some((item) => isEmpty(item) || isTodo(item))) {
-      errors.push("diritti");
+      errors.push(fieldLabels.diritti);
     }
   }
 
   if (errors.length) {
-    configError = `Privacy config non valida: ${errors.join(", ")}.`;
+    configError = `Invalid privacy config: ${errors.join(", ")}.`;
   } else {
     config = parsed;
   }
@@ -62,7 +69,7 @@ export default function PrivacyPolicyPage() {
           Privacy Policy
         </h1>
         <p className="mt-4 text-sm leading-7 text-[color:var(--muted)]">
-          {configError ?? "Privacy config non disponibile."}
+          {configError ?? "Privacy config not available."}
         </p>
       </main>
     );
@@ -75,11 +82,11 @@ export default function PrivacyPolicyPage() {
       </h1>
       <div className="mt-6 space-y-6 text-sm leading-7 text-[color:var(--muted)]">
         <div>
-          <div className="text-[color:var(--foreground)] font-semibold">Titolare</div>
+          <div className="text-[color:var(--foreground)] font-semibold">Data controller</div>
           <div>{config.titolare}</div>
         </div>
         <div>
-          <div className="text-[color:var(--foreground)] font-semibold">Email di contatto</div>
+          <div className="text-[color:var(--foreground)] font-semibold">Contact email</div>
           <div>{config.email_contatto}</div>
         </div>
         <div>
@@ -87,7 +94,7 @@ export default function PrivacyPolicyPage() {
           <div>{config.hosting}</div>
         </div>
         <div>
-          <div className="text-[color:var(--foreground)] font-semibold">Finalita del trattamento</div>
+          <div className="text-[color:var(--foreground)] font-semibold">Purposes of processing</div>
           <ul className="mt-2 list-disc space-y-1 pl-5">
             {config.finalita.map((item) => (
               <li key={item}>{item}</li>
@@ -95,7 +102,7 @@ export default function PrivacyPolicyPage() {
           </ul>
         </div>
         <div>
-          <div className="text-[color:var(--foreground)] font-semibold">Diritti dell'interessato</div>
+          <div className="text-[color:var(--foreground)] font-semibold">Data subject rights</div>
           <ul className="mt-2 list-disc space-y-1 pl-5">
             {config.diritti.map((item) => (
               <li key={item}>{item}</li>

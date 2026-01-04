@@ -1,9 +1,56 @@
+// Pre-computed featured projects for homepage (avoid runtime filter)
+export const featuredProjects = [
+  {
+    slug: 'claudio-re',
+    title: 'Claudio Re',
+    year: '2020',
+    tag: 'Short',
+    image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20claudio%20re.avif',
+  },
+  {
+    slug: 'soggetto-obsoleto',
+    title: 'Soggetto Obsoleto',
+    year: '2021',
+    tag: 'Short',
+    image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20soggetto%20obsoleto.webp',
+  },
+  {
+    slug: 'i-veneti-antichi',
+    title: 'I Veneti Antichi',
+    year: '2024',
+    tag: 'Documentary',
+    image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20i%20veneti%20antichi.avif',
+  },
+  {
+    slug: 'i-found-you',
+    title: 'I Found You',
+    year: '2020',
+    tag: 'Short',
+    image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20i%20found%20you.webp',
+  },
+  {
+    slug: 'l-appartamento',
+    title: "L'Appartamento",
+    year: '2022',
+    tag: 'Feature',
+    image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20l%27appartamento.webp",
+  },
+  {
+    slug: 'la-sonata-del-caos',
+    title: 'La Sonata del Caos',
+    year: '2023',
+    tag: 'Documentary',
+    image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20la%20sonata%20del%20caos.avif',
+  },
+];
+
 export const projects = [
   {
     slug: 'claudio-re',
     title: 'Claudio Re',
     year: '2020',
     tag: 'Short',
+    featured: true,
     image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20claudio%20re.avif',
     largeImage: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20claudio%20re.avif',
     description: `Claudio Re is a short film directed by Marco Martini, inspired by Hamlet and centered on the psychological unraveling of King Claudius after committing murder to secure his throne.
@@ -41,6 +88,7 @@ export const projects = [
     title: 'Soggetto Obsoleto',
     year: '2021',
     tag: 'Short',
+    featured: true,
     image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20soggetto%20obsoleto.webp',
     largeImage: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20soggetto%20obsoleto.webp',
     description: `Soggetto Obsoleto is a short film directed by Nicola Pegg, set in a dystopian society where individuals are periodically evaluated according to their social usefulness and risk being declared "obsolete."
@@ -67,6 +115,7 @@ export const projects = [
     title: 'I Veneti Antichi',
     year: '2024',
     tag: 'Documentary',
+    featured: true,
     image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20i%20veneti%20antichi.avif',
     largeImage: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20i%20veneti%20antichi.avif',
     description: `I Veneti Antichi – Riding the Myth is a historical docu-film directed by Tommaso Giusto and produced by Akeron Film, dedicated to the ancient Veneti civilization and their mythic and cultural imagination.
@@ -89,6 +138,7 @@ export const projects = [
     title: 'I Found You',
     year: '2020',
     tag: 'Short',
+    featured: true,
     image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20i%20found%20you.webp',
     largeImage: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20i%20found%20you.webp',
     description: `I Found You is an independent horror film directed by Diego Carli, set in an abandoned villa where two young girls engage in a seemingly innocent game that gradually reveals its dangerous nature.
@@ -101,6 +151,7 @@ export const projects = [
     title: "L'Appartamento",
     year: '2022',
     tag: 'Feature',
+    featured: true,
     image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20l%27appartamento.webp",
     largeImage: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20l%27appartamento.webp",
     description: `L'Appartamento is a social docu-film directed by Federico Scienza and Manuela Boezio, telling the experience of the Io Abito project and the paths toward autonomy of people with vulnerabilities in everyday apartment life.
@@ -108,19 +159,19 @@ export const projects = [
     tracks: [
       {
         file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-lappartamento/Il-mio-ritmo-alt.mp3",
-        context: 'Il mio ritmo — main theme, solo piano.',
+        context: 'My Rhythm — main theme, solo piano.',
       },
       {
         file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-lappartamento/Nonostante-tutto-alt.mp3",
-        context: 'Nonostante tutto — atmospheric textures.',
+        context: 'Despite Everything — atmospheric textures.',
       },
       {
         file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-lappartamento/Come-sono-dove-sono-alt.mp3",
-        context: 'Come sono, dove sono — intimate cue.',
+        context: 'How I Am, Where I Am — intimate cue.',
       },
       {
         file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-lappartamento/Occhi-chiusi-cuore-aperto-alt.mp3",
-        context: 'Occhi chiusi, cuore aperto — closing theme.',
+        context: 'Eyes Closed, Heart Open — closing theme.',
       },
     ],
   },
@@ -129,6 +180,7 @@ export const projects = [
     title: 'La Sonata del Caos',
     year: '2023',
     tag: 'Documentary',
+    featured: true,
     image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20la%20sonata%20del%20caos.avif',
     largeImage: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20la%20sonata%20del%20caos.avif',
     description: `La Sonata del Caos is a fantasy short film directed by Eleonora Valentino, set in a space suspended between reality and folklore, where the presence of the Banshee embodies the theme of death and the inevitable.
@@ -162,6 +214,7 @@ export const projects = [
     title: 'Meridiana',
     year: '2021',
     tag: 'Short',
+    featured: false,
     image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20meridiana.avif',
     largeImage: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20meridiana.avif',
     description: `Poetic short film with acoustic and ambient sounds. Music conceived for wide visual openings.`,
@@ -172,6 +225,7 @@ export const projects = [
     title: 'Freak Shakespeare',
     year: '2019',
     tag: 'Theatre',
+    featured: false,
     image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20freak%20shakespeare.avif',
     largeImage: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20freak%20shakespeare.avif',
     description: `Theatre production with original music. Hybrid style between electronic and classical instruments.`,
@@ -182,6 +236,7 @@ export const projects = [
     title: "Una Piccola, Stupida, Inutile Storia D'Amore",
     year: '2022',
     tag: 'Feature',
+    featured: false,
     image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20%20una%20piccola%2C%20stupida%2C%20inutile%20storia%20d%27amore.webp',
     largeImage: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20%20una%20piccola%2C%20stupida%2C%20inutile%20storia%20d%27amore.webp',
     description: `Feature film with intimate arrangements and light rhythms. Focus on the relationships between characters.`,
@@ -198,9 +253,10 @@ export const projects = [
     title: 'Samba e Bossa Nova',
     year: '2025',
     tag: 'Music',
+    featured: false,
     image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20samba%20e%20bossa%20nova.png',
     largeImage: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20samba%20e%20bossa%20nova.png',
-    description: `Locandina per progetti in stile Samba e Bossa Nova. Aggiungi tracce o dettagli se necessario.`,
+    description: `Poster for Samba and Bossa Nova style projects. Add tracks or details if needed.`,
     tracks: [],
   },
   {
@@ -208,6 +264,7 @@ export const projects = [
     title: 'Free / Fall',
     year: 'Coming Soon',
     tag: 'Coming Soon',
+    featured: false,
     description: `Free / Fall is a short film directed by Francesco La Barbera and Daniele Murgia, exploring gambling addiction through the subjective collapse of a young man trapped in a repetitive cycle of compulsion and avoidance.
   The score is built around synths, piano and strings, shifting between major and minor tonalities to mirror the dopamine highs and emotional lows characteristic of addiction. In moments of heightened internal conflict, these harmonic shifts are deliberately dissonant against the surrounding melodic material, generating friction that reflects the character’s psychological instability.
   The music makes frequent use of dominant seventh harmonies that resolve back onto the same chord, creating a sensation of apparent resolution that never truly moves forward. This harmonic loop reinforces the illusion of control and relief typical of addictive behavior. Underlying synth drones act as a persistent noise floor, representing the unresolved inner pressure the character attempts to suppress. The score avoids true catharsis, aligning with the film’s ending as the character ultimately returns to gambling.`,
@@ -231,6 +288,7 @@ export const projects = [
     title: 'Polvere Sotto Al Tappeto',
     year: 'Coming Soon',
     tag: 'Coming Soon',
+    featured: false,
     description: `Polvere sotto al tappeto is a dramatic horror short film directed by Gianluca Volpe, centered on a man who murders his partner after discovering her betrayal and constructs a network of narcissistic justifications to legitimize his act.
   The narrative unfolds entirely from the protagonist’s subjective perspective, with the voice in his head taking the form of his murdered partner, collapsing guilt, denial and self-absolution into a single distorted inner dialogue.
   The score aligns with this corrupted point of view: the music appears ordered, controlled and deceptively positive, suggesting clarity and emotional balance where none truly exist. By adopting the protagonist’s internal logic, the music amplifies the psychological horror, exposing the fracture between apparent rationality and moral collapse.`,
@@ -266,6 +324,7 @@ export const projects = [
     title: "Non c'è Casa in Paradiso",
     year: 'Coming Soon',
     tag: 'Coming Soon',
+    featured: false,
     description: `Non c’è casa in paradiso is a documentary short film directed by Federico Scienza and Manuela Boezio, addressing the housing emergency in Trentino and its concrete impact on individuals and families excluded from the housing system.
   The score is conceived as a restrained narrative support, designed to accompany testimonies and situations without amplifying or dramatizing them. Music operates in the background, reinforcing continuity and emotional grounding while leaving space for voices, silence and real-life tension.
   Rather than offering commentary or resolution, the music maintains a measured presence that supports the documentary’s observational approach, allowing the social reality portrayed on screen to remain central.`,

@@ -4,13 +4,15 @@ import "./globals.css";
 import Footer from "../components/Footer";
 import ScrollController from "../components/ScrollController";
 import BackgroundVideo from "../components/BackgroundVideo";
-import ScrollPerformance from "../components/ScrollPerformance";
+import Header from "../components/Header";
 
+// Optimized font loading - reduced weights to critical only
 const bodoni = Bodoni_Moda({
   variable: "--font-bodoni",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "600"], // Removed 500, only use 400 and 600
   display: 'swap',
+  preload: true,
 });
 
 const workSans = Work_Sans({
@@ -18,24 +20,50 @@ const workSans = Work_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   display: 'swap',
+  preload: true,
 });
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   subsets: ["latin"],
-  weight: ["400", "600"],
+  weight: ["400"], // Removed 600, only use 400 for mono
   display: 'swap',
+  preload: true,
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
-  ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined)
-  ?? "http://localhost:3000";
+const resolvedSiteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
+const siteUrl = resolvedSiteUrl ?? "http://localhost:3000";
+const defaultTitle = "Pietro Montanti";
+const defaultDescription =
+  "Composer for Film and Media. Music that supports edit, tension, and character.";
+
+if (!resolvedSiteUrl && process.env.NODE_ENV !== "production") {
+  console.warn(
+    "NEXT_PUBLIC_SITE_URL is not set. Using http://localhost:3000 for metadata."
+  );
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Pietro Montanti - Composer for Film and Media",
-  description:
-    "Pietro Montanti is a composer and music producer for film and visual media. Original scores, sound design, and narrative music.",
+  title: {
+    default: defaultTitle,
+    template: "%s | Pietro Montanti",
+  },
+  description: defaultDescription,
+  openGraph: {
+    title: defaultTitle,
+    description: defaultDescription,
+    url: siteUrl,
+    siteName: defaultTitle,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: defaultTitle,
+    description: defaultDescription,
+  },
 };
 
 export default function RootLayout({
@@ -65,9 +93,9 @@ export default function RootLayout({
       <body
         className={`${bodoni.variable} ${workSans.variable} ${jetbrainsMono.variable} antialiased`}
       >
+        <Header />
         {SHOW_BG_VIDEO && <BackgroundVideo />}
         <ScrollController />
-        <ScrollPerformance />
         {children}
         <Footer />
       </body>

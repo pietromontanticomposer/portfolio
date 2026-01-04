@@ -6,6 +6,23 @@ type Props = {
   images: string[];
 };
 
+type NetworkInfo = {
+  saveData?: boolean;
+  effectiveType?: string;
+};
+
+type NavigatorWithConnection = Navigator & {
+  connection?: NetworkInfo;
+  deviceMemory?: number;
+};
+
+type WindowWithIdleCallback = Window & {
+  requestIdleCallback?: (
+    callback: IdleRequestCallback,
+    options?: IdleRequestOptions
+  ) => number;
+};
+
 export default function MediaPreload({ images }: Props) {
   const cacheRef = useRef<HTMLImageElement[]>([]);
 
@@ -14,12 +31,16 @@ export default function MediaPreload({ images }: Props) {
     const cache: HTMLImageElement[] = [];
     let cancelled = false;
 
-    const conn = typeof navigator !== "undefined" ? (navigator as any).connection : null;
+    const nav =
+      typeof navigator !== "undefined"
+        ? (navigator as NavigatorWithConnection)
+        : null;
+    const conn = nav?.connection ?? null;
     const saveData = !!conn?.saveData;
     const effectiveType = typeof conn?.effectiveType === "string" ? conn.effectiveType : "";
     const lowNet = /2g/.test(effectiveType);
-    const deviceMemory = typeof (navigator as any)?.deviceMemory === "number" ? (navigator as any).deviceMemory : 8;
-    const cores = typeof navigator?.hardwareConcurrency === "number" ? navigator.hardwareConcurrency : 8;
+    const deviceMemory = typeof nav?.deviceMemory === "number" ? nav.deviceMemory : 8;
+    const cores = typeof nav?.hardwareConcurrency === "number" ? nav.hardwareConcurrency : 8;
 
     const eagerCount = saveData ? 0 : (deviceMemory <= 4 || cores <= 4 || lowNet ? 4 : 8);
     const eagerList = unique.slice(0, eagerCount);
@@ -47,8 +68,9 @@ export default function MediaPreload({ images }: Props) {
       };
 
       const schedule = () => {
-        if ("requestIdleCallback" in window) {
-          (window as any).requestIdleCallback((deadline: IdleDeadline) => {
+        const windowWithIdle = window as WindowWithIdleCallback;
+        if (typeof windowWithIdle.requestIdleCallback === "function") {
+          windowWithIdle.requestIdleCallback((deadline: IdleDeadline) => {
             const hasMore = loadBatch(deadline);
             if (hasMore) schedule();
           }, { timeout: 1500 });

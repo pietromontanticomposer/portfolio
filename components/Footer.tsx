@@ -1,9 +1,14 @@
 import Link from "next/link";
 import ContactPopover from "./ContactPopover";
 
+const CONTACT_EMAIL = "pietromontanticomposer@gmail.com";
+
 export default function Footer() {
   return (
-    <footer className="mt-12 border-t border-black/10 bg-transparent px-6 py-10 sm:px-10 lg:px-16">
+    <footer
+      id="contact"
+      className="mt-12 border-t border-black/10 bg-transparent px-6 py-10 sm:px-10 lg:px-16"
+    >
       <div className="mx-auto max-w-7xl text-sm">
 
         {/* Desktop: three-column grid */}
@@ -15,10 +20,16 @@ export default function Footer() {
           </div>
 
           <div className="col-span-1 flex justify-center">
-            <ContactPopover
-              buttonLabel="Contact Me"
-              buttonClassName="appearance-none inline-flex items-center justify-center rounded-md border border-[color:var(--muted)] bg-transparent px-6 py-3 text-base font-medium text-[color:var(--foreground)] hover:bg-[color:var(--muted)]/6"
-            />
+            <div className="flex flex-col items-center gap-3">
+              <ContactPopover
+                buttonLabel="Contact Me"
+                buttonClassName="hero-btn hero-btn-secondary"
+                panelId="contact-popover-footer-desktop"
+              />
+              <div className="text-xs text-[color:var(--muted)]">
+                {CONTACT_EMAIL}
+              </div>
+            </div>
           </div>
 
           <div className="col-span-1 text-right">
@@ -49,10 +60,16 @@ export default function Footer() {
           </div>
 
           <div className="flex justify-center">
-            <ContactPopover
-              buttonLabel="Contact Me"
-              buttonClassName="appearance-none inline-flex items-center justify-center rounded-md border border-[color:var(--muted)] bg-transparent px-5 py-3 text-base font-medium text-[color:var(--foreground)] hover:bg-[color:var(--muted)]/6"
-            />
+            <div className="flex flex-col items-center gap-3">
+              <ContactPopover
+                buttonLabel="Contact Me"
+                buttonClassName="hero-btn hero-btn-secondary"
+                panelId="contact-popover-footer-mobile"
+              />
+              <div className="text-xs text-[color:var(--muted)]">
+                {CONTACT_EMAIL}
+              </div>
+            </div>
           </div>
 
           <div className="flex justify-center">

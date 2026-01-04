@@ -1,20 +1,60 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import CaseStudiesAccordion from "../../components/CaseStudiesAccordion";
-import CaseStudyVideo from "../../components/CaseStudyVideo";
 import ContactPopover from "../../components/ContactPopover";
-import CaseStudyDuration from "../../components/CaseStudyDuration";
+import CaseStudyVideo from "../../components/CaseStudyVideo";
 import LazyIframe from "../../components/LazyIframe";
+import CaseStudyDuration from "../../components/CaseStudyDuration";
 import TrackPlayerClient from "../../components/TrackPlayerClient";
+import CaseStudiesAccordion from "../../components/CaseStudiesAccordion";
 import { caseStudiesNormalized, type CaseStudy } from "../../data/caseStudies";
 
 export const metadata: Metadata = {
-  title: "Case Studies",
-  description: "What was asked, what I chose, what changed in the scene.",
+  title: "For Directors",
+  description:
+    "Director-led scoring for picture and performance. Fast A/B/C options, clean revisions, and post-ready delivery.",
+  openGraph: {
+    title: "For Directors",
+    description:
+      "Director-led scoring for picture and performance. Fast A/B/C options, clean revisions, and post-ready delivery.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "For Directors",
+    description:
+      "Director-led scoring for picture and performance. Fast A/B/C options, clean revisions, and post-ready delivery.",
+  },
 };
 
-const claudioRePosterSrc = "/optimized/posters/poster%20claudio%20re.avif";
-const claudioReHref = "/portfolio/claudio-re";
+const steps = [
+  {
+    title: "Spotting",
+    detail:
+      "Define cue in/out, hit points, and the scene's job, plus what to avoid.",
+  },
+  {
+    title: "Options A/B/C",
+    detail:
+      "2–3 distinct directions on the same cut, so decisions stay fast and clean.",
+  },
+  {
+    title: "Lock",
+    detail:
+      "Timing and intent approved first, then orchestration and mix without moving targets.",
+  },
+  {
+    title: "Delivery",
+    detail:
+      "Organized exports and versions for post, with stems when needed.",
+  },
+];
+
+const deliveryChecklist = [
+  "Main stereo mix",
+  "Dialogue-friendly alternate when needed",
+  "Stems on request, clearly named",
+  "Cue sheet timings for the cut",
+  "One clean delivery folder, versioned",
+];
 
 function formatTimingEntry(entry: { time: string; label: string }) {
   const label = entry.label?.trim();
@@ -59,7 +99,7 @@ function MediaBlock({ item }: { item: CaseStudy }) {
 
   if (!src) {
     return (
-      <div className="rounded-2xl card-inset p-4 text-sm text-[color:var(--muted)]">
+      <div className="card-inset rounded-2xl p-4 text-sm text-[color:var(--muted)]">
         Embed URL not set yet. Paste the HLS playlist (.m3u8) or Vimeo/YouTube embed URL in data/caseStudies.ts (embedUrl).
       </div>
     );
@@ -99,7 +139,7 @@ function MediaThumbnail({ item }: { item: CaseStudy }) {
   const { posterUrl } = getMediaSources(item.embedUrl);
 
   return (
-    <div className="relative aspect-video overflow-hidden rounded-2xl card-inset">
+    <div className="relative aspect-video overflow-hidden rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card-inset-bg)]">
       {posterUrl ? (
         <img
           src={posterUrl}
@@ -125,20 +165,14 @@ function MediaThumbnail({ item }: { item: CaseStudy }) {
   );
 }
 
-function CaseStudyCard({
-  item,
-  showClaudioRePoster,
-}: {
-  item: CaseStudy;
-  showClaudioRePoster?: boolean;
-}) {
+function CaseStudyCard({ item }: { item: CaseStudy }) {
   const videoAnchorId = `video-${item.id}`;
   const musicalLanguage = (item.musicalLanguage ?? item.musicChoices)?.trim();
   const trackTitle = item.trackTitle?.trim();
 
   return (
     <details
-      className="card-shell group overflow-hidden case-study-card"
+      className="group overflow-hidden case-study-card card-inset rounded-[20px]"
       suppressHydrationWarning
     >
       <summary className="cursor-pointer select-none list-none p-6 sm:p-8 [&::-webkit-details-marker]:hidden">
@@ -283,7 +317,7 @@ function CaseStudyCard({
               {trackTitle ? (
                 <div className="mt-3 text-sm text-[color:var(--muted)]">
                   <span className="font-semibold text-[color:var(--foreground)]">Track:</span>{" "}
-                  “{trackTitle}”
+                  "{trackTitle}"
                 </div>
               ) : null}
             </div>
@@ -322,26 +356,6 @@ function CaseStudyCard({
             </div>
           ) : null}
 
-          {item.id === "la-sonata-del-chaos-mothers-tale-banshee" ? (
-            <div className="rounded-2xl card-inset p-4">
-              <div className="text-sm font-semibold text-[color:var(--foreground)]">
-                Track: The Mother&apos;s Tale
-              </div>
-              <div className="mt-3">
-                <TrackPlayerClient
-                  tracks={[
-                    {
-                      file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-la-sonata-del-caos/The-Mothers-Tale-alt.mp3",
-                      context: "The Mother's Tale"
-                    }
-                  ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20la%20sonata%20del%20caos.webp"
-                  displayDurations={[parseDurationToSeconds(item.duration)]}
-                />
-              </div>
-            </div>
-          ) : null}
-
           {item.id === "scene-03" ? (
             <div className="rounded-2xl card-inset p-4">
               <div className="text-sm font-semibold text-[color:var(--foreground)]">
@@ -361,218 +375,112 @@ function CaseStudyCard({
               </div>
             </div>
           ) : null}
-
-          {item.id === "scene-05" ? (
-            <div className="rounded-2xl card-inset p-4">
-              <div className="text-sm font-semibold text-[color:var(--foreground)]">
-                Track: A Close Encounter in the Wood
-              </div>
-              <div className="mt-3">
-                <TrackPlayerClient
-                  tracks={[
-                    {
-                      file: "/uploads/tracks/musiche%20la%20sonata%20del%20caos/A%20Close%20Encounter%20In%20The%20Wood.mp3",
-                      context: "A Close Encounter in the Wood"
-                    }
-                  ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20la%20sonata%20del%20caos.webp"
-                  displayDurations={[parseDurationToSeconds(item.duration)]}
-                />
-              </div>
-            </div>
-          ) : null}
-
-          {item.id === "scene-04" ? (
-            <div className="rounded-2xl card-inset p-4">
-              <div className="text-sm font-semibold text-[color:var(--foreground)]">
-                Track: Talia&apos;s Farewell
-              </div>
-              <div className="mt-3">
-                <TrackPlayerClient
-                  tracks={[
-                    {
-                      file: "/uploads/tracks/musiche%20la%20sonata%20del%20caos/Talias%20Farewell.mp3",
-                      context: "Talia's Farewell"
-                    }
-                  ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20la%20sonata%20del%20caos.webp"
-                  displayDurations={[parseDurationToSeconds(item.duration)]}
-                />
-              </div>
-            </div>
-          ) : null}
-
-          {item.id === "claudio-re-opening-titles-storm-theme" ? (
-            <div className="rounded-2xl card-inset p-4">
-              <div className="text-sm font-semibold text-[color:var(--foreground)]">
-                Track: The Storm
-              </div>
-              <div className="mt-3">
-                <TrackPlayerClient
-                  tracks={[
-                    {
-                      file: "/uploads/tracks/musiche%20claudio%20re/The%20Storm.mp3",
-                      context: "The Storm"
-                    }
-                  ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp"
-                  displayDurations={[parseDurationToSeconds(item.duration)]}
-                />
-              </div>
-            </div>
-          ) : null}
-
-          {item.id === "scene-08" ? (
-            <div className="rounded-2xl card-inset p-4">
-              <div className="text-sm font-semibold text-[color:var(--foreground)]">
-                Track: My Sin Is Rotten
-              </div>
-              <div className="mt-3">
-                <TrackPlayerClient
-                  tracks={[
-                    {
-                      file: "/uploads/tracks/musiche%20claudio%20re/My%20Sin%20Is%20Rotten.mp3",
-                      context: "My Sin Is Rotten"
-                    }
-                  ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp"
-                  displayDurations={[parseDurationToSeconds(item.duration)]}
-                />
-              </div>
-            </div>
-          ) : null}
-
-          {item.id === "scene-09" ? (
-            <div className="rounded-2xl card-inset p-4">
-              <div className="text-sm font-semibold text-[color:var(--foreground)]">
-                Track: My Crown, My Ambition, My Queen
-              </div>
-              <div className="mt-3">
-                <TrackPlayerClient
-                  tracks={[
-                    {
-                      file: "/uploads/tracks/musiche%20claudio%20re/My%20Crown,%20My%20Ambition,%20My%20Queen.mp3",
-                      context: "My Crown, My Ambition, My Queen"
-                    }
-                  ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp"
-                  displayDurations={[parseDurationToSeconds(item.duration)]}
-                />
-              </div>
-            </div>
-          ) : null}
-
-          {item.id === "scene-07" ? (
-            <div className="rounded-2xl card-inset p-4">
-              <div className="text-sm font-semibold text-[color:var(--foreground)]">
-                Track: The Spectre
-              </div>
-              <div className="mt-3">
-                <TrackPlayerClient
-                  tracks={[
-                    {
-                      file: "/uploads/tracks/musiche%20claudio%20re/The%20Spectre.mp3",
-                      context: "The Spectre"
-                    }
-                  ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp"
-                  displayDurations={[parseDurationToSeconds(item.duration)]}
-                />
-              </div>
-            </div>
-          ) : null}
-
-          {item.id === "scene-10" ? (
-            <div className="rounded-2xl card-inset p-4">
-              <div className="text-sm font-semibold text-[color:var(--foreground)]">
-                Track: What If A Man Can&apos;t Regret
-              </div>
-              <div className="mt-3">
-                <TrackPlayerClient
-                  tracks={[
-                    {
-                      file: "/uploads/tracks/musiche%20claudio%20re/What%20If%20A%20Man%20Can't%20Regret.mp3",
-                      context: "What If A Man Can't Regret"
-                    }
-                  ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp"
-                  displayDurations={[parseDurationToSeconds(item.duration)]}
-                />
-              </div>
-            </div>
-          ) : null}
         </div>
 
-        {showClaudioRePoster ? (
-          <section className="mt-6 rounded-2xl card-inset p-6 sm:p-8">
-            <div className="grid gap-6 md:grid-cols-[1.1fr,0.9fr] md:items-center">
-              <div className="flex flex-col gap-4 text-left">
-                <p className="text-xs uppercase tracking-[0.32em] text-[color:var(--muted)]">
-                  Per maggiori info sul corto
-                </p>
-                <div className="flex flex-wrap items-center gap-3">
-                  <ContactPopover
-                    buttonLabel="Contact"
-                    buttonClassName="hero-btn hero-btn-primary min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent)]"
-                    panelId={`contact-popover-${item.id}`}
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <Link
-                  href={claudioReHref}
-                  className="group relative overflow-hidden rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card-inset-bg)] p-3 shadow-[0_18px_45px_var(--shadow)] transition hover:border-[color:rgba(255,255,255,0.3)] hover:shadow-[0_22px_55px_var(--shadow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent)]"
-                  aria-label="View Claudio Re case study"
-                >
-                  <img
-                    src={claudioRePosterSrc}
-                    alt="Claudio Re poster"
-                    className="h-auto w-full rounded-xl object-cover transition-transform duration-300 group-hover:scale-[1.01]"
-                    loading="lazy"
-                  />
-                </Link>
-              </div>
-            </div>
-          </section>
-        ) : (
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <ContactPopover
-              buttonLabel="Contact"
-              buttonClassName="hero-btn hero-btn-secondary min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent)]"
-              panelId={`contact-popover-${item.id}`}
-            />
-          </div>
-        )}
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          <ContactPopover
+            buttonLabel="Contact"
+            buttonClassName="hero-btn hero-btn-secondary min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent)]"
+            panelId={`contact-popover-${item.id}`}
+          />
+        </div>
       </div>
     </details>
   );
 }
 
-export default function CaseStudiesPage() {
-  const lastFiveStartIndex = Math.max(caseStudiesNormalized.length - 5, 0);
+export default function ForDirectorsPage() {
+  // Get first two case studies
+  const featuredCaseStudies = caseStudiesNormalized.slice(0, 2);
 
   return (
-    <main className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-16 lg:px-20">
-      <header className="max-w-3xl">
+    <main className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-16 lg:px-20">
+      <section className="card-shell p-8">
         <h1 className="section-title text-4xl text-[color:var(--foreground)]">
-          Case Studies
+          For Directors
         </h1>
-        <p className="mt-4 text-sm leading-7 text-[color:var(--muted)]">
-          What was asked, what I chose, what changed in the scene.
+        <p className="mt-3 text-sm text-[color:var(--muted)]">
+          I score to picture, performance, and point of view. You get fast
+          A/B/C options early, clear revision passes, and cues that support your
+          cut without competing with it.
         </p>
-      </header>
+        <div className="mt-6">
+          <ContactPopover
+            buttonLabel="Contact"
+            buttonClassName="hero-btn hero-btn-primary"
+            panelId="contact-popover-directors-hero"
+          />
+        </div>
+      </section>
 
-      <section className="space-y-6" aria-label="Case studies">
-        <CaseStudiesAccordion className="case-studies-grid grid gap-6 md:grid-cols-2">
-          {caseStudiesNormalized.map((item, index) => (
-            <CaseStudyCard
-              key={item.id}
-              item={item}
-              showClaudioRePoster={index >= lastFiveStartIndex}
-            />
+      <section className="card-shell p-8">
+        <h2 className="section-title text-2xl text-[color:var(--foreground)]">
+          How I work
+        </h2>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {steps.map((step) => (
+            <div key={step.title} className="card-inset rounded-2xl p-4">
+              <h3 className="text-sm font-semibold text-[color:var(--foreground)]">
+                {step.title}
+              </h3>
+              <p className="mt-2 text-sm text-[color:var(--muted)]">
+                {step.detail}
+              </p>
+            </div>
           ))}
-        </CaseStudiesAccordion>
+        </div>
+      </section>
+
+      <section className="card-shell p-8">
+        <h2 className="section-title text-2xl text-[color:var(--foreground)]">
+          Delivery ready for post
+        </h2>
+        <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-[color:var(--muted)]">
+          {deliveryChecklist.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="card-shell p-8">
+        <h2 className="section-title text-2xl text-[color:var(--foreground)]">
+          Scene case studies
+        </h2>
+        <p className="mt-2 text-sm text-[color:var(--muted)]">
+          Scene-by-scene breakdowns: goals, key moments, options tested, and delivery.
+        </p>
+        <div className="mt-6">
+          <CaseStudiesAccordion className="case-studies-grid grid gap-6 md:grid-cols-2">
+            {featuredCaseStudies.map((item) => (
+              <CaseStudyCard key={item.id} item={item} />
+            ))}
+          </CaseStudiesAccordion>
+        </div>
+        <div className="mt-6">
+          <Link
+            href="/case-studies"
+            className="hero-btn hero-btn-secondary"
+          >
+            View all case studies
+          </Link>
+        </div>
+      </section>
+
+      <section className="card-shell p-8">
+        <h2 className="section-title text-2xl text-[color:var(--foreground)]">
+          Ready to send a cut?
+        </h2>
+        <p className="mt-2 text-sm text-[color:var(--muted)]">
+          Send the scene, your references, and what it must do. I will reply with
+          options, timings, and next steps.
+        </p>
+        <div className="mt-4 flex flex-wrap items-center gap-4">
+          <ContactPopover
+            buttonLabel="Contact"
+            buttonClassName="hero-btn hero-btn-primary"
+            panelId="contact-popover-directors-cta"
+          />
+        </div>
       </section>
     </main>
   );

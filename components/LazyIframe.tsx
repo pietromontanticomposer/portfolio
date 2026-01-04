@@ -9,6 +9,7 @@ export default function LazyIframe({
   allow,
   className,
   autoLoad,
+  buttonLabel = "Carica media",
 }: {
   src: string;
   title?: string;
@@ -16,6 +17,7 @@ export default function LazyIframe({
   allow?: string;
   className?: string;
   autoLoad?: boolean;
+  buttonLabel?: string;
 }) {
   const [loaded, setLoaded] = useState(Boolean((autoLoad as boolean) || false));
 
@@ -28,7 +30,7 @@ export default function LazyIframe({
             className="modal-close"
             aria-label={`Load ${title || "media"}`}
           >
-            Carica media
+            {buttonLabel}
           </button>
         </div>
       ) : (

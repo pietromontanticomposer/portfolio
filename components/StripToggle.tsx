@@ -19,7 +19,7 @@ export function ToggleButton({ view, onToggle }: { view: "strip" | "grid"; onTog
         aria-pressed={view === "grid"}
         onClick={onToggle}
         className={`strip-toggle-button strip-toggle-icon ${view === "grid" ? "is-active" : ""}`}
-        title={view === "strip" ? "Apri griglia" : "Torna a scorrimento"}
+        title={view === "strip" ? "Open grid view" : "Back to scroll view"}
       >
         {view === "strip" ? (
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="7" height="7" rx="2" fill="currentColor"/><rect x="13" y="4" width="7" height="7" rx="2" fill="currentColor"/><rect x="4" y="13" width="7" height="7" rx="2" fill="currentColor"/><rect x="13" y="13" width="7" height="7" rx="2" fill="currentColor"/></svg>
