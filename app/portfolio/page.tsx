@@ -1,22 +1,32 @@
 import type { Metadata } from "next";
 import PosterCard from "../../components/PosterCard";
 import { projects } from "../../data/projects";
-import { placeholderProjects } from "../../data/placeholders";
+import { comingSoonPosters } from "../../data/placeholders";
 
 export const metadata: Metadata = {
   title: "Portfolio",
 };
 
-const posters = projects.map((p, index) => {
-  const fallback = placeholderProjects[index % placeholderProjects.length];
-  return {
+const postersFromProjects = projects.map((p) => ({
+  slug: p.slug,
+  title: p.title,
+  year: (p as { year?: string }).year ?? '',
+  tag: p.tag || "Poster",
+  image: p.image,
+  href: `/portfolio/${p.slug}`,
+})).filter((poster): poster is typeof poster & { image: string } => Boolean(poster.image));
+
+const posters = [
+  ...postersFromProjects,
+  ...comingSoonPosters.map((p) => ({
     slug: p.slug,
     title: p.title,
-    year: p.year,
+    year: (p as { year?: string }).year ?? '',
     tag: p.tag || "Poster",
-    image: p.image || fallback.image,
-  };
-});
+    image: p.image,
+    href: `/portfolio/${p.slug}`,
+  })).filter((poster): poster is typeof poster & { image: string } => Boolean(poster.image)),
+];
 
 export default function PortfolioPage() {
   return (
@@ -39,7 +49,7 @@ export default function PortfolioPage() {
                 year={poster.year}
                 tag={poster.tag}
                 image={poster.image}
-                href={`/portfolio/${poster.slug}`}
+                href={poster.href}
               />
             </div>
           ))}

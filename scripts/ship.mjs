@@ -1,13 +1,33 @@
 import fs from 'fs';
 import path from 'path';
 import { spawnSync } from 'child_process';
+import dotenv from 'dotenv';
 
 const DEFAULT_REMOTE = 'https://github.com/pietromontanticomposer/portfolio.git';
 
 const root = process.cwd();
 const inbox = path.join(root, 'asset_inbox');
 
+// Carica variabili d'ambiente locali se esiste .env.local (fonte di verità locale)
+const envPath = path.join(root, '.env.local');
+if (fs.existsSync(envPath)) {
+  dotenv.config({ path: envPath });
+  console.log('Caricate variabili da .env.local');
+} else {
+  console.log('.env.local non trovato: procedo comunque (assumo variabili d\'ambiente già impostate).');
+}
+
+// Arg parsing: support `--dry-run` and message after flags
+const argv = process.argv.slice(2);
+const dryRun = argv.includes('--dry-run') || process.env.DRY_RUN === '1';
+const filtered = argv.filter((a) => a !== '--dry-run');
+const msg = filtered.join(' ').trim() || 'chore: update';
+
 function run(cmd, args, opts = {}) {
+  if (dryRun) {
+    console.log('[dry-run]', cmd, ...args);
+    return { status: 0 };
+  }
   const res = spawnSync(cmd, args, { stdio: 'inherit', ...opts });
   if (res.status !== 0) process.exit(res.status ?? 1);
 }
@@ -27,51 +47,79 @@ function hasInboxFiles(dir) {
   return false;
 }
 
-const msg = process.argv.slice(2).join(' ').trim() || 'chore: update';
 const doneDir = path.join(root, '_blob_done');
 const hasInbox = hasInboxFiles(inbox);
 
 if (hasInbox) {
-  run('npm', ['run', 'blob:sync']);
-  run('npm', ['run', 'blob:replace']);
-  run('node', ['scripts/verify-blob-urls.mjs']);
+  // Evitiamo di tentare qualsiasi operazione di provisioning del Blob store.
+  // Eseguiamo operazioni Blob solo se è presente il token di scrittura nei env locali.
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    run('npm', ['run', 'blob:sync']);
+    run('npm', ['run', 'blob:replace']);
+    run('node', ['scripts/verify-blob-urls.mjs']);
+  } else {
+    console.error('BLOB_READ_WRITE_TOKEN non trovato in ambiente (.env.local). Salto operazioni Blob per evitare ricreare o riconfigurare lo store.');
+  }
 } else {
   console.log('asset_inbox vuota: salto upload blob.');
 }
 
 if (hasInbox) {
-  fs.mkdirSync(doneDir, { recursive: true });
-  const stack = [inbox];
-  while (stack.length) {
-    const current = stack.pop();
-    const entries = fs.readdirSync(current, { withFileTypes: true });
-    for (const e of entries) {
-      const abs = path.join(current, e.name);
-      const rel = path.relative(inbox, abs);
-      const target = path.join(doneDir, rel);
-      if (e.isDirectory()) {
-        stack.push(abs);
-      } else {
-        fs.mkdirSync(path.dirname(target), { recursive: true });
-        fs.renameSync(abs, target);
+  if (dryRun) {
+    console.log('[dry-run] would move files from', inbox, 'to', doneDir);
+    const sample = [];
+    const stack = [inbox];
+    while (stack.length) {
+      const current = stack.pop();
+      const entries = fs.readdirSync(current, { withFileTypes: true });
+      for (const e of entries) {
+        const abs = path.join(current, e.name);
+        const rel = path.relative(inbox, abs);
+        const target = path.join(doneDir, rel);
+        if (e.isDirectory()) stack.push(abs);
+        else sample.push({ from: abs, to: target });
       }
     }
-  }
-  // Clean up empty dirs in asset_inbox.
-  const prune = [inbox];
-  while (prune.length) {
-    const dir = prune.pop();
-    const entries = fs.readdirSync(dir, { withFileTypes: true });
-    for (const e of entries) {
-      if (e.isDirectory()) prune.push(path.join(dir, e.name));
+    for (const s of sample.slice(0, 20)) console.log('[dry-run] move', s.from, '->', s.to);
+    if (sample.length > 20) console.log('[dry-run] ...', sample.length - 20, 'more files');
+  } else {
+    fs.mkdirSync(doneDir, { recursive: true });
+    const stack = [inbox];
+    while (stack.length) {
+      const current = stack.pop();
+      const entries = fs.readdirSync(current, { withFileTypes: true });
+      for (const e of entries) {
+        const abs = path.join(current, e.name);
+        const rel = path.relative(inbox, abs);
+        const target = path.join(doneDir, rel);
+        if (e.isDirectory()) {
+          stack.push(abs);
+        } else {
+          fs.mkdirSync(path.dirname(target), { recursive: true });
+          fs.renameSync(abs, target);
+        }
+      }
     }
-    if (fs.readdirSync(dir).length === 0) fs.rmdirSync(dir);
+    // Clean up empty dirs in asset_inbox.
+    const prune = [inbox];
+    while (prune.length) {
+      const dir = prune.pop();
+      const entries = fs.readdirSync(dir, { withFileTypes: true });
+      for (const e of entries) {
+        if (e.isDirectory()) prune.push(path.join(dir, e.name));
+      }
+      if (fs.readdirSync(dir).length === 0) fs.rmdirSync(dir);
+    }
   }
 }
 
 const ensureRemote = spawnSync('git', ['remote', 'get-url', 'origin'], { encoding: 'utf8' });
 if (ensureRemote.status !== 0) {
-  run('git', ['remote', 'add', 'origin', DEFAULT_REMOTE]);
+  if (dryRun) {
+    console.log('[dry-run] git remote add origin', DEFAULT_REMOTE);
+  } else {
+    run('git', ['remote', 'add', 'origin', DEFAULT_REMOTE]);
+  }
 }
 
 // Aggiungi solo codice e configurazione del progetto.
@@ -117,6 +165,12 @@ if (!dirty) {
 }
 
 run('git', ['add', '-A', '--', ...toAdd]);
-run('git', ['commit', '-m', msg]);
-run('git', ['push', '--force']);
-run('vercel', ['--prod', '--confirm']);
+if (dryRun) {
+  console.log('[dry-run] git commit -m', JSON.stringify(msg));
+  console.log('[dry-run] git push --force');
+  console.log('[dry-run] vercel --prod --confirm');
+} else {
+  run('git', ['commit', '-m', msg]);
+  run('git', ['push', '--force']);
+  run('vercel', ['--prod', '--confirm']);
+}

@@ -129,7 +129,7 @@ function AutoScrollStrip({ posters }: { posters: Poster[] }) {
             year={p.year}
             tag={p.tag}
             image={p.image}
-            href={p.href ?? `/portfolio/${p.slug}`}
+            href={p.href}
           />
         </div>
       </div>

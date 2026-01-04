@@ -10,7 +10,7 @@ import CollaborationsSection from "../components/CollaborationsSection";
 import { featuredProjects } from "../data/projects";
 import { heroCredits, partners } from "../data/homeContent";
 import { bioFull, bioQuote, bioStats, bioSkills } from "../data/bio";
-import { placeholderProjects } from "../data/placeholders";
+import { comingSoonPosters } from "../data/placeholders";
 
 export const metadata: Metadata = {
   title: "Pietro Montanti",
@@ -33,25 +33,24 @@ export const metadata: Metadata = {
 // Use pre-computed featured projects (avoids runtime filter on full projects array)
 const selectedProjects = featuredProjects.slice(0, 6);
 
-const posters = selectedProjects.map((project, index) => {
-  const fallback = placeholderProjects[index % placeholderProjects.length];
-  return {
-    slug: project.slug,
-    title: project.title || fallback.title,
-    year: project.year || fallback.year,
-    tag: project.tag || fallback.tag,
-    image: project.image || fallback.image,
-  };
-});
+const selectedPosterTiles = selectedProjects.map((project) => ({
+  slug: project.slug,
+  title: project.title,
+  year: project.year,
+  tag: project.tag,
+  image: project.image,
+  href: `/portfolio/${project.slug}`,
+}));
 
-if (posters.length < 6) {
-  const missing = 6 - posters.length;
-  const fill = placeholderProjects.slice(0, missing).map((placeholder) => ({
-    ...placeholder,
-    href: "/portfolio",
-  }));
-  posters.push(...fill);
-}
+const comingSoonStrip = comingSoonPosters.map((poster) => ({
+  slug: poster.slug,
+  title: poster.title,
+  year: (poster as { year?: string }).year ?? '',
+  tag: poster.tag,
+  image: poster.image,
+}));
+
+const posters = [...selectedPosterTiles, ...comingSoonStrip];
 
 const PORTRAIT_SRC = "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/uploads/foto-sito.jpg";
 
@@ -61,7 +60,7 @@ export default function Home() {
   ] as string[];
   const showreelEmbedUrl =
     process.env.NEXT_PUBLIC_SHOWREEL_EMBED_URL ??
-    "/uploads/video/_hls/Showreel Sito/index.m3u8";
+    "/uploads/video/_hls/Showreel Sito New/index.m3u8";
   const resolvedSiteUrl =
     process.env.NEXT_PUBLIC_SITE_URL ??
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
@@ -141,7 +140,10 @@ export default function Home() {
           </div>
         </header>
 
-        <ShowreelSection embedUrl={showreelEmbedUrl} />
+        <ShowreelSection
+          embedUrl={showreelEmbedUrl}
+          previewImage="/showreel-preview.jpg"
+        />
 
         <AudiencePaths />
 

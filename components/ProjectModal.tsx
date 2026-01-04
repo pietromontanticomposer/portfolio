@@ -36,6 +36,9 @@ export default function ProjectModal({
       <div className="modal-panel">
         <header className="modal-header">
           <h2 className="modal-title">{project.title}</h2>
+          <button className="modal-close" onClick={onClose} aria-label="Close">
+            Back Home
+          </button>
         </header>
 
         <div className="modal-body">

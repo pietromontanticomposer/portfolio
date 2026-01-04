@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import ContactPopover from "../../components/ContactPopover";
 import ChiSonoSection from "../../components/ChiSonoSection";
 import { bioFull, bioShort, bioQuote, bioStats, bioSkills } from "../../data/bio";

@@ -5,7 +5,8 @@ const root = process.cwd();
 const roots = ['src', 'app', 'components', 'lib', 'data'];
 const exts = new Set(['.ts', '.tsx']);
 
-const localMediaPattern = /['"`](\/(?:optimized|uploads|posters|partners|hls)\/[^'"`]+)['"`]/g;
+// Match literal strings that point to media files (require a filename with extension)
+const localMediaPattern = /['"`](\/(?:optimized|uploads|posters|partners|hls)\/[^'"`]*\.[a-z0-9]{1,6})['"`]/gi;
 const doubleUrlPattern = /https:\/\/[^'"`\s]+https:\/\//g;
 
 function walk(dir, out = []) {

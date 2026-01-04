@@ -7,12 +7,19 @@ const PLACEHOLDER_MP4 =
 
 type ShowreelSectionProps = {
   embedUrl?: string | null;
+  previewImage?: string | null;
 };
 
-export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
+const normalizeUrl = (url: string) => (url.startsWith("/") ? encodeURI(url) : url);
+
+export default function ShowreelSection({ embedUrl, previewImage }: ShowreelSectionProps) {
   const hasEmbed = typeof embedUrl === "string" && embedUrl.trim().length > 0;
   const trimmedUrl = embedUrl?.trim() ?? "";
+  const normalizedPreview = previewImage?.trim()
+    ? normalizeUrl(previewImage.trim())
+    : undefined;
   const isHls = hasEmbed && (trimmedUrl.endsWith(".m3u8") || trimmedUrl.includes("/_hls/"));
+  const isMp4 = hasEmbed && /\.mp4(?:\?|$)/i.test(trimmedUrl);
   const mp4Fallback =
     trimmedUrl.startsWith("/uploads/video/_hls/") && trimmedUrl.endsWith("/index.m3u8")
       ? trimmedUrl
@@ -40,7 +47,20 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
                 hlsUrl={trimmedUrl}
                 mp4Url={mp4Fallback}
                 title="Showreel"
+                poster={normalizedPreview}
               />
+            ) : hasEmbed && isMp4 ? (
+              <video
+                className="case-study-video absolute inset-0 h-full w-full rounded-xl"
+                controls
+                playsInline
+                preload="metadata"
+                aria-label="Showreel video"
+                poster={normalizedPreview}
+              >
+                <source src={trimmedUrl} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             ) : hasEmbed ? (
               <iframe
                 src={trimmedUrl}
@@ -57,6 +77,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
                 playsInline
                 preload="metadata"
                 aria-label="Showreel placeholder video"
+                poster={normalizedPreview}
               >
                 <source src={PLACEHOLDER_WEBM} type="video/webm" />
                 <source src={PLACEHOLDER_MP4} type="video/mp4" />

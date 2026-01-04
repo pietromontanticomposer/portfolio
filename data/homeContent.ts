@@ -1,18 +1,21 @@
 export const partners = [
-  { name: "Akeron Film", image: "/partners/akeron-film.png" },
-  { name: "Cassa Rurale AltoGarda Rovereto", image: "/partners/cassa_rurale_alto_garda_rovereto.png" },
-  { name: "Fondazione Caritro", image: "/partners/fondazione_caritro.png" },
-  { name: "Fondazione Museo storico del Trentino", image: "/partners/fondazione-museo-storico-del-trentino.jpg" },
-  { name: "Cooperativa Amalia Guardini", image: "/partners/cooperativa_amalia_guardini.png" },
-  { name: "Comunità della Vallagarina", image: "/partners/comunita_della_vallagarina.png" },
+  { name: "Akeron Film", image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/partners/akeron-film.png" },
+  { name: "Cassa Rurale AltoGarda Rovereto", image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/partners/cassa_rurale_alto_garda_rovereto.png" },
+  { name: "Fondazione Caritro", image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/partners/fondazione_caritro.png" },
+  {
+    name: "Fondazione Museo storico del Trentino",
+    image: "/partners/fondazione-museo-storico-del-trentino.jpg",
+  },
+  { name: "Cooperativa Amalia Guardini", image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/partners/cooperativa_amalia_guardini.png" },
+  { name: "Comunità della Vallagarina", image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/partners/comunita_della_vallagarina.png" },
   { name: "Comune di Soave", image: "/partners/comune_di_soave.png" },
   { name: "Comune di Rovereto", image: "/partners/comune_di_rovereto.png" },
-  { name: "Pro Loco Soave", image: "/partners/pro-loco-soave.png" },
-  { name: "Etika Energia", image: "/partners/etika.png" },
+  { name: "Pro Loco Soave", image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/partners/pro-loco-soave.png" },
+  { name: "Etika Energia", image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/partners/etika.png" },
   { name: "Evotek", image: "/partners/evotek.png" },
-  { name: "In Tavola", image: "/partners/in-tavola.png" },
-  { name: "Movie Art Pro", image: "/partners/movie_art_pro.png" },
-  { name: "Marina di Venezia Camping Village", image: "/partners/marina_di_venezia.png" },
+  { name: "In Tavola", image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/partners/in-tavola.png" },
+  { name: "Movie Art Pro", image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/partners/movie_art_pro.png" },
+  { name: "Marina di Venezia Camping Village", image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/partners/marina_di_venezia.png" },
 ];
 
 export const selectedTracks = [

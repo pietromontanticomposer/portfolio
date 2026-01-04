@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import ContactPopover from "../../components/ContactPopover";
 import { projects } from "../../data/projects";
 

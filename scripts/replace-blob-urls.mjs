@@ -48,14 +48,26 @@ for (const file of targets) {
   let updated = content;
   for (const [pathname, url] of entries) {
     const withSlash = `/${pathname}`;
-    const variants = [withSlash];
-    if (withSlash.includes("'")) variants.push(withSlash.replace(/'/g, "\\'"));
+    const variants = [withSlash, encodeURI(withSlash)];
+    if (withSlash.includes("'")) {
+      variants.push(withSlash.replace(/'/g, "\\'"));
+      variants.push(encodeURI(withSlash.replace(/'/g, "\\'")));
+    }
     for (const v of variants) {
       if (!updated.includes(v)) continue;
       const pattern = new RegExp(`(['"\`])${escapeRegExp(v)}`, 'g');
       updated = updated.replace(pattern, `$1${url}`);
     }
   }
+  // Replace HLS index.m3u8 references pointing to _hls/ directories
+  // convert "/uploads/video/_hls/Foo/Bar/index.m3u8" -> mapping for "uploads/video/Foo/Bar.mp4"
+  updated = updated.replace(/\/uploads\/video\/_hls\/(.+?)\/index\.m3u8/g, (match, p1) => {
+    const candidate = `uploads/video/${p1}.mp4`;
+    const mapped = mappings[candidate];
+    if (typeof mapped === 'string' && mapped) return mapped;
+    if (mapped && typeof mapped === 'object' && mapped.url) return mapped.url;
+    return match; // leave as-is if no mapping
+  });
   if (updated !== content) {
     fs.writeFileSync(file, updated, 'utf8');
     changed++;

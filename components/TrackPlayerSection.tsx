@@ -1,5 +1,6 @@
 "use client";
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { useEffect, useState, useRef } from 'react';
 import ContactPopover from "./ContactPopover";
 
@@ -83,7 +84,7 @@ export default function TrackPlayerSection({
             <div className="track-player-cover-wrap">
               <div className="track-player-cover">
                 {coverSrc ? (
-                  <img src={coverSrc} alt="Placeholder cover" />
+                  <Image src={coverSrc} alt="Placeholder cover" width={400} height={400} className="object-cover" />
                 ) : (
                   <div className="track-player-cover-empty" />
                 )}

@@ -16,6 +16,7 @@ export type CaseStudy = {
 
   // PUBLIC ONLY
   embedUrl: string; // Vimeo/YouTube embed URL or HLS playlist (.m3u8). Must be set.
+  posterImage?: string | null;
 
   context: string;
 
@@ -339,7 +340,7 @@ export const caseStudies: CaseStudyInput[] = [
     ],
     isPublic: false,
     festivalCirculation: true,
-    embedUrl: "/uploads/video/_hls/I Veneti Antichi/I Veneti Antichi The Battle/index.m3u8",
+    embedUrl: "/uploads/video/I Veneti Antichi/I Veneti Antichi The Battle New.mp4",
 
     context:
       "Reconstruction of the battle with the Spartans, built on fast cuts and long battlefield wides. The sequence needs drive without turning into a modern action trailer, and it must leave space for historical narration and sound design.",
@@ -464,7 +465,7 @@ export const caseStudies: CaseStudyInput[] = [
   },
   {
     id: "la-sonata-del-chaos-mothers-tale-banshee",
-    title: "The Mother’s Tale, Banshee Motif in Focus (Dialogue)",
+    title: "The Mother's Tale, Banshee Motif in Focus (Dialogue)",
     projectLabel: "La Sonata Del Chaos",
     sceneType: "Dialogue",
     duration: "00:52",
@@ -589,7 +590,7 @@ export const caseStudies: CaseStudyInput[] = [
   },
   {
     id: "scene-04",
-    title: "Talia’s Farewell, Last Story (Reveal)",
+    title: "Talia's Farewell, Last Story (Reveal)",
     projectLabel: "La Sonata Del Chaos",
     sceneType: "Reveal",
     duration: "02:00",

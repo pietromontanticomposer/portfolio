@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import CaseStudiesAccordion from "../../components/CaseStudiesAccordion";
 import CaseStudyVideo from "../../components/CaseStudyVideo";
 import ContactPopover from "../../components/ContactPopover";
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
   description: "What was asked, what I chose, what changed in the scene.",
 };
 
-const claudioRePosterSrc = "/optimized/posters/poster%20claudio%20re.avif";
+const claudioRePosterSrc = "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20claudio%20re.avif";
 const claudioReHref = "/portfolio/claudio-re";
 
 function formatTimingEntry(entry: { time: string; label: string }) {
@@ -41,7 +42,9 @@ function getMediaSources(embedUrl?: string) {
     };
   }
 
-  const isHls = trimmedUrl.endsWith(".m3u8") || trimmedUrl.includes("/_hls/");
+  const lower = trimmedUrl.toLowerCase();
+  const isHls = lower.endsWith(".m3u8") || trimmedUrl.includes("/_hls/");
+  const isMp4 = lower.endsWith(".mp4") || lower.includes(".mp4");
   const src = trimmedUrl.startsWith("/") ? encodeURI(trimmedUrl) : trimmedUrl;
   const mp4Fallback =
     trimmedUrl.startsWith("/uploads/video/_hls/") && trimmedUrl.endsWith("/index.m3u8")
@@ -49,18 +52,51 @@ function getMediaSources(embedUrl?: string) {
           .replace("/uploads/video/_hls/", "/uploads/video/")
           .replace("/index.m3u8", ".mp4")
       : null;
-  const posterUrl = mp4Fallback ? mp4Fallback.replace(/\.mp4$/i, ".jpg") : null;
+  // Generate posterUrl: for direct MP4, replace .mp4 with .jpg; for HLS, use mp4Fallback
+  const posterUrl = isMp4 && trimmedUrl.endsWith('.mp4')
+    ? trimmedUrl.replace(/\.mp4$/i, ".jpg")
+    : mp4Fallback
+    ? mp4Fallback.replace(/\.mp4$/i, ".jpg")
+    : null;
 
-  return { isHls, src, mp4Fallback, posterUrl };
+  // If the embed is a direct mp4 URL, provide isMp4 so caller can render a native video tag.
+  return { isHls, isMp4, src, mp4Fallback, posterUrl } as const;
 }
 
 function MediaBlock({ item }: { item: CaseStudy }) {
-  const { isHls, src, mp4Fallback } = getMediaSources(item.embedUrl);
+  const { isHls, src, mp4Fallback, isMp4, posterUrl } = getMediaSources(item.embedUrl) as any;
+  // debug: log embedUrl and detected types during SSR to diagnose rendering path
+  if (typeof window === "undefined") {
+    // eslint-disable-next-line no-console
+    console.log("[media-debug] embedUrl:", item.embedUrl, "->", { isHls, isMp4, src, mp4Fallback, posterUrl });
+  }
 
   if (!src) {
     return (
       <div className="rounded-2xl card-inset p-4 text-sm text-[color:var(--muted)]">
         Embed URL not set yet. Paste the HLS playlist (.m3u8) or Vimeo/YouTube embed URL in data/caseStudies.ts (embedUrl).
+      </div>
+    );
+  }
+
+  // If the source is an HLS playlist, render the HLS player; if it's a plain MP4, render a native video tag.
+  const maybeMp4 = (getMediaSources(item.embedUrl) as any).isMp4 as boolean | undefined;
+  if (maybeMp4) {
+    return (
+      <div>
+        <div className="video-wrapper">
+          <video
+            className="case-study-video absolute inset-0 h-full w-full rounded-xl"
+            controls
+            playsInline
+            preload="metadata"
+            poster={item.posterImage || getMediaSources(item.embedUrl).posterUrl || undefined}
+            aria-label={`${item.title} clip`}
+          >
+            <source src={src ?? undefined} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
       </div>
     );
   }
@@ -73,6 +109,7 @@ function MediaBlock({ item }: { item: CaseStudy }) {
             hlsUrl={src}
             mp4Url={mp4Fallback}
             title={`${item.title} clip`}
+            poster={item.posterImage}
           />
         </div>
       </div>
@@ -101,11 +138,12 @@ function MediaThumbnail({ item }: { item: CaseStudy }) {
   return (
     <div className="relative aspect-video overflow-hidden rounded-2xl card-inset">
       {posterUrl ? (
-        <img
+        <Image
           src={posterUrl}
           alt={`${item.title} thumbnail`}
+          fill
           className="absolute inset-0 h-full w-full object-cover"
-          loading="lazy"
+          sizes="(max-width: 768px) 100vw, 50vw"
         />
       ) : (
         <div className="absolute inset-0 bg-[color:var(--card-inset-bg)]" />
@@ -311,11 +349,11 @@ function CaseStudyCard({
                 <TrackPlayerClient
                   tracks={[
                     {
-                      file: "/uploads/tracks/musiche%20soggetto%20obsoleto/Sitting%20On%20The%20Seashore.mp3",
+                      file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/uploads/tracks/musiche%20soggetto%20obsoleto/Sitting%20On%20The%20Seashore.mp3",
                       context: "Sitting on the Seashore"
                     }
                   ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20soggetto%20obsoleto.webp"
+                  coverSrc="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20soggetto%20obsoleto.webp"
                   displayDurations={[parseDurationToSeconds(item.duration)]}
                 />
               </div>
@@ -335,7 +373,7 @@ function CaseStudyCard({
                       context: "The Mother's Tale"
                     }
                   ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20la%20sonata%20del%20caos.webp"
+                  coverSrc="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20la%20sonata%20del%20caos.webp"
                   displayDurations={[parseDurationToSeconds(item.duration)]}
                 />
               </div>
@@ -351,11 +389,11 @@ function CaseStudyCard({
                 <TrackPlayerClient
                   tracks={[
                     {
-                      file: "/uploads/tracks/musiche%20la%20sonata%20del%20caos/Something%20Threatening.mp3",
+                      file: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/tracks/musiche%20la%20sonata%20del%20caos/Something%20Threatening.mp3",
                       context: "Something Threatening"
                     }
                   ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20la%20sonata%20del%20caos.webp"
+                  coverSrc="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20la%20sonata%20del%20caos.webp"
                   displayDurations={[parseDurationToSeconds(item.duration)]}
                 />
               </div>
@@ -371,11 +409,11 @@ function CaseStudyCard({
                 <TrackPlayerClient
                   tracks={[
                     {
-                      file: "/uploads/tracks/musiche%20la%20sonata%20del%20caos/A%20Close%20Encounter%20In%20The%20Wood.mp3",
+                      file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/uploads/tracks/musiche%20la%20sonata%20del%20caos/A%20Close%20Encounter%20In%20The%20Wood.mp3",
                       context: "A Close Encounter in the Wood"
                     }
                   ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20la%20sonata%20del%20caos.webp"
+                  coverSrc="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20la%20sonata%20del%20caos.webp"
                   displayDurations={[parseDurationToSeconds(item.duration)]}
                 />
               </div>
@@ -391,11 +429,11 @@ function CaseStudyCard({
                 <TrackPlayerClient
                   tracks={[
                     {
-                      file: "/uploads/tracks/musiche%20la%20sonata%20del%20caos/Talias%20Farewell.mp3",
+                      file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/uploads/tracks/musiche%20la%20sonata%20del%20caos/Talias%20Farewell.mp3",
                       context: "Talia's Farewell"
                     }
                   ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20la%20sonata%20del%20caos.webp"
+                  coverSrc="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20la%20sonata%20del%20caos.webp"
                   displayDurations={[parseDurationToSeconds(item.duration)]}
                 />
               </div>
@@ -411,11 +449,11 @@ function CaseStudyCard({
                 <TrackPlayerClient
                   tracks={[
                     {
-                      file: "/uploads/tracks/musiche%20claudio%20re/The%20Storm.mp3",
+                      file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/uploads/tracks/musiche%20claudio%20re/The%20Storm.mp3",
                       context: "The Storm"
                     }
                   ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp"
+                  coverSrc="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp"
                   displayDurations={[parseDurationToSeconds(item.duration)]}
                 />
               </div>
@@ -431,11 +469,11 @@ function CaseStudyCard({
                 <TrackPlayerClient
                   tracks={[
                     {
-                      file: "/uploads/tracks/musiche%20claudio%20re/My%20Sin%20Is%20Rotten.mp3",
+                      file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/uploads/tracks/musiche%20claudio%20re/My%20Sin%20Is%20Rotten.mp3",
                       context: "My Sin Is Rotten"
                     }
                   ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp"
+                  coverSrc="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp"
                   displayDurations={[parseDurationToSeconds(item.duration)]}
                 />
               </div>
@@ -451,11 +489,11 @@ function CaseStudyCard({
                 <TrackPlayerClient
                   tracks={[
                     {
-                      file: "/uploads/tracks/musiche%20claudio%20re/My%20Crown,%20My%20Ambition,%20My%20Queen.mp3",
+                      file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/uploads/tracks/musiche%20claudio%20re/My%20Crown%2C%20My%20Ambition%2C%20My%20Queen.mp3",
                       context: "My Crown, My Ambition, My Queen"
                     }
                   ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp"
+                  coverSrc="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp"
                   displayDurations={[parseDurationToSeconds(item.duration)]}
                 />
               </div>
@@ -471,11 +509,11 @@ function CaseStudyCard({
                 <TrackPlayerClient
                   tracks={[
                     {
-                      file: "/uploads/tracks/musiche%20claudio%20re/The%20Spectre.mp3",
+                      file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/uploads/tracks/musiche%20claudio%20re/The%20Spectre.mp3",
                       context: "The Spectre"
                     }
                   ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp"
+                  coverSrc="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp"
                   displayDurations={[parseDurationToSeconds(item.duration)]}
                 />
               </div>
@@ -491,11 +529,11 @@ function CaseStudyCard({
                 <TrackPlayerClient
                   tracks={[
                     {
-                      file: "/uploads/tracks/musiche%20claudio%20re/What%20If%20A%20Man%20Can't%20Regret.mp3",
+                      file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/uploads/tracks/musiche%20claudio%20re/What%20If%20A%20Man%20Can%27t%20Regret.mp3",
                       context: "What If A Man Can't Regret"
                     }
                   ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp"
+                  coverSrc="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20claudio%20re.webp"
                   displayDurations={[parseDurationToSeconds(item.duration)]}
                 />
               </div>
@@ -525,11 +563,13 @@ function CaseStudyCard({
                   className="group relative overflow-hidden rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card-inset-bg)] p-3 shadow-[0_18px_45px_var(--shadow)] transition hover:border-[color:rgba(255,255,255,0.3)] hover:shadow-[0_22px_55px_var(--shadow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent)]"
                   aria-label="View Claudio Re case study"
                 >
-                  <img
+                  <Image
                     src={claudioRePosterSrc}
                     alt="Claudio Re poster"
+                    width={400}
+                    height={600}
                     className="h-auto w-full rounded-xl object-cover transition-transform duration-300 group-hover:scale-[1.01]"
-                    loading="lazy"
+                    sizes="(max-width: 640px) 100vw, 400px"
                   />
                 </Link>
               </div>

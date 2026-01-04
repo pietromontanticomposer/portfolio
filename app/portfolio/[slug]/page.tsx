@@ -60,6 +60,12 @@ export default async function ProjectPage({ params }: Params) {
 
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-16 lg:px-20">
+      <Link
+        href="/"
+        className="hero-btn hero-btn-secondary modal-close back-home"
+      >
+        Back Home
+      </Link>
       <section className="page-panel">
         <h1 className="headline section-title text-3xl text-[color:var(--foreground)]">
           {project.title}
@@ -142,6 +148,12 @@ export default async function ProjectPage({ params }: Params) {
           />
         </section>
       ) : null}
+      <Link
+        href="/"
+        className="hero-btn hero-btn-secondary modal-close back-home"
+      >
+        Back Home
+      </Link>
     </main>
   );
 }

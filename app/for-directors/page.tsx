@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import ContactPopover from "../../components/ContactPopover";
 import CaseStudyVideo from "../../components/CaseStudyVideo";
 import LazyIframe from "../../components/LazyIframe";
@@ -141,11 +142,12 @@ function MediaThumbnail({ item }: { item: CaseStudy }) {
   return (
     <div className="relative aspect-video overflow-hidden rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card-inset-bg)]">
       {posterUrl ? (
-        <img
+        <Image
           src={posterUrl}
           alt={`${item.title} thumbnail`}
+          fill
           className="absolute inset-0 h-full w-full object-cover"
-          loading="lazy"
+          sizes="(max-width: 768px) 100vw, 50vw"
         />
       ) : (
         <div className="absolute inset-0 bg-[color:var(--card-inset-bg)]" />
@@ -317,7 +319,7 @@ function CaseStudyCard({ item }: { item: CaseStudy }) {
               {trackTitle ? (
                 <div className="mt-3 text-sm text-[color:var(--muted)]">
                   <span className="font-semibold text-[color:var(--foreground)]">Track:</span>{" "}
-                  "{trackTitle}"
+                  &ldquo;{trackTitle}&rdquo;
                 </div>
               ) : null}
             </div>
@@ -345,11 +347,11 @@ function CaseStudyCard({ item }: { item: CaseStudy }) {
                 <TrackPlayerClient
                   tracks={[
                     {
-                      file: "/uploads/tracks/musiche%20soggetto%20obsoleto/Sitting%20On%20The%20Seashore.mp3",
+                      file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/uploads/tracks/musiche%20soggetto%20obsoleto/Sitting%20On%20The%20Seashore.mp3",
                       context: "Sitting on the Seashore"
                     }
                   ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20soggetto%20obsoleto.webp"
+                  coverSrc="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20soggetto%20obsoleto.webp"
                   displayDurations={[parseDurationToSeconds(item.duration)]}
                 />
               </div>
@@ -365,11 +367,11 @@ function CaseStudyCard({ item }: { item: CaseStudy }) {
                 <TrackPlayerClient
                   tracks={[
                     {
-                      file: "/uploads/tracks/musiche%20la%20sonata%20del%20caos/Something%20Threatening.mp3",
+                      file: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/tracks/musiche%20la%20sonata%20del%20caos/Something%20Threatening.mp3",
                       context: "Something Threatening"
                     }
                   ]}
-                  coverSrc="/optimized/uploads/copertina%20album/copertina%20la%20sonata%20del%20caos.webp"
+                  coverSrc="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20la%20sonata%20del%20caos.webp"
                   displayDurations={[parseDurationToSeconds(item.duration)]}
                 />
               </div>

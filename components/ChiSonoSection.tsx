@@ -46,7 +46,7 @@ export default function ChiSonoSection({
           {quote && (
             <div className="border-l-2 border-[color:var(--accent)] pl-4 py-1">
               <p className="text-base italic text-[color:var(--foreground)] opacity-90">
-                "{quote}"
+                &ldquo;{quote}&rdquo;
               </p>
             </div>
           )}
