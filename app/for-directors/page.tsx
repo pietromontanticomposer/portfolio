@@ -137,7 +137,8 @@ function MediaBlock({ item }: { item: CaseStudy }) {
 }
 
 function MediaThumbnail({ item }: { item: CaseStudy }) {
-  const { posterUrl } = getMediaSources(item.embedUrl);
+  const { posterUrl: generatedPosterUrl } = getMediaSources(item.embedUrl);
+  const posterUrl = item.posterImage || generatedPosterUrl;
 
   return (
     <div className="relative aspect-video overflow-hidden rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card-inset-bg)]">
