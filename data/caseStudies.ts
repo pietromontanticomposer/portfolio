@@ -341,7 +341,7 @@ export const caseStudies: CaseStudyInput[] = [
     ],
     isPublic: false,
     festivalCirculation: true,
-    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/I%20Veneti%20Antichi/I%20Veneti%20Antichi%20The%20Battle.mp4",
+    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/I%20Veneti%20Antichi%20The%20Battle%20New/index.m3u8",
 
     context:
       "Reconstruction of the battle with the Spartans, built on fast cuts and long battlefield wides. The sequence needs drive without turning into a modern action trailer, and it must leave space for historical narration and sound design.",
@@ -403,7 +403,7 @@ export const caseStudies: CaseStudyInput[] = [
     tags: ["Dialogue", "Theme layering", "Motif seed", "Foreshadowing", "Piano", "Banshee motif"],
     isPublic: false,
     festivalCirculation: true,
-    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/La%20Sonata%20Del%20Caos/La%20Sonata%20Del%20Caos%20Something%20Threatening%20Case%20Stud.mp4",
+    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/La%20Sonata%20Del%20Caos/La%20Sonata%20Del%20Caos%20Something%20Threatening%20Case%20Stud/index.m3u8",
 
     context:
       "La Sonata Del Chaos is a short film where a family folktale, the Banshee, shifts from a spoken legend into a real force inside the home. The story follows Eris through grief after her violin teacher’s death, and the Banshee idea later becomes inseparable from an incurable illness that hits the mother and then Talia.\n\nThis cue sits inside a warm bedtime conversation where the myth is spoken aloud, and the mother’s cough quietly reframes it as something already inside the house.",
@@ -473,7 +473,7 @@ export const caseStudies: CaseStudyInput[] = [
     tags: ["Dialogue", "Leitmotif", "Motif recall", "Foreground theme", "Mystery", "Foreshadowing"],
     isPublic: true,
     festivalCirculation: false,
-    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/La%20Sonata%20Del%20Caos/La%20Sonata%20Del%20Caos%20The%20Mother_s%20Tale%20Case%20Study.mp4",
+    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/La%20Sonata%20Del%20Caos/La%20Sonata%20Del%20Caos%20The%20Mother_s%20Tale%20Case%20Study/index.m3u8",
 
     context:
       "La Sonata Del Chaos is a short film where a family folktale, the Banshee, shifts from a spoken legend into a real force inside the home. The story follows Eris through grief after her violin teacher’s death, and the Banshee idea later becomes inseparable from an incurable illness that hits the mother and then Talia.\n\nThe mother tells her daughter the legend of the Banshee. The motif already exists in the score, but here it becomes audible and central for the first time, carrying the scene without stepping on the dialogue.",
@@ -535,7 +535,7 @@ export const caseStudies: CaseStudyInput[] = [
     ],
     isPublic: true,
     festivalCirculation: false,
-    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/La%20Sonata%20Del%20Caos/La%20Sonata%20Del%20Caos%20A%20Close%20Encounter%20In%20The%20Wood.mp4",
+    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/La%20Sonata%20Del%20Caos/La%20Sonata%20Del%20Caos%20A%20Close%20Encounter%20In%20The%20Wood/index.m3u8",
 
     context:
       "La Sonata Del Chaos is a short film where a family folktale, the Basci (Banshee), shifts from a spoken legend into a real force inside the home. The story follows Eris through grief after her violin teacher’s death, and the Banshee idea later becomes inseparable from an incurable illness that hits the mother and then Talia.\n\nIn this scene Eris wakes from a nightmare, hears Talia coughing, checks on her, then hears the Banshee screaming from the woods. She goes outside to confront it and finds it face-to-face.",
@@ -598,7 +598,7 @@ export const caseStudies: CaseStudyInput[] = [
     tags: ["Reveal", "Emotion", "Release", "Dialogue support"],
     isPublic: true,
     festivalCirculation: false,
-    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/La%20Sonata%20Del%20Caos/La%20Sonata%20Del%20Caos%20Talia_s%20Farewell.mp4",
+    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/La%20Sonata%20Del%20Caos/La%20Sonata%20Del%20Caos%20Talia_s%20Farewell/index.m3u8",
 
     context:
       "La Sonata Del Chaos is a short film where a family folktale, the Basci (Banshee), shifts from a spoken legend into a real force inside the home, later inseparable from an incurable illness that hits the mother and then Talia.\n\nIn this scene Eris reads Talia’s favourite story one last time. The music functions as a soft eulogy: it does not comment on death, it accompanies the act of love that survives it.",
@@ -653,7 +653,7 @@ export const caseStudies: CaseStudyInput[] = [
     tags: ["Opening titles", "Modern orchestra", "Resonant texture", "Leitmotif", "Power paranoia"],
     isPublic: true,
     festivalCirculation: false,
-    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Claudio%20Re/Claudio%20Re%20The%20Storm%20Case%20Study.mp4",
+    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/Claudio%20Re/Claudio%20Re%20The%20Storm%20Case%20Study/index.m3u8",
 
     context:
       "Claudio re is inspired by Hamlet. Claudio murders his own brother to take the crown and the queen, then rules under a surface of stability while the crime keeps echoing through the court. His guilt is real, but his repentance is not: he refuses the price of redemption because he will not give up what he stole. That split turns into paranoia, a cold logic of power: if he rose through blood, he can be taken by blood.\n\nThe opening titles introduce the film’s core idea, the “storm”: not weather, but the irreversible disturbance Claudio has unleashed, moral, political, and psychological. The score’s job here is to make the world feel cracked from the first frame, and to establish the storm theme as consequence advancing, not as decorative mood.",
@@ -724,7 +724,7 @@ export const caseStudies: CaseStudyInput[] = [
     ],
     isPublic: true,
     festivalCirculation: false,
-    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Claudio%20Re/Claudio%20Re%20My%20Sin%20Is%20Rotten.mp4",
+    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/Claudio%20Re/Claudio%20Re%20My%20Sin%20Is%20Rotten/index.m3u8",
 
     context:
       "Claudio re is inspired by Hamlet. Claudio murders his own brother to take the crown and the queen, then rules under a surface of stability while the crime keeps echoing through the court. His guilt is real, but he refuses the price of repentance because he will not give up what he stole.\n\nIn this monologue he names the sin as rotten and admits it is the oldest curse, the murder of a brother, then exposes the trap: forgiveness cannot ‘go through’ while he remains in possession of the fruits of the murder, the crown, ambition, and the queen. The cue mirrors that contradiction: a veneer of nobility struggling to stand over something fundamentally corrupt.",
@@ -798,7 +798,7 @@ export const caseStudies: CaseStudyInput[] = [
     ],
     isPublic: true,
     festivalCirculation: false,
-    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Claudio%20Re/Claudio%20Re%20My%20Crown%2C%20My%20Ambition%2C%20My%20Queen%20Case%20St.mp4",
+    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/Claudio%20Re/Claudio%20Re%20My%20Crown%2C%20My%20Ambition%2C%20My%20Queen%20Case%20St/index.m3u8",
 
     context:
       "Claudio re is inspired by Hamlet. Claudio murders his own brother to take the crown and the queen, then rules under a surface of stability while the crime keeps echoing through the court. His guilt is real, but he refuses the price of repentance because he will not give up what he stole.\n\nIn this monologue he names the sin as rotten and admits it is the oldest curse, the murder of a brother, then exposes the trap: forgiveness cannot ‘go through’ while he remains in possession of the fruits of the murder, the crown, ambition, and the queen. The cue mirrors that contradiction: a veneer of nobility struggling to stand over something fundamentally corrupt.",
@@ -868,7 +868,7 @@ export const caseStudies: CaseStudyInput[] = [
     ],
     isPublic: true,
     festivalCirculation: false,
-    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Claudio%20Re/Claudio%20Re%20The%20Spectre.mp4",
+    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/Claudio%20Re/Claudio%20Re%20The%20Spectre/index.m3u8",
 
     context:
       "“But not up there? Ah no. Up there there is no trickery, eh? There, action exists in its true nature. And we ourselves are compelled to bear witness, as beggars, on the forehead of our guilt. Anyone. And then, what remains? [Music]”\n\nClaudio enters the imagined duel with the Spectre, is dominated and stabbed. The music starts when the words end.",
@@ -933,7 +933,7 @@ export const caseStudies: CaseStudyInput[] = [
     tags: ["Release", "Emotion"],
     isPublic: true,
     festivalCirculation: false,
-    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Claudio%20Re/Claudio%20Re%20What%20If%20A%20Man%20Can_t%20Regret%20Case%20Study.mp4",
+    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/Claudio%20Re/Claudio%20Re%20What%20If%20A%20Man%20Can_t%20Regret%20Case%20Study/index.m3u8",
 
     context:
       "“...try what repentance can do. What can it not do? Yet what can it do if a man cannot repent? To die, to sleep, and heart attack. And with a sleep, to say we end the heartache and the thousand natural shocks of flesh. This is a consummation to be wished, devoutly to be wished. To die, to sleep—do we not dream ahead? bent close, stubborn, and you, heart of steel snares. Yes, but I orbit, like muscles in a child, just gone. Everything can end... ...repenting. [Music]”\n\nClaudio searches for a path to repentance but remains trapped by the real price of redemption. The scene works as a distorted echo of Hamlet’s central knots: conscience, guilt, the impossibility of action, and the desire for an end as escape.",

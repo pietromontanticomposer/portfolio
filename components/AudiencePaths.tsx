@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { memo } from "react";
 
-export default function AudiencePaths() {
+function AudiencePaths() {
   return (
     <section className="w-full">
       <div className="card-shell p-6 sm:p-8">
@@ -42,3 +43,5 @@ export default function AudiencePaths() {
     </section>
   );
 }
+
+export default memo(AudiencePaths);

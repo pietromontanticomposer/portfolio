@@ -8,6 +8,7 @@ export default function Footer() {
     <footer
       id="contact"
       className="mt-12 border-t border-black/10 bg-transparent px-6 py-10 sm:px-10 lg:px-16"
+      style={{ contain: "layout style paint" }}
     >
       <div className="mx-auto max-w-7xl text-sm">
 

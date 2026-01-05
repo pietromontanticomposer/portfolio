@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import Hls from "hls.js";
 
 type CaseStudyVideoProps = {
@@ -10,7 +10,7 @@ type CaseStudyVideoProps = {
   poster?: string | null;
 };
 
-export default function CaseStudyVideo({
+function CaseStudyVideo({
   hlsUrl,
   mp4Url,
   title,
@@ -30,6 +30,10 @@ export default function CaseStudyVideo({
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+
+    // Assicurati che l'audio sia abilitato
+    video.muted = false;
+    video.volume = 1.0;
 
     // Se il browser supporta nativamente HLS (Safari)
     if (video.canPlayType('application/vnd.apple.mpegurl')) {
@@ -95,9 +99,14 @@ export default function CaseStudyVideo({
       preload="metadata"
       poster={posterUrl}
       aria-label={title}
+      muted={false}
+      src={normalizedHls}
     >
+      <source src={normalizedHls} type="application/x-mpegURL" />
       {normalizedMp4 ? <source src={normalizedMp4} type="video/mp4" /> : null}
       Your browser does not support the video tag.
     </video>
   );
 }
+
+export default memo(CaseStudyVideo);

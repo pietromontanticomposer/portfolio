@@ -1,23 +1,31 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 
 const DEBUG_BG =
   process.env.NEXT_PUBLIC_BG_DEBUG === "1" ||
   process.env.NEXT_PUBLIC_BG_DEBUG === "true";
 
-export default function BackgroundVideo() {
+function BackgroundVideo() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [shouldLoadSrc, setShouldLoadSrc] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const isPlayingRef = useRef(false);
   const hasLoadedRef = useRef(false);
 
-  // Load immediately to ensure background video starts playing.
+  // Delay load to not block initial render and scroll
   useEffect(() => {
     if (hasLoadedRef.current) return;
-    hasLoadedRef.current = true;
-    setShouldLoadSrc(true);
+
+    // Wait for page to be interactive before loading video
+    const timer = setTimeout(() => {
+      if (!hasLoadedRef.current) {
+        hasLoadedRef.current = true;
+        setShouldLoadSrc(true);
+      }
+    }, 1500); // Delay 1.5s to prioritize main content
+
+    return () => clearTimeout(timer);
   }, []);
 
   // Attach sources and attempt playback
@@ -396,16 +404,44 @@ export default function BackgroundVideo() {
         controlsList="nodownload noremoteplayback"
         poster="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/background-poster.jpg"
         aria-hidden="true"
-        style={{ transform: "translateZ(0)" }}
+        style={{
+          transform: "translate3d(0, 0, 0)",
+          willChange: "transform",
+          contain: "strict",
+          isolation: "isolate",
+          backfaceVisibility: "hidden",
+          perspective: 1000
+        }}
       />
 
       <div
         className={`bg-video-poster ${isPlaying ? "is-hidden" : ""}`}
-        style={{ backgroundImage: `url('https://4glkq64bdlmmple5.public.blob.vercel-storage.com/background-poster.jpg')` }}
+        style={{
+          backgroundImage: `url('https://4glkq64bdlmmple5.public.blob.vercel-storage.com/background-poster.jpg')`,
+          transform: "translate3d(0, 0, 0)",
+          willChange: "transform",
+          contain: "strict",
+          isolation: "isolate",
+          backfaceVisibility: "hidden",
+          perspective: 1000
+        }}
         aria-hidden="true"
       />
 
-      <div className="bg-video-overlay" aria-hidden="true" />
+      <div
+        className="bg-video-overlay"
+        aria-hidden="true"
+        style={{
+          transform: "translate3d(0, 0, 0)",
+          willChange: "transform",
+          contain: "strict",
+          isolation: "isolate",
+          backfaceVisibility: "hidden",
+          perspective: 1000
+        }}
+      />
     </>
   );
 }
+
+export default memo(BackgroundVideo);

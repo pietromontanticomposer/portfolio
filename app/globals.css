@@ -242,8 +242,7 @@ main {
 
 @media (min-width: 1024px) {
   .card-shell {
-    content-visibility: auto;
-    contain-intrinsic-size: 1px 900px;
+    /* Removed content-visibility to prevent card flickering during scroll */
   }
 
   .scroll-shell,

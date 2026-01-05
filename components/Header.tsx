@@ -50,7 +50,11 @@ function Header() {
   return (
     <header
       className={`fixed top-0 left-0 z-50 w-full bg-transparent/60 transition ${scrolled && isDesktop && canBlur ? "backdrop-blur-sm" : ""}`}
-      style={{ height: "var(--header-height)" }}
+      style={{
+        height: "var(--header-height)",
+        contain: "layout style paint",
+        transform: "translateZ(0)"
+      }}
     >
       <div className="mx-auto flex h-full max-w-6xl items-center justify-end gap-6 px-6 sm:px-10 lg:px-16">
         <nav className="hidden items-center gap-6 text-sm text-[color:var(--muted)] sm:flex">

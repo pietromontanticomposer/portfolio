@@ -1,16 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ContactPopover from "../components/ContactPopover";
-import ShowreelSection from "../components/ShowreelSection";
+import LazyShowreel from "../components/LazyShowreel";
 import AudiencePaths from "../components/AudiencePaths";
-import AutoScrollStrip from "../components/AutoScrollStrip";
-import MediaPreload from "../components/MediaPreload";
-import ChiSonoSection from "../components/ChiSonoSection";
-import CollaborationsSection from "../components/CollaborationsSection";
-import { featuredProjects } from "../data/projects";
-import { heroCredits, partners } from "../data/homeContent";
-import { bioFull, bioQuote, bioStats, bioSkills } from "../data/bio";
-import { comingSoonPosters } from "../data/placeholders";
+import { heroCredits } from "../data/homeContent";
 
 export const metadata: Metadata = {
   title: "Pietro Montanti",
@@ -30,34 +23,7 @@ export const metadata: Metadata = {
   },
 };
 
-// Use pre-computed featured projects (avoids runtime filter on full projects array)
-const selectedProjects = featuredProjects.slice(0, 6);
-
-const selectedPosterTiles = selectedProjects.map((project) => ({
-  slug: project.slug,
-  title: project.title,
-  year: project.year,
-  tag: project.tag,
-  image: project.image,
-  href: `/portfolio/${project.slug}`,
-}));
-
-const comingSoonStrip = comingSoonPosters.map((poster) => ({
-  slug: poster.slug,
-  title: poster.title,
-  year: (poster as { year?: string }).year ?? '',
-  tag: poster.tag,
-  image: poster.image,
-}));
-
-const posters = [...selectedPosterTiles, ...comingSoonStrip];
-
-const PORTRAIT_SRC = "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/uploads/foto-sito.jpg";
-
 export default function Home() {
-  const preloadImages = [
-    ...posters.map((p) => p.image).filter(Boolean),
-  ] as string[];
   const showreelEmbedUrl =
     process.env.NEXT_PUBLIC_SHOWREEL_EMBED_URL ??
     "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/Showreel%20Sito%20New/index.m3u8";
@@ -94,10 +60,9 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen page-root">
-      <MediaPreload images={preloadImages} />
-      <div className="pointer-events-none absolute inset-0 grain z-10" />
-      <div className="pointer-events-none absolute -top-40 right-[-80px] h-96 w-96 rounded-full bg-[color:var(--accent)]/20 blur-3xl float z-10 max-lg:right-0 max-lg:h-[70vw] max-lg:w-[70vw]" />
-      <div className="pointer-events-none absolute bottom-[-180px] left-[-120px] h-[30rem] w-[30rem] rounded-full bg-[color:var(--accent-2)]/70 blur-3xl z-10 max-lg:left-0 max-lg:h-[70vw] max-lg:w-[70vw]" />
+      <div className="pointer-events-none absolute inset-0 grain z-10" style={{ transform: 'translateZ(0)', contain: 'layout style paint' }} />
+      <div className="pointer-events-none absolute -top-40 right-[-80px] h-96 w-96 rounded-full bg-[color:var(--accent)]/20 blur-3xl z-10 max-lg:right-0 max-lg:h-[70vw] max-lg:w-[70vw]" style={{ transform: 'translateZ(0)', contain: 'layout style paint' }} />
+      <div className="pointer-events-none absolute bottom-[-180px] left-[-120px] h-[30rem] w-[30rem] rounded-full bg-[color:var(--accent-2)]/70 blur-3xl z-10 max-lg:left-0 max-lg:h-[70vw] max-lg:w-[70vw]" style={{ transform: 'translateZ(0)', contain: 'layout style paint' }} />
 
       <main className="relative z-20 mx-auto flex min-h-screen max-w-7xl flex-col gap-12 px-6 py-12 lg:px-20">
         <script
@@ -140,9 +105,23 @@ export default function Home() {
           </div>
         </header>
 
-        <ShowreelSection embedUrl={showreelEmbedUrl} />
+        <LazyShowreel embedUrl={showreelEmbedUrl} />
 
         <AudiencePaths />
+
+        <section className="card-shell p-6 sm:p-8">
+          <div className="section-header flex items-center justify-between">
+            <h3 className="section-title text-2xl text-[color:var(--foreground)]">Portfolio</h3>
+          </div>
+          <p className="mt-2 text-sm text-[color:var(--muted)]">
+            Selected work, collaborations, and full project list.
+          </p>
+          <div className="mt-4">
+            <Link href="/portfolio" className="hero-btn hero-btn-secondary">
+              View portfolio
+            </Link>
+          </div>
+        </section>
 
         <section className="card-shell p-6 sm:p-8">
           <div className="section-header flex items-center justify-between">
@@ -158,50 +137,19 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="selected-work" className="card-shell p-6 sm:p-8">
+        <section className="card-shell p-6 sm:p-8">
           <div className="section-header flex items-center justify-between">
-            <h3 className="section-title text-2xl text-[color:var(--foreground)]">
-              Selected Work
-            </h3>
+            <h3 className="section-title text-2xl text-[color:var(--foreground)]">About</h3>
           </div>
           <p className="mt-2 text-sm text-[color:var(--muted)]">
-            Curated highlights. Full list in Portfolio.
+            Bio, background, and approach to composing.
           </p>
-          <AutoScrollStrip posters={posters} />
-          <div className="mt-6 aspect-video w-full overflow-hidden rounded-lg">
-            <iframe
-              src="https://www.youtube.com/embed/uyxIoQIE-cM"
-              title="Video"
-              width="100%"
-              height="100%"
-              frameBorder="0"
-              loading="lazy"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full"
-            />
-          </div>
-          <p className="mt-2 text-sm text-[color:var(--muted)]">Role: Arranger</p>
           <div className="mt-4">
-            <Link
-              href="/portfolio"
-              className="text-sm text-[color:var(--muted)] transition hover:text-[color:var(--foreground)]"
-            >
-              View all projects
+            <Link href="/about" className="hero-btn hero-btn-secondary">
+              Learn more
             </Link>
           </div>
         </section>
-
-        <ChiSonoSection
-          id="about"
-          imageSrc={PORTRAIT_SRC}
-          bio={bioFull}
-          quote={bioQuote}
-          stats={bioStats}
-          skills={bioSkills}
-        />
-
-        <CollaborationsSection partners={partners} />
 
       </main>
     </div>

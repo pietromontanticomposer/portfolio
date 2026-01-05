@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import ScrollController from "../components/ScrollController";
 import BackgroundVideo from "../components/BackgroundVideo";
 import Header from "../components/Header";
+import ScrollPerformance from "../components/ScrollPerformance";
 
 // Optimized font loading - reduced weights to critical only
 const bodoni = Bodoni_Moda({
@@ -96,6 +97,7 @@ export default function RootLayout({
         <Header />
         {SHOW_BG_VIDEO && <BackgroundVideo />}
         <ScrollController />
+        <ScrollPerformance />
         {children}
         <Footer />
       </body>
