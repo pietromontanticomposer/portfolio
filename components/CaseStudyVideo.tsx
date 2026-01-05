@@ -22,8 +22,10 @@ export default function CaseStudyVideo({
   // URLs are already encoded in MediaBlock, don't encode again
   const normalizedHls = hlsUrl;
   const normalizedMp4 = mp4Url;
-  // Don't auto-derive poster URLs - use explicit poster prop only
-  const posterUrl = poster || undefined;
+  const posterFromMp4 = normalizedMp4
+    ? normalizedMp4.replace(/\.mp4$/i, ".jpg")
+    : undefined;
+  const posterUrl = poster || posterFromMp4;
 
   useEffect(() => {
     const video = videoRef.current;

@@ -52,8 +52,12 @@ function getMediaSources(embedUrl?: string) {
           .replace("/uploads/video/_hls/", "/uploads/video/")
           .replace("/index.m3u8", ".mp4")
       : null;
-  // Don't auto-derive poster, use explicit posterImage from case study data
-  const posterUrl = null;
+  // Generate posterUrl: for direct MP4, replace .mp4 with .jpg; for HLS, use mp4Fallback
+  const posterUrl = isMp4 && trimmedUrl.endsWith('.mp4')
+    ? trimmedUrl.replace(/\.mp4$/i, ".jpg")
+    : mp4Fallback
+    ? mp4Fallback.replace(/\.mp4$/i, ".jpg")
+    : null;
 
   // If the embed is a direct mp4 URL, provide isMp4 so caller can render a native video tag.
   return { isHls, isMp4, src, mp4Fallback, posterUrl } as const;
@@ -86,7 +90,7 @@ function MediaBlock({ item }: { item: CaseStudy }) {
             controls
             playsInline
             preload="metadata"
-            poster={item.posterImage || undefined}
+            poster={item.posterImage || getMediaSources(item.embedUrl).posterUrl || undefined}
             aria-label={`${item.title} clip`}
           >
             <source src={src ?? undefined} type="video/mp4" />

@@ -90,7 +90,7 @@ function getMediaSources(embedUrl?: string) {
           .replace("/uploads/video/_hls/", "/uploads/video/")
           .replace("/index.m3u8", ".mp4")
       : null;
-  const posterUrl = null; // Don't auto-derive poster, use explicit posterImage from data
+  const posterUrl = mp4Fallback ? mp4Fallback.replace(/\.mp4$/i, ".jpg") : null;
 
   return { isHls, src, mp4Fallback, posterUrl };
 }
