@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo, memo } from "react";
 
-export default function LazyIframe({
+function LazyIframe({
   src,
   title,
   height = 120,
@@ -21,6 +21,27 @@ export default function LazyIframe({
 }) {
   const [loaded, setLoaded] = useState(Boolean((autoLoad as boolean) || false));
 
+  // Memoize the iframe src calculation
+  const iframeSrc = useMemo(() => {
+    try {
+      // If this is a SoundCloud embed widget, prefer the compact non-visual player
+      if (typeof src === 'string' && src.includes('w.soundcloud.com/player')) {
+        const url = new URL(src);
+        const params = url.searchParams;
+        // set compact view and reduce UI elements
+        if (!params.has('visual')) params.set('visual', 'false');
+        if (!params.has('show_artwork')) params.set('show_artwork', 'true');
+        if (!params.has('show_comments')) params.set('show_comments', 'false');
+        if (!params.has('show_user')) params.set('show_user', 'false');
+        if (!params.has('show_reposts')) params.set('show_reposts', 'false');
+        return url.toString();
+      }
+    } catch {
+      // ignore
+    }
+    return src;
+  }, [src]);
+
   return (
     <div className={className ? className : "lazy-iframe"}>
       {!loaded ? (
@@ -35,25 +56,7 @@ export default function LazyIframe({
         </div>
       ) : (
         <iframe
-          src={(() => {
-            try {
-              // If this is a SoundCloud embed widget, prefer the compact non-visual player
-              if (typeof src === 'string' && src.includes('w.soundcloud.com/player')) {
-                const url = new URL(src);
-                const params = url.searchParams;
-                // set compact view and reduce UI elements
-                if (!params.has('visual')) params.set('visual', 'false');
-                if (!params.has('show_artwork')) params.set('show_artwork', 'true');
-                if (!params.has('show_comments')) params.set('show_comments', 'false');
-                if (!params.has('show_user')) params.set('show_user', 'false');
-                if (!params.has('show_reposts')) params.set('show_reposts', 'false');
-                return url.toString();
-              }
-            } catch {
-              // ignore
-            }
-            return src;
-          })()}
+          src={iframeSrc}
           title={title}
           width="100%"
           height={height}
@@ -66,3 +69,5 @@ export default function LazyIframe({
     </div>
   );
 }
+
+export default memo(LazyIframe);

@@ -86,6 +86,15 @@ export default function RootLayout({
           href="https://4glkq64bdlmmple5.public.blob.vercel-storage.com"
         />
         <link
+          rel="preconnect"
+          href="https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="dns-prefetch"
+          href="https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com"
+        />
+        <link
           rel="preload"
           as="image"
           href="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/background-poster.jpg"

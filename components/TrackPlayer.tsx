@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import AudioPlayer from "./AudioPlayer";
 
@@ -35,7 +35,7 @@ const getTitle = (context: string) => {
   return split[0]?.trim() || context;
 };
 
-export default function TrackPlayer({
+function TrackPlayer({
   tracks,
   coverSrc,
   displayDurations,
@@ -161,3 +161,5 @@ export default function TrackPlayer({
     </div>
   );
 }
+
+export default memo(TrackPlayer);
