@@ -66,18 +66,24 @@ export const comingSoonPosters = [
     slug: "coming-soon-freefall",
     title: "Freefall",
     tag: "Coming Soon",
-    image: "[object Object]",
+    image: undefined,
   },
   {
     slug: "coming-soon-polvere-sotto-al-tappeto",
     title: "Polvere Sotto Al Tappeto",
     tag: "Coming Soon",
-    image: "[object Object]",
+    image: undefined,
   },
   {
     slug: "coming-soon-non-ce-casa-in-paradiso",
     title: "Non C'è Casa In Paradiso",
     tag: "Coming Soon",
-    image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/placeholders/poster-6.jpg",
+    image: undefined,
+  },
+  {
+    slug: "coming-soon-airborne",
+    title: "Airborne",
+    tag: "Coming Soon",
+    image: undefined,
   },
 ];

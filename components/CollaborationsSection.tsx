@@ -110,7 +110,7 @@ function CollaborationsSection({ partners }: { partners: Partner[] }) {
   );
 
   return (
-    <section className="card-shell p-6 sm:p-8">
+    <section id="collaborations" className="card-shell p-6 sm:p-8 overflow-hidden">
       <div className="section-header flex items-center justify-between">
         <h3 className="section-title text-2xl text-[color:var(--foreground)]">
           Collaborations

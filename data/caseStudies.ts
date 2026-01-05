@@ -1,5 +1,3 @@
-import { z } from "zod";
-
 export type CaseStudyTag = string;
 
 export type SceneType = "Dialogue" | "Reveal" | "Montage" | "Action" | "Atmosphere";
@@ -103,27 +101,20 @@ const moodTags = new Set([
 
 const lowPriorityMoodTags = new Set(["Emotion", "Release"]);
 
-const durationSchema = z
-  .string()
-  .refine((value) => value === "00:??" || /^\d{2}:\d{2}$/.test(value), {
-    message: "duration must be MM:SS or 00:??",
-  });
+// Validation functions (replacing Zod schemas)
+function isValidDuration(value: string): boolean {
+  return value === "00:??" || /^\d{2}:\d{2}$/.test(value);
+}
 
-const tagsSchema = z.preprocess((value) => {
-  if (!Array.isArray(value)) return [];
-  return value.filter((tag) => typeof tag === "string");
-}, z.array(z.string()));
-
-const caseStudyBaseSchema = z
-  .object({
-    id: z.string().min(1),
-    title: z.string().min(1),
-    projectLabel: z.string().min(1),
-    sceneType: z.string().min(1),
-    duration: durationSchema,
-    tags: tagsSchema.optional().default([]),
-  })
-  .passthrough();
+function validateCaseStudyBase(data: CaseStudyInput): string[] {
+  const errors: string[] = [];
+  if (!data.id || typeof data.id !== "string") errors.push("id is required");
+  if (!data.title || typeof data.title !== "string") errors.push("title is required");
+  if (!data.projectLabel || typeof data.projectLabel !== "string") errors.push("projectLabel is required");
+  if (!data.sceneType || typeof data.sceneType !== "string") errors.push("sceneType is required");
+  if (!data.duration || !isValidDuration(data.duration)) errors.push(`duration must be MM:SS or 00:?? (got: ${data.duration})`);
+  return errors;
+}
 
 function normalizeSpacing(value: string) {
   return value.replace(/\s+/g, " ").trim();
@@ -258,12 +249,6 @@ function normalizeCaseStudy(data: CaseStudyInput): CaseStudy {
     tags,
   } as CaseStudy;
 }
-
-const caseStudySchema = caseStudyBaseSchema.transform((data) =>
-  normalizeCaseStudy(data as CaseStudyInput)
-);
-
-const caseStudiesSchema = z.array(caseStudySchema);
 
 export const caseStudies: CaseStudyInput[] = [
   {
@@ -995,13 +980,21 @@ export const caseStudies: CaseStudyInput[] = [
   }
 ];
 
-const parsedCaseStudies = caseStudiesSchema.safeParse(caseStudies);
+// Validate and normalize all case studies
+const allErrors: string[] = [];
+const normalizedData: CaseStudy[] = [];
 
-if (!parsedCaseStudies.success) {
-  const issues = parsedCaseStudies.error.issues
-    .map((issue) => `${issue.path.join(".")}: ${issue.message}`)
-    .join("\n");
-  throw new Error(`[case-studies] Invalid case studies data:\n${issues}`);
+for (let i = 0; i < caseStudies.length; i++) {
+  const cs = caseStudies[i];
+  const errors = validateCaseStudyBase(cs);
+  if (errors.length > 0) {
+    allErrors.push(`caseStudies[${i}] (${cs.id}): ${errors.join(", ")}`);
+  }
+  normalizedData.push(normalizeCaseStudy(cs));
 }
 
-export const caseStudiesNormalized = parsedCaseStudies.data as CaseStudy[];
+if (allErrors.length > 0) {
+  throw new Error(`[case-studies] Invalid case studies data:\n${allErrors.join("\n")}`);
+}
+
+export const caseStudiesNormalized = normalizedData;

@@ -758,13 +758,16 @@ main {
   mask-size: 100% 100%;
 }
 
-#selected-work .scroll-strip {
+#selected-work .scroll-strip,
+#collaborations .scroll-strip {
   width: 100%;
   margin-left: 0;
   margin-right: 0;
+  overflow: hidden;
 }
 
-#selected-work {
+#selected-work,
+#collaborations {
   overflow: hidden;
 }
 
@@ -1491,8 +1494,8 @@ main {
 }
 
 .bg-video-toggle-btn {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1525,8 +1528,8 @@ main {
   }
   
   .bg-video-toggle-btn {
-    width: 28px;
-    height: 28px;
+    width: 34px;
+    height: 34px;
   }
   
   .bg-video-toggle-label {

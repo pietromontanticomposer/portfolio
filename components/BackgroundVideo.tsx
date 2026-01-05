@@ -11,13 +11,11 @@ function BackgroundVideo() {
   const [shouldLoadSrc, setShouldLoadSrc] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [hasMounted, setHasMounted] = useState(false);
   const isPlayingRef = useRef(false);
   const hasLoadedRef = useRef(false);
 
   // Read localStorage after mount to avoid hydration mismatch
   useEffect(() => {
-    setHasMounted(true);
     const savedPauseState = localStorage.getItem('bg-video-paused') === 'true';
     if (savedPauseState) {
       setIsPaused(true);

@@ -66,11 +66,7 @@ function getMediaSources(embedUrl?: string) {
 function MediaBlock({ item }: { item: CaseStudy }) {
   const mediaSources = getMediaSources(item.embedUrl);
   const { isHls, src, mp4Fallback, isMp4, posterUrl } = mediaSources;
-  // debug: log embedUrl and detected types during SSR to diagnose rendering path
-  if (process.env.NODE_ENV === 'development' && typeof window === "undefined") {
-    // eslint-disable-next-line no-console
-    console.log("[media-debug] embedUrl:", item.embedUrl, "->", { isHls, isMp4, src, mp4Fallback });
-  }
+
 
   if (!src) {
     return (
