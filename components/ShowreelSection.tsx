@@ -38,8 +38,8 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
           <div className="video-wrapper">
             {hasEmbed && isHls ? (
               <CaseStudyVideo
-                hlsUrl={encodeURI(trimmedUrl)}
-                mp4Url={mp4Fallback ? encodeURI(mp4Fallback) : null}
+                hlsUrl={trimmedUrl}
+                mp4Url={mp4Fallback}
                 title="Showreel"
                 poster="https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Showreel%20Sito.jpg"
               />
