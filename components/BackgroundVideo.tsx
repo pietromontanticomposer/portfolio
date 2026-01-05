@@ -458,7 +458,7 @@ function BackgroundVideo() {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       video.removeEventListener('play', handlePlay);
     };
-  }, [shouldLoadSrc]);
+  }, [shouldLoadSrc, isPaused]);
 
   return (
     <>
