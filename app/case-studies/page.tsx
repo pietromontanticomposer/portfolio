@@ -64,9 +64,10 @@ function getMediaSources(embedUrl?: string) {
 }
 
 function MediaBlock({ item }: { item: CaseStudy }) {
-  const { isHls, src, mp4Fallback, isMp4 } = getMediaSources(item.embedUrl);
+  const mediaSources = getMediaSources(item.embedUrl);
+  const { isHls, src, mp4Fallback, isMp4, posterUrl } = mediaSources;
   // debug: log embedUrl and detected types during SSR to diagnose rendering path
-  if (typeof window === "undefined") {
+  if (process.env.NODE_ENV === 'development' && typeof window === "undefined") {
     // eslint-disable-next-line no-console
     console.log("[media-debug] embedUrl:", item.embedUrl, "->", { isHls, isMp4, src, mp4Fallback });
   }
@@ -80,8 +81,7 @@ function MediaBlock({ item }: { item: CaseStudy }) {
   }
 
   // If the source is an HLS playlist, render the HLS player; if it's a plain MP4, render a native video tag.
-  const maybeMp4 = (getMediaSources(item.embedUrl) as any).isMp4 as boolean | undefined;
-  if (maybeMp4) {
+  if (isMp4) {
     return (
       <div>
         <div className="video-wrapper">
@@ -90,7 +90,7 @@ function MediaBlock({ item }: { item: CaseStudy }) {
             controls
             playsInline
             preload="metadata"
-            poster={item.posterImage || getMediaSources(item.embedUrl).posterUrl || undefined}
+            poster={item.posterImage || posterUrl || undefined}
             aria-label={`${item.title} clip`}
           >
             <source src={src ?? undefined} type="video/mp4" />

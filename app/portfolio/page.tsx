@@ -43,7 +43,7 @@ export default function PortfolioPage() {
       <section className="w-full overflow-visible">
         <div className="poster-grid-gridview">
           {posters.map((poster) => (
-            <div key={poster.slug}>
+            <div key={`${poster.slug}-${poster.year}-${poster.tag}`}>
               <PosterCard
                 title={poster.title}
                 year={poster.year}

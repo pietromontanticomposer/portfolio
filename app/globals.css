@@ -901,7 +901,6 @@ main {
   height: auto;
   /* reduced edge padding */
   padding-inline: 2rem;
-  will-change: auto;
 }
 
 .scroll-track[data-auto-scroll="true"] {
