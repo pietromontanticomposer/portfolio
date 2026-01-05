@@ -111,20 +111,6 @@ export default function Home() {
 
         <section className="card-shell p-6 sm:p-8">
           <div className="section-header flex items-center justify-between">
-            <h3 className="section-title text-2xl text-[color:var(--foreground)]">Portfolio</h3>
-          </div>
-          <p className="mt-2 text-sm text-[color:var(--muted)]">
-            Selected work, collaborations, and full project list.
-          </p>
-          <div className="mt-4">
-            <Link href="/portfolio" className="hero-btn hero-btn-secondary">
-              View portfolio
-            </Link>
-          </div>
-        </section>
-
-        <section className="card-shell p-6 sm:p-8">
-          <div className="section-header flex items-center justify-between">
             <h3 className="section-title text-2xl text-[color:var(--foreground)]">Case Studies</h3>
           </div>
           <p className="mt-2 text-sm text-[color:var(--muted)]">
@@ -134,6 +120,20 @@ export default function Home() {
             <a href="/case-studies" className="hero-btn hero-btn-secondary">
               View case studies
             </a>
+          </div>
+        </section>
+
+        <section className="card-shell p-6 sm:p-8">
+          <div className="section-header flex items-center justify-between">
+            <h3 className="section-title text-2xl text-[color:var(--foreground)]">Portfolio</h3>
+          </div>
+          <p className="mt-2 text-sm text-[color:var(--muted)]">
+            Selected work, collaborations, and full project list.
+          </p>
+          <div className="mt-4">
+            <Link href="/portfolio" className="hero-btn hero-btn-secondary">
+              View portfolio
+            </Link>
           </div>
         </section>
 
