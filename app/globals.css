@@ -1462,6 +1462,82 @@ main {
   background: linear-gradient(180deg, rgba(2,6,23,0.08) 0%, rgba(2,6,23,0.6) 100%);
 }
 
+.bg-video-toggle {
+  position: fixed;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  z-index: 9999;
+}
+
+.bg-video-toggle-label {
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: 0.5rem;
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.7);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  background: var(--card-surface-strong);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 8px 20px var(--shadow), inset 0 0 0 1px var(--card-border), inset 0 1px 0 rgba(255,255,255,0.04);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+}
+
+.bg-video-toggle:hover .bg-video-toggle-label {
+  opacity: 1;
+}
+
+.bg-video-toggle-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card-surface-strong);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  border: 1px solid var(--card-border);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 20px var(--shadow), inset 0 0 0 1px var(--card-border), inset 0 1px 0 rgba(255,255,255,0.04);
+  transition: all 0.2s ease;
+}
+
+.bg-video-toggle-btn:hover {
+  background: var(--card-surface-strong);
+  border-color: var(--card-border);
+  color: white;
+  box-shadow: 0 12px 28px var(--shadow), inset 0 0 0 1px var(--card-border), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.bg-video-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+  .bg-video-toggle {
+    bottom: 0.5rem;
+    right: 0.5rem;
+  }
+  
+  .bg-video-toggle-btn {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .bg-video-toggle-label {
+    display: none;
+  }
+}
+
 /* Hide native video controls/pip overlays across browsers (background video only) */
 .bg-video::-webkit-media-controls,
 .bg-video::-webkit-media-controls-enclosure,

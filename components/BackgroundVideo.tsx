@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 const DEBUG_BG =
   process.env.NEXT_PUBLIC_BG_DEBUG === "1" ||
@@ -10,8 +10,19 @@ function BackgroundVideo() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [shouldLoadSrc, setShouldLoadSrc] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
   const isPlayingRef = useRef(false);
   const hasLoadedRef = useRef(false);
+
+  // Read localStorage after mount to avoid hydration mismatch
+  useEffect(() => {
+    setHasMounted(true);
+    const savedPauseState = localStorage.getItem('bg-video-paused') === 'true';
+    if (savedPauseState) {
+      setIsPaused(true);
+    }
+  }, []);
 
   // Delay load to not block initial render and scroll
   useEffect(() => {
@@ -390,6 +401,65 @@ function BackgroundVideo() {
     };
   }, [shouldLoadSrc]);
 
+  const togglePause = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    
+    if (isPaused) {
+      video.play().catch(() => {});
+      setIsPaused(false);
+      localStorage.setItem('bg-video-paused', 'false');
+    } else {
+      video.pause();
+      setIsPaused(true);
+      localStorage.setItem('bg-video-paused', 'true');
+    }
+  }, [isPaused]);
+
+  // Apply saved pause state when video loads and handle visibility changes
+  useEffect(() => {
+    if (!shouldLoadSrc || !videoRef.current) return;
+    const video = videoRef.current;
+    
+    if (isPaused) {
+      video.pause();
+    }
+
+    // Handle page visibility changes to prevent auto-resume
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Save current play state when leaving page
+        if (!video.paused) {
+          video.pause();
+        }
+      } else {
+        // When returning to page, respect saved pause state
+        const savedPauseState = localStorage.getItem('bg-video-paused') === 'true';
+        if (!savedPauseState && !video.paused) {
+          video.play().catch(() => {});
+        } else if (savedPauseState) {
+          video.pause();
+        }
+      }
+    };
+
+    // Prevent auto-resume when video starts playing
+    const handlePlay = () => {
+      const savedPauseState = localStorage.getItem('bg-video-paused') === 'true';
+      if (savedPauseState) {
+        video.pause();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    video.addEventListener('play', handlePlay);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      video.removeEventListener('play', handlePlay);
+    };
+  }, [shouldLoadSrc, isPaused]);
+
   return (
     <>
       <video
@@ -415,7 +485,7 @@ function BackgroundVideo() {
       />
 
       <div
-        className={`bg-video-poster ${isPlaying ? "is-hidden" : ""}`}
+        className={`bg-video-poster ${isPlaying || isPaused ? "is-hidden" : ""}`}
         style={{
           backgroundImage: `url('https://4glkq64bdlmmple5.public.blob.vercel-storage.com/background-poster.jpg')`,
           transform: "translate3d(0, 0, 0)",
@@ -440,6 +510,26 @@ function BackgroundVideo() {
           perspective: 1000
         }}
       />
+
+      <div className="bg-video-toggle">
+        <span className="bg-video-toggle-label">Block background video</span>
+        <button
+          onClick={togglePause}
+          className="bg-video-toggle-btn"
+          aria-label={isPaused ? "Play background video" : "Pause background video"}
+          title={isPaused ? "Play background" : "Pause background"}
+        >
+          {isPaused ? (
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M5 3.5v9l7-4.5-7-4.5z" />
+            </svg>
+          ) : (
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M4 3h3v10H4V3zm5 0h3v10H9V3z" />
+            </svg>
+          )}
+        </button>
+      </div>
     </>
   );
 }
