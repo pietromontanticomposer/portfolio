@@ -153,24 +153,18 @@ if (toAdd.length === 0) {
   process.exit(0);
 }
 
-const status = spawnSync('git', ['status', '--porcelain'], { encoding: 'utf8' });
-const statusLines = (status.stdout || '').trim().split('\n').filter(Boolean);
-const isSafePath = (filePath) =>
-  toAdd.some((rootPath) => filePath === rootPath || filePath.startsWith(`${rootPath}/`));
-const dirty = statusLines.some((line) => isSafePath(line.slice(3).trim()));
-
-if (!dirty) {
-  console.log('Nessuna modifica da committare.');
-  process.exit(0);
-}
-
 run('git', ['add', '-A', '--', ...toAdd]);
+
 if (dryRun) {
-  console.log('[dry-run] git commit -m', JSON.stringify(msg));
+  console.log('[dry-run] git commit -m', JSON.stringify(msg), '--allow-empty');
   console.log('[dry-run] git push --force');
-  console.log('[dry-run] vercel --prod --confirm');
 } else {
-  run('git', ['commit', '-m', msg]);
+  // Sempre crea commit (anche se vuoto) per triggerare deploy
+  run('git', ['commit', '-m', msg, '--allow-empty']);
+
+  // Push sempre, anche se identico
+  console.log('Push to GitHub...');
   run('git', ['push', '--force']);
-  run('vercel', ['--prod', '--confirm']);
+
+  console.log('✅ Push completed! Deploy will be triggered automatically by Vercel.');
 }

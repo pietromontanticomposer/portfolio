@@ -7,17 +7,11 @@ const PLACEHOLDER_MP4 =
 
 type ShowreelSectionProps = {
   embedUrl?: string | null;
-  previewImage?: string | null;
 };
 
-const normalizeUrl = (url: string) => (url.startsWith("/") ? encodeURI(url) : url);
-
-export default function ShowreelSection({ embedUrl, previewImage }: ShowreelSectionProps) {
+export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
   const hasEmbed = typeof embedUrl === "string" && embedUrl.trim().length > 0;
   const trimmedUrl = embedUrl?.trim() ?? "";
-  const normalizedPreview = previewImage?.trim()
-    ? normalizeUrl(previewImage.trim())
-    : undefined;
   const isHls = hasEmbed && (trimmedUrl.endsWith(".m3u8") || trimmedUrl.includes("/_hls/"));
   const isMp4 = hasEmbed && /\.mp4(?:\?|$)/i.test(trimmedUrl);
   const mp4Fallback =
@@ -44,10 +38,9 @@ export default function ShowreelSection({ embedUrl, previewImage }: ShowreelSect
           <div className="video-wrapper">
             {hasEmbed && isHls ? (
               <CaseStudyVideo
-                hlsUrl={trimmedUrl}
-                mp4Url={mp4Fallback}
+                hlsUrl={encodeURI(trimmedUrl)}
+                mp4Url={mp4Fallback ? encodeURI(mp4Fallback) : null}
                 title="Showreel"
-                poster={normalizedPreview}
               />
             ) : hasEmbed && isMp4 ? (
               <video
@@ -56,14 +49,13 @@ export default function ShowreelSection({ embedUrl, previewImage }: ShowreelSect
                 playsInline
                 preload="metadata"
                 aria-label="Showreel video"
-                poster={normalizedPreview}
               >
-                <source src={trimmedUrl} type="video/mp4" />
+                <source src={encodeURI(trimmedUrl)} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             ) : hasEmbed ? (
               <iframe
-                src={trimmedUrl}
+                src={encodeURI(trimmedUrl)}
                 title="Showreel"
                 frameBorder="0"
                 loading="lazy"
@@ -77,7 +69,6 @@ export default function ShowreelSection({ embedUrl, previewImage }: ShowreelSect
                 playsInline
                 preload="metadata"
                 aria-label="Showreel placeholder video"
-                poster={normalizedPreview}
               >
                 <source src={PLACEHOLDER_WEBM} type="video/webm" />
                 <source src={PLACEHOLDER_MP4} type="video/mp4" />

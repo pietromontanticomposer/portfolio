@@ -43,18 +43,34 @@ export default function CaseStudyDuration({
 
     const video = document.createElement("video");
     const normalizedUrl = normalizeUrl(playableUrl);
+    let timeoutId: ReturnType<typeof setTimeout>;
 
     const handleLoadedMetadata = () => {
+      clearTimeout(timeoutId);
       const nextDuration = Number.isFinite(video.duration) ? video.duration : null;
       setDuration(nextDuration);
     };
 
+    const handleError = () => {
+      clearTimeout(timeoutId);
+      console.warn(`Failed to load video metadata for ${normalizedUrl}`);
+    };
+
+    // Set a 10-second timeout for metadata loading
+    timeoutId = setTimeout(() => {
+      console.warn(`Timeout loading video metadata for ${normalizedUrl}`);
+      video.src = "";
+    }, 10000);
+
     video.preload = "metadata";
-    video.src = normalizedUrl;
     video.addEventListener("loadedmetadata", handleLoadedMetadata);
+    video.addEventListener("error", handleError);
+    video.src = normalizedUrl;
 
     return () => {
+      clearTimeout(timeoutId);
       video.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      video.removeEventListener("error", handleError);
       video.src = "";
     };
   }, [playableUrl]);

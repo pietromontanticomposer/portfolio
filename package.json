@@ -12,7 +12,7 @@
     "blob:sync": "DOTENV_CONFIG_PATH=.env.local node scripts/blob-sync.mjs asset_inbox --manifest scripts/blob-urls.json",
     "blob:replace": "node scripts/replace-blob-urls.mjs",
     "blob:verify": "node scripts/verify-blob-urls.mjs",
-    "ship": "sh -c \"git add -A && git commit -m 'chore: ship (automated)' || echo 'no changes to commit' && git push origin main --force && ( [ -n '$DEPLOY_HOOK_URL' ] && curl -fsS -X POST \"$DEPLOY_HOOK_URL\" || echo 'no deploy hook set' ) && ( command -v vercel >/dev/null 2>&1 && [ -n '$VERCEL_TOKEN' ] && vercel --prod --token \"$VERCEL_TOKEN\" || echo 'vercel CLI not configured or token missing' )\"",
+    "ship": "node scripts/ship.mjs",
     "inbox:add": "node scripts/inbox-add.mjs",
     "ship:media": "node scripts/ship-all.mjs"
   },

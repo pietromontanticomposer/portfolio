@@ -539,6 +539,26 @@ function CaseStudyCard({
               </div>
             </div>
           ) : null}
+
+          {item.id === "i-veneti-antichi-battle-with-the-spartans" ? (
+            <div className="rounded-2xl card-inset p-4">
+              <div className="text-sm font-semibold text-[color:var(--foreground)]">
+                Track: The Battle
+              </div>
+              <div className="mt-3">
+                <TrackPlayerClient
+                  tracks={[
+                    {
+                      file: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/tracks/musiche-i-veneti-antichi/The-Battle.mp3",
+                      context: "The Battle"
+                    }
+                  ]}
+                  coverSrc="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/uploads/copertina%20album/copertina%20i%20veneti%20antichi.png"
+                  displayDurations={[parseDurationToSeconds(item.duration)]}
+                />
+              </div>
+            </div>
+          ) : null}
         </div>
 
         {showClaudioRePoster ? (

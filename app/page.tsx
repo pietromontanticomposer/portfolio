@@ -60,7 +60,7 @@ export default function Home() {
   ] as string[];
   const showreelEmbedUrl =
     process.env.NEXT_PUBLIC_SHOWREEL_EMBED_URL ??
-    "/uploads/video/_hls/Showreel Sito New/index.m3u8";
+    "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/Showreel%20Sito%20New/index.m3u8";
   const resolvedSiteUrl =
     process.env.NEXT_PUBLIC_SITE_URL ??
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
@@ -140,10 +140,7 @@ export default function Home() {
           </div>
         </header>
 
-        <ShowreelSection
-          embedUrl={showreelEmbedUrl}
-          previewImage="/showreel-preview.jpg"
-        />
+        <ShowreelSection embedUrl={showreelEmbedUrl} />
 
         <AudiencePaths />
 
