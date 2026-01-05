@@ -8,7 +8,42 @@ type CachedPeaks = {
   duration: number;
 };
 
-const peaksCache = new Map<string, CachedPeaks>();
+// LRU cache implementation to prevent unbounded memory growth
+class LRUCache<K, V> {
+  private maxSize: number;
+  private cache: Map<K, V>;
+
+  constructor(maxSize: number) {
+    this.maxSize = maxSize;
+    this.cache = new Map();
+  }
+
+  get(key: K): V | undefined {
+    const value = this.cache.get(key);
+    if (value !== undefined) {
+      // Move to end (most recently used)
+      this.cache.delete(key);
+      this.cache.set(key, value);
+    }
+    return value;
+  }
+
+  set(key: K, value: V): void {
+    // Remove if exists (to update position)
+    if (this.cache.has(key)) {
+      this.cache.delete(key);
+    }
+    // Evict oldest if at capacity
+    else if (this.cache.size >= this.maxSize) {
+      const firstKey = this.cache.keys().next().value;
+      this.cache.delete(firstKey);
+    }
+    this.cache.set(key, value);
+  }
+}
+
+// Cache up to 50 audio waveform peak data to prevent unbounded memory growth
+const peaksCache = new LRUCache<string, CachedPeaks>(50);
 
 const scheduleIdle = (cb: () => void) => {
   if (typeof window === "undefined") return null;
@@ -83,6 +118,7 @@ export default function AudioPlayer({
   const reactId = useId();
   const pendingPlayRef = useRef(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const pointerCleanupRef = useRef<(() => void) | null>(null);
 
   if (!playerIdRef.current) {
     playerIdRef.current = `wave-${reactId}`;
@@ -315,6 +351,13 @@ export default function AudioPlayer({
       if (resizeHandler) window.removeEventListener("resize", resizeHandler);
       setIsReady(false);
       cancelIdle(idleId);
+
+      // Clean up any active pointer event listeners
+      if (pointerCleanupRef.current) {
+        pointerCleanupRef.current();
+        pointerCleanupRef.current = null;
+      }
+
       if (ws) {
         try {
           ws.unAll();
@@ -351,6 +394,13 @@ export default function AudioPlayer({
   const onPointerDown = (e: React.PointerEvent) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     e.preventDefault();
+
+    // Clean up any existing pointer listeners before adding new ones
+    if (pointerCleanupRef.current) {
+      pointerCleanupRef.current();
+      pointerCleanupRef.current = null;
+    }
+
     isDraggingRef.current = true;
     try { (e.target as Element).setPointerCapture?.(e.pointerId); } catch {}
     handlePointerMove(e.clientY);
@@ -360,9 +410,17 @@ export default function AudioPlayer({
       try { (e.target as Element).releasePointerCapture?.(e.pointerId); } catch {}
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerup', onUp);
+      pointerCleanupRef.current = null;
     };
     window.addEventListener('pointermove', onMove);
     window.addEventListener('pointerup', onUp);
+
+    // Store cleanup function to call on unmount
+    pointerCleanupRef.current = () => {
+      isDraggingRef.current = false;
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+    };
   };
 
   // close popover on click outside or Escape

@@ -83,14 +83,14 @@ function getMediaSources(embedUrl?: string) {
   }
 
   const isHls = trimmedUrl.endsWith(".m3u8") || trimmedUrl.includes("/_hls/");
-  const src = trimmedUrl.startsWith("/") ? encodeURI(trimmedUrl) : trimmedUrl;
+  const src = trimmedUrl; // URLs are already encoded from blob storage
   const mp4Fallback =
     trimmedUrl.startsWith("/uploads/video/_hls/") && trimmedUrl.endsWith("/index.m3u8")
       ? trimmedUrl
           .replace("/uploads/video/_hls/", "/uploads/video/")
           .replace("/index.m3u8", ".mp4")
       : null;
-  const posterUrl = mp4Fallback ? mp4Fallback.replace(/\.mp4$/i, ".jpg") : null;
+  const posterUrl = null; // Don't auto-derive poster, use explicit posterImage from data
 
   return { isHls, src, mp4Fallback, posterUrl };
 }

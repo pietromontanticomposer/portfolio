@@ -45,30 +45,26 @@ function getMediaSources(embedUrl?: string) {
   const lower = trimmedUrl.toLowerCase();
   const isHls = lower.endsWith(".m3u8") || trimmedUrl.includes("/_hls/");
   const isMp4 = lower.endsWith(".mp4") || lower.includes(".mp4");
-  const src = trimmedUrl.startsWith("/") ? encodeURI(trimmedUrl) : trimmedUrl;
+  const src = trimmedUrl; // URLs are already encoded from blob storage
   const mp4Fallback =
     trimmedUrl.startsWith("/uploads/video/_hls/") && trimmedUrl.endsWith("/index.m3u8")
       ? trimmedUrl
           .replace("/uploads/video/_hls/", "/uploads/video/")
           .replace("/index.m3u8", ".mp4")
       : null;
-  // Generate posterUrl: for direct MP4, replace .mp4 with .jpg; for HLS, use mp4Fallback
-  const posterUrl = isMp4 && trimmedUrl.endsWith('.mp4')
-    ? trimmedUrl.replace(/\.mp4$/i, ".jpg")
-    : mp4Fallback
-    ? mp4Fallback.replace(/\.mp4$/i, ".jpg")
-    : null;
+  // Don't auto-derive poster, use explicit posterImage from case study data
+  const posterUrl = null;
 
   // If the embed is a direct mp4 URL, provide isMp4 so caller can render a native video tag.
   return { isHls, isMp4, src, mp4Fallback, posterUrl } as const;
 }
 
 function MediaBlock({ item }: { item: CaseStudy }) {
-  const { isHls, src, mp4Fallback, isMp4, posterUrl } = getMediaSources(item.embedUrl) as any;
+  const { isHls, src, mp4Fallback, isMp4 } = getMediaSources(item.embedUrl);
   // debug: log embedUrl and detected types during SSR to diagnose rendering path
   if (typeof window === "undefined") {
     // eslint-disable-next-line no-console
-    console.log("[media-debug] embedUrl:", item.embedUrl, "->", { isHls, isMp4, src, mp4Fallback, posterUrl });
+    console.log("[media-debug] embedUrl:", item.embedUrl, "->", { isHls, isMp4, src, mp4Fallback });
   }
 
   if (!src) {
@@ -90,7 +86,7 @@ function MediaBlock({ item }: { item: CaseStudy }) {
             controls
             playsInline
             preload="metadata"
-            poster={item.posterImage || getMediaSources(item.embedUrl).posterUrl || undefined}
+            poster={item.posterImage || undefined}
             aria-label={`${item.title} clip`}
           >
             <source src={src ?? undefined} type="video/mp4" />

@@ -8,7 +8,8 @@ type CaseStudyDurationProps = {
   className?: string;
 };
 
-const normalizeUrl = (url: string) => (url.startsWith("/") ? encodeURI(url) : url);
+// URLs are already encoded from blob storage, no need to encode again
+const normalizeUrl = (url: string) => url;
 
 const formatDuration = (totalSeconds: number) => {
   const minutes = Math.floor(totalSeconds / 60);

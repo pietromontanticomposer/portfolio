@@ -77,6 +77,7 @@ export default function BackgroundVideo() {
     let stallCount = 0;
     let hasSource = false;
     let mounted = true;
+    const timeoutIds: ReturnType<typeof setTimeout>[] = [];
 
     const tryPlayImmediate = () => {
       if (!hasSource || !mounted) return;
@@ -272,8 +273,18 @@ export default function BackgroundVideo() {
     };
     const onCanPlay = () => tryPlayImmediate();
     const onCanPlayThrough = () => tryPlayImmediate();
-    const onWaiting = () => setTimeout(() => tryPlayImmediate(), 250);
-    const onStalled = () => setTimeout(() => tryPlayImmediate(), 500);
+    const onWaiting = () => {
+      const id = setTimeout(() => {
+        if (mounted) tryPlayImmediate();
+      }, 250);
+      timeoutIds.push(id);
+    };
+    const onStalled = () => {
+      const id = setTimeout(() => {
+        if (mounted) tryPlayImmediate();
+      }, 500);
+      timeoutIds.push(id);
+    };
     const onTimeUpdate = () => {
       if (video.currentTime !== lastTime) {
         lastTime = video.currentTime;
@@ -336,6 +347,12 @@ export default function BackgroundVideo() {
 
     return () => {
       mounted = false;
+
+      // Clear all tracked timeouts
+      timeoutIds.forEach((id) => clearTimeout(id));
+      timeoutIds.length = 0;
+
+      // Remove all event listeners
       video.removeEventListener("playing", onPlaying);
       video.removeEventListener("pause", onPause);
       video.removeEventListener("canplay", onCanPlay);
@@ -344,14 +361,22 @@ export default function BackgroundVideo() {
       video.removeEventListener("stalled", onStalled);
       video.removeEventListener("timeupdate", onTimeUpdate);
       video.removeEventListener("error", onError);
+
+      // Clear watchdog interval
       if (watchdogId) window.clearInterval(watchdogId);
+
+      // Remove connection change listener
       const conn = (navigator as any).connection;
       if (conn && connectionChangeHandler && typeof conn.removeEventListener === "function") {
         conn.removeEventListener("change", connectionChangeHandler);
+        connectionChangeHandler = null;
       }
+
+      // Destroy HLS instance
       if (hls) {
         try {
           hls.destroy();
+          hls = null;
         } catch {}
       }
     };
