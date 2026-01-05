@@ -41,6 +41,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
                 hlsUrl={encodeURI(trimmedUrl)}
                 mp4Url={mp4Fallback ? encodeURI(mp4Fallback) : null}
                 title="Showreel"
+                poster="https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Showreel%20Sito.jpg"
               />
             ) : hasEmbed && isMp4 ? (
               <video

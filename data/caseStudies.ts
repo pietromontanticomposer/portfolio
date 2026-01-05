@@ -276,6 +276,7 @@ export const caseStudies: CaseStudyInput[] = [
     isPublic: false,
     festivalCirculation: true,
     embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/Soggetto%20Obsoleto/Soggetto%20Obsoleto%20Sitting%20On%20The%20Seashore%20Case%20Stu/index.m3u8",
+    posterImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Soggetto%20Obsoleto/Soggetto%20Obsoleto%20Sitting%20On%20The%20Seashore%20Case%20Stu.jpg",
 
     context:
       "Marco reaches the beach. His father is already there, facing the sea. This is the first cue where the score is allowed to bloom fully. The music must open emotional space from the inside, not illustrate the location.",
