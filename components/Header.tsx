@@ -1,9 +1,12 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { memo, useEffect, useRef, useState } from "react";
 import { animationCoordinator } from "../lib/AnimationCoordinator";
 
 function Header() {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
   const [scrolled, setScrolled] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const [canBlur, setCanBlur] = useState(true);
@@ -56,7 +59,20 @@ function Header() {
         transform: "translateZ(0)"
       }}
     >
-      <div className="mx-auto flex h-full max-w-6xl items-center justify-end gap-6 px-6 sm:px-10 lg:px-16">
+      <div className="mx-auto flex h-full max-w-6xl items-center justify-between gap-6 px-6 sm:px-10 lg:px-16">
+        {!isHome ? (
+          <Link 
+            href="/" 
+            className="flex items-center gap-2 text-sm text-[color:var(--muted)] transition hover:text-[color:var(--foreground)]"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 1L1 7h2v7h4v-4h2v4h4V7h2L8 1z" />
+            </svg>
+            <span className="hidden sm:inline">Home</span>
+          </Link>
+        ) : (
+          <div />
+        )}
         <nav className="hidden items-center gap-6 text-sm text-[color:var(--muted)] sm:flex">
           <Link href="/#showreel" className="transition hover:text-[color:var(--foreground)]">
             Showreel
