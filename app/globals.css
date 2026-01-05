@@ -1572,7 +1572,8 @@ main {
   width: 100%;
   margin: 0 auto;
 }
-.video-wrapper iframe {
+.video-wrapper iframe,
+.video-wrapper video {
   position: absolute;
   inset: 0;
   width: 100%;

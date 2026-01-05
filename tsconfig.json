@@ -42,6 +42,8 @@
     "public/video",
     "public/hls",
     "public/uploads/video/_hls",
-    "_blob_done"
+    "_blob_done",
+    "_blob_inbox",
+    "asset_inbox"
   ]
 }

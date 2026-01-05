@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HLS Test</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body>
+  <h1>Test Video HLS</h1>
+  <video id="video" controls width="640" height="360"></video>
+  <div id="status"></div>
+  
+  <script>
+    const videoUrl = "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/Claudio%20Re/Claudio%20Re%20The%20Storm%20Case%20Study/index.m3u8";
+    const video = document.getElementById('video');
+    const status = document.getElementById('status');
+    
+    if (Hls.isSupported()) {
+      status.textContent = 'Using HLS.js...';
+      const hls = new Hls();
+      hls.loadSource(videoUrl);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        status.textContent = 'Manifest loaded! Video ready.';
+      });
+      hls.on(Hls.Events.ERROR, (e, data) => {
+        status.textContent = 'ERROR: ' + JSON.stringify(data);
+        console.error(data);
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      status.textContent = 'Using native HLS (Safari)';
+      video.src = videoUrl;
+    } else {
+      status.textContent = 'HLS not supported!';
+    }
+  </script>
+</body>
+</html>

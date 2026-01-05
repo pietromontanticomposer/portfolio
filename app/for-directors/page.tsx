@@ -161,7 +161,7 @@ function MediaThumbnail({ item }: { item: CaseStudy }) {
         </div>
       </div>
       <div className="absolute bottom-3 right-3">
-        <CaseStudyDuration embedUrl={item.embedUrl} />
+        <CaseStudyDuration duration={item.duration} />
       </div>
     </div>
   );
@@ -185,7 +185,7 @@ function CaseStudyCard({ item }: { item: CaseStudy }) {
             </h2>
             <p className="mt-2 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
               {item.projectLabel} · {item.sceneType} ·{" "}
-              <CaseStudyDuration embedUrl={item.embedUrl} />
+                <CaseStudyDuration duration={item.duration} />
             </p>
           </div>
           <svg
