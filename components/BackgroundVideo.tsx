@@ -416,37 +416,37 @@ function BackgroundVideo() {
     }
   }, [isPaused]);
 
-  // Apply saved pause state when video loads and handle visibility changes
+  // Apply saved pause state when video loads
   useEffect(() => {
     if (!shouldLoadSrc || !videoRef.current) return;
     const video = videoRef.current;
     
-    if (isPaused) {
+    // Only pause if user explicitly paused (localStorage has 'true')
+    const savedPauseState = localStorage.getItem('bg-video-paused') === 'true';
+    
+    if (savedPauseState) {
       video.pause();
     }
 
-    // Handle page visibility changes to prevent auto-resume
+    // Handle page visibility changes (tab switch)
     const handleVisibilityChange = () => {
       if (document.hidden) {
-        // Save current play state when leaving page
-        if (!video.paused) {
-          video.pause();
-        }
+        // Don't do anything when tab is hidden - let browser handle it
+        return;
       } else {
-        // When returning to page, respect saved pause state
-        const savedPauseState = localStorage.getItem('bg-video-paused') === 'true';
-        if (!savedPauseState && !video.paused) {
-          video.play().catch(() => {});
-        } else if (savedPauseState) {
+        // When returning to tab, respect saved pause state
+        const pauseState = localStorage.getItem('bg-video-paused') === 'true';
+        if (pauseState) {
           video.pause();
         }
+        // If not paused, video should continue playing (browser handles this)
       }
     };
 
-    // Prevent auto-resume when video starts playing
+    // Intercept play events only if user has explicitly paused
     const handlePlay = () => {
-      const savedPauseState = localStorage.getItem('bg-video-paused') === 'true';
-      if (savedPauseState) {
+      const pauseState = localStorage.getItem('bg-video-paused') === 'true';
+      if (pauseState) {
         video.pause();
       }
     };
@@ -458,7 +458,7 @@ function BackgroundVideo() {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       video.removeEventListener('play', handlePlay);
     };
-  }, [shouldLoadSrc, isPaused]);
+  }, [shouldLoadSrc]);
 
   return (
     <>
