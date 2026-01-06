@@ -38,6 +38,7 @@ _blob_inbox/
 _blob_done/
 _local_media/
 scripts/blob-urls.json
+scripts/translations.json
 
 # external static assets (hosted on blob/CDN)
 public/posters/
