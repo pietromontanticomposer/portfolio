@@ -845,9 +845,10 @@ main {
   border-color: rgba(255, 255, 255, 0.15);
 }
 
-.lang-flag {
-  font-size: 1.1rem;
-  line-height: 1;
+.lang-flag-svg {
+  display: block;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
 @media (max-width: 768px) {
@@ -855,14 +856,15 @@ main {
     margin-left: 0.5rem;
     padding-left: 0.5rem;
   }
-  
+
   .lang-btn {
     width: 24px;
     height: 24px;
   }
-  
-  .lang-flag {
-    font-size: 0.95rem;
+
+  .lang-flag-svg {
+    width: 18px;
+    height: 12px;
   }
 }
 
