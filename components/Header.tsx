@@ -3,10 +3,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { memo, useEffect, useRef, useState } from "react";
 import { animationCoordinator } from "../lib/AnimationCoordinator";
+import { useLanguage } from "../lib/LanguageContext";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 function Header() {
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const { t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const [canBlur, setCanBlur] = useState(true);
@@ -69,26 +72,27 @@ function Header() {
               <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style={{ display: 'block' }}>
                 <path d="M8 1L1 7h2v7h4v-4h2v4h4V7h2L8 1z" />
               </svg>
-              <span className="hidden sm:inline">Home</span>
+              <span className="hidden sm:inline">{t("Home", "Home")}</span>
             </Link>
           )}
         </div>
         <nav className="flex h-full items-center gap-6 text-sm text-[color:var(--muted)]">
           <Link href="/#showreel" className="transition hover:text-[color:var(--foreground)]">
-            Showreel
+            {t("Showreel", "Showreel")}
           </Link>
           <Link href="/portfolio" className="transition hover:text-[color:var(--foreground)]">
-            Portfolio
+            {t("Portfolio", "Portfolio")}
           </Link>
           <Link href="/case-studies" className="transition hover:text-[color:var(--foreground)]">
-            Case Studies
+            {t("Case Studies", "Case Studies")}
           </Link>
-          <Link href="/#about" className="transition hover:text-[color:var(--foreground)]">
-            About
+          <Link href="/about" className="transition hover:text-[color:var(--foreground)]">
+            {t("Chi sono", "About")}
           </Link>
           <Link href="/#contact" className="transition hover:text-[color:var(--foreground)]">
-            Contact
+            {t("Contatti", "Contact")}
           </Link>
+          <LanguageSwitcher />
         </nav>
       </div>
     </header>

@@ -12,6 +12,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'ui0he7mtsmc0vwcb.public.blob.vercel-storage.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: '*.public.blob.vercel-storage.com',
         port: '',
         pathname: '/**',
@@ -21,6 +27,10 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 31536000,
     // Prefer modern formats
     formats: ['image/avif', 'image/webp'],
+    // Increase timeout for remote images (default is 15s, increase to 30s)
+    dangerouslyAllowSVG: false,
+    // Don't optimize images in development to avoid timeout issues
+    unoptimized: process.env.NODE_ENV === 'development',
   },
   // Cache headers for static assets
   async headers() {

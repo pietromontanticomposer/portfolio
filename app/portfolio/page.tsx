@@ -7,6 +7,7 @@ import CollaborationsSection from "../../components/CollaborationsSection";
 import { projects, featuredProjects } from "../../data/projects";
 import { comingSoonPosters } from "../../data/placeholders";
 import { partners } from "../../data/homeContent";
+import { useLanguage } from "../../lib/LanguageContext";
 
 const postersFromProjects = projects.map((p) => ({
   slug: p.slug,
@@ -50,26 +51,27 @@ const selectedWorkPosters = [...selectedPosterTiles, ...comingSoonStrip];
 
 export default function PortfolioPage() {
   const [showAllProjects, setShowAllProjects] = useState(false);
+  const { t } = useLanguage();
 
   return (
-    <main className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-16 lg:px-20">
+    <main className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-16 lg:px-20">
       <header>
         <h1 className="section-title text-4xl text-[color:var(--foreground)]">
           Portfolio
         </h1>
         <p className="mt-3 text-sm text-[color:var(--muted)]">
-          Curated highlights and full project list.
+          {t("Lavori in evidenza e lista completa dei progetti.", "Curated highlights and full project list.")}
         </p>
       </header>
 
       <section id="selected-work" className="card-shell p-6 sm:p-8">
         <div className="section-header flex items-center justify-between">
           <h3 className="section-title text-2xl text-[color:var(--foreground)]">
-            Selected Work
+            {t("Lavori selezionati", "Selected Work")}
           </h3>
         </div>
         <p className="mt-2 text-sm text-[color:var(--muted)]">
-          Curated highlights. Full list below.
+          {t("Lavori in evidenza. Lista completa sotto.", "Curated highlights. Full list below.")}
         </p>
         <AutoScrollStrip posters={selectedWorkPosters} />
         <div className="mt-6 aspect-video w-full overflow-hidden rounded-lg">
@@ -85,13 +87,13 @@ export default function PortfolioPage() {
             className="w-full h-full"
           />
         </div>
-        <p className="mt-2 text-sm text-[color:var(--muted)]">Role: Arranger</p>
+        <p className="mt-2 text-sm text-[color:var(--muted)]">{t("Ruolo: Arrangiatore", "Role: Arranger")}</p>
         <div className="mt-4">
           <button
             onClick={() => setShowAllProjects(!showAllProjects)}
             className="text-sm text-[color:var(--muted)] transition hover:text-[color:var(--foreground)] underline"
           >
-            {showAllProjects ? "Hide all projects" : "View all projects"}
+            {showAllProjects ? t("Nascondi tutti i progetti", "Hide all projects") : t("Vedi tutti i progetti", "View all projects")}
           </button>
         </div>
       </section>
@@ -102,7 +104,7 @@ export default function PortfolioPage() {
         <section id="all-projects" className="w-full overflow-visible">
           <div className="section-header flex items-center justify-between mb-6">
             <h3 className="section-title text-2xl text-[color:var(--foreground)]">
-              All Projects
+              {t("Tutti i progetti", "All Projects")}
             </h3>
           </div>
           <div className="poster-grid-gridview">

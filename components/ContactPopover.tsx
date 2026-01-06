@@ -1,18 +1,28 @@
 "use client";
 
-import React, { memo, useEffect, useId, useRef, useState } from "react";
+import { memo, useEffect, useId, useRef, useState } from "react";
+import { useLanguage } from "../lib/LanguageContext";
 
 const EMAIL = "pietromontanticomposer@gmail.com";
-const SUBJECT = "Project Inquiry";
-const buildMailtoHref = () => {
-  const subject = encodeURIComponent(SUBJECT);
-  const body = encodeURIComponent("Hi Pietro,\n\nI would like to discuss a project.\n\nThanks,");
+const SUBJECT_IT = "Richiesta Progetto";
+const SUBJECT_EN = "Project Inquiry";
+const buildMailtoHref = (lang: "it" | "en") => {
+  const subject = encodeURIComponent(lang === "it" ? SUBJECT_IT : SUBJECT_EN);
+  const body = encodeURIComponent(
+    lang === "it"
+      ? "Ciao Pietro,\n\nVorrei discutere di un progetto.\n\nGrazie,"
+      : "Hi Pietro,\n\nI would like to discuss a project.\n\nThanks,"
+  );
   return `mailto:${EMAIL}?subject=${subject}&body=${body}`;
 };
 
-const buildGmailHref = () => {
-  const subject = encodeURIComponent(SUBJECT);
-  const body = encodeURIComponent("Hi Pietro,\n\nI would like to discuss a project.\n\nThanks,");
+const buildGmailHref = (lang: "it" | "en") => {
+  const subject = encodeURIComponent(lang === "it" ? SUBJECT_IT : SUBJECT_EN);
+  const body = encodeURIComponent(
+    lang === "it"
+      ? "Ciao Pietro,\n\nVorrei discutere di un progetto.\n\nGrazie,"
+      : "Hi Pietro,\n\nI would like to discuss a project.\n\nThanks,"
+  );
   return `https://mail.google.com/mail/u/0/?to=${encodeURIComponent(EMAIL)}&su=${subject}&body=${body}&tf=cm`;
 };
 
@@ -56,6 +66,7 @@ function ContactPopover({
   align = "center",
   panelId,
 }: ContactPopoverProps) {
+  const { t, language } = useLanguage();
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
@@ -128,7 +139,7 @@ function ContactPopover({
         <div
           id={resolvedPanelId}
           role="dialog"
-          aria-label="Contact options"
+          aria-label={t("Opzioni contatto", "Contact options")}
           className={`absolute top-full z-50 mt-3 w-[min(92vw,360px)] rounded-2xl border border-white/10 bg-[color:var(--card)]/95 p-4 shadow-[0_20px_50px_rgba(2,6,23,0.55)] backdrop-blur-sm ${panelAlignment} ${panelClassName ?? ""}`}
         >
           <div className="flex flex-col gap-2">
@@ -137,21 +148,21 @@ function ContactPopover({
               onClick={handleCopy}
               className="hero-btn hero-btn-secondary btn-compact w-full"
             >
-              {copied ? "Copied" : "Copy email"}
+              {copied ? t("Copiata", "Copied") : t("Copia email", "Copy email")}
             </button>
             <a
-              href={buildMailtoHref()}
+              href={buildMailtoHref(language)}
               className="hero-btn hero-btn-secondary btn-compact w-full"
             >
-              Open email
+              {t("Apri email", "Open email")}
             </a>
             <a
-              href={buildGmailHref()}
+              href={buildGmailHref(language)}
               target="_blank"
               rel="noreferrer"
               className="hero-btn hero-btn-secondary btn-compact w-full"
             >
-              Open Gmail
+              {t("Apri Gmail", "Open Gmail")}
             </a>
             <p className="pt-2 text-center text-xs text-[color:var(--muted)]" aria-live="polite">
               {EMAIL}

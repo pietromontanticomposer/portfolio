@@ -81,41 +81,82 @@ export const selectedTracks = [
   },
 ];
 
-export const quickProofs = [
-  "Scene first, music second",
-  "Fast options, clean revisions",
-  "Delivery ready for post",
-];
+export const quickProofs = {
+  it: [
+    "Prima la scena, poi la musica",
+    "Opzioni rapide, revisioni pulite",
+    "Pronto per la post-produzione",
+  ],
+  en: [
+    "Scene first, music second",
+    "Fast options, clean revisions",
+    "Delivery ready for post",
+  ],
+};
 
-export const caseStudies = [
-  {
-    context: "Character reveal, close-up, no temp score.",
-    problem: "The edit felt flat and exposed without an emotional spine.",
-    musicalChoice: "Single motif on piano with soft room tone and low pad.",
-    beforeAfter: "Before: silent and static. After: guided tension and focus.",
-    result: "Scene lands with clarity while dialogue stays untouched.",
-  },
-  {
-    context: "Action montage with fast cuts and handheld camera.",
-    problem: "Rhythm drifted; energy felt inconsistent between shots.",
-    musicalChoice: "Pulse-driven low strings with controlled percussion.",
-    beforeAfter: "Before: uneven pacing. After: locked momentum.",
-    result: "Montage reads cohesive and pushes story forward.",
-  },
-  {
-    context: "Final decision beat with long hold and close framing.",
-    problem: "Needed closure without sentimentality or a big swell.",
-    musicalChoice: "Muted harmony, restrained dynamics, minimal decay.",
-    beforeAfter: "Before: emotionally flat. After: resolved but restrained.",
-    result: "Ending feels deliberate and mature.",
-  },
-];
+export const caseStudies = {
+  it: [
+    {
+      context: "Rivelazione del personaggio, primo piano, nessuna temp score.",
+      problem: "Il montaggio risultava piatto ed esposto senza una spina dorsale emotiva.",
+      musicalChoice: "Singolo motivo al piano con soft room tone e pad basso.",
+      beforeAfter: "Prima: silenzioso e statico. Dopo: tensione guidata e focus.",
+      result: "La scena arriva con chiarezza mentre il dialogo resta intatto.",
+    },
+    {
+      context: "Montaggio d'azione con tagli veloci e camera a mano.",
+      problem: "Il ritmo andava alla deriva; l'energia era inconsistente tra le inquadrature.",
+      musicalChoice: "Archi bassi a pulsazione con percussioni controllate.",
+      beforeAfter: "Prima: ritmo irregolare. Dopo: momentum bloccato.",
+      result: "Il montaggio risulta coeso e spinge avanti la storia.",
+    },
+    {
+      context: "Beat decisivo finale con long hold e inquadratura stretta.",
+      problem: "Serviva una chiusura senza sentimentalismo o grande crescendo.",
+      musicalChoice: "Armonia attenuata, dinamiche contenute, decay minimo.",
+      beforeAfter: "Prima: emotivamente piatto. Dopo: risolto ma contenuto.",
+      result: "Il finale risulta intenzionale e maturo.",
+    },
+  ],
+  en: [
+    {
+      context: "Character reveal, close-up, no temp score.",
+      problem: "The edit felt flat and exposed without an emotional spine.",
+      musicalChoice: "Single motif on piano with soft room tone and low pad.",
+      beforeAfter: "Before: silent and static. After: guided tension and focus.",
+      result: "Scene lands with clarity while dialogue stays untouched.",
+    },
+    {
+      context: "Action montage with fast cuts and handheld camera.",
+      problem: "Rhythm drifted; energy felt inconsistent between shots.",
+      musicalChoice: "Pulse-driven low strings with controlled percussion.",
+      beforeAfter: "Before: uneven pacing. After: locked momentum.",
+      result: "Montage reads cohesive and pushes story forward.",
+    },
+    {
+      context: "Final decision beat with long hold and close framing.",
+      problem: "Needed closure without sentimentality or a big swell.",
+      musicalChoice: "Muted harmony, restrained dynamics, minimal decay.",
+      beforeAfter: "Before: emotionally flat. After: resolved but restrained.",
+      result: "Ending feels deliberate and mature.",
+    },
+  ],
+};
 
-export const processSteps = ["Spotting", "Mockup", "Revisions", "Lock", "Delivery"];
+export const processSteps = {
+  it: ["Spotting", "Mockup", "Revisioni", "Lock", "Delivery"],
+  en: ["Spotting", "Mockup", "Revisions", "Lock", "Delivery"],
+};
 
-export const heroCredits =
-  "A PIETRO MONTANTI PRODUCTION  ORIGINAL SCORE AND SOUND DESIGN  COMPOSER FOR FILM AND MEDIA " +
-  "FEATURED WORKS INCLUDE  CLAUDIO RE  SOGGETTO OBSOLETO  I VENETI ANTICHI  I FOUND YOU " +
-  "L'APPARTAMENTO  LA SONATA DEL CAOS  MERIDIANA  FREAK SHAKESPEARE " +
-  "UNA PICCOLA, STUPIDA, INUTILE STORIA D'AMORE  FREE / FALL  POLVERE SOTTO AL TAPPETO " +
-  "NON C'E CASA IN PARADISO";
+export const heroCredits = {
+  it: "UNA PRODUZIONE DI PIETRO MONTANTI  COLONNA SONORA ORIGINALE E SOUND DESIGN  COMPOSITORE PER FILM E MEDIA " +
+    "LAVORI IN EVIDENZA  CLAUDIO RE  SOGGETTO OBSOLETO  I VENETI ANTICHI  I FOUND YOU " +
+    "L'APPARTAMENTO  LA SONATA DEL CAOS  MERIDIANA  FREAK SHAKESPEARE " +
+    "UNA PICCOLA, STUPIDA, INUTILE STORIA D'AMORE  FREE / FALL  POLVERE SOTTO AL TAPPETO " +
+    "NON C'E CASA IN PARADISO",
+  en: "A PIETRO MONTANTI PRODUCTION  ORIGINAL SCORE AND SOUND DESIGN  COMPOSER FOR FILM AND MEDIA " +
+    "FEATURED WORKS INCLUDE  CLAUDIO RE  SOGGETTO OBSOLETO  I VENETI ANTICHI  I FOUND YOU " +
+    "L'APPARTAMENTO  LA SONATA DEL CAOS  MERIDIANA  FREAK SHAKESPEARE " +
+    "UNA PICCOLA, STUPIDA, INUTILE STORIA D'AMORE  FREE / FALL  POLVERE SOTTO AL TAPPETO " +
+    "NON C'E CASA IN PARADISO",
+};

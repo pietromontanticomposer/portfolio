@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import React, { memo, useCallback, useEffect, useRef } from "react";
+import { memo, useCallback, useEffect, useRef } from "react";
 import { animationCoordinator } from "../lib/AnimationCoordinator";
+import { useLanguage } from "../lib/LanguageContext";
 
 type Partner = {
   name: string;
@@ -12,6 +13,7 @@ type Partner = {
 function CollaborationsSection({ partners }: { partners: Partner[] }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -113,7 +115,7 @@ function CollaborationsSection({ partners }: { partners: Partner[] }) {
     <section id="collaborations" className="card-shell p-6 sm:p-8 overflow-hidden">
       <div className="section-header flex items-center justify-between">
         <h3 className="section-title text-2xl text-[color:var(--foreground)]">
-          Collaborations
+          {t("Collaborazioni", "Collaborations")}
         </h3>
       </div>
       <div className="scroll-strip mt-6 flex items-center" ref={containerRef}>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState, memo } from "react";
 import AutoScrollStrip from "./AutoScrollStrip";
 import PosterCard from "./PosterCard";
 
@@ -90,4 +90,4 @@ function StripToggle({ posters }: { posters: Poster[] }) {
 }
 
 // Memoize to prevent unnecessary re-renders when parent updates
-export default React.memo(StripToggle);
+export default memo(StripToggle);

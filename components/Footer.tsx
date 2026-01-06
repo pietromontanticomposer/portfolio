@@ -1,9 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import ContactPopover from "./ContactPopover";
+import { useLanguage } from "../lib/LanguageContext";
 
 const CONTACT_EMAIL = "pietromontanticomposer@gmail.com";
 
 export default function Footer() {
+  const { t } = useLanguage();
+  
   return (
     <footer
       id="contact"
@@ -16,14 +21,14 @@ export default function Footer() {
         <div className="hidden sm:grid sm:grid-cols-3 sm:items-start sm:gap-6">
           <div className="col-span-1">
             <div className="text-[color:var(--foreground)] font-semibold">Pietro Montanti</div>
-            <div className="mt-1 text-[color:var(--foreground)] font-medium">Composer for Film &amp; Media</div>
-            <div className="mt-1 mono text-xs text-[color:var(--foreground)] font-medium">Italy · EU</div>
+            <div className="mt-1 text-[color:var(--foreground)] font-medium">{t("Compositore per Film e Media", "Composer for Film & Media")}</div>
+            <div className="mt-1 mono text-xs text-[color:var(--foreground)] font-medium">{t("Italia · UE", "Italy · EU")}</div>
           </div>
 
           <div className="col-span-1 flex justify-center">
             <div className="flex flex-col items-center gap-3">
               <ContactPopover
-                buttonLabel="Contact Me"
+                buttonLabel={t("Contattami", "Contact Me")}
                 buttonClassName="hero-btn hero-btn-secondary"
                 panelId="contact-popover-footer-desktop"
               />
@@ -57,13 +62,13 @@ export default function Footer() {
         <div className="sm:hidden flex flex-col gap-4 text-center items-center">
           <div className="flex flex-col items-center">
             <div className="text-[color:var(--foreground)] font-semibold">Pietro Montanti</div>
-            <div className="mt-1 mono text-xs text-[color:var(--foreground)] font-medium">Composer for Film &amp; Media — Italy · EU</div>
+            <div className="mt-1 mono text-xs text-[color:var(--foreground)] font-medium">{t("Compositore per Film e Media — Italia · UE", "Composer for Film & Media — Italy · EU")}</div>
           </div>
 
           <div className="flex justify-center">
             <div className="flex flex-col items-center gap-3">
               <ContactPopover
-                buttonLabel="Contact Me"
+                buttonLabel={t("Contattami", "Contact Me")}
                 buttonClassName="hero-btn hero-btn-secondary"
                 panelId="contact-popover-footer-mobile"
               />
@@ -98,8 +103,8 @@ export default function Footer() {
           <div className="font-medium">VAT 04593080239</div>
           <div className="font-medium">© 2025 Pietro Montanti</div>
           <div className="flex gap-4 justify-center">
-            <Link href="/privacy-policy" className="hover:underline">Privacy Policy</Link>
-            <Link href="/cookie-policy" className="hover:underline">Cookie Policy</Link>
+            <Link href="/privacy-policy" className="hover:underline">{t("Informativa Privacy", "Privacy Policy")}</Link>
+            <Link href="/cookie-policy" className="hover:underline">{t("Cookie Policy", "Cookie Policy")}</Link>
           </div>
         </div>
       </div>

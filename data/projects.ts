@@ -1,49 +1,3 @@
-// Pre-computed featured projects for homepage (avoid runtime filter)
-export const featuredProjects = [
-  {
-    slug: 'claudio-re',
-    title: 'Claudio Re',
-    year: '2020',
-    tag: 'Short',
-    image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20claudio%20re.avif',
-  },
-  {
-    slug: 'soggetto-obsoleto',
-    title: 'Soggetto Obsoleto',
-    year: '2021',
-    tag: 'Short',
-    image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20soggetto%20obsoleto.webp',
-  },
-  {
-    slug: 'i-veneti-antichi',
-    title: 'I Veneti Antichi',
-    year: '2024',
-    tag: 'Documentary',
-    image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20i%20veneti%20antichi.avif',
-  },
-  {
-    slug: 'i-found-you',
-    title: 'I Found You',
-    year: '2020',
-    tag: 'Short',
-    image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20i%20found%20you.webp',
-  },
-  {
-    slug: 'l-appartamento',
-    title: "L'Appartamento",
-    year: '2022',
-    tag: 'Feature',
-    image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20l%27appartamento.webp",
-  },
-  {
-    slug: 'la-sonata-del-caos',
-    title: 'La Sonata del Caos',
-    year: '2023',
-    tag: 'Documentary',
-    image: 'https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20la%20sonata%20del%20caos.avif',
-  },
-];
-
 export const projects = [
   {
     slug: 'claudio-re',
@@ -333,3 +287,6 @@ export const projects = [
 ];
 
 export type Project = typeof projects[number];
+
+// Derive featured projects from main array (avoids data duplication)
+export const featuredProjects = projects.filter(p => p.featured);

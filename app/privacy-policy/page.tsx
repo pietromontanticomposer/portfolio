@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import PrivacyPolicyClient from "./PrivacyPolicyClient";
 
 type PrivacyConfig = {
   titolare: string;
@@ -62,54 +63,5 @@ if (isProduction && configError) {
 }
 
 export default function PrivacyPolicyPage() {
-  if (configError || !config) {
-    return (
-      <main className="mx-auto max-w-3xl px-6 py-16">
-        <h1 className="section-title text-3xl text-[color:var(--foreground)]">
-          Privacy Policy
-        </h1>
-        <p className="mt-4 text-sm leading-7 text-[color:var(--muted)]">
-          {configError ?? "Privacy config not available."}
-        </p>
-      </main>
-    );
-  }
-
-  return (
-    <main className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="section-title text-3xl text-[color:var(--foreground)]">
-        Privacy Policy
-      </h1>
-      <div className="mt-6 space-y-6 text-sm leading-7 text-[color:var(--muted)]">
-        <div>
-          <div className="text-[color:var(--foreground)] font-semibold">Data controller</div>
-          <div>{config.titolare}</div>
-        </div>
-        <div>
-          <div className="text-[color:var(--foreground)] font-semibold">Contact email</div>
-          <div>{config.email_contatto}</div>
-        </div>
-        <div>
-          <div className="text-[color:var(--foreground)] font-semibold">Hosting</div>
-          <div>{config.hosting}</div>
-        </div>
-        <div>
-          <div className="text-[color:var(--foreground)] font-semibold">Purposes of processing</div>
-          <ul className="mt-2 list-disc space-y-1 pl-5">
-            {config.finalita.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <div className="text-[color:var(--foreground)] font-semibold">Data subject rights</div>
-          <ul className="mt-2 list-disc space-y-1 pl-5">
-            {config.diritti.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </main>
-  );
+  return <PrivacyPolicyClient config={config} configError={configError} />;
 }

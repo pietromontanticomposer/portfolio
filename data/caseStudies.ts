@@ -2,9 +2,11 @@ export type CaseStudyTag = string;
 
 export type SceneType = "Dialogue" | "Reveal" | "Montage" | "Action" | "Atmosphere";
 
+export type BilingualText = { it: string; en: string };
+
 export type CaseStudy = {
   id: string;
-  title: string;
+  title: BilingualText;
   projectLabel: string;
   sceneType: SceneType;
   duration: string;
@@ -16,38 +18,70 @@ export type CaseStudy = {
   embedUrl: string; // Vimeo/YouTube embed URL or HLS playlist (.m3u8). Must be set.
   posterImage?: string | null;
 
-  context: string;
+  context: BilingualText;
 
-  goal: string;
-  chosen: { key: "A" | "B" | "C"; summary: string; reason: string };
-  result: string;
+  goal: BilingualText;
+  chosen: { key: "A" | "B" | "C"; summary: BilingualText; reason: BilingualText };
+  result: BilingualText;
   timing: {
-    in: { time: string; label: string };
-    turn?: { time: string; label: string };
-    out: { time: string; label: string };
+    in: { time: string; label: BilingualText };
+    turn?: { time: string; label: BilingualText };
+    out: { time: string; label: BilingualText };
   };
-  spottingNote?: string;
+  spottingNote?: BilingualText;
 
-  directorWanted: string;
-  directorAvoid: string;
+  directorWanted: BilingualText;
+  directorAvoid: BilingualText;
 
-  versionsTested: { A: string; B: string; C: string };
-  finalChoice: string;
+  versionsTested: { A: BilingualText; B: BilingualText; C: BilingualText };
+  finalChoice: BilingualText;
 
-  delivered: string;
-  technicalDeliverables: string[];
-  quote?: { text: string; attribution: string };
-  musicChoices?: string;
-  musicalLanguage?: string;
+  delivered: BilingualText;
+  technicalDeliverables: BilingualText[];
+  quote?: { text: BilingualText; attribution: string };
+  musicChoices?: BilingualText;
+  musicalLanguage?: BilingualText;
   trackTitle?: string;
 
   // Only inside <details>
-  technicalNotes: string[];
+  technicalNotes: BilingualText[];
 };
 
-export type CaseStudyInput = Omit<CaseStudy, "sceneType" | "tags"> & {
+// Flexible input type that accepts both BilingualText and string for text fields
+type BilingualOrString = BilingualText | string;
+
+export type CaseStudyInput = {
+  id: string;
+  title: BilingualOrString;
+  projectLabel: string;
   sceneType: string;
+  duration: string;
   tags?: CaseStudyTag[];
+  isPublic: boolean;
+  festivalCirculation: boolean;
+  embedUrl: string;
+  posterImage?: string | null;
+  context: BilingualOrString;
+  goal: BilingualOrString;
+  chosen: { key: "A" | "B" | "C"; summary: BilingualOrString; reason: BilingualOrString };
+  result: BilingualOrString;
+  timing: {
+    in: { time: string; label: BilingualOrString };
+    turn?: { time: string; label: BilingualOrString };
+    out: { time: string; label: BilingualOrString };
+  };
+  spottingNote?: BilingualOrString;
+  directorWanted: BilingualOrString;
+  directorAvoid: BilingualOrString;
+  versionsTested: { A: BilingualOrString; B: BilingualOrString; C: BilingualOrString };
+  finalChoice: BilingualOrString;
+  delivered: BilingualOrString;
+  technicalDeliverables: BilingualOrString[];
+  quote?: { text: BilingualOrString; attribution: string };
+  musicChoices?: BilingualOrString;
+  musicalLanguage?: BilingualOrString;
+  trackTitle?: string;
+  technicalNotes: BilingualOrString[];
 };
 
 const allowedSceneTypes: SceneType[] = [
@@ -106,10 +140,21 @@ function isValidDuration(value: string): boolean {
   return value === "00:??" || /^\d{2}:\d{2}$/.test(value);
 }
 
+function isBilingualText(value: unknown): value is BilingualText {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "it" in value &&
+    "en" in value &&
+    typeof (value as BilingualText).it === "string" &&
+    typeof (value as BilingualText).en === "string"
+  );
+}
+
 function validateCaseStudyBase(data: CaseStudyInput): string[] {
   const errors: string[] = [];
   if (!data.id || typeof data.id !== "string") errors.push("id is required");
-  if (!data.title || typeof data.title !== "string") errors.push("title is required");
+  if (!data.title || (!isBilingualText(data.title) && typeof data.title !== "string")) errors.push("title is required");
   if (!data.projectLabel || typeof data.projectLabel !== "string") errors.push("projectLabel is required");
   if (!data.sceneType || typeof data.sceneType !== "string") errors.push("sceneType is required");
   if (!data.duration || !isValidDuration(data.duration)) errors.push(`duration must be MM:SS or 00:?? (got: ${data.duration})`);
@@ -140,8 +185,9 @@ function findSceneTypeInTags(tags: string[]) {
   return null;
 }
 
-function findSceneTypeInTitle(title: string) {
-  const match = title.match(/\((Dialogue|Reveal|Montage|Action|Atmosphere)\)/i);
+function findSceneTypeInTitle(title: BilingualText | string) {
+  const titleStr = typeof title === "string" ? title : title.en;
+  const match = titleStr.match(/\((Dialogue|Reveal|Montage|Action|Atmosphere)\)/i);
   if (!match) return null;
   return findAllowedSceneType(match[1] ?? "");
 }
@@ -217,7 +263,7 @@ function normalizeCaseStudy(data: CaseStudyInput): CaseStudy {
       sceneType = fromTags;
       appliedCorrection = "from tags";
     } else {
-      const fromTitle = findSceneTypeInTitle(data.title ?? "");
+      const fromTitle = findSceneTypeInTitle(data.title || { it: "", en: "" });
       if (fromTitle) {
         sceneType = fromTitle;
         appliedCorrection = "from title";
@@ -243,17 +289,73 @@ function normalizeCaseStudy(data: CaseStudyInput): CaseStudy {
 
   const tags = normalizeTags([...rawTags, ...extraTags], sceneType);
 
+  // Helper to normalize string to BilingualText
+  const toBilingual = (value: BilingualOrString | undefined): BilingualText => {
+    if (!value) return { it: "", en: "" };
+    if (typeof value === "string") return { it: value, en: value };
+    return value;
+  };
+
+  const toBilingualOptional = (value: BilingualOrString | undefined): BilingualText | undefined => {
+    if (!value) return undefined;
+    if (typeof value === "string") return { it: value, en: value };
+    return value;
+  };
+
+  const toBilingualArray = (arr: BilingualOrString[]): BilingualText[] => {
+    return arr.map(item => typeof item === "string" ? { it: item, en: item } : item);
+  };
+
   return {
-    ...(data as CaseStudyInput),
+    id: data.id,
+    title: toBilingual(data.title),
+    projectLabel: data.projectLabel,
     sceneType,
+    duration: data.duration,
     tags,
-  } as CaseStudy;
+    isPublic: data.isPublic,
+    festivalCirculation: data.festivalCirculation,
+    embedUrl: data.embedUrl,
+    posterImage: data.posterImage,
+    context: toBilingual(data.context),
+    goal: toBilingual(data.goal),
+    chosen: {
+      key: data.chosen.key,
+      summary: toBilingual(data.chosen.summary),
+      reason: toBilingual(data.chosen.reason),
+    },
+    result: toBilingual(data.result),
+    timing: {
+      in: { time: data.timing.in.time, label: toBilingual(data.timing.in.label) },
+      turn: data.timing.turn ? { time: data.timing.turn.time, label: toBilingual(data.timing.turn.label) } : undefined,
+      out: { time: data.timing.out.time, label: toBilingual(data.timing.out.label) },
+    },
+    spottingNote: toBilingualOptional(data.spottingNote),
+    directorWanted: toBilingual(data.directorWanted),
+    directorAvoid: toBilingual(data.directorAvoid),
+    versionsTested: {
+      A: toBilingual(data.versionsTested.A),
+      B: toBilingual(data.versionsTested.B),
+      C: toBilingual(data.versionsTested.C),
+    },
+    finalChoice: toBilingual(data.finalChoice),
+    delivered: toBilingual(data.delivered),
+    technicalDeliverables: toBilingualArray(data.technicalDeliverables),
+    quote: data.quote ? { text: toBilingual(data.quote.text), attribution: data.quote.attribution } : undefined,
+    musicChoices: toBilingualOptional(data.musicChoices),
+    musicalLanguage: toBilingualOptional(data.musicalLanguage),
+    trackTitle: data.trackTitle,
+    technicalNotes: toBilingualArray(data.technicalNotes),
+  };
 }
 
 export const caseStudies: CaseStudyInput[] = [
   {
     id: "soggetto-obsoleto-sitting-on-the-seashore",
-    title: "Sitting on the Seashore, First Theme Entrance (Beach)",
+    title: {
+      it: "In riva al mare, prima entrata del tema (Spiaggia)",
+      en: "Sitting on the Seashore, First Theme Entrance (Beach)"
+    },
     projectLabel: "Soggetto Obsoleto",
     sceneType: "Reveal",
     duration: "01:44",
@@ -263,57 +365,91 @@ export const caseStudies: CaseStudyInput[] = [
     embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/Soggetto%20Obsoleto/Soggetto%20Obsoleto%20Sitting%20On%20The%20Seashore%20Case%20Stu/index.m3u8",
     posterImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/Soggetto%20Obsoleto%20Sitting%20On%20The%20Seashore%20Case%20Stu.jpg",
 
-    context:
-      "Marco reaches the beach. His father is already there, facing the sea. This is the first cue where the score is allowed to bloom fully. The music must open emotional space from the inside, not illustrate the location.",
-    goal: "Crack open Marco’s emotions for the first time, without turning the moment into catharsis. Let the theme enter on the father reveal, then cut before the first line so dialogue lands clean.",
+    context: {
+      it: "Marco raggiunge la spiaggia. Suo padre e gia li, di fronte al mare. Questo e il primo cue in cui la colonna sonora puo finalmente fiorire. La musica deve aprire uno spazio emotivo dall'interno, non illustrare il luogo.",
+      en: "Marco reaches the beach. His father is already there, facing the sea. This is the first cue where the score is allowed to bloom fully. The music must open emotional space from the inside, not illustrate the location."
+    },
+    goal: {
+      it: "Aprire le emozioni di Marco per la prima volta, senza trasformare il momento in catarsi. Far entrare il tema sulla rivelazione del padre, poi tagliare prima della prima battuta cosi il dialogo arriva pulito.",
+      en: "Crack open Marco's emotions for the first time, without turning the moment into catharsis. Let the theme enter on the father reveal, then cut before the first line so dialogue lands clean."
+    },
     chosen: {
       key: "B",
-      summary: "Theme on the father reveal with light strings, piano, and airy synth.",
-      reason: "Exits before the first line so the words land clean."
+      summary: {
+        it: "Tema sulla rivelazione del padre con archi leggeri, piano e synth arioso.",
+        en: "Theme on the father reveal with light strings, piano, and airy synth."
+      },
+      reason: {
+        it: "Esce prima della prima battuta cosi le parole arrivano pulite.",
+        en: "Exits before the first line so the words land clean."
+      }
     },
-    result: "The scene finally breathes, but the ending lands in minor, keeping the release incomplete. The theme reads as recognition, not commentary.",
+    result: {
+      it: "La scena finalmente respira, ma il finale atterra in minore, mantenendo il rilascio incompleto. Il tema si legge come riconoscimento, non come commento.",
+      en: "The scene finally breathes, but the ending lands in minor, keeping the release incomplete. The theme reads as recognition, not commentary."
+    },
     timing: {
-      in: { time: "00:00", label: "Piano ticks begin (time held, no melody)" },
-      turn: { time: "00:32", label: "Theme enters on father reveal" },
-      out: { time: "01:44", label: "Cut before “May I sit here with you?”" }
+      in: { time: "00:00", label: { it: "Iniziano i tick del piano (tempo sospeso, nessuna melodia)", en: "Piano ticks begin (time held, no melody)" } },
+      turn: { time: "00:32", label: { it: "Il tema entra sulla rivelazione del padre", en: "Theme enters on father reveal" } },
+      out: { time: "01:44", label: { it: "Taglio prima di 'Posso sedermi qui con te?'", en: "Cut before 'May I sit here with you?'" } }
     },
-    spottingNote: "This is intentionally the first full cue. It opens the film emotionally, but exits before the first spoken line so the dialogue lands pristine.",
+    spottingNote: {
+      it: "Questo e intenzionalmente il primo cue completo. Apre il film emotivamente, ma esce prima della prima battuta cosi il dialogo arriva incontaminato.",
+      en: "This is intentionally the first full cue. It opens the film emotionally, but exits before the first spoken line so the dialogue lands pristine."
+    },
 
-    directorWanted: "Restraint. Internal breathing. Music that feels born inside the scene.",
-    directorAvoid: "Melodrama. Telegraphed emotion. Covering the first spoken line.",
+    directorWanted: {
+      it: "Trattenimento. Respiro interno. Musica che sembra nata dentro la scena.",
+      en: "Restraint. Internal breathing. Music that feels born inside the scene."
+    },
+    directorAvoid: {
+      it: "Melodramma. Emozione telefonata. Coprire la prima battuta.",
+      en: "Melodrama. Telegraphed emotion. Covering the first spoken line."
+    },
 
     versionsTested: {
-      A: "Only piano ticks. No theme. Too cold, no emotional doorway.",
-      B: "Theme on father reveal (light strings + piano + airy synth), stop right before the first request to sit.",
-      C: "Theme earlier during the walk. Feels manipulative and telegraphs the moment."
+      A: { it: "Solo tick del piano. Nessun tema. Troppo freddo, nessuna porta emotiva.", en: "Only piano ticks. No theme. Too cold, no emotional doorway." },
+      B: { it: "Tema sulla rivelazione del padre (archi leggeri + piano + synth arioso), stop appena prima della richiesta di sedersi.", en: "Theme on father reveal (light strings + piano + airy synth), stop right before the first request to sit." },
+      C: { it: "Tema prima, durante la camminata. Risulta manipolativo e anticipa il momento.", en: "Theme earlier during the walk. Feels manipulative and telegraphs the moment." }
     },
-    finalChoice: "B",
+    finalChoice: { it: "B", en: "B" },
 
-    delivered: "Final mix plus alternates, clearly labelled. Revisions tracked.",
+    delivered: {
+      it: "Mix finale piu alternate, etichettate chiaramente. Revisioni tracciate.",
+      en: "Final mix plus alternates, clearly labelled. Revisions tracked."
+    },
     technicalDeliverables: [
-      "Clean filenames and versioning",
-      "Alternates ready on request",
-      "Notes/revisions tracked"
+      { it: "Nomi file puliti e versioning", en: "Clean filenames and versioning" },
+      { it: "Alternate pronte su richiesta", en: "Alternates ready on request" },
+      { it: "Note/revisioni tracciate", en: "Notes/revisions tracked" }
     ],
-    musicalLanguage:
-      "Goal: unlock Marco’s emotions for the first time after a full film of restraint, but without catharsis.\n\n0:00–0:32: only piano ticks, acting as an emotional clock (time held, no melody).\n\n0:32–1:44: the theme, in G major, enters on the father reveal with piano leading, light strings, and an airy synth bed. The orchestration stays deliberately clean and restrained so it opens space without pushing the viewer, then cuts before “May I sit here with you?” so dialogue lands clean.\n\nHarmony keeps a major colour but lands in minor: G–F♯m–A–Em, with B minor withheld until the final chord (promise held back, release not complete).",
+    musicalLanguage: {
+      it: "Obiettivo: sbloccare le emozioni di Marco per la prima volta dopo un intero film di trattenimento, ma senza catarsi.\n\n0:00-0:32: solo tick del piano, che fungono da orologio emotivo (tempo sospeso, nessuna melodia).\n\n0:32-1:44: il tema, in Sol maggiore, entra sulla rivelazione del padre con piano in primo piano, archi leggeri e un letto di synth arioso. L'orchestrazione resta volutamente pulita e trattenuta per aprire spazio senza spingere lo spettatore, poi taglia prima di 'Posso sedermi qui con te?' cosi il dialogo arriva pulito.\n\nL'armonia mantiene un colore maggiore ma atterra in minore: Sol-Fa#m-La-Mim, con Si minore trattenuto fino all'accordo finale (promessa trattenuta, rilascio non completo).",
+      en: "Goal: unlock Marco's emotions for the first time after a full film of restraint, but without catharsis.\n\n0:00-0:32: only piano ticks, acting as an emotional clock (time held, no melody).\n\n0:32-1:44: the theme, in G major, enters on the father reveal with piano leading, light strings, and an airy synth bed. The orchestration stays deliberately clean and restrained so it opens space without pushing the viewer, then cuts before 'May I sit here with you?' so dialogue lands clean.\n\nHarmony keeps a major colour but lands in minor: G-F#m-A-Em, with B minor withheld until the final chord (promise held back, release not complete)."
+    },
     quote: {
-      text: "Revision handling was always clear. Pietro anticipated requests and already proposed alternative solutions.",
+      text: {
+        it: "La gestione delle revisioni e sempre stata chiara. Pietro anticipava le richieste e proponeva gia soluzioni alternative.",
+        en: "Revision handling was always clear. Pietro anticipated requests and already proposed alternative solutions."
+      },
       attribution: "Nicola Pegg, director"
     },
 
     technicalNotes: [
-      "Delivery format: WAV (linear PCM)",
-      "Specs: 48 kHz, 24-bit",
-      "Sync: aligned to final picture",
-      "Stems: Piano, Strings, Synth",
-      "Alt: reduced version for dialogue/editorial flexibility",
-      "Clean filenames and versioning"
+      { it: "Formato delivery: WAV (linear PCM)", en: "Delivery format: WAV (linear PCM)" },
+      { it: "Specifiche: 48 kHz, 24-bit", en: "Specs: 48 kHz, 24-bit" },
+      { it: "Sync: allineato al picture finale", en: "Sync: aligned to final picture" },
+      { it: "Stem: Piano, Archi, Synth", en: "Stems: Piano, Strings, Synth" },
+      { it: "Alt: versione ridotta per dialogo/flessibilita editoriale", en: "Alt: reduced version for dialogue/editorial flexibility" },
+      { it: "Nomi file puliti e versioning", en: "Clean filenames and versioning" }
     ]
   },
   {
     id: "i-veneti-antichi-battle-with-the-spartans",
-    title: "I Veneti Antichi, The Battle With The Spartans (Action)",
+    title: {
+      it: "I Veneti Antichi, La Battaglia con gli Spartani (Azione)",
+      en: "I Veneti Antichi, The Battle With The Spartans (Action)"
+    },
     projectLabel: "I Veneti Antichi",
     sceneType: "Action",
     duration: "04:59",
@@ -329,60 +465,84 @@ export const caseStudies: CaseStudyInput[] = [
     embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/I%20Veneti%20Antichi%20The%20Battle%20New/index.m3u8",
     posterImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/I%20Veneti%20Antichi%20The%20Battle.jpg",
 
-    context:
-      "Reconstruction of the battle with the Spartans, built on fast cuts and long battlefield wides. The sequence needs drive without turning into a modern action trailer, and it must leave space for historical narration and sound design.",
-    goal:
-      "Hold a clear rhythmic spine for the edit, give the clashes weight, and keep the cue readable so the educational tone stays intact.",
+    context: {
+      it: "Ricostruzione della battaglia con gli Spartani, costruita su tagli rapidi e campi lunghi sul campo di battaglia. La sequenza ha bisogno di drive senza diventare un trailer d'azione moderno, e deve lasciare spazio per la narrazione storica e il sound design.",
+      en: "Reconstruction of the battle with the Spartans, built on fast cuts and long battlefield wides. The sequence needs drive without turning into a modern action trailer, and it must leave space for historical narration and sound design."
+    },
+    goal: {
+      it: "Mantenere una spina dorsale ritmica chiara per il montaggio, dare peso agli scontri e mantenere il cue leggibile cosi il tono educativo resta intatto.",
+      en: "Hold a clear rhythmic spine for the edit, give the clashes weight, and keep the cue readable so the educational tone stays intact."
+    },
     chosen: {
       key: "B",
-      summary:
-        "Low strings pulse with restrained percussion, brass calls on formation changes, full orchestra only at the first clash.",
-      reason:
-        "Keeps tension and momentum while leaving space for narration and diegetic battle sound."
+      summary: {
+        it: "Pulse di archi bassi con percussioni contenute, chiamate di ottoni sui cambi di formazione, orchestra piena solo al primo scontro.",
+        en: "Low strings pulse with restrained percussion, brass calls on formation changes, full orchestra only at the first clash."
+      },
+      reason: {
+        it: "Mantiene tensione e slancio lasciando spazio per la narrazione e il suono diegetico della battaglia.",
+        en: "Keeps tension and momentum while leaving space for narration and diegetic battle sound."
+      }
     },
-    result:
-      "The scene feels kinetic but intelligible. The rhythm stays locked to the edit, the clashes land with weight, and the narration still reads cleanly.",
+    result: {
+      it: "La scena risulta cinetica ma intelligibile. Il ritmo resta agganciato al montaggio, gli scontri arrivano con peso, e la narrazione si legge ancora chiaramente.",
+      en: "The scene feels kinetic but intelligible. The rhythm stays locked to the edit, the clashes land with weight, and the narration still reads cleanly."
+    },
     trackTitle: "The Battle",
     timing: {
-      in: { time: "00:00", label: "Wide battlefield shot, pulse enters." },
-      turn: { time: "02:06", label: "First clash, brass and percussion lock to cuts." },
-      out: { time: "04:59", label: "Aftermath wide, cue releases into sustain." }
+      in: { time: "00:00", label: { it: "Campo largo sul campo di battaglia, entra il pulse.", en: "Wide battlefield shot, pulse enters." } },
+      turn: { time: "02:06", label: { it: "Primo scontro, ottoni e percussioni si agganciano ai tagli.", en: "First clash, brass and percussion lock to cuts." } },
+      out: { time: "04:59", label: { it: "Campo largo sulle conseguenze, il cue si rilascia in sustain.", en: "Aftermath wide, cue releases into sustain." } }
     },
-    spottingNote:
-      "Keep the cue lean until the first clash. Avoid constant hits so the narration and battle FX remain dominant.",
+    spottingNote: {
+      it: "Mantenere il cue snello fino al primo scontro. Evitare colpi costanti cosi la narrazione e gli FX battaglia restano dominanti.",
+      en: "Keep the cue lean until the first clash. Avoid constant hits so the narration and battle FX remain dominant."
+    },
 
-    directorWanted:
-      "Drive and clarity. A historical tone with orchestral weight, but never trailer-style.",
-    directorAvoid:
-      "Wall-to-wall percussion, oversized hits, or music that masks narration.",
+    directorWanted: {
+      it: "Drive e chiarezza. Un tono storico con peso orchestrale, ma mai stile trailer.",
+      en: "Drive and clarity. A historical tone with orchestral weight, but never trailer-style."
+    },
+    directorAvoid: {
+      it: "Percussioni muro a muro, colpi sovradimensionati, o musica che maschera la narrazione.",
+      en: "Wall-to-wall percussion, oversized hits, or music that masks narration."
+    },
 
     versionsTested: {
-      A: "Percussion-only pulse. Too dry and not enough identity.",
-      B: "Low strings pulse, brass calls on shifts, full orchestra only at the first clash.",
-      C: "Full orchestral wall from the start. Overwhelming and flattened the dynamics."
+      A: { it: "Pulse solo percussioni. Troppo secco e senza abbastanza identita.", en: "Percussion-only pulse. Too dry and not enough identity." },
+      B: { it: "Pulse archi bassi, chiamate ottoni sui cambi, orchestra piena solo al primo scontro.", en: "Low strings pulse, brass calls on shifts, full orchestra only at the first clash." },
+      C: { it: "Muro orchestrale pieno dall'inizio. Opprimente e appiattiva le dinamiche.", en: "Full orchestral wall from the start. Overwhelming and flattened the dynamics." }
     },
-    finalChoice: "B",
+    finalChoice: { it: "B", en: "B" },
 
-    delivered: "Final mix plus a lighter percussion alternate, clearly labelled.",
+    delivered: {
+      it: "Mix finale piu un'alternata con percussioni piu leggere, etichettata chiaramente.",
+      en: "Final mix plus a lighter percussion alternate, clearly labelled."
+    },
     technicalDeliverables: [
-      "48 kHz, 24-bit stereo master",
-      "Alt: reduced percussion for VO",
-      "Stems: strings, brass, percussion"
+      { it: "Master stereo 48 kHz, 24-bit", en: "48 kHz, 24-bit stereo master" },
+      { it: "Alt: percussioni ridotte per VO", en: "Alt: reduced percussion for VO" },
+      { it: "Stem: archi, ottoni, percussioni", en: "Stems: strings, brass, percussion" }
     ],
-    musicalLanguage:
-      "Built on a low strings ostinato and a heartbeat kick to keep the pulse steady while the edit accelerates.\n\nShort brass calls and trombone figures mark shifts in formation, but the full orchestra is held back until the first clash, so the impact reads as a narrative turn instead of constant intensity.\n\nAfter the collision, the harmony opens into sustained low strings to let the aftermath breathe while keeping tension under the narration.",
+    musicalLanguage: {
+      it: "Costruito su un ostinato di archi bassi e un kick heartbeat per mantenere il pulse stabile mentre il montaggio accelera.\n\nBrevi chiamate di ottoni e figure di trombone segnano i cambi di formazione, ma l'orchestra piena e trattenuta fino al primo scontro, cosi l'impatto si legge come svolta narrativa invece che intensita costante.\n\nDopo la collisione, l'armonia si apre in archi bassi sostenuti per far respirare le conseguenze mantenendo la tensione sotto la narrazione.",
+      en: "Built on a low strings ostinato and a heartbeat kick to keep the pulse steady while the edit accelerates.\n\nShort brass calls and trombone figures mark shifts in formation, but the full orchestra is held back until the first clash, so the impact reads as a narrative turn instead of constant intensity.\n\nAfter the collision, the harmony opens into sustained low strings to let the aftermath breathe while keeping tension under the narration."
+    },
 
     technicalNotes: [
-      "Delivery format: WAV (linear PCM)",
-      "Specs: 48 kHz, 24-bit",
-      "Sync: aligned to final picture",
-      "Alt: reduced percussion for VO",
-      "Stems: strings, brass, percussion"
+      { it: "Formato delivery: WAV (linear PCM)", en: "Delivery format: WAV (linear PCM)" },
+      { it: "Specifiche: 48 kHz, 24-bit", en: "Specs: 48 kHz, 24-bit" },
+      { it: "Sync: allineato al picture finale", en: "Sync: aligned to final picture" },
+      { it: "Alt: percussioni ridotte per VO", en: "Alt: reduced percussion for VO" },
+      { it: "Stem: archi, ottoni, percussioni", en: "Stems: strings, brass, percussion" }
     ]
   },
   {
     id: "scene-03",
-    title: "Eris Reads, The Banshee Story and the First Cough (Dialogue)",
+    title: {
+      it: "Eris legge, La storia della Banshee e il primo colpo di tosse (Dialogo)",
+      en: "Eris Reads, The Banshee Story and the First Cough (Dialogue)"
+    },
     projectLabel: "La Sonata Del Chaos",
     sceneType: "Dialogue",
     duration: "00:??",
@@ -392,68 +552,107 @@ export const caseStudies: CaseStudyInput[] = [
     embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/La%20Sonata%20Del%20Caos/La%20Sonata%20Del%20Caos%20Something%20Threatening%20Case%20Stud/index.m3u8",
     posterImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/La%20Sonata%20Del%20Caos%20Something%20Threatening%20Case%20Stud.jpg",
 
-    context:
-      "La Sonata Del Chaos is a short film where a family folktale, the Banshee, shifts from a spoken legend into a real force inside the home. The story follows Eris through grief after her violin teacher’s death, and the Banshee idea later becomes inseparable from an incurable illness that hits the mother and then Talia.\n\nThis cue sits inside a warm bedtime conversation where the myth is spoken aloud, and the mother’s cough quietly reframes it as something already inside the house.",
-    goal:
-      "Keep the scene tender and dialogue first, while turning the family myth into a real threat through one precise hinge, the mother’s cough, without telegraphing horror.",
+    context: {
+      it: "La Sonata Del Chaos e un cortometraggio in cui una fiaba familiare, la Banshee, passa da leggenda raccontata a forza reale dentro casa. La storia segue Eris attraverso il lutto per la morte della sua insegnante di violino, e l'idea della Banshee diventa poi inseparabile da una malattia incurabile che colpisce la madre e poi Talia.\n\nQuesto cue si trova dentro una calda conversazione della buonanotte dove il mito viene pronunciato ad alta voce, e il colpo di tosse della madre lo riformula silenziosamente come qualcosa gia dentro casa.",
+      en: "La Sonata Del Chaos is a short film where a family folktale, the Banshee, shifts from a spoken legend into a real force inside the home. The story follows Eris through grief after her violin teacher's death, and the Banshee idea later becomes inseparable from an incurable illness that hits the mother and then Talia.\n\nThis cue sits inside a warm bedtime conversation where the myth is spoken aloud, and the mother's cough quietly reframes it as something already inside the house."
+    },
+    goal: {
+      it: "Mantenere la scena tenera e con il dialogo in primo piano, trasformando al contempo il mito familiare in una minaccia reale attraverso un cardine preciso, il colpo di tosse della madre, senza telefonare l'horror.",
+      en: "Keep the scene tender and dialogue first, while turning the family myth into a real threat through one precise hinge, the mother's cough, without telegraphing horror."
+    },
     chosen: {
       key: "C",
-      summary: "Eris theme on piano, a gentle Talia hint, and a minimal Banshee accent exactly on the cough.",
-      reason: "Connects the family myth to the physical symptom without shifting the scene into horror."
+      summary: {
+        it: "Tema di Eris al piano, un delicato accenno a Talia, e un accento minimo della Banshee esattamente sul colpo di tosse.",
+        en: "Eris theme on piano, a gentle Talia hint, and a minimal Banshee accent exactly on the cough."
+      },
+      reason: {
+        it: "Collega il mito familiare al sintomo fisico senza far scivolare la scena nell'horror.",
+        en: "Connects the family myth to the physical symptom without shifting the scene into horror."
+      }
     },
-    result:
-      "The beat stays domestic and readable. Eris is framed through a soft piano statement, Talia is gently seeded, and the cough carries a minimal Banshee fingerprint that links folklore to the first physical crack.",
+    result: {
+      it: "Il beat resta domestico e leggibile. Eris e inquadrata attraverso una morbida dichiarazione al piano, Talia e delicatamente seminata, e il colpo di tosse porta un'impronta minima della Banshee che collega il folklore alla prima crepa fisica.",
+      en: "The beat stays domestic and readable. Eris is framed through a soft piano statement, Talia is gently seeded, and the cough carries a minimal Banshee fingerprint that links folklore to the first physical crack."
+    },
     trackTitle: "Something Threatening",
     timing: {
       in: {
         time: "00:00",
-        label: "Eris finishes reading. The family talks about the ‘Banshee’ as a story from the grandmother."
+        label: {
+          it: "Eris finisce di leggere. La famiglia parla della 'Banshee' come una storia della nonna.",
+          en: "Eris finishes reading. The family talks about the 'Banshee' as a story from the grandmother."
+        }
       },
       turn: {
         time: "00:??",
-        label: "Fear rises as the myth is treated as real. Talia voices doubt and fear."
+        label: {
+          it: "La paura sale mentre il mito viene trattato come reale. Talia esprime dubbio e paura.",
+          en: "Fear rises as the myth is treated as real. Talia voices doubt and fear."
+        }
       },
       out: {
         time: "00:??",
-        label: "Mother coughs three times, dismisses it, sends them to bed. End tag."
+        label: {
+          it: "La madre tossisce tre volte, liquida il fatto, le manda a letto. Tag finale.",
+          en: "Mother coughs three times, dismisses it, sends them to bed. End tag."
+        }
       }
     },
-    spottingNote:
-      "Dialogue remains primary. The cue only surfaces as a tiny motif accent on the cough, then immediately retreats back under the scene.",
+    spottingNote: {
+      it: "Il dialogo resta primario. Il cue emerge solo come un piccolo accento di motivo sul colpo di tosse, poi si ritrae immediatamente sotto la scena.",
+      en: "Dialogue remains primary. The cue only surfaces as a tiny motif accent on the cough, then immediately retreats back under the scene."
+    },
 
-    directorWanted:
-      "Warm domestic intimacy. Clear dialogue and breath. Foreshadowing without signalling horror. Motifs that can recur later in variation.",
-    directorAvoid:
-      "Overt Banshee statement. Music that competes with the reading rhythm. Early genre shift into horror. Any masking of consonants.",
+    directorWanted: {
+      it: "Calda intimita domestica. Dialogo e respiro chiari. Foreshadowing senza segnalare horror. Motivi che possono ricorrere dopo in variazione.",
+      en: "Warm domestic intimacy. Clear dialogue and breath. Foreshadowing without signalling horror. Motifs that can recur later in variation."
+    },
+    directorAvoid: {
+      it: "Dichiarazione esplicita della Banshee. Musica che compete con il ritmo della lettura. Cambio di genere prematuro verso l'horror. Qualsiasi mascheramento delle consonanti.",
+      en: "Overt Banshee statement. Music that competes with the reading rhythm. Early genre shift into horror. Any masking of consonants."
+    },
 
     versionsTested: {
-      A: "Only Eris theme on soft piano, no other references.",
-      B: "Eris theme plus a short Talia hint, still purely domestic.",
-      C: "Eris theme on piano, a gentle Talia hint, and a minimal Banshee accent exactly on the cough, then immediate return to domestic neutrality."
+      A: { it: "Solo tema di Eris su piano morbido, nessun altro riferimento.", en: "Only Eris theme on soft piano, no other references." },
+      B: { it: "Tema di Eris piu un breve accenno a Talia, ancora puramente domestico.", en: "Eris theme plus a short Talia hint, still purely domestic." },
+      C: { it: "Tema di Eris al piano, un delicato accenno a Talia, e un accento minimo della Banshee esattamente sul colpo di tosse, poi ritorno immediato alla neutralita domestica.", en: "Eris theme on piano, a gentle Talia hint, and a minimal Banshee accent exactly on the cough, then immediate return to domestic neutrality." }
     },
-    finalChoice:
-      "C, because the Banshee is introduced as a family-transmitted myth and later becomes physical through the mother’s illness. The cough is the smallest bridge from folklore to the body, so the motif can function narratively without announcing itself.",
+    finalChoice: {
+      it: "C, perche la Banshee e introdotta come un mito trasmesso dalla famiglia e poi diventa fisica attraverso la malattia della madre. Il colpo di tosse e il ponte piu piccolo dal folklore al corpo, cosi il motivo puo funzionare narrativamente senza annunciarsi.",
+      en: "C, because the Banshee is introduced as a family-transmitted myth and later becomes physical through the mother's illness. The cough is the smallest bridge from folklore to the body, so the motif can function narratively without announcing itself."
+    },
 
-    delivered: "Final mix plus dialogue safe alternate, clearly labelled. Revisions tracked.",
+    delivered: {
+      it: "Mix finale piu alternata dialogue-safe, etichettata chiaramente. Revisioni tracciate.",
+      en: "Final mix plus dialogue safe alternate, clearly labelled. Revisions tracked."
+    },
     technicalDeliverables: [
-      "Delivery format: WAV (linear PCM)",
-      "Specs: 48 kHz, 24-bit",
-      "Sync: aligned to final picture"
+      { it: "Formato delivery: WAV (linear PCM)", en: "Delivery format: WAV (linear PCM)" },
+      { it: "Specifiche: 48 kHz, 24-bit", en: "Specs: 48 kHz, 24-bit" },
+      { it: "Sync: allineato al picture finale", en: "Sync: aligned to final picture" }
     ],
-    musicChoices:
-      "I treated this as a dialogue bed with a leitmotif function. The piano carries Eris in a fragile, domestic profile to keep the scene human. Talia appears as an incomplete warmth marker to build attachment early. On the cough, a minimal Banshee fingerprint briefly leaks in. It is a contour, not a full phrase. The point is to connect myth and illness as two faces of the same narrative force, while keeping the scene believable and intimate.",
-    musicalLanguage:
-      "I treated this as a dialogue bed with a leitmotif function. The piano carries Eris in a fragile, domestic profile to keep the scene human. Talia appears as an incomplete warmth marker to build attachment early. On the cough, a minimal Banshee fingerprint briefly leaks in. It is a contour, not a full phrase. The point is to connect myth and illness as two faces of the same narrative force, while keeping the scene believable and intimate.",
+    musicChoices: {
+      it: "Ho trattato questo come un bed per dialogo con funzione di leitmotif. Il piano porta Eris in un profilo fragile e domestico per mantenere la scena umana. Talia appare come un marcatore di calore incompleto per costruire attaccamento presto. Sul colpo di tosse, un'impronta minima della Banshee trapela brevemente. E un contorno, non una frase completa. Il punto e connettere mito e malattia come due facce della stessa forza narrativa, mantenendo la scena credibile e intima.",
+      en: "I treated this as a dialogue bed with a leitmotif function. The piano carries Eris in a fragile, domestic profile to keep the scene human. Talia appears as an incomplete warmth marker to build attachment early. On the cough, a minimal Banshee fingerprint briefly leaks in. It is a contour, not a full phrase. The point is to connect myth and illness as two faces of the same narrative force, while keeping the scene believable and intimate."
+    },
+    musicalLanguage: {
+      it: "Ho trattato questo come un bed per dialogo con funzione di leitmotif. Il piano porta Eris in un profilo fragile e domestico per mantenere la scena umana. Talia appare come un marcatore di calore incompleto per costruire attaccamento presto. Sul colpo di tosse, un'impronta minima della Banshee trapela brevemente. E un contorno, non una frase completa. Il punto e connettere mito e malattia come due facce della stessa forza narrativa, mantenendo la scena credibile e intima.",
+      en: "I treated this as a dialogue bed with a leitmotif function. The piano carries Eris in a fragile, domestic profile to keep the scene human. Talia appears as an incomplete warmth marker to build attachment early. On the cough, a minimal Banshee fingerprint briefly leaks in. It is a contour, not a full phrase. The point is to connect myth and illness as two faces of the same narrative force, while keeping the scene believable and intimate."
+    },
 
     technicalNotes: [
-      "Delivery format: WAV (linear PCM)",
-      "Specs: 48 kHz, 24-bit",
-      "Sync: aligned to final picture"
+      { it: "Formato delivery: WAV (linear PCM)", en: "Delivery format: WAV (linear PCM)" },
+      { it: "Specifiche: 48 kHz, 24-bit", en: "Specs: 48 kHz, 24-bit" },
+      { it: "Sync: allineato al picture finale", en: "Sync: aligned to final picture" }
     ]
   },
   {
     id: "la-sonata-del-chaos-mothers-tale-banshee",
-    title: "The Mother's Tale, Banshee Motif in Focus (Dialogue)",
+    title: {
+      it: "Il racconto della madre, Motivo della Banshee in primo piano (Dialogo)",
+      en: "The Mother's Tale, Banshee Motif in Focus (Dialogue)"
+    },
     projectLabel: "La Sonata Del Chaos",
     sceneType: "Dialogue",
     duration: "00:52",
@@ -463,47 +662,76 @@ export const caseStudies: CaseStudyInput[] = [
     embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/La%20Sonata%20Del%20Caos/La%20Sonata%20Del%20Caos%20The%20Mother_s%20Tale%20Case%20Study/index.m3u8",
     posterImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/La%20Sonata%20Del%20Caos%20The%20Mother_s%20Tale%20Case%20Study.jpg",
 
-    context:
-      "La Sonata Del Chaos is a short film where a family folktale, the Banshee, shifts from a spoken legend into a real force inside the home. The story follows Eris through grief after her violin teacher’s death, and the Banshee idea later becomes inseparable from an incurable illness that hits the mother and then Talia.\n\nThe mother tells her daughter the legend of the Banshee. The motif already exists in the score, but here it becomes audible and central for the first time, carrying the scene without stepping on the dialogue.",
-    goal:
-      "Bring the already established Banshee leitmotif into clear focus for the first time, assigning it to the violins while the piano and harp sustain the scene, so the dialogue remains fully readable.",
+    context: {
+      it: "La Sonata Del Chaos e un cortometraggio in cui una fiaba familiare, la Banshee, passa da leggenda raccontata a forza reale dentro casa. La storia segue Eris attraverso il lutto per la morte della sua insegnante di violino, e l'idea della Banshee diventa poi inseparabile da una malattia incurabile che colpisce la madre e poi Talia.\n\nLa madre racconta alla figlia la leggenda della Banshee. Il motivo esiste gia nella colonna sonora, ma qui diventa udibile e centrale per la prima volta, portando la scena senza calpestare il dialogo.",
+      en: "La Sonata Del Chaos is a short film where a family folktale, the Banshee, shifts from a spoken legend into a real force inside the home. The story follows Eris through grief after her violin teacher's death, and the Banshee idea later becomes inseparable from an incurable illness that hits the mother and then Talia.\n\nThe mother tells her daughter the legend of the Banshee. The motif already exists in the score, but here it becomes audible and central for the first time, carrying the scene without stepping on the dialogue."
+    },
+    goal: {
+      it: "Portare il leitmotif della Banshee gia stabilito in chiaro fuoco per la prima volta, assegnandolo ai violini mentre piano e arpa sostengono la scena, cosi il dialogo resta pienamente leggibile.",
+      en: "Bring the already established Banshee leitmotif into clear focus for the first time, assigning it to the violins while the piano and harp sustain the scene, so the dialogue remains fully readable."
+    },
     chosen: {
       key: "B",
-      summary: "Piano bed with a short motif tucked under the first Banshee mention.",
-      reason: "Plants the leitmotif while keeping consonants and breaths clear."
+      summary: {
+        it: "Bed di piano con un breve motivo infilato sotto la prima menzione della Banshee.",
+        en: "Piano bed with a short motif tucked under the first Banshee mention."
+      },
+      reason: {
+        it: "Pianta il leitmotif mantenendo consonanti e respiri chiari.",
+        en: "Plants the leitmotif while keeping consonants and breaths clear."
+      }
     },
-    result:
-      "The motif becomes unmistakable and memorable without overpowering the scene. Later variations are perceived as narrative recall rather than new material, strengthening cohesion across the short.",
+    result: {
+      it: "Il motivo diventa inconfondibile e memorabile senza sopraffare la scena. Le variazioni successive vengono percepite come richiamo narrativo piuttosto che materiale nuovo, rafforzando la coesione del corto.",
+      en: "The motif becomes unmistakable and memorable without overpowering the scene. Later variations are perceived as narrative recall rather than new material, strengthening cohesion across the short."
+    },
     timing: {
-      in: { time: "00:00", label: "Mother: “It is said…”" },
-      out: { time: "00:52", label: "End of the tale beat" }
+      in: { time: "00:00", label: { it: "Madre: 'Si dice...'", en: "Mother: 'It is said...'" } },
+      out: { time: "00:52", label: { it: "Fine del beat del racconto", en: "End of the tale beat" } }
     },
-    musicalLanguage:
-      "Piano-led orchestral writing built as a narrative hinge, not as background mood.\n\nAt 0:09 Eris’ theme enters on piano: it opens in C major, immediately slips to the minor subdominant (Fm), then pivots into C minor and confirms it through a cadential reconfirmation. This harmonic “bright-to-shadow” turn makes grief and unease part of the theme’s DNA while keeping the mother’s dialogue pristine.\n\nAt 0:32 Talia’s motif is briefly hinted in B♭, intentionally clashing against Eris’ C minor centre. The friction reads as vulnerability entering the room, not as a melodic decoration.\n\nImmediately after, the Banshee motif appears in violas and hammered dulcimer. The dulcimer’s percussive string attack gives an “alien” texture that suggests the monstrous and the unknown, with a controlled sense of threat. This is where the motif is allowed to speak clearly as the scene’s spine, not just as a background hint.\n\nOn the mother’s cough, the cue introduces the “illness” idea (0:48 to the end): related to the Banshee material but not identical, so the film can later separate folklore as myth from illness as body, while still keeping them psychologically linked.",
+    musicalLanguage: {
+      it: "Scrittura orchestrale guidata dal piano costruita come cardine narrativo, non come mood di sottofondo.\n\nA 0:09 il tema di Eris entra al piano: si apre in Do maggiore, scivola immediatamente nella sottodominante minore (Fam), poi pivota in Do minore e lo conferma attraverso una riconferma cadenzale. Questa svolta armonica 'da luce a ombra' rende lutto e inquietudine parte del DNA del tema mantenendo il dialogo della madre incontaminato.\n\nA 0:32 il motivo di Talia e brevemente accennato in Sib, intenzionalmente in attrito con il centro in Do minore di Eris. L'attrito si legge come vulnerabilita che entra nella stanza, non come decorazione melodica.\n\nSubito dopo, il motivo della Banshee appare in viole e dulcimer a martello. L'attacco percussivo delle corde del dulcimer da una texture 'aliena' che suggerisce il mostruoso e l'ignoto, con un senso controllato di minaccia. Questo e dove al motivo e permesso parlare chiaramente come spina dorsale della scena, non solo come accenno di sottofondo.\n\nSul colpo di tosse della madre, il cue introduce l'idea della 'malattia' (0:48 fino alla fine): correlata al materiale della Banshee ma non identica, cosi il film puo poi separare il folklore come mito dalla malattia come corpo, mantenendoli comunque psicologicamente collegati.",
+      en: "Piano-led orchestral writing built as a narrative hinge, not as background mood.\n\nAt 0:09 Eris' theme enters on piano: it opens in C major, immediately slips to the minor subdominant (Fm), then pivots into C minor and confirms it through a cadential reconfirmation. This harmonic 'bright-to-shadow' turn makes grief and unease part of the theme's DNA while keeping the mother's dialogue pristine.\n\nAt 0:32 Talia's motif is briefly hinted in Bb, intentionally clashing against Eris' C minor centre. The friction reads as vulnerability entering the room, not as a melodic decoration.\n\nImmediately after, the Banshee motif appears in violas and hammered dulcimer. The dulcimer's percussive string attack gives an 'alien' texture that suggests the monstrous and the unknown, with a controlled sense of threat. This is where the motif is allowed to speak clearly as the scene's spine, not just as a background hint.\n\nOn the mother's cough, the cue introduces the 'illness' idea (0:48 to the end): related to the Banshee material but not identical, so the film can later separate folklore as myth from illness as body, while still keeping them psychologically linked."
+    },
     trackTitle: "Something Threatening",
-    spottingNote: "Enters under the opening line to seed the motif without pulling focus.",
+    spottingNote: {
+      it: "Entra sotto la battuta di apertura per seminare il motivo senza rubare l'attenzione.",
+      en: "Enters under the opening line to seed the motif without pulling focus."
+    },
 
-    directorWanted: "Keep dialogue pristine while letting the myth feel unsettling.",
-    directorAvoid: "No horror stabs. No swelling under lines.",
+    directorWanted: {
+      it: "Mantenere il dialogo incontaminato lasciando che il mito risulti inquietante.",
+      en: "Keep dialogue pristine while letting the myth feel unsettling."
+    },
+    directorAvoid: {
+      it: "Niente stab horror. Niente crescendo sotto le battute.",
+      en: "No horror stabs. No swelling under lines."
+    },
 
     versionsTested: {
-      A: "Room tone and light pad only. Clear dialogue but no thematic seed.",
-      B: "Piano bed plus short motif on the first Banshee mention.",
-      C: "Full motif early. Draws too much attention away from the story."
+      A: { it: "Solo room tone e pad leggero. Dialogo chiaro ma nessun seme tematico.", en: "Room tone and light pad only. Clear dialogue but no thematic seed." },
+      B: { it: "Bed di piano piu breve motivo sulla prima menzione della Banshee.", en: "Piano bed plus short motif on the first Banshee mention." },
+      C: { it: "Motivo completo presto. Attira troppa attenzione lontano dalla storia.", en: "Full motif early. Draws too much attention away from the story." }
     },
-    finalChoice: "B, because it planted the motif without pulling focus from the legend.",
+    finalChoice: {
+      it: "B, perche pianta il motivo senza rubare l'attenzione dalla leggenda.",
+      en: "B, because it planted the motif without pulling focus from the legend."
+    },
 
-    delivered: "Final mix plus alternates, clearly labelled. Revisions tracked.",
+    delivered: {
+      it: "Mix finale piu alternate, etichettate chiaramente. Revisioni tracciate.",
+      en: "Final mix plus alternates, clearly labelled. Revisions tracked."
+    },
     technicalDeliverables: [
-      "48 kHz, 24 bit stereo master",
-      "Alt: lighter motif",
-      "Stems: piano, strings, pads"
+      { it: "Master stereo 48 kHz, 24-bit", en: "48 kHz, 24 bit stereo master" },
+      { it: "Alt: motivo piu leggero", en: "Alt: lighter motif" },
+      { it: "Stem: piano, archi, pad", en: "Stems: piano, strings, pads" }
     ],
 
     technicalNotes: [
-      "Delivery format: WAV (linear PCM)",
-      "Specs: 48 kHz, 24-bit",
-      "Sync: aligned to final picture"
+      { it: "Formato delivery: WAV (linear PCM)", en: "Delivery format: WAV (linear PCM)" },
+      { it: "Specifiche: 48 kHz, 24-bit", en: "Specs: 48 kHz, 24-bit" },
+      { it: "Sync: allineato al picture finale", en: "Sync: aligned to final picture" }
     ]
   },
   {

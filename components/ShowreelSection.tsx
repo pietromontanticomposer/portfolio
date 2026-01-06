@@ -1,4 +1,7 @@
+"use client";
+
 import CaseStudyVideo from "./CaseStudyVideo";
+import { useLanguage } from "../lib/LanguageContext";
 
 const PLACEHOLDER_WEBM =
   "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/videos/background.webm";
@@ -10,6 +13,7 @@ type ShowreelSectionProps = {
 };
 
 export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
+  const { t } = useLanguage();
   const hasEmbed = typeof embedUrl === "string" && embedUrl.trim().length > 0;
   const trimmedUrl = embedUrl?.trim() ?? "";
   const isHls = hasEmbed && (trimmedUrl.endsWith(".m3u8") || trimmedUrl.includes("/_hls/"));
@@ -31,7 +35,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
         </div>
         {!hasEmbed && (
           <p className="mt-2 text-sm text-[color:var(--muted)]">
-            Placeholder video. Full reel will be updated soon.
+            {t("Video placeholder. Il reel completo sarà aggiornato a breve.", "Placeholder video. Full reel will be updated soon.")}
           </p>
         )}
         <div className="mt-6">

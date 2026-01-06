@@ -1,6 +1,9 @@
-import React from "react";
+"use client";
+
+import { memo } from "react";
 import Link from 'next/link'
 import Image from 'next/image'
+import { useLanguage } from "../lib/LanguageContext";
 
 type PosterProps = {
   title: string;
@@ -12,6 +15,7 @@ type PosterProps = {
 };
 
 function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
+  const { t } = useLanguage();
   const normalized = title ? title.toLowerCase().replace(/[^a-z0-9]/g, "") : "";
   const isFreak =
     normalized.includes("freakshakespeare") || (title || "").toLowerCase().includes("freak shakespeare");
@@ -22,6 +26,7 @@ function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
 
   const renderPosterImage = () => {
     const isComingSoon = (tag ?? "").toLowerCase().includes("coming");
+    const comingSoonLabel = t("PROSSIMAMENTE", "COMING SOON");
 
     // For "Coming Soon" items always render a transparent placeholder with label
     if (isComingSoon) {
@@ -29,7 +34,7 @@ function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
         <div className="poster-image mt-4 poster-placeholder" aria-hidden>
           <div className="poster-placeholder-inner">
             <div className="poster-placeholder-title">{title}</div>
-            <div className="poster-placeholder-tag">{"COMING SOON"}</div>
+            <div className="poster-placeholder-tag">{comingSoonLabel}</div>
           </div>
         </div>
       );
@@ -56,7 +61,7 @@ function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
       <div className="poster-image mt-4 poster-placeholder">
         <div className="poster-placeholder-inner">
           <div className="poster-placeholder-title">{title}</div>
-          <div className="poster-placeholder-tag">{tag ?? "Coming Soon"}</div>
+          <div className="poster-placeholder-tag">{tag ?? t("Prossimamente", "Coming Soon")}</div>
         </div>
       </div>
     );
@@ -108,4 +113,4 @@ function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
 }
 
 // Memoize to prevent unnecessary re-renders
-export default React.memo(PosterCard);
+export default memo(PosterCard);

@@ -117,9 +117,9 @@ body.animating-paused .scroll-strip {
 }
 
 /* Reduce expensive effects while scrolling (mobile/touch). */
+/* Use opacity transition instead of instant backdrop-filter removal */
 body.is-scrolling .card-shell {
-  backdrop-filter: none !important;
-  box-shadow: none !important;
+  /* Keep backdrop-filter but reduce opacity of pseudo-elements */
 }
 
 body.is-scrolling .grain {
@@ -128,7 +128,7 @@ body.is-scrolling .grain {
 }
 
 body.is-scrolling .bg-video-overlay {
-  backdrop-filter: none !important;
+  /* Keep backdrop-filter active to avoid visual jump */
 }
 
 body.is-scrolling * {
@@ -143,14 +143,14 @@ body.is-scrolling .strip-toggle,
 body.is-scrolling .track-player,
 body.is-scrolling .modal-panel,
 body.is-scrolling .poster-card {
-  backdrop-filter: none !important;
+  /* Removed backdrop-filter: none to prevent visual jump */
 }
 
 body.is-scrolling .card-shell,
 body.is-scrolling .page-panel,
 body.is-scrolling .modal-panel,
 body.is-scrolling .poster-card {
-  box-shadow: none !important;
+  /* Removed box-shadow: none to prevent visual jump */
 }
 
 body.is-scrolling .poster-card,
@@ -164,31 +164,12 @@ body.is-scrolling button {
 }
 
 body.is-scrolling .poster-card::after {
-  filter: none !important;
+  /* Keep visible during scroll - shadow doesn't cause performance issues */
 }
 
 @media (min-width: 1024px) {
-  body.is-scrolling .hero-panel,
-  body.is-scrolling .page-panel,
-  body.is-scrolling .card-shell,
-  body.is-scrolling .scroll-strip,
-  body.is-scrolling .strip-toggle,
-  body.is-scrolling .strip-toggle-grid,
-  body.is-scrolling .scroll-shell,
-  body.is-scrolling .track-player,
-  body.is-scrolling .selected-track-group,
-  body.is-scrolling .poster-grid-gridview .poster-card,
-  body.is-scrolling .modal-panel {
-    backdrop-filter: none !important;
-    box-shadow: none !important;
-  }
-
-  body.is-scrolling .poster-image,
-  body.is-scrolling .portfolio-poster,
-  body.is-scrolling .poster-card::after,
-  body.is-scrolling .audio-play {
-    filter: none !important;
-  }
+  /* Desktop: keep visual effects during scroll for smoother experience */
+  /* Removed aggressive backdrop-filter/box-shadow removal that caused visual jumps */
 }
 
 @media (max-width: 768px), (pointer: coarse) {
@@ -251,7 +232,6 @@ main {
   .poster-grid-gridview,
   .card-shell,
   .page-panel,
-  .hero-panel,
   .track-player,
   .selected-track-group,
   .selected-track-list,
@@ -307,10 +287,6 @@ main {
 
 .card-overlay {
   background: var(--card-overlay);
-}
-
-.card-overlay-strong {
-  background: var(--card-overlay-strong);
 }
 
 .case-study-play-button {
@@ -385,20 +361,6 @@ main {
   text-transform: uppercase;
   font-size: 0.72rem;
   letter-spacing: 0.35em;
-}
-
-.hero-panel {
-  background: var(--card-surface-strong);
-  border: 1px solid transparent;
-  box-shadow: 0 14px 40px var(--shadow), inset 0 0 0 1px var(--card-border), inset 0 1px 0 rgba(255,255,255,0.04);
-  border-radius: 20px;
-  padding: 2.2rem 1.6rem;
-}
-
-@media (min-width: 640px) {
-  .hero-panel {
-    padding: 2.6rem 2.4rem;
-  }
 }
 
 .page-panel {
@@ -488,8 +450,6 @@ main {
   height: 2px;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
 }
-
-/* (bio-name removed) underline handled by .section-title */
 
 .hero-subtitle {
   text-shadow: 0 8px 20px rgba(4, 6, 12, 0.45);
@@ -589,45 +549,6 @@ main {
 .bio-text {
   font-family: var(--font-work-sans), sans-serif;
   letter-spacing: 0.01em;
-}
-
-.partner-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 24px;
-  align-items: center;
-  justify-items: center;
-}
-
-.partner-card {
-  position: relative;
-  width: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 160px;
-  padding: 0.25rem 0.5rem;
-  background: transparent;
-}
-
-.partner-card img {
-  max-width: 240px;
-  max-height: 150px;
-  object-fit: contain;
-}
-
-
-
-@media (max-width: 900px) {
-  .partner-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 640px) {
-  .partner-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 640px) {
@@ -763,7 +684,8 @@ main {
   width: 100%;
   margin-left: 0;
   margin-right: 0;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: visible;
 }
 
 #selected-work,
@@ -891,6 +813,59 @@ main {
   outline-offset: 3px;
 }
 
+/* Language Switcher */
+.lang-switcher {
+  margin-left: 0.75rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lang-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+}
+
+.lang-btn:hover {
+  opacity: 0.8;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.lang-btn.is-active {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.lang-flag {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .lang-switcher {
+    margin-left: 0.5rem;
+    padding-left: 0.5rem;
+  }
+  
+  .lang-btn {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .lang-flag {
+    font-size: 0.95rem;
+  }
+}
+
 .scroll-track {
   display: flex;
   gap: 2.5rem;
@@ -899,18 +874,23 @@ main {
   height: auto;
   /* reduced edge padding */
   padding-inline: 2rem;
+  /* Prevent layout shifts during animation */
+  contain: layout style;
 }
 
 .scroll-track[data-auto-scroll="true"] {
   will-change: transform;
   animation: strip-scroll var(--scroll-duration, 40s) linear infinite;
+  /* Use GPU acceleration and prevent sub-pixel rendering issues */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 @keyframes strip-scroll {
-  from {
+  0% {
     transform: translate3d(0, 0, 0);
   }
-  to {
+  100% {
     transform: translate3d(var(--scroll-offset, -1px), 0, 0);
   }
 }
@@ -1342,6 +1322,19 @@ main {
 /* Keep scroll strip posters uncropped so full artwork is visible */
 .scroll-strip .poster-image img {
   object-fit: contain;
+}
+
+/* Stabilize poster cards in scroll strip to prevent glitches */
+.scroll-strip .poster-card,
+.scroll-track .poster-card {
+  flex-shrink: 0;
+  width: clamp(200px, 22vw, 320px);
+  contain: layout style paint;
+}
+
+.scroll-strip .poster-wrapper,
+.scroll-track .poster-wrapper {
+  contain: layout style;
 }
 
 .poster-card-freak .poster-image img {

@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import ContactPopover from "../../components/ContactPopover";
@@ -8,100 +9,168 @@ import CaseStudyDuration from "../../components/CaseStudyDuration";
 import TrackPlayerClient from "../../components/TrackPlayerClient";
 import CaseStudiesAccordion from "../../components/CaseStudiesAccordion";
 import { caseStudiesNormalized, type CaseStudy } from "../../data/caseStudies";
+import { useLanguage, type Language } from "../../lib/LanguageContext";
+import { getText, getTagTranslation, formatTimingEntry } from "../../lib/translations";
+import { parseDurationToSeconds, getMediaSources } from "../../lib/mediaUtils";
 
-export const metadata: Metadata = {
-  title: "For Directors",
-  description:
-    "Director-led scoring for picture and performance. Fast A/B/C options, clean revisions, and post-ready delivery.",
-  openGraph: {
-    title: "For Directors",
-    description:
-      "Director-led scoring for picture and performance. Fast A/B/C options, clean revisions, and post-ready delivery.",
+const stepsData = {
+  it: [
+    {
+      title: "Spotting",
+      detail:
+        "Definisco in/out delle cue, hit point, e il ruolo della scena, oltre a cosa evitare.",
+    },
+    {
+      title: "Opzioni A/B/C",
+      detail:
+        "2–3 direzioni distinte sullo stesso montaggio, per decisioni rapide e chiare.",
+    },
+    {
+      title: "Lock",
+      detail:
+        "Timing e intento approvati prima, poi orchestrazione e mix senza obiettivi mobili.",
+    },
+    {
+      title: "Consegna",
+      detail:
+        "Export organizzati e versioni per la post, con stem quando necessario.",
+    },
+  ],
+  en: [
+    {
+      title: "Spotting",
+      detail:
+        "Define cue in/out, hit points, and the scene's job, plus what to avoid.",
+    },
+    {
+      title: "Options A/B/C",
+      detail:
+        "2–3 distinct directions on the same cut, so decisions stay fast and clean.",
+    },
+    {
+      title: "Lock",
+      detail:
+        "Timing and intent approved first, then orchestration and mix without moving targets.",
+    },
+    {
+      title: "Delivery",
+      detail:
+        "Organized exports and versions for post, with stems when needed.",
+    },
+  ],
+};
+
+const deliveryChecklistData = {
+  it: [
+    "Mix stereo principale",
+    "Alternativa dialogue-friendly quando serve",
+    "Stem su richiesta, chiaramente nominati",
+    "Cue sheet con timing per il montaggio",
+    "Una cartella di consegna pulita, versionata",
+  ],
+  en: [
+    "Main stereo mix",
+    "Dialogue-friendly alternate when needed",
+    "Stems on request, clearly named",
+    "Cue sheet timings for the cut",
+    "One clean delivery folder, versioned",
+  ],
+};
+
+const labelsData = {
+  it: {
+    pageTitle: "Per Registi",
+    heroDescription:
+      "Compongo su immagine, performance e punto di vista. Ricevi opzioni A/B/C veloci, revisioni chiare, e cue che supportano il montaggio senza competere con esso.",
+    howIWork: "Come lavoro",
+    deliveryReady: "Consegna pronta per la post",
+    sceneCaseStudies: "Case study delle scene",
+    sceneCaseStudiesDesc:
+      "Breakdown scena per scena: obiettivi, momenti chiave, opzioni testate e consegna.",
+    viewAllCaseStudies: "Vedi tutti i case study",
+    readyToSend: "Pronto a inviare un montaggio?",
+    readyToSendDesc:
+      "Invia la scena, i tuoi riferimenti, e cosa deve ottenere. Rispondo con opzioni, timing e prossimi passi.",
+    contact: "Contattami",
+    // CaseStudyCard labels
+    goal: "Obiettivo",
+    result: "Risultato",
+    delivery: "Consegna",
+    video: "Video",
+    context: "Contesto",
+    timing: "Timing",
+    timingIn: "Entra:",
+    timingShift: "Shift:",
+    timingOut: "Esce:",
+    timingNote: "Nota:",
+    timingNoteDefault: "Entra per supportare la scena senza invadere.",
+    brief: "Brief",
+    wanted: "Desiderato:",
+    avoid: "Evitare:",
+    direction: "Direzione",
+    finalChoice: "Scelta finale:",
+    musicalLanguage: "Linguaggio musicale",
+    track: "Traccia:",
+    technicalNotes: "Note tecniche (post)",
+    loadClip: "Carica clip",
+    embedNotSet:
+      "Embed URL non impostato. Incolla l'URL HLS (.m3u8) o embed Vimeo/YouTube in data/caseStudies.ts (embedUrl).",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "For Directors",
-    description:
-      "Director-led scoring for picture and performance. Fast A/B/C options, clean revisions, and post-ready delivery.",
+  en: {
+    pageTitle: "For Directors",
+    heroDescription:
+      "I score to picture, performance, and point of view. You get fast A/B/C options early, clear revision passes, and cues that support your cut without competing with it.",
+    howIWork: "How I work",
+    deliveryReady: "Delivery ready for post",
+    sceneCaseStudies: "Scene case studies",
+    sceneCaseStudiesDesc:
+      "Scene-by-scene breakdowns: goals, key moments, options tested, and delivery.",
+    viewAllCaseStudies: "View all case studies",
+    readyToSend: "Ready to send a cut?",
+    readyToSendDesc:
+      "Send the scene, your references, and what it must do. I will reply with options, timings, and next steps.",
+    contact: "Contact",
+    // CaseStudyCard labels
+    goal: "Goal",
+    result: "Result",
+    delivery: "Delivery",
+    video: "Video",
+    context: "Context",
+    timing: "Timing",
+    timingIn: "In:",
+    timingShift: "Shift:",
+    timingOut: "Out:",
+    timingNote: "Note:",
+    timingNoteDefault: "Enters to support the scene without getting in the way.",
+    brief: "Brief",
+    wanted: "Wanted:",
+    avoid: "Avoid:",
+    direction: "Direction",
+    finalChoice: "Final choice:",
+    musicalLanguage: "Musical language",
+    track: "Track:",
+    technicalNotes: "Technical notes (post)",
+    loadClip: "Load clip",
+    embedNotSet:
+      "Embed URL not set yet. Paste the HLS playlist (.m3u8) or Vimeo/YouTube embed URL in data/caseStudies.ts (embedUrl).",
   },
 };
 
-const steps = [
-  {
-    title: "Spotting",
-    detail:
-      "Define cue in/out, hit points, and the scene's job, plus what to avoid.",
-  },
-  {
-    title: "Options A/B/C",
-    detail:
-      "2–3 distinct directions on the same cut, so decisions stay fast and clean.",
-  },
-  {
-    title: "Lock",
-    detail:
-      "Timing and intent approved first, then orchestration and mix without moving targets.",
-  },
-  {
-    title: "Delivery",
-    detail:
-      "Organized exports and versions for post, with stems when needed.",
-  },
-];
-
-const deliveryChecklist = [
-  "Main stereo mix",
-  "Dialogue-friendly alternate when needed",
-  "Stems on request, clearly named",
-  "Cue sheet timings for the cut",
-  "One clean delivery folder, versioned",
-];
-
-function formatTimingEntry(entry: { time: string; label: string }) {
-  const label = entry.label?.trim();
-  return label ? `${entry.time} ${label}` : entry.time;
-}
-
-function parseDurationToSeconds(value: string) {
-  const match = value.match(/^(\d{2}):(\d{2})$/);
-  if (!match) return null;
-  const minutes = Number.parseInt(match[1], 10);
-  const seconds = Number.parseInt(match[2], 10);
-  if (!Number.isFinite(minutes) || !Number.isFinite(seconds)) return null;
-  return minutes * 60 + seconds;
-}
-
-function getMediaSources(embedUrl?: string) {
-  const trimmedUrl = embedUrl?.trim();
-  if (!trimmedUrl) {
-    return {
-      isHls: false,
-      src: null as string | null,
-      mp4Fallback: null as string | null,
-      posterUrl: null as string | null,
-    };
-  }
-
-  const isHls = trimmedUrl.endsWith(".m3u8") || trimmedUrl.includes("/_hls/");
-  const src = trimmedUrl; // URLs are already encoded from blob storage
-  const mp4Fallback =
-    trimmedUrl.startsWith("/uploads/video/_hls/") && trimmedUrl.endsWith("/index.m3u8")
-      ? trimmedUrl
-          .replace("/uploads/video/_hls/", "/uploads/video/")
-          .replace("/index.m3u8", ".mp4")
-      : null;
-  const posterUrl = mp4Fallback ? mp4Fallback.replace(/\.mp4$/i, ".jpg") : null;
-
-  return { isHls, src, mp4Fallback, posterUrl };
-}
-
-function MediaBlock({ item }: { item: CaseStudy }) {
+function MediaBlock({
+  item,
+  labels,
+  language,
+}: {
+  item: CaseStudy;
+  labels: typeof labelsData.it;
+  language: Language;
+}) {
   const { isHls, src, mp4Fallback } = getMediaSources(item.embedUrl);
 
   if (!src) {
     return (
       <div className="card-inset rounded-2xl p-4 text-sm text-[color:var(--muted)]">
-        Embed URL not set yet. Paste the HLS playlist (.m3u8) or Vimeo/YouTube embed URL in data/caseStudies.ts (embedUrl).
+        {labels.embedNotSet}
       </div>
     );
   }
@@ -113,7 +182,7 @@ function MediaBlock({ item }: { item: CaseStudy }) {
           <CaseStudyVideo
             hlsUrl={src}
             mp4Url={mp4Fallback}
-            title={`${item.title} clip`}
+            title={`${getText(item.title, language)} clip`}
           />
         </div>
       </div>
@@ -125,18 +194,18 @@ function MediaBlock({ item }: { item: CaseStudy }) {
       <div className="video-wrapper">
         <LazyIframe
           src={src}
-          title={`${item.title} clip`}
+          title={`${getText(item.title, language)} clip`}
           height={360}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           autoLoad
-          buttonLabel="Load clip"
+          buttonLabel={labels.loadClip}
         />
       </div>
     </div>
   );
 }
 
-function MediaThumbnail({ item }: { item: CaseStudy }) {
+function MediaThumbnail({ item, language }: { item: CaseStudy; language: Language }) {
   const { posterUrl: generatedPosterUrl } = getMediaSources(item.embedUrl);
   const posterUrl = item.posterImage || generatedPosterUrl;
 
@@ -145,7 +214,7 @@ function MediaThumbnail({ item }: { item: CaseStudy }) {
       {posterUrl ? (
         <Image
           src={posterUrl}
-          alt={`${item.title} thumbnail`}
+          alt={`${getText(item.title, language)} thumbnail`}
           fill
           className="absolute inset-0 h-full w-full object-cover"
           sizes="(max-width: 768px) 100vw, 50vw"
@@ -154,9 +223,16 @@ function MediaThumbnail({ item }: { item: CaseStudy }) {
         <div className="absolute inset-0 bg-[color:var(--card-inset-bg)]" />
       )}
       <div className="absolute inset-0 card-overlay" aria-hidden="true" />
-      <div className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+      <div
+        className="absolute inset-0 flex items-center justify-center"
+        aria-hidden="true"
+      >
         <div className="case-study-play-button flex h-12 w-12 items-center justify-center rounded-full">
-          <svg className="h-5 w-5 text-white" viewBox="0 0 16 16" fill="currentColor">
+          <svg
+            className="h-5 w-5 text-white"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+          >
             <path d="M5 3.5v9l7-4.5-7-4.5z" />
           </svg>
         </div>
@@ -168,9 +244,17 @@ function MediaThumbnail({ item }: { item: CaseStudy }) {
   );
 }
 
-function CaseStudyCard({ item }: { item: CaseStudy }) {
+function CaseStudyCard({
+  item,
+  labels,
+  language,
+}: {
+  item: CaseStudy;
+  labels: typeof labelsData.it;
+  language: Language;
+}) {
   const videoAnchorId = `video-${item.id}`;
-  const musicalLanguage = (item.musicalLanguage ?? item.musicChoices)?.trim();
+  const musicalLanguageText = getText(item.musicalLanguage ?? item.musicChoices, language)?.trim();
   const trackTitle = item.trackTitle?.trim();
 
   return (
@@ -182,11 +266,11 @@ function CaseStudyCard({ item }: { item: CaseStudy }) {
         <div className="flex items-start justify-between gap-4">
           <div>
             <h2 className="section-title text-2xl text-[color:var(--foreground)]">
-              {item.title}
+              {getText(item.title, language)}
             </h2>
             <p className="mt-2 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
               {item.projectLabel} · {item.sceneType} ·{" "}
-                <CaseStudyDuration duration={item.duration} />
+              <CaseStudyDuration duration={item.duration} />
             </p>
           </div>
           <svg
@@ -204,7 +288,7 @@ function CaseStudyCard({ item }: { item: CaseStudy }) {
         </div>
 
         <div className="mt-4 group-open:hidden">
-          <MediaThumbnail item={item} />
+          <MediaThumbnail item={item} language={language} />
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2">
@@ -213,7 +297,7 @@ function CaseStudyCard({ item }: { item: CaseStudy }) {
               key={`${item.id}-${tag}`}
               className="rounded-full border border-[color:var(--card-border)] bg-[color:var(--card-inset-bg)] px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-[color:var(--muted)]"
             >
-              {tag}
+              {getTagTranslation(tag, language)}
             </span>
           ))}
         </div>
@@ -223,103 +307,153 @@ function CaseStudyCard({ item }: { item: CaseStudy }) {
         <div className="section-divider mx-auto w-24" aria-hidden="true" />
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
           <div className="rounded-2xl card-inset p-4">
-            <div className="text-sm font-semibold text-[color:var(--foreground)]">Goal</div>
-            <div className="mt-3 text-sm text-[color:var(--muted)]">{item.goal}</div>
+            <div className="text-sm font-semibold text-[color:var(--foreground)]">
+              {labels.goal}
+            </div>
+            <div className="mt-3 text-sm text-[color:var(--muted)]">
+              {getText(item.goal, language)}
+            </div>
           </div>
 
           <div className="rounded-2xl card-inset p-4">
-            <div className="text-sm font-semibold text-[color:var(--foreground)]">Result</div>
-            <div className="mt-3 text-sm text-[color:var(--muted)]">{item.result}</div>
+            <div className="text-sm font-semibold text-[color:var(--foreground)]">
+              {labels.result}
+            </div>
+            <div className="mt-3 text-sm text-[color:var(--muted)]">
+              {getText(item.result, language)}
+            </div>
           </div>
 
           <div className="rounded-2xl card-inset p-4">
-            <div className="text-sm font-semibold text-[color:var(--foreground)]">Delivery</div>
-            <div className="mt-3 text-sm text-[color:var(--muted)]">{item.delivered}</div>
+            <div className="text-sm font-semibold text-[color:var(--foreground)]">
+              {labels.delivery}
+            </div>
+            <div className="mt-3 text-sm text-[color:var(--muted)]">
+              {getText(item.delivered, language)}
+            </div>
           </div>
         </div>
 
         <div className="mt-6" id={videoAnchorId}>
-          <div className="text-sm font-semibold text-[color:var(--foreground)]">Video</div>
+          <div className="text-sm font-semibold text-[color:var(--foreground)]">
+            {labels.video}
+          </div>
           <div className="mt-3 overflow-hidden rounded-2xl">
-            <MediaBlock item={item} />
+            <MediaBlock item={item} labels={labels} language={language} />
           </div>
         </div>
 
         <div className="mt-6 grid gap-4">
-
           <div className="rounded-2xl card-inset p-4">
-            <div className="text-sm font-semibold text-[color:var(--foreground)]">Context</div>
+            <div className="text-sm font-semibold text-[color:var(--foreground)]">
+              {labels.context}
+            </div>
             <p className="mt-3 text-sm leading-7 text-[color:var(--muted)]">
-              {item.context}
+              {getText(item.context, language)}
             </p>
           </div>
 
           <div className="rounded-2xl card-inset p-4">
             <div className="text-sm font-semibold text-[color:var(--foreground)]">
-              Timing
+              {labels.timing}
             </div>
             <div className="mt-3 space-y-2 text-sm text-[color:var(--muted)]">
               <div>
-                <span className="font-semibold text-[color:var(--foreground)]">In:</span>{" "}
-                {formatTimingEntry(item.timing.in)}
+                <span className="font-semibold text-[color:var(--foreground)]">
+                  {labels.timingIn}
+                </span>{" "}
+                {formatTimingEntry(item.timing.in, language)}
               </div>
               {item.timing.turn ? (
                 <div>
-                  <span className="font-semibold text-[color:var(--foreground)]">Shift:</span>{" "}
-                  {formatTimingEntry(item.timing.turn)}
+                  <span className="font-semibold text-[color:var(--foreground)]">
+                    {labels.timingShift}
+                  </span>{" "}
+                  {formatTimingEntry(item.timing.turn, language)}
                 </div>
               ) : null}
               <div>
-                <span className="font-semibold text-[color:var(--foreground)]">Out:</span>{" "}
-                {formatTimingEntry(item.timing.out)}
+                <span className="font-semibold text-[color:var(--foreground)]">
+                  {labels.timingOut}
+                </span>{" "}
+                {formatTimingEntry(item.timing.out, language)}
               </div>
             </div>
             <div className="mt-3 text-sm text-[color:var(--muted)]">
-              <span className="font-semibold text-[color:var(--foreground)]">Note:</span>{" "}
-              {item.spottingNote ?? "Enters to support the scene without getting in the way."}
+              <span className="font-semibold text-[color:var(--foreground)]">
+                {labels.timingNote}
+              </span>{" "}
+              {getText(item.spottingNote, language) || labels.timingNoteDefault}
             </div>
           </div>
 
           <div className="rounded-2xl card-inset p-4">
-            <div className="text-sm font-semibold text-[color:var(--foreground)]">Brief</div>
+            <div className="text-sm font-semibold text-[color:var(--foreground)]">
+              {labels.brief}
+            </div>
             <div className="mt-3 grid gap-2 text-sm text-[color:var(--muted)]">
               <div>
-                <span className="font-semibold text-[color:var(--foreground)]">Wanted:</span>{" "}
-                {item.directorWanted}
+                <span className="font-semibold text-[color:var(--foreground)]">
+                  {labels.wanted}
+                </span>{" "}
+                {getText(item.directorWanted, language)}
               </div>
               <div>
-                <span className="font-semibold text-[color:var(--foreground)]">Avoid:</span>{" "}
-                {item.directorAvoid}
+                <span className="font-semibold text-[color:var(--foreground)]">
+                  {labels.avoid}
+                </span>{" "}
+                {getText(item.directorAvoid, language)}
               </div>
             </div>
           </div>
 
           <div className="rounded-2xl card-inset p-4">
-            <div className="text-sm font-semibold text-[color:var(--foreground)]">Direction</div>
+            <div className="text-sm font-semibold text-[color:var(--foreground)]">
+              {labels.direction}
+            </div>
             <ul className="mt-3 space-y-2 text-sm text-[color:var(--muted)]">
-              <li><span className="font-semibold text-[color:var(--foreground)]">A:</span> {item.versionsTested.A}</li>
-              <li><span className="font-semibold text-[color:var(--foreground)]">B:</span> {item.versionsTested.B}</li>
-              <li><span className="font-semibold text-[color:var(--foreground)]">C:</span> {item.versionsTested.C}</li>
+              <li>
+                <span className="font-semibold text-[color:var(--foreground)]">
+                  A:
+                </span>{" "}
+                {getText(item.versionsTested.A, language)}
+              </li>
+              <li>
+                <span className="font-semibold text-[color:var(--foreground)]">
+                  B:
+                </span>{" "}
+                {getText(item.versionsTested.B, language)}
+              </li>
+              <li>
+                <span className="font-semibold text-[color:var(--foreground)]">
+                  C:
+                </span>{" "}
+                {getText(item.versionsTested.C, language)}
+              </li>
             </ul>
             <div className="mt-3 text-sm text-[color:var(--muted)]">
-              <span className="font-semibold text-[color:var(--foreground)]">Final choice:</span>{" "}
-              {item.finalChoice}
+              <span className="font-semibold text-[color:var(--foreground)]">
+                {labels.finalChoice}
+              </span>{" "}
+              {getText(item.finalChoice, language)}
             </div>
           </div>
 
-          {musicalLanguage || trackTitle ? (
+          {musicalLanguageText || trackTitle ? (
             <div className="rounded-2xl card-inset p-4">
               <div className="text-sm font-semibold text-[color:var(--foreground)]">
-                Musical language
+                {labels.musicalLanguage}
               </div>
-              {musicalLanguage ? (
+              {musicalLanguageText ? (
                 <p className="mt-3 whitespace-pre-line text-sm leading-7 text-[color:var(--muted)]">
-                  {musicalLanguage}
+                  {musicalLanguageText}
                 </p>
               ) : null}
               {trackTitle ? (
                 <div className="mt-3 text-sm text-[color:var(--muted)]">
-                  <span className="font-semibold text-[color:var(--foreground)]">Track:</span>{" "}
+                  <span className="font-semibold text-[color:var(--foreground)]">
+                    {labels.track}
+                  </span>{" "}
                   &ldquo;{trackTitle}&rdquo;
                 </div>
               ) : null}
@@ -328,12 +462,12 @@ function CaseStudyCard({ item }: { item: CaseStudy }) {
 
           <div className="rounded-2xl card-inset p-4">
             <div className="text-sm font-semibold text-[color:var(--foreground)]">
-              Technical notes (post)
+              {labels.technicalNotes}
             </div>
             <div className="mt-3 text-sm text-[color:var(--muted)]">
               <ul className="list-disc space-y-1 pl-5">
-                {item.technicalNotes.map((line) => (
-                  <li key={`${item.id}-${line}`}>{line}</li>
+                {item.technicalNotes.map((line, idx) => (
+                  <li key={`${item.id}-tech-${idx}`}>{getText(line, language)}</li>
                 ))}
               </ul>
             </div>
@@ -349,8 +483,8 @@ function CaseStudyCard({ item }: { item: CaseStudy }) {
                   tracks={[
                     {
                       file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/uploads/tracks/musiche%20soggetto%20obsoleto/Sitting%20On%20The%20Seashore.mp3",
-                      context: "Sitting on the Seashore"
-                    }
+                      context: "Sitting on the Seashore",
+                    },
                   ]}
                   coverSrc="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20soggetto%20obsoleto.webp"
                   displayDurations={[parseDurationToSeconds(item.duration)]}
@@ -369,8 +503,8 @@ function CaseStudyCard({ item }: { item: CaseStudy }) {
                   tracks={[
                     {
                       file: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/tracks/musiche%20la%20sonata%20del%20caos/Something%20Threatening.mp3",
-                      context: "Something Threatening"
-                    }
+                      context: "Something Threatening",
+                    },
                   ]}
                   coverSrc="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/copertina%20album/copertina%20la%20sonata%20del%20caos.webp"
                   displayDurations={[parseDurationToSeconds(item.duration)]}
@@ -382,7 +516,7 @@ function CaseStudyCard({ item }: { item: CaseStudy }) {
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <ContactPopover
-            buttonLabel="Contact"
+            buttonLabel={labels.contact}
             buttonClassName="hero-btn hero-btn-secondary min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent)]"
             panelId={`contact-popover-${item.id}`}
           />
@@ -393,23 +527,25 @@ function CaseStudyCard({ item }: { item: CaseStudy }) {
 }
 
 export default function ForDirectorsPage() {
-  // Get first two case studies
+  const { language, t } = useLanguage();
+  const steps = stepsData[language];
+  const deliveryChecklist = deliveryChecklistData[language];
+  const labels = labelsData[language];
+
   const featuredCaseStudies = caseStudiesNormalized.slice(0, 2);
 
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-16 lg:px-20">
       <section className="card-shell p-8">
         <h1 className="section-title text-4xl text-[color:var(--foreground)]">
-          For Directors
+          {labels.pageTitle}
         </h1>
         <p className="mt-3 text-sm text-[color:var(--muted)]">
-          I score to picture, performance, and point of view. You get fast
-          A/B/C options early, clear revision passes, and cues that support your
-          cut without competing with it.
+          {labels.heroDescription}
         </p>
         <div className="mt-6">
           <ContactPopover
-            buttonLabel="Contact"
+            buttonLabel={labels.contact}
             buttonClassName="hero-btn hero-btn-primary"
             panelId="contact-popover-directors-hero"
           />
@@ -418,7 +554,7 @@ export default function ForDirectorsPage() {
 
       <section className="card-shell p-8">
         <h2 className="section-title text-2xl text-[color:var(--foreground)]">
-          How I work
+          {labels.howIWork}
         </h2>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((step) => (
@@ -436,7 +572,7 @@ export default function ForDirectorsPage() {
 
       <section className="card-shell p-8">
         <h2 className="section-title text-2xl text-[color:var(--foreground)]">
-          Delivery ready for post
+          {labels.deliveryReady}
         </h2>
         <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-[color:var(--muted)]">
           {deliveryChecklist.map((item) => (
@@ -447,39 +583,35 @@ export default function ForDirectorsPage() {
 
       <section className="card-shell p-8">
         <h2 className="section-title text-2xl text-[color:var(--foreground)]">
-          Scene case studies
+          {labels.sceneCaseStudies}
         </h2>
         <p className="mt-2 text-sm text-[color:var(--muted)]">
-          Scene-by-scene breakdowns: goals, key moments, options tested, and delivery.
+          {labels.sceneCaseStudiesDesc}
         </p>
         <div className="mt-6">
           <CaseStudiesAccordion className="case-studies-grid grid gap-6 md:grid-cols-2">
             {featuredCaseStudies.map((item) => (
-              <CaseStudyCard key={item.id} item={item} />
+              <CaseStudyCard key={item.id} item={item} labels={labels} language={language} />
             ))}
           </CaseStudiesAccordion>
         </div>
         <div className="mt-6">
-          <Link
-            href="/case-studies"
-            className="hero-btn hero-btn-secondary"
-          >
-            View all case studies
+          <Link href="/case-studies" className="hero-btn hero-btn-secondary">
+            {labels.viewAllCaseStudies}
           </Link>
         </div>
       </section>
 
       <section className="card-shell p-8">
         <h2 className="section-title text-2xl text-[color:var(--foreground)]">
-          Ready to send a cut?
+          {labels.readyToSend}
         </h2>
         <p className="mt-2 text-sm text-[color:var(--muted)]">
-          Send the scene, your references, and what it must do. I will reply with
-          options, timings, and next steps.
+          {labels.readyToSendDesc}
         </p>
         <div className="mt-4 flex flex-wrap items-center gap-4">
           <ContactPopover
-            buttonLabel="Contact"
+            buttonLabel={labels.contact}
             buttonClassName="hero-btn hero-btn-primary"
             panelId="contact-popover-directors-cta"
           />

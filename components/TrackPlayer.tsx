@@ -1,7 +1,8 @@
 "use client";
-import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import AudioPlayer from "./AudioPlayer";
+import { formatTime, getTitle } from "../lib/formatUtils";
 
 type Track = {
   file: string;
@@ -17,22 +18,6 @@ type Props = {
   progressColor?: string;
   showRowCover?: boolean;
   rowCoverSrc?: string;
-};
-
-const formatTime = (seconds: number) => {
-  if (!Number.isFinite(seconds) || seconds <= 0) return "--:--";
-  const mm = Math.floor(seconds / 60)
-    .toString()
-    .padStart(2, "0");
-  const ss = Math.floor(seconds % 60)
-    .toString()
-    .padStart(2, "0");
-  return `${mm}:${ss}`;
-};
-
-const getTitle = (context: string) => {
-  const split = context.split("—");
-  return split[0]?.trim() || context;
 };
 
 function TrackPlayer({

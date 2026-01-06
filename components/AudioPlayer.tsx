@@ -2,6 +2,7 @@
 "use client";
 import React, { useEffect, useRef, useState, useId } from "react";
 import { AudioManager } from "../lib/AudioManager";
+import { formatTime } from "../lib/formatUtils";
 
 type CachedPeaks = {
   peaks: Array<number[]>;
@@ -62,17 +63,6 @@ const cancelIdle = (id: number | null) => {
     return;
   }
   (window as any).clearTimeout(id);
-};
-
-// Move format function outside component to prevent recreation
-const formatTime = (s: number) => {
-  const mm = Math.floor(s / 60)
-    .toString()
-    .padStart(2, "0");
-  const ss = Math.floor(s % 60)
-    .toString()
-    .padStart(2, "0");
-  return `${mm}:${ss}`;
 };
 
 type Props = {

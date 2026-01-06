@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { useLanguage } from "../lib/LanguageContext";
 
 const DEBUG_BG =
   process.env.NEXT_PUBLIC_BG_DEBUG === "1" ||
@@ -8,6 +9,7 @@ const DEBUG_BG =
 
 function BackgroundVideo() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const { t } = useLanguage();
   const [shouldLoadSrc, setShouldLoadSrc] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -510,7 +512,7 @@ function BackgroundVideo() {
       />
 
       <div className="bg-video-toggle">
-        <span className="bg-video-toggle-label">Block background video</span>
+        <span className="bg-video-toggle-label">{t("Blocca video di sfondo", "Block background video")}</span>
         <button
           onClick={togglePause}
           className="bg-video-toggle-btn"

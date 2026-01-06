@@ -2,6 +2,7 @@
 
 import { memo, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { useLanguage } from "../lib/LanguageContext";
 
 const ShowreelSection = dynamic(() => import("./ShowreelSection"), {
   loading: () => (
@@ -15,7 +16,7 @@ const ShowreelSection = dynamic(() => import("./ShowreelSection"), {
         <div className="mt-6">
           <div className="video-wrapper">
             <div className="absolute inset-0 flex items-center justify-center bg-[color:var(--background)]/50 rounded-xl">
-              <div className="text-sm text-[color:var(--muted)]">Loading...</div>
+              <div className="text-sm text-[color:var(--muted)]">···</div>
             </div>
           </div>
         </div>
@@ -32,6 +33,7 @@ type LazyShowreelProps = {
 function LazyShowreel({ embedUrl }: LazyShowreelProps) {
   const [shouldLoad, setShouldLoad] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -71,7 +73,7 @@ function LazyShowreel({ embedUrl }: LazyShowreelProps) {
             <div className="mt-6">
               <div className="video-wrapper" style={{ minHeight: "400px" }}>
                 <div className="absolute inset-0 flex items-center justify-center bg-[color:var(--card)]/50 rounded-xl">
-                  <div className="text-sm text-[color:var(--muted)]">Scroll to load video</div>
+                  <div className="text-sm text-[color:var(--muted)]">{t("Scorri per caricare il video", "Scroll to load video")}</div>
                 </div>
               </div>
             </div>

@@ -1,38 +1,29 @@
-import type { Metadata } from "next";
+"use client";
+
 import ContactPopover from "../../components/ContactPopover";
 import ChiSonoSection from "../../components/ChiSonoSection";
 import { bioFull, bioShort, bioQuote, bioStats, bioSkills } from "../../data/bio";
+import { useLanguage } from "../../lib/LanguageContext";
 
-export const metadata: Metadata = {
-  title: "About",
-  description: bioShort,
-  openGraph: {
-    title: "About",
-    description: bioShort,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "About",
-    description: bioShort,
-  },
-};
-
-const PORTRAIT_SRC = "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/uploads/foto-sito.jpg";
+const PORTRAIT_SRC = "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/foto-sito.webp";
 
 export default function AboutPage() {
+  const { t } = useLanguage();
+
   return (
-    <main className="mx-auto flex max-w-5xl flex-col gap-8 px-6 py-16 lg:px-20">
+    <main className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-16 lg:px-20">
       <ChiSonoSection
         imageSrc={PORTRAIT_SRC}
         bio={bioFull}
         quote={bioQuote}
         stats={bioStats}
         skills={bioSkills}
+        priorityImage
       />
 
       <div className="flex flex-wrap items-center gap-4">
         <ContactPopover
-          buttonLabel="Contact"
+          buttonLabel={t("Contattami", "Contact")}
           buttonClassName="hero-btn hero-btn-primary"
           panelId="contact-popover-about"
         />

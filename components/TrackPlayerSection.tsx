@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useEffect, useState, useRef } from 'react';
 import ContactPopover from "./ContactPopover";
+import { useLanguage } from "../lib/LanguageContext";
 
 const TrackPlayer = dynamic(() => import('./TrackPlayerClient'), {
   ssr: false,
@@ -18,14 +19,13 @@ type Track = {
 type Props = {
   tracks: Track[];
   placeholderTracks?: Track[];
-  requestLabel?: string;
 };
 
 export default function TrackPlayerSection({
   tracks,
   placeholderTracks = [],
-  requestLabel = "Request listening link",
 }: Props) {
+  const { t } = useLanguage();
   const [shouldLoad, setShouldLoad] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const playableTracks = tracks.filter(
@@ -67,7 +67,7 @@ export default function TrackPlayerSection({
     <section id="selected-tracks" className="card-shell p-8" ref={sectionRef}>
       <div className="flex items-center justify-between">
         <h3 className="section-title text-2xl text-[color:var(--foreground)]">
-          Selected Tracks
+          {t("Tracce Selezionate", "Selected Tracks")}
         </h3>
       </div>
       <div className="mt-6">
@@ -76,7 +76,7 @@ export default function TrackPlayerSection({
             <TrackPlayer tracks={playableTracks} coverSrc={coverSrc} />
           ) : (
             <div className="track-player-skeleton" style={{ minHeight: '400px' }}>
-              Scroll to load player...
+              {t("Scorri per caricare il player...", "Scroll to load player...")}
             </div>
           )
         ) : (
@@ -104,7 +104,7 @@ export default function TrackPlayerSection({
                   </button>
                   <div className="audio-wave">
                     <div className="audio-loading">
-                      Listening link available on request
+                      {t("Link di ascolto disponibile su richiesta", "Listening link available on request")}
                     </div>
                   </div>
                   <div className="audio-volume">
@@ -166,7 +166,7 @@ export default function TrackPlayerSection({
       {!hasPlayableTracks ? (
         <div className="mt-6">
           <ContactPopover
-            buttonLabel={requestLabel}
+            buttonLabel={t("Richiedi link di ascolto", "Request listening link")}
             buttonClassName="hero-btn hero-btn-secondary"
             align="left"
             panelId="contact-popover-tracks"

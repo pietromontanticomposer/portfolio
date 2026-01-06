@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, memo } from "react";
+import { useState, useMemo, memo } from "react";
 
 function LazyIframe({
   src,

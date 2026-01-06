@@ -6,12 +6,14 @@ import ScrollController from "../components/ScrollController";
 import BackgroundVideo from "../components/BackgroundVideo";
 import Header from "../components/Header";
 import ScrollPerformance from "../components/ScrollPerformance";
+import { LanguageProvider } from "../lib/LanguageContext";
+import { getSiteUrl, siteMetadata } from "../lib/siteConfig";
 
 // Optimized font loading - reduced weights to critical only
 const bodoni = Bodoni_Moda({
   variable: "--font-bodoni",
   subsets: ["latin"],
-  weight: ["400", "600"], // Removed 500, only use 400 and 600
+  weight: ["400", "600"],
   display: 'swap',
   preload: true,
 });
@@ -27,43 +29,31 @@ const workSans = Work_Sans({
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   subsets: ["latin"],
-  weight: ["400"], // Removed 600, only use 400 for mono
+  weight: ["400"],
   display: 'swap',
   preload: true,
 });
 
-const resolvedSiteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
-const siteUrl = resolvedSiteUrl ?? "http://localhost:3000";
-const defaultTitle = "Pietro Montanti";
-const defaultDescription =
-  "Composer for Film and Media. Music that supports edit, tension, and character.";
-
-if (!resolvedSiteUrl && process.env.NODE_ENV !== "production") {
-  console.warn(
-    "NEXT_PUBLIC_SITE_URL is not set. Using http://localhost:3000 for metadata."
-  );
-}
+const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: defaultTitle,
+    default: siteMetadata.title,
     template: "%s | Pietro Montanti",
   },
-  description: defaultDescription,
+  description: siteMetadata.description,
   openGraph: {
-    title: defaultTitle,
-    description: defaultDescription,
+    title: siteMetadata.title,
+    description: siteMetadata.description,
     url: siteUrl,
-    siteName: defaultTitle,
+    siteName: siteMetadata.title,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: defaultTitle,
-    description: defaultDescription,
+    title: siteMetadata.title,
+    description: siteMetadata.description,
   },
 };
 
@@ -103,12 +93,14 @@ export default function RootLayout({
       <body
         className={`${bodoni.variable} ${workSans.variable} ${jetbrainsMono.variable} antialiased`}
       >
-        <Header />
-        {SHOW_BG_VIDEO && <BackgroundVideo />}
-        <ScrollController />
-        <ScrollPerformance />
-        {children}
-        <Footer />
+        <LanguageProvider>
+          <Header />
+          {SHOW_BG_VIDEO && <BackgroundVideo />}
+          <ScrollController />
+          <ScrollPerformance />
+          {children}
+          <Footer />
+        </LanguageProvider>
       </body>
     </html>
   );

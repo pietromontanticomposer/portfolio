@@ -31,9 +31,14 @@ function AutoScrollStrip({ posters }: { posters: Poster[] }) {
     const updateWidth = () => {
       const firstSetWidth = Math.max(1, track.scrollWidth / 2);
       const duration = firstSetWidth / speed;
-      track.style.setProperty("--scroll-width", `${firstSetWidth}px`);
-      track.style.setProperty("--scroll-offset", `${-firstSetWidth}px`);
-      track.style.setProperty("--scroll-duration", `${duration}s`);
+      // Only update if values actually changed to prevent animation restart
+      const currentOffset = track.style.getPropertyValue("--scroll-offset");
+      const newOffset = `${-firstSetWidth}px`;
+      if (currentOffset !== newOffset) {
+        track.style.setProperty("--scroll-width", `${firstSetWidth}px`);
+        track.style.setProperty("--scroll-offset", newOffset);
+        track.style.setProperty("--scroll-duration", `${duration}s`);
+      }
     };
     const scheduleUpdateWidth = () => {
       requestAnimationFrame(updateWidth);
