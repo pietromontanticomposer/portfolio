@@ -16,12 +16,9 @@ function BackgroundVideo() {
   const isPlayingRef = useRef(false);
   const hasLoadedRef = useRef(false);
 
-  // Read localStorage after mount to avoid hydration mismatch
+  // Clear any saved pause state on page load so video always starts
   useEffect(() => {
-    const savedPauseState = localStorage.getItem('bg-video-paused') === 'true';
-    if (savedPauseState) {
-      setIsPaused(true);
-    }
+    localStorage.removeItem('bg-video-paused');
   }, []);
 
   // Delay load to not block initial render and scroll
@@ -416,17 +413,10 @@ function BackgroundVideo() {
     }
   }, [isPaused]);
 
-  // Apply saved pause state when video loads
+  // Handle pause state during session (not persisted across page loads)
   useEffect(() => {
     if (!shouldLoadSrc || !videoRef.current) return;
     const video = videoRef.current;
-    
-    // Only pause if user explicitly paused (localStorage has 'true')
-    const savedPauseState = localStorage.getItem('bg-video-paused') === 'true';
-    
-    if (savedPauseState) {
-      video.pause();
-    }
 
     // Handle page visibility changes (tab switch)
     const handleVisibilityChange = () => {
@@ -434,19 +424,16 @@ function BackgroundVideo() {
         // Don't do anything when tab is hidden - let browser handle it
         return;
       } else {
-        // When returning to tab, respect saved pause state
-        const pauseState = localStorage.getItem('bg-video-paused') === 'true';
-        if (pauseState) {
+        // When returning to tab, respect current pause state
+        if (isPaused) {
           video.pause();
         }
-        // If not paused, video should continue playing (browser handles this)
       }
     };
 
-    // Intercept play events only if user has explicitly paused
+    // Intercept play events only if user has paused during this session
     const handlePlay = () => {
-      const pauseState = localStorage.getItem('bg-video-paused') === 'true';
-      if (pauseState) {
+      if (isPaused) {
         video.pause();
       }
     };
