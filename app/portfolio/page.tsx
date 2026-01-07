@@ -4,9 +4,10 @@ import { useState } from "react";
 import PosterCard from "../../components/PosterCard";
 import AutoScrollStrip from "../../components/AutoScrollStrip";
 import CollaborationsSection from "../../components/CollaborationsSection";
+import TrackPlayerSection from "../../components/TrackPlayerSection";
 import { projects, featuredProjects } from "../../data/projects";
 import { comingSoonPosters } from "../../data/placeholders";
-import { partners } from "../../data/homeContent";
+import { partners, selectedTracks } from "../../data/homeContent";
 import { useLanguage } from "../../lib/LanguageContext";
 
 const postersFromProjects = projects.map((p) => ({
@@ -97,6 +98,8 @@ export default function PortfolioPage() {
           </button>
         </div>
       </section>
+
+      <TrackPlayerSection tracks={selectedTracks} />
 
       <CollaborationsSection partners={partners} />
 

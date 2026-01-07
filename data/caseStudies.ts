@@ -1,3 +1,30 @@
+/**
+ * HLS VIDEO REQUIREMENTS FOR CASE STUDIES
+ * ========================================
+ * All case study videos must use HLS with the following specs:
+ *
+ * FFmpeg command:
+ *   ffmpeg -i input.mp4 \
+ *     -c:v libx264 -preset fast -crf 23 \
+ *     -c:a aac -b:a 128k \
+ *     -f hls \
+ *     -hls_time 6 \
+ *     -hls_list_size 0 \
+ *     -hls_segment_filename "output_dir/seg_%03d.ts" \
+ *     -hls_playlist_type vod \
+ *     -hls_flags independent_segments \
+ *     "output_dir/index.m3u8"
+ *
+ * Required manifest structure:
+ *   - #EXT-X-VERSION:6
+ *   - #EXT-X-INDEPENDENT-SEGMENTS
+ *   - #EXT-X-PLAYLIST-TYPE:VOD
+ *   - Segments named: seg_000.ts, seg_001.ts, etc.
+ *
+ * Each segment must contain both video (h264) and audio (aac).
+ * Upload to Vercel Blob using scripts/upload-veneti-hls.mjs as reference.
+ */
+
 export type CaseStudyTag = string;
 
 export type SceneType = "Dialogue" | "Reveal" | "Montage" | "Action" | "Atmosphere";
