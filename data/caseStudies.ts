@@ -462,7 +462,7 @@ export const caseStudies: CaseStudyInput[] = [
     ],
     isPublic: false,
     festivalCirculation: true,
-    embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/I%20Veneti%20Antichi%20The%20Battle%20New/index.m3u8",
+    embedUrl: "http://localhost:4000/uploads/video/_hls/I%20Veneti%20Antichi%20The%20Battle%20New/index.m3u8",
     posterImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/I%20Veneti%20Antichi%20The%20Battle.jpg",
 
     context: {
