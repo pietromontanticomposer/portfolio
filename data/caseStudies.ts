@@ -485,7 +485,8 @@ export const caseStudies: CaseStudyInput[] = [
       "Low strings incipit",
       "Trombones",
       "Heartbeat kick",
-      "Battle rhythm"
+      "Battle rhythm",
+      "Timbri antichi"
     ],
     isPublic: false,
     festivalCirculation: true,
@@ -493,11 +494,11 @@ export const caseStudies: CaseStudyInput[] = [
     posterImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/I%20Veneti%20Antichi%20The%20Battle.jpg",
 
     context: {
-      it: "Scena di battaglia a intensita alta, con micro svolte narrative e cambi di energia. La musica deve sostenere ritmo e chiarezza, senza coprire la lettura della scena.",
+      it: "Ricostruzione della battaglia con gli Spartani: tagli rapidi alternati a campi lunghi sul campo di battaglia. Serve drive e chiarezza senza scivolare nel trailer moderno, lasciando sempre priorità a narrazione storica e sound design.",
       en: "Reconstruction of the battle with the Spartans, built on fast cuts and long battlefield wides. The sequence needs drive without turning into a modern action trailer, and it must leave space for historical narration and sound design."
     },
     goal: {
-      it: "Score battle action progettato per essere leggibile sul montaggio. Spina dorsale ritmica stabile, progressione chiara, e passaggi chiave sottolineati con soluzioni armoniche dedicate. Consegna ordinata e versionata, pronta per la post.",
+      it: "Costruire un battle cue in stile blockbuster che sostenga il montaggio senza coprire narrazione e FX. Tenere una spina dorsale ritmica leggibile e riservare i picchi ai beat chiave, così la scena resta chiara e il tono storico rimane credibile.",
       en: "Hold a clear rhythmic spine for the edit, give the clashes weight, and keep the cue readable so the educational tone stays intact."
     },
     chosen: {
@@ -512,41 +513,38 @@ export const caseStudies: CaseStudyInput[] = [
       }
     },
     result: {
-      it: "La scena mantiene impatto senza diventare caos. I cambi di fase si percepiscono subito grazie a scelte armoniche mirate, non solo volume. Revisioni rapide perche la struttura e pensata per interventi chirurgici, senza rifare tutto.",
+      it: "La scena corre, ma non diventa rumore. Il ritmo resta agganciato ai tagli, gli impatti arrivano con peso, e nei momenti di lettura la musica si apre e lascia spazio alla narrazione.",
       en: "The scene feels kinetic but intelligible. The rhythm stays locked to the edit, the clashes land with weight, and the narration still reads cleanly."
     },
     trackTitle: "The Battle",
     timing: {
-      in: { time: "00:00", label: { it: "Campo largo sul campo di battaglia, entra il pulse.", en: "Wide battlefield shot, pulse enters." } },
-      turn: { time: "02:06", label: { it: "Primo scontro, ottoni e percussioni si agganciano ai tagli.", en: "First clash, brass and percussion lock to cuts." } },
-      out: { time: "04:59", label: { it: "Campo largo sulle conseguenze, il cue si rilascia in sustain.", en: "Aftermath wide, cue releases into sustain." } }
+      in: { time: "00:00", label: { it: "Campo largo sul campo di battaglia. Entra il pulse, sobrio e leggibile.", en: "Wide battlefield shot, pulse enters." } },
+      turn: { time: "02:06", label: { it: "Primo scontro. Gli accenti si agganciano ai tagli e il peso sale senza saturare la scena.", en: "First clash, brass and percussion lock to cuts." } },
+      out: { time: "04:59", label: { it: "Campo largo sulle conseguenze. Il cue si rilascia in sustain controllato.", en: "Aftermath wide, cue releases into sustain." } }
     },
     spottingNote: {
-      it: "Mantenere il cue snello fino al primo scontro. Evitare colpi costanti cosi la narrazione e gli FX battaglia restano dominanti. Gli snodi principali sono marcati con pivot armonici dedicati, per far sentire i passaggi senza sovraccaricare.",
+      it: "Mantenere il cue snello fino al primo scontro. Evitare colpi costanti: i picchi devono leggere come svolte narrative, non come intensità continua. In due passaggi chiave, usare un cambio armonico dedicato per evidenziare la transizione senza alzare volume.",
       en: "Keep the cue lean until the first clash. Avoid constant hits so the narration and battle FX remain dominant."
     },
 
     directorWanted: {
-      it: "Drive e chiarezza. Un tono storico con peso orchestrale, ma mai stile trailer. Sottolineare eventi e passaggi con soluzioni armoniche dedicate, in funzione della scena.",
+      it: "Drive, chiarezza e peso. Tono storico con orchestra e timbri antichi come colore, mai estetica da trailer.",
       en: "Drive and clarity. A historical tone with orchestral weight, but never trailer-style."
     },
     directorAvoid: {
-      it: "Percussioni muro a muro, colpi sovradimensionati, o musica che maschera la narrazione. File confusi o non versionati, e armonia statica che non chiarisce gli snodi.",
+      it: "Percussioni muro a muro, colpi sovradimensionati, o musica che maschera narrazione e sound design.",
       en: "Wall-to-wall percussion, oversized hits, or music that masks narration."
     },
 
     versionsTested: {
-      A: { it: "Pulse solo percussioni. Troppo secco e senza abbastanza identita.", en: "Percussion-only pulse. Too dry and not enough identity." },
-      B: { it: "Pulse archi bassi, chiamate ottoni sui cambi, orchestra piena solo al primo scontro.", en: "Low strings pulse, brass calls on shifts, full orchestra only at the first clash." },
-      C: { it: "Muro orchestrale pieno dall'inizio. Opprimente e appiattiva le dinamiche.", en: "Full orchestral wall from the start. Overwhelming and flattened the dynamics." }
+      A: { it: "Pulse solo percussioni e timbri antichi. Troppo secco e poco narrativo.", en: "Percussion-only pulse. Too dry and not enough identity." },
+      B: { it: "Pulse su archi bassi e percussioni, chiamate di ottoni sui cambi. Elementi etnici e antichi come accenti. Orchestra piena solo al primo scontro.", en: "Low strings pulse, brass calls on shifts, full orchestra only at the first clash." },
+      C: { it: "Orchestra piena dall'inizio. Opprimente: appiattisce le dinamiche e copre la narrazione.", en: "Full orchestral wall from the start. Overwhelming and flattened the dynamics." }
     },
-    finalChoice: {
-      it: "B. Scelta finale guidata da leggibilita narrativa e gestione delle revisioni, con armonia usata per segnare i cambi di fase oltre alla spinta ritmica.",
-      en: "B"
-    },
+    finalChoice: { it: "B", en: "B" },
 
     delivered: {
-      it: "Mix principale e alternative utili al montaggio. Stems musicali organizzati. File nominati in modo chiaro e versioni tracciate, cosi la post non perde tempo e non rischia errori.",
+      it: "Mix finale più una versione alternativa con percussioni alleggerite per voce e dialoghi. Stems ordinati e nominati in modo coerente, pronti per la post.",
       en: "Final mix plus a lighter percussion alternate, clearly labelled."
     },
     technicalDeliverables: [
@@ -555,17 +553,17 @@ export const caseStudies: CaseStudyInput[] = [
       { it: "Stem: archi, ottoni, percussioni", en: "Stems: strings, brass, percussion" }
     ],
     musicalLanguage: {
-      it: "Orchestra cinematografica action, con strumenti antichi ed etnici come colore storico controllato. Ostinati e percussioni per la trazione, ottoni per l'impatto, archi per la continuita. Armonia progettata per evidenziare svolte, ingressi e chiusure in relazione al montaggio.",
+      it: "Base ritmica su ostinato di archi bassi e pulse di percussioni per sostenere l'accelerazione del montaggio. Timbri etnici e strumenti dal sapore antico entrano come spezia, per dare flavour storico senza modernizzare la scena.\n\nI cambi di formazione e i passaggi chiave sono segnati da brevi chiamate di ottoni e da soluzioni armoniche dedicate, così ogni svolta si legge anche a volume basso e senza invadere FX e racconto.\n\nDopo il primo impatto, l'orchestra si apre in sustain controllati e l'armonia respira: tensione sotto pelle, ma spazio sopra per conseguenze e narrazione.",
       en: "Built on a low strings ostinato and a heartbeat kick to keep the pulse steady while the edit accelerates.\n\nShort brass calls and trombone figures mark shifts in formation, but the full orchestra is held back until the first clash, so the impact reads as a narrative turn instead of constant intensity.\n\nAfter the collision, the harmony opens into sustained low strings to let the aftermath breathe while keeping tension under the narration."
     },
 
     technicalNotes: [
       { it: "Formato delivery: WAV (linear PCM)", en: "Delivery format: WAV (linear PCM)" },
-      { it: "Specifiche: 48 kHz, 24-bit", en: "Specs: 48 kHz, 24-bit" },
-      { it: "Sync: allineato al picture finale", en: "Sync: aligned to final picture" },
-      { it: "Alt: percussioni ridotte per VO", en: "Alt: reduced percussion for VO" },
-      { it: "Stem: archi, ottoni, percussioni", en: "Stems: strings, brass, percussion" },
-      { it: "Stems separati dove serve, naming chiaro e versioni tracciate per una consegna sicura in post.", en: "Separate stems where needed, clear naming and tracked versions for a safe post delivery." }
+      { it: "Specifiche: 48 kHz, 24 bit (standard richiesto da molte delivery spec, inclusi stems e mix master)", en: "Specs: 48 kHz, 24-bit" },
+      { it: "Sync: allineato al picture lock", en: "Sync: aligned to final picture" },
+      { it: "Alt: versione VO friendly con percussioni alleggerite", en: "Alt: reduced percussion for VO" },
+      { it: "Stem: archi, ottoni, percussioni, timbri etnici e antichi (più eventuali synth e bassi)", en: "Stems: strings, brass, percussion" },
+      { it: "Naming: coerente e versionato tra mix e stems", en: "Separate stems where needed, clear naming and tracked versions for a safe post delivery." }
     ]
   },
   {
