@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ContactPopover from "../../components/ContactPopover";
@@ -253,6 +254,7 @@ function CaseStudyCard({
   labels: typeof labelsData.it;
   language: Language;
 }) {
+  const [isOpen, setIsOpen] = useState(false);
   const videoAnchorId = `video-${item.id}`;
   const musicalLanguageText = getText(item.musicalLanguage ?? item.musicChoices, language)?.trim();
   const trackTitle = item.trackTitle?.trim();
@@ -261,6 +263,7 @@ function CaseStudyCard({
     <details
       className="group overflow-hidden case-study-card card-inset rounded-[20px]"
       suppressHydrationWarning
+      onToggle={(event) => setIsOpen(event.currentTarget.open)}
     >
       <summary className="cursor-pointer select-none list-none p-6 sm:p-8 [&::-webkit-details-marker]:hidden">
         <div className="flex items-start justify-between gap-4">
@@ -339,7 +342,9 @@ function CaseStudyCard({
             {labels.video}
           </div>
           <div className="mt-3 overflow-hidden rounded-2xl">
-            <MediaBlock item={item} labels={labels} language={language} />
+            {isOpen ? (
+              <MediaBlock item={item} labels={labels} language={language} />
+            ) : null}
           </div>
         </div>
 
@@ -527,7 +532,7 @@ function CaseStudyCard({
 }
 
 export default function ForDirectorsPage() {
-  const { language, t } = useLanguage();
+  const { language } = useLanguage();
   const steps = stepsData[language];
   const deliveryChecklist = deliveryChecklistData[language];
   const labels = labelsData[language];

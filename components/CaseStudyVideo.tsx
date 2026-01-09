@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 type CaseStudyVideoProps = {
   hlsUrl: string;
@@ -17,7 +17,6 @@ export default function CaseStudyVideo({
 }: CaseStudyVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<unknown>(null);
-  const [isHlsLoaded, setIsHlsLoaded] = useState(false);
 
   const normalizedHls = hlsUrl?.trim();
   const normalizedMp4 = mp4Url?.trim() ?? null;
@@ -79,7 +78,6 @@ export default function CaseStudyVideo({
       hlsRef.current = hls;
       hls.loadSource(normalizedHls);
       hls.attachMedia(video);
-      setIsHlsLoaded(true);
 
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         video.muted = false;
@@ -122,9 +120,6 @@ export default function CaseStudyVideo({
     };
   }, [normalizedHls, normalizedMp4]);
 
-  // Set initial src only for MP4 fallback or native HLS
-  const initialSrc = !isHlsLoaded ? (normalizedMp4 ?? undefined) : undefined;
-
   return (
     <video
       ref={videoRef}
@@ -134,7 +129,7 @@ export default function CaseStudyVideo({
       preload="metadata"
       crossOrigin="anonymous"
       poster={posterUrl}
-      src={initialSrc}
+      src={normalizedHls ? undefined : normalizedMp4 ?? undefined}
       aria-label={title}
     >
       Your browser does not support the video tag.
