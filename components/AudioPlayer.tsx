@@ -5,7 +5,7 @@ import { AudioManager } from "../lib/AudioManager";
 import { formatTime } from "../lib/formatUtils";
 
 type CachedPeaks = {
-  peaks: Array<number[]>;
+  peaks: number[] | number[][];
   duration: number;
 };
 
@@ -44,6 +44,17 @@ class LRUCache<K, V> {
     this.cache.set(key, value);
   }
 }
+
+const normalizePeaks = (peaks: number[] | number[][]): number[][] => {
+  if (!peaks || peaks.length === 0) return [];
+  if (Array.isArray(peaks[0])) return peaks as number[][];
+  return [peaks as number[]];
+};
+
+const getPeaksLength = (peaks: number[] | number[][]): number => {
+  if (!peaks || peaks.length === 0) return 0;
+  return Array.isArray(peaks[0]) ? (peaks[0] as number[]).length : (peaks as number[]).length;
+};
 
 // Cache up to 50 audio waveform peak data to prevent unbounded memory growth
 const peaksCache = new LRUCache<string, CachedPeaks>(50);
@@ -171,6 +182,9 @@ export default function AudioPlayer({
     try {
       ws.pause();
     } catch {}
+    try {
+      ws.setTime(0);
+    } catch {}
     isPlayingRef.current = false;
     setIsPlaying(false);
     currentTimeRef.current = 0;
@@ -182,14 +196,16 @@ export default function AudioPlayer({
     desiredLengthRef.current = desiredLength;
 
     const cached = peaksCache.get(nextSrc);
-    const useCached = cached && Array.isArray(cached.peaks) && cached.peaks.length === desiredLength;
+    const cachedPeaks = cached ? normalizePeaks(cached.peaks) : null;
+    const cachedLength = cached ? getPeaksLength(cached.peaks) : 0;
+    const useCached = !!(cached && cachedPeaks && cachedLength === desiredLength);
     shouldCacheRef.current = !useCached;
 
     if (!hasReadyRef.current) {
       setIsReady(false);
     }
 
-    const loadResult = useCached ? ws.load(nextSrc, cached.peaks, cached.duration) : ws.load(nextSrc);
+    const loadResult = useCached && cached && cachedPeaks ? ws.load(nextSrc, cachedPeaks, cached.duration) : ws.load(nextSrc);
     if (loadResult && typeof (loadResult as Promise<void>).catch === "function") {
       (loadResult as Promise<void>).catch(() => {
         // Swallow AbortError when component unmounts mid-load.
@@ -217,6 +233,9 @@ export default function AudioPlayer({
 
         const WaveSurfer = WaveSurferModule.default;
         // create wavesurfer
+        if (containerRef.current) {
+          containerRef.current.innerHTML = "";
+        }
         ws = WaveSurfer.create({
           container: containerRef.current,
           waveColor,
@@ -299,17 +318,15 @@ export default function AudioPlayer({
               const barW2 = (ws.params && (ws.params as any).barWidth) || 2;
               const barG2 = (ws.params && (ws.params as any).barGap) || 1;
               const length = cacheLength || Math.max(512, Math.round(containerRef.current.clientWidth / (barW2 + barG2)));
-              let peaks: any;
+              let peaks: number[][] = [];
               try {
-                if (ws.backend && typeof (ws.backend as any).getPeaks === 'function') {
-                  peaks = Array.from((ws.backend as any).getPeaks(length));
-                } else {
-                  peaks = ws.exportPeaks({ maxLength: length, precision: 2 });
-                }
+                peaks = normalizePeaks(ws.exportPeaks({ channels: 1, maxLength: length, precision: 2 }) as number[][]);
               } catch {
-                peaks = ws.exportPeaks({ maxLength: length, precision: 2 });
+                peaks = normalizePeaks(ws.exportPeaks({ channels: 1, maxLength: length, precision: 2 }) as number[][]);
               }
-              peaksCache.set(cacheSrc, { peaks, duration: nextDuration });
+              if (peaks.length) {
+                peaksCache.set(cacheSrc, { peaks, duration: nextDuration });
+              }
             });
           }
         });

@@ -1,5 +1,5 @@
 "use client";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import AudioPlayer from "./AudioPlayer";
 import { formatTime, getTitle } from "../lib/formatUtils";
@@ -20,6 +20,18 @@ type Props = {
   rowCoverSrc?: string;
 };
 
+const CoverArt = memo(function CoverArt({ src }: { src: string }) {
+  return (
+    <div className="track-player-cover">
+      {src ? (
+        <Image src={src} alt="Cover art" fill sizes="140px" />
+      ) : (
+        <div className="track-player-cover-empty" />
+      )}
+    </div>
+  );
+});
+
 function TrackPlayer({
   tracks,
   coverSrc,
@@ -33,6 +45,7 @@ function TrackPlayer({
   const [durations, setDurations] = useState<Record<number, number>>({});
   const [nowPlaying, setNowPlaying] = useState<{ isPlaying: boolean; currentTime: number; duration: number }>({ isPlaying: false, currentTime: 0, duration: 0 });
   const [hasPlayed, setHasPlayed] = useState(false);
+  const coverPendingRef = useRef<string | null>(null);
 
   // Preload only current + next track metadata
   useEffect(() => {
@@ -69,11 +82,47 @@ function TrackPlayer({
 
   const currentTrack = useMemo(() => tracks[currentIndex], [tracks, currentIndex]);
 
-  const safeCoverSrc = (() => {
+  const safeCoverSrc = useMemo(() => {
     const src = currentTrack?.cover ?? coverSrc;
-    if (!src) return '';
+    if (!src) return "";
     return src;
-  })();
+  }, [currentTrack, coverSrc]);
+
+  const [displayCoverSrc, setDisplayCoverSrc] = useState(() => safeCoverSrc);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const seen = new Set<string>();
+    tracks.forEach((track) => {
+      const src = track.cover ?? coverSrc;
+      if (!src || seen.has(src)) return;
+      seen.add(src);
+      const img = new window.Image();
+      img.src = src;
+    });
+  }, [tracks, coverSrc]);
+
+  useEffect(() => {
+    if (!safeCoverSrc) return;
+    if (safeCoverSrc === displayCoverSrc) return;
+    let active = true;
+    coverPendingRef.current = safeCoverSrc;
+    const img = new window.Image();
+    img.src = safeCoverSrc;
+    img.onload = () => {
+      if (!active) return;
+      if (coverPendingRef.current !== safeCoverSrc) return;
+      setDisplayCoverSrc(safeCoverSrc);
+    };
+    img.onerror = () => {
+      if (!active) return;
+      if (coverPendingRef.current !== safeCoverSrc) return;
+      setDisplayCoverSrc(safeCoverSrc);
+    };
+    return () => {
+      active = false;
+    };
+  }, [safeCoverSrc, displayCoverSrc]);
 
   // Memoize callback to prevent AudioPlayer re-renders
   const handleNowPlayingChange = useCallback((d: { isPlaying: boolean; currentTime: number; duration: number }) => {
@@ -84,13 +133,7 @@ function TrackPlayer({
   return (
     <div className="track-player">
       <div className="track-player-cover-wrap">
-        <div className="track-player-cover">
-          {safeCoverSrc ? (
-            <Image src={safeCoverSrc} alt="Cover art" fill sizes="140px" />
-          ) : (
-            <div className="track-player-cover-empty" />
-          )}
-        </div>
+        <CoverArt src={displayCoverSrc} />
         {hasPlayed ? (
           <div className="track-player-now">
             Now playing: {getTitle(currentTrack.context)} - {formatTime(nowPlaying.currentTime)}/{formatTime(displayDurations?.[currentIndex] ?? durations[currentIndex] ?? nowPlaying.duration)}
