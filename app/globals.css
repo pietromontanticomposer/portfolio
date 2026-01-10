@@ -2069,12 +2069,16 @@ main {
   background: rgba(7, 10, 18, 0.4);
 }
 .track-row-indicator {
+  display: inline-block;
   width: 0;
   height: 0;
   border-top: 6px solid transparent;
   border-bottom: 6px solid transparent;
   border-left: 10px solid var(--player-play);
+  visibility: hidden;
+  flex: 0 0 auto;
 }
+.track-row.is-active .track-row-indicator { visibility: visible; }
 .track-row-time {
   color: rgba(148,163,184,0.9);
   font-variant-numeric: tabular-nums;

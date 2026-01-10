@@ -109,38 +109,41 @@ function TrackPlayer({
         />
       </div>
       <div className="track-player-list" role="list">
-        {tracks.map((track, index) => (
-          <button
-            key={track.file}
-            type="button"
-            className={`track-row ${index === currentIndex ? "is-active" : ""}`}
-            onClick={() => setCurrentIndex(index)}
-          >
-            <span className="track-row-title">
-              {showRowCover ? (
-                <span className="track-row-thumb" aria-hidden="true">
-                  {(track.cover ?? rowCoverSrc ?? coverSrc) ? (
-                    <Image
-                      src={track.cover ?? rowCoverSrc ?? coverSrc}
-                      alt=""
-                      width={36}
-                      height={52}
-                    />
-                  ) : (
-                    <span className="track-row-thumb-empty" />
-                  )}
-                </span>
-              ) : null}
-              {index === currentIndex ? (
+        {tracks.map((track, index) => {
+          const isActive = index === currentIndex;
+          return (
+            <button
+              key={track.file}
+              type="button"
+              className={`track-row ${isActive ? "is-active" : ""}`}
+              onClick={() => {
+                if (!isActive) setCurrentIndex(index);
+              }}
+            >
+              <span className="track-row-title">
+                {showRowCover ? (
+                  <span className="track-row-thumb" aria-hidden="true">
+                    {(track.cover ?? rowCoverSrc ?? coverSrc) ? (
+                      <Image
+                        src={track.cover ?? rowCoverSrc ?? coverSrc}
+                        alt=""
+                        width={36}
+                        height={52}
+                      />
+                    ) : (
+                      <span className="track-row-thumb-empty" />
+                    )}
+                  </span>
+                ) : null}
                 <span className="track-row-indicator" aria-hidden="true" />
-              ) : null}
-              {getTitle(track.context)}
-            </span>
-            <span className="track-row-time">
-              {formatTime(displayDurations?.[index] ?? durations[index])}
-            </span>
-          </button>
-        ))}
+                {getTitle(track.context)}
+              </span>
+              <span className="track-row-time">
+                {formatTime(displayDurations?.[index] ?? durations[index])}
+              </span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

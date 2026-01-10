@@ -229,6 +229,7 @@ export default function AudioPlayer({
           barWidth: 2,
           barGap: 1,
           barRadius: 2,
+          barAlign: "bottom",
         } as any);
         wsRef.current = ws;
         AudioManager.register(
@@ -254,7 +255,7 @@ export default function AudioPlayer({
           const nextWidth = parent?.clientWidth ?? containerRef.current.clientWidth;
           if (!nextWidth || nextWidth === lastWidth) return;
           lastWidth = nextWidth;
-          ws.setOptions({ width: nextWidth, height: WAVE_HEIGHT, splitChannels: false });
+          ws.setOptions({ width: nextWidth, height: WAVE_HEIGHT, splitChannels: false, barAlign: "bottom" });
         };
         if (typeof ResizeObserver !== "undefined") {
           resizeObserver = new ResizeObserver(() => {
