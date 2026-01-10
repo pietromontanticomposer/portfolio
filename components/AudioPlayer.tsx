@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useEffect, useRef, useState, useId } from "react";
+import React, { useCallback, useEffect, useRef, useState, useId } from "react";
 import { AudioManager } from "../lib/AudioManager";
 import { formatTime } from "../lib/formatUtils";
 
@@ -109,6 +109,12 @@ export default function AudioPlayer({
   const playerIdRef = useRef<string>("");
   const reactId = useId();
   const pendingPlayRef = useRef(false);
+  const srcRef = useRef(src);
+  const hasReadyRef = useRef(false);
+  const lastLoadedSrcRef = useRef<string | null>(null);
+  const idleIdRef = useRef<number | null>(null);
+  const shouldCacheRef = useRef(false);
+  const desiredLengthRef = useRef(0);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const pointerCleanupRef = useRef<(() => void) | null>(null);
 
@@ -129,6 +135,10 @@ export default function AudioPlayer({
   }, [volume]);
 
   useEffect(() => {
+    srcRef.current = src;
+  }, [src]);
+
+  useEffect(() => {
     if (shouldInit) return;
     const node = containerRef.current;
     if (!node || !("IntersectionObserver" in window)) return;
@@ -146,6 +156,47 @@ export default function AudioPlayer({
     return () => observer.disconnect();
   }, [shouldInit]);
 
+  const loadTrack = useCallback((nextSrc: string) => {
+    const ws = wsRef.current;
+    const node = containerRef.current;
+    if (!ws || !node) return;
+    if (!nextSrc) return;
+
+    if (lastLoadedSrcRef.current === nextSrc) return;
+
+    lastLoadedSrcRef.current = nextSrc;
+    cancelIdle(idleIdRef.current);
+    idleIdRef.current = null;
+
+    try {
+      ws.pause();
+    } catch {}
+    isPlayingRef.current = false;
+    setIsPlaying(false);
+    currentTimeRef.current = 0;
+    setCurrentTime(0);
+
+    const barW = (ws.params && (ws.params as any).barWidth) || 2;
+    const barG = (ws.params && (ws.params as any).barGap) || 1;
+    const desiredLength = Math.max(512, Math.round(node.clientWidth / (barW + barG)));
+    desiredLengthRef.current = desiredLength;
+
+    const cached = peaksCache.get(nextSrc);
+    const useCached = cached && Array.isArray(cached.peaks) && cached.peaks.length === desiredLength;
+    shouldCacheRef.current = !useCached;
+
+    if (!hasReadyRef.current) {
+      setIsReady(false);
+    }
+
+    const loadResult = useCached ? ws.load(nextSrc, cached.peaks, cached.duration) : ws.load(nextSrc);
+    if (loadResult && typeof (loadResult as Promise<void>).catch === "function") {
+      (loadResult as Promise<void>).catch(() => {
+        // Swallow AbortError when component unmounts mid-load.
+      });
+    }
+  }, []);
+
   useEffect(() => {
     if (!containerRef.current) return;
     if (!shouldInit) return;
@@ -154,7 +205,6 @@ export default function AudioPlayer({
     let mounted = true;
     let resizeObserver: ResizeObserver | null = null;
     let resizeHandler: (() => void) | null = null;
-    let idleId: number | null = null;
     let hasInitialized = false;
 
     const initWaveSurfer = () => {
@@ -174,6 +224,7 @@ export default function AudioPlayer({
           cursorColor: "transparent",
           cursorWidth: 0,
           normalize: true,
+          splitChannels: false,
           height: WAVE_HEIGHT,
           barWidth: 2,
           barGap: 1,
@@ -203,7 +254,7 @@ export default function AudioPlayer({
           const nextWidth = parent?.clientWidth ?? containerRef.current.clientWidth;
           if (!nextWidth || nextWidth === lastWidth) return;
           lastWidth = nextWidth;
-          ws.setOptions({ width: nextWidth, height: WAVE_HEIGHT });
+          ws.setOptions({ width: nextWidth, height: WAVE_HEIGHT, splitChannels: false });
         };
         if (typeof ResizeObserver !== "undefined") {
           resizeObserver = new ResizeObserver(() => {
@@ -217,46 +268,11 @@ export default function AudioPlayer({
         // Ensure correct width after initial layout.
         requestAnimationFrame(syncWidth);
 
-        const safeSrc = src;
-        // Determine desired peaks length based on container width and bar sizing
-        const barW = (ws.params && (ws.params as any).barWidth) || 2;
-        const barG = (ws.params && (ws.params as any).barGap) || 1;
-        const desiredLength = Math.max(512, Math.round(containerRef.current!.clientWidth / (barW + barG)));
-
-        const cached = peaksCache.get(safeSrc);
-        let loadResult: any;
-        if (cached && Array.isArray(cached.peaks) && cached.peaks.length === desiredLength) {
-          loadResult = ws.load(safeSrc, cached.peaks, cached.duration);
-        } else {
-          loadResult = ws.load(safeSrc);
-        }
-        if (loadResult && typeof (loadResult as Promise<void>).catch === "function") {
-          (loadResult as Promise<void>).catch(() => {
-            // Swallow AbortError when component unmounts mid-load.
-          });
-        }
+        loadTrack(srcRef.current);
 
         ws.on("ready", () => {
           const nextDuration = Math.round(ws.getDuration());
-          if (!cached) {
-            idleId = scheduleIdle(() => {
-              if (wsRef.current !== ws || !containerRef.current) return;
-              const barW2 = (ws.params && (ws.params as any).barWidth) || 2;
-              const barG2 = (ws.params && (ws.params as any).barGap) || 1;
-              const length = Math.max(512, Math.round(containerRef.current.clientWidth / (barW2 + barG2)));
-              let peaks: any;
-              try {
-                if (ws.backend && typeof (ws.backend as any).getPeaks === 'function') {
-                  peaks = Array.from((ws.backend as any).getPeaks(length));
-                } else {
-                  peaks = ws.exportPeaks({ maxLength: length, precision: 2 });
-                }
-              } catch {
-                peaks = ws.exportPeaks({ maxLength: length, precision: 2 });
-              }
-              peaksCache.set(safeSrc, { peaks, duration: nextDuration });
-            });
-          }
+          hasReadyRef.current = true;
           setIsReady(true);
           durationRef.current = nextDuration;
           setDuration(nextDuration);
@@ -271,6 +287,28 @@ export default function AudioPlayer({
               isPlaying: isPlayingRef.current,
               currentTime: currentTimeRef.current,
               duration: nextDuration,
+            });
+          }
+          const cacheSrc = lastLoadedSrcRef.current;
+          if (cacheSrc && shouldCacheRef.current) {
+            shouldCacheRef.current = false;
+            const cacheLength = desiredLengthRef.current;
+            idleIdRef.current = scheduleIdle(() => {
+              if (wsRef.current !== ws || !containerRef.current) return;
+              const barW2 = (ws.params && (ws.params as any).barWidth) || 2;
+              const barG2 = (ws.params && (ws.params as any).barGap) || 1;
+              const length = cacheLength || Math.max(512, Math.round(containerRef.current.clientWidth / (barW2 + barG2)));
+              let peaks: any;
+              try {
+                if (ws.backend && typeof (ws.backend as any).getPeaks === 'function') {
+                  peaks = Array.from((ws.backend as any).getPeaks(length));
+                } else {
+                  peaks = ws.exportPeaks({ maxLength: length, precision: 2 });
+                }
+              } catch {
+                peaks = ws.exportPeaks({ maxLength: length, precision: 2 });
+              }
+              peaksCache.set(cacheSrc, { peaks, duration: nextDuration });
             });
           }
         });
@@ -342,7 +380,12 @@ export default function AudioPlayer({
       if (resizeObserver) resizeObserver.disconnect();
       if (resizeHandler) window.removeEventListener("resize", resizeHandler);
       setIsReady(false);
-      cancelIdle(idleId);
+      hasReadyRef.current = false;
+      lastLoadedSrcRef.current = null;
+      shouldCacheRef.current = false;
+      desiredLengthRef.current = 0;
+      cancelIdle(idleIdRef.current);
+      idleIdRef.current = null;
 
       // Clean up any active pointer event listeners
       if (pointerCleanupRef.current) {
@@ -362,7 +405,14 @@ export default function AudioPlayer({
       }
       AudioManager.unregister(playerIdRef.current);
     };
-  }, [src, waveColor, progressColor, shouldInit]);
+  }, [loadTrack, waveColor, progressColor, shouldInit]);
+
+  useEffect(() => {
+    if (!shouldInit) return;
+    if (!src) return;
+    if (!wsRef.current) return;
+    loadTrack(src);
+  }, [loadTrack, shouldInit, src]);
 
   useEffect(() => {
     if (!wsRef.current) return;

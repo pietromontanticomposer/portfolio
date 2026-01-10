@@ -99,7 +99,6 @@ function TrackPlayer({
       </div>
       <div className="track-player-wave">
         <AudioPlayer
-          key={currentTrack.file}
           src={currentTrack.file}
           waveColor={waveColor}
           progressColor={progressColor}
