@@ -20,11 +20,18 @@ type Props = {
   rowCoverSrc?: string;
 };
 
-const CoverArt = memo(function CoverArt({ src }: { src: string }) {
+const CoverArt = memo(function CoverArt({ src, onReady }: { src: string; onReady?: () => void }) {
   return (
     <div className="track-player-cover">
       {src ? (
-        <Image src={src} alt="Cover art" fill sizes="140px" />
+        <Image
+          src={src}
+          alt="Cover art"
+          fill
+          sizes="140px"
+          onLoadingComplete={() => onReady?.()}
+          onError={() => onReady?.()}
+        />
       ) : (
         <div className="track-player-cover-empty" />
       )}
@@ -45,6 +52,8 @@ function TrackPlayer({
   const [durations, setDurations] = useState<Record<number, number>>({});
   const [nowPlaying, setNowPlaying] = useState<{ isPlaying: boolean; currentTime: number; duration: number }>({ isPlaying: false, currentTime: 0, duration: 0 });
   const [hasPlayed, setHasPlayed] = useState(false);
+  const [isCoverReady, setIsCoverReady] = useState(false);
+  const [isWaveReady, setIsWaveReady] = useState(false);
   const coverPendingRef = useRef<string | null>(null);
 
   // Preload only current + next track metadata
@@ -124,16 +133,31 @@ function TrackPlayer({
     };
   }, [safeCoverSrc, displayCoverSrc]);
 
+  useEffect(() => {
+    if (!safeCoverSrc) {
+      setIsCoverReady(true);
+      return;
+    }
+    setIsCoverReady(false);
+  }, [safeCoverSrc]);
+
+  useEffect(() => {
+    setIsWaveReady(false);
+  }, [currentTrack?.file]);
+
   // Memoize callback to prevent AudioPlayer re-renders
   const handleNowPlayingChange = useCallback((d: { isPlaying: boolean; currentTime: number; duration: number }) => {
     setNowPlaying(d);
     if (d.isPlaying && !hasPlayed) setHasPlayed(true);
   }, [hasPlayed]);
+  const handleCoverReady = useCallback(() => setIsCoverReady(true), []);
+  const handleWaveReadyChange = useCallback((ready: boolean) => setIsWaveReady(ready), []);
+  const isVisualReady = isCoverReady && isWaveReady;
 
   return (
-    <div className="track-player">
+    <div className="track-player" data-visual-ready={isVisualReady ? "true" : "false"}>
       <div className="track-player-cover-wrap">
-        <CoverArt src={displayCoverSrc} />
+        <CoverArt src={displayCoverSrc} onReady={handleCoverReady} />
         {hasPlayed ? (
           <div className="track-player-now">
             Now playing: {getTitle(currentTrack.context)} - {formatTime(nowPlaying.currentTime)}/{formatTime(displayDurations?.[currentIndex] ?? durations[currentIndex] ?? nowPlaying.duration)}
@@ -149,6 +173,7 @@ function TrackPlayer({
           title={getTitle(currentTrack.context)}
           showNowPlaying={false}
           onNowPlayingChange={handleNowPlayingChange}
+          onReadyChange={handleWaveReadyChange}
         />
       </div>
       <div className="track-player-list" role="list">

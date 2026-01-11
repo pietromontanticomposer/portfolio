@@ -1676,6 +1676,15 @@ main {
   --volume-accent: #6d4bff;
   width: 100%;
 }
+.track-player-cover-wrap,
+.track-player-wave {
+  transition: opacity 220ms ease;
+}
+.track-player[data-visual-ready="false"] .track-player-cover-wrap,
+.track-player[data-visual-ready="false"] .track-player-wave {
+  opacity: 0;
+  pointer-events: none;
+}
 .track-player-cover-wrap {
   grid-area: cover;
   display: flex;
