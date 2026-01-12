@@ -1,7 +1,7 @@
 "use client";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import AudioPlayer, { preloadWaveformJson } from "./AudioPlayer";
+import SVGWavePlayer from "./SVGWavePlayer";
 import { formatTime, getTitle } from "../lib/formatUtils";
 
 type Track = {
@@ -53,15 +53,7 @@ function TrackPlayer({
   const [hasPlayed, setHasPlayed] = useState(false);
   const [coverLoaded, setCoverLoaded] = useState<Record<string, boolean>>({});
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const current = tracks[currentIndex];
-    if (current?.file) preloadWaveformJson(current.file);
-    const next = tracks[currentIndex + 1];
-    if (next?.file) preloadWaveformJson(next.file);
-  }, [tracks, currentIndex]);
-
-  // Preload covers only (waveforms load on-demand)
+  // Preload covers only
   useEffect(() => {
     if (typeof window === "undefined") return;
     const seenCovers = new Set<string>();
@@ -138,7 +130,7 @@ function TrackPlayer({
         ) : null}
       </div>
       <div className="track-player-wave">
-        <AudioPlayer
+        <SVGWavePlayer
           src={currentTrack.file}
           waveColor={waveColor}
           progressColor={progressColor}
