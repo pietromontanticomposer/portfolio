@@ -1,7 +1,7 @@
 "use client";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import AudioPlayer from "./AudioPlayer";
+import LightAudioPlayer from "./LightAudioPlayer";
 import { formatTime, getTitle } from "../lib/formatUtils";
 
 type Track = {
@@ -137,7 +137,7 @@ function TrackPlayer({
         ) : null}
       </div>
       <div className="track-player-wave">
-        <AudioPlayer
+        <LightAudioPlayer
           src={currentTrack.file}
           waveColor={waveColor}
           progressColor={progressColor}
