@@ -59,6 +59,32 @@ const getPeaksLength = (peaks: number[] | number[][]): number => {
 // Cache up to 20 audio waveform peak data to reduce memory usage
 const peaksCache = new LRUCache<string, CachedPeaks>(20);
 
+// Convert audio URL to waveform JSON URL
+function getWaveformUrl(audioSrc: string): string | null {
+  // /uploads/tracks/folder/file.mp3 -> /waveforms/folder/file.json
+  const match = audioSrc.match(/\/uploads\/tracks\/(.+)\.mp3$/i);
+  if (!match) return null;
+  return `/waveforms/${match[1]}.json`;
+}
+
+// Load pre-generated waveform JSON
+async function loadPreGeneratedPeaks(audioSrc: string): Promise<CachedPeaks | null> {
+  const url = getWaveformUrl(audioSrc);
+  if (!url) return null;
+
+  try {
+    const res = await fetch(url, { cache: "force-cache" });
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data.peaks && Array.isArray(data.peaks)) {
+      return { peaks: data.peaks, duration: data.duration || 0 };
+    }
+  } catch {
+    // Waveform file doesn't exist, will decode audio instead
+  }
+  return null;
+}
+
 const scheduleIdle = (cb: () => void) => {
   if (typeof window === "undefined") return null;
   if ("requestIdleCallback" in window) {
@@ -241,7 +267,7 @@ export default function AudioPlayer({
     srcRef.current = src;
   }, [src]);
 
-  const loadTrack = useCallback((nextSrc: string) => {
+  const loadTrack = useCallback(async (nextSrc: string) => {
     const ws = wsRef.current;
     const node = containerRef.current;
     if (!ws || !node) return;
@@ -264,21 +290,30 @@ export default function AudioPlayer({
     currentTimeRef.current = 0;
     setCurrentTime(0);
 
-    const cached = peaksCache.get(nextSrc);
-    const cachedDuration = cached?.duration ?? 0;
-    const desiredLength = getDesiredPeaksLength(node, ws, cachedDuration);
-    desiredLengthRef.current = desiredLength;
-    const cachedPeaks = cached ? normalizePeaks(cached.peaks) : null;
-    const cachedLength = cached ? getPeaksLength(cached.peaks) : 0;
-    const useCached = !!(cached && cachedPeaks && cachedLength >= desiredLength);
-    usedCachedRef.current = useCached;
-    shouldCacheRef.current = !useCached;
-
     setIsReady(false);
     hasReadyRef.current = false;
     if (typeof onReadyChangeRef.current === "function") {
       onReadyChangeRef.current(false);
     }
+
+    // Try to load pre-generated waveform first (fast!)
+    let cached = peaksCache.get(nextSrc);
+    if (!cached) {
+      const preGenerated = await loadPreGeneratedPeaks(nextSrc);
+      if (preGenerated) {
+        peaksCache.set(nextSrc, preGenerated);
+        cached = preGenerated;
+      }
+    }
+
+    const cachedDuration = cached?.duration ?? 0;
+    const desiredLength = getDesiredPeaksLength(node, ws, cachedDuration);
+    desiredLengthRef.current = desiredLength;
+    const cachedPeaks = cached ? normalizePeaks(cached.peaks) : null;
+    const cachedLength = cached ? getPeaksLength(cached.peaks) : 0;
+    const useCached = !!(cached && cachedPeaks && cachedLength > 0);
+    usedCachedRef.current = useCached;
+    shouldCacheRef.current = !useCached;
 
     const loadResult = useCached && cached && cachedPeaks ? ws.load(nextSrc, cachedPeaks, cached.duration) : ws.load(nextSrc);
     if (loadResult && typeof (loadResult as Promise<void>).catch === "function") {
