@@ -99,16 +99,16 @@ function processPreloadQueue() {
     }
     preloadingSet.add(src);
 
-    fetch(src)
+    fetch(src, { cache: "force-cache" })
       .then(res => res.arrayBuffer())
       .then(arrayBuffer => {
         const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
         return audioContext.decodeAudioData(arrayBuffer).then(audioBuffer => {
           const channelData = audioBuffer.getChannelData(0);
           const duration = audioBuffer.duration;
-          const targetLength = 1024;
+          const targetLength = 512;
           const samplesPerPeak = Math.floor(channelData.length / targetLength);
-          const peaks: number[] = [];
+          const peaks: number[] = new Array(targetLength);
 
           for (let i = 0; i < targetLength; i++) {
             const start = i * samplesPerPeak;
@@ -118,7 +118,7 @@ function processPreloadQueue() {
               const abs = Math.abs(channelData[j]);
               if (abs > max) max = abs;
             }
-            peaks.push(Math.round(max * PEAKS_PRECISION) / PEAKS_PRECISION);
+            peaks[i] = Math.round(max * 100) / 100;
           }
 
           peaksCache.set(src, { peaks: [peaks], duration });
@@ -159,10 +159,10 @@ type Props = {
 };
 
 const WAVE_HEIGHT = 56;
-const PEAKS_MIN_LENGTH = 512;
-const PEAKS_MAX_LENGTH = 4000;
-const PEAKS_PER_SECOND = 20;
-const PEAKS_PRECISION = 1000;
+const PEAKS_MIN_LENGTH = 256;
+const PEAKS_MAX_LENGTH = 2000;
+const PEAKS_PER_SECOND = 10;
+const PEAKS_PRECISION = 100;
 
 const getDesiredPeaksLength = (node: HTMLDivElement | null, ws: any, duration = 0): number => {
   const width = node?.clientWidth || node?.parentElement?.clientWidth || 0;
@@ -316,13 +316,15 @@ export default function AudioPlayer({
           progressColor,
           cursorColor: "transparent",
           cursorWidth: 0,
-          normalize: true,
+          normalize: false,
           splitChannels: false,
           height: WAVE_HEIGHT,
-          barWidth: 2,
-          barGap: 1,
+          barWidth: 3,
+          barGap: 2,
           barRadius: 2,
           barMinHeight: 1,
+          backend: "WebAudio",
+          fetchParams: { cache: "force-cache" },
         } as any);
         wsRef.current = ws;
         AudioManager.register(

@@ -210,15 +210,19 @@ main {
   }
 }
 
-/* Optimized grain: larger pattern size (8px vs 6px) = fewer GPU calculations */
+/* Optimized grain: larger pattern size = fewer GPU calculations */
 .grain {
   background-image: radial-gradient(rgba(240, 248, 255, 0.05) 0.8px, transparent 0.8px);
-  background-size: 10px 10px;
-  opacity: 0.08;
-  mix-blend-mode: screen;
-  /* Performance: use GPU layer but avoid constant repaints */
-  will-change: auto;
+  background-size: 12px 12px;
+  opacity: 0.06;
   pointer-events: none;
+  contain: strict;
+}
+@media (min-width: 768px) {
+  .grain {
+    mix-blend-mode: screen;
+    opacity: 0.08;
+  }
 }
 
 @media (min-width: 1024px) {

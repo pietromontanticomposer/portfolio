@@ -80,13 +80,13 @@ function Header() {
           <Link href="/#showreel" className="transition hover:text-[color:var(--foreground)]">
             {t("Showreel", "Showreel")}
           </Link>
-          <Link href="/portfolio" className="transition hover:text-[color:var(--foreground)]">
+          <Link href="/portfolio" prefetch={true} className="transition hover:text-[color:var(--foreground)]">
             {t("Portfolio", "Portfolio")}
           </Link>
-          <Link href="/case-studies" className="transition hover:text-[color:var(--foreground)]">
+          <Link href="/case-studies" prefetch={true} className="transition hover:text-[color:var(--foreground)]">
             {t("Case Studies", "Case Studies")}
           </Link>
-          <Link href="/about" className="transition hover:text-[color:var(--foreground)]">
+          <Link href="/about" prefetch={true} className="transition hover:text-[color:var(--foreground)]">
             {t("Chi sono", "About")}
           </Link>
           <Link href="/#contact" className="transition hover:text-[color:var(--foreground)]">

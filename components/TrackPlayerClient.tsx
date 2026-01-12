@@ -18,7 +18,7 @@ export default function TrackPlayerClient(props: any) {
           observer.disconnect();
         }
       },
-      { rootMargin: "150px 0px" } // Reduced from 300px for less aggressive preloading
+      { rootMargin: "50px 0px" }
     );
 
     observer.observe(node);

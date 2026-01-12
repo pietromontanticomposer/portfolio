@@ -48,7 +48,7 @@ function LazyShowreel({ embedUrl }: LazyShowreelProps) {
           }
         });
       },
-      { rootMargin: "400px" } // Increased to load earlier but still lazy
+      { rootMargin: "100px" }
     );
 
     observer.observe(container);
