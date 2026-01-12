@@ -15,26 +15,41 @@ type Props = {
   onNowPlayingChange?: (data: { isPlaying: boolean; currentTime: number; duration: number }) => void;
 };
 
-const BARS = 120;
 const BAR_WIDTH = 2;
 const BAR_GAP = 1;
 const HEIGHT = 56;
 
-// Generate placeholder waveform that looks like audio
-function generatePlaceholder(seed: string): number[] {
-  let hash = 0;
-  for (let i = 0; i < seed.length; i++) {
-    hash = ((hash << 5) - hash + seed.charCodeAt(i)) | 0;
+// Convert audio URL to waveform JSON URL
+function getWaveformUrl(audioSrc: string): string | null {
+  const match = audioSrc.match(/\/uploads\/tracks\/(.+)\.mp3$/i);
+  if (!match) return null;
+  return `/waveforms/${match[1]}.json`;
+}
+
+// Cache for loaded waveforms
+const waveformCache = new Map<string, number[]>();
+
+// Load pre-generated waveform
+async function loadWaveform(audioSrc: string): Promise<number[] | null> {
+  if (waveformCache.has(audioSrc)) {
+    return waveformCache.get(audioSrc)!;
   }
-  const peaks: number[] = [];
-  for (let i = 0; i < BARS; i++) {
-    hash = ((hash * 1103515245 + 12345) | 0) >>> 0;
-    // Create more realistic variation
-    const base = 0.2 + ((hash % 1000) / 1000) * 0.6;
-    const wave = Math.sin(i * 0.15) * 0.15;
-    peaks.push(Math.max(0.15, Math.min(0.95, base + wave)));
+
+  const url = getWaveformUrl(audioSrc);
+  if (!url) return null;
+
+  try {
+    const res = await fetch(url, { cache: "force-cache" });
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data.peaks && Array.isArray(data.peaks)) {
+      waveformCache.set(audioSrc, data.peaks);
+      return data.peaks;
+    }
+  } catch {
+    // File doesn't exist
   }
-  return peaks;
+  return null;
 }
 
 function SVGWavePlayer({
@@ -55,30 +70,38 @@ function SVGWavePlayer({
   const [progress, setProgress] = useState(0);
   const [volume, setVolume] = useState(1);
   const [showVolume, setShowVolume] = useState(false);
-  const [peaks, setPeaks] = useState<number[]>(() => generatePlaceholder(src));
-  const [isLoading, setIsLoading] = useState(true);
+  const [peaks, setPeaks] = useState<number[] | null>(null);
   const playerIdRef = useRef(`audio-${Math.random().toString(36).slice(2)}`);
   const svgRef = useRef<SVGSVGElement>(null);
   const rafRef = useRef<number | undefined>(undefined);
   const audioToggleRef = useRef<HTMLButtonElement | null>(null);
 
-  const totalWidth = BARS * (BAR_WIDTH + BAR_GAP) - BAR_GAP;
+  const numBars = peaks?.length || 120;
+  const totalWidth = numBars * (BAR_WIDTH + BAR_GAP) - BAR_GAP;
 
-  // Create audio element and decode peaks
+  // Load pre-generated waveform JSON (instant)
+  useEffect(() => {
+    let mounted = true;
+    loadWaveform(src).then(loaded => {
+      if (mounted && loaded) {
+        setPeaks(loaded);
+        onReadyChange?.(true);
+      }
+    });
+    return () => { mounted = false; };
+  }, [src, onReadyChange]);
+
+  // Create audio element
   useEffect(() => {
     const audio = new Audio();
     audio.preload = "metadata";
-    audio.crossOrigin = "anonymous";
     audioRef.current = audio;
 
     let mounted = true;
-    let audioContext: AudioContext | null = null;
 
     const onMeta = () => {
       if (!mounted) return;
       setDuration(audio.duration);
-      setIsLoading(false);
-      onReadyChange?.(true);
     };
 
     const onEnded = () => {
@@ -98,38 +121,7 @@ function SVGWavePlayer({
       () => { audio.src = ""; }
     );
 
-    // Load audio and decode waveform
     audio.src = src;
-
-    // Decode real waveform in background
-    fetch(src, { cache: "force-cache" })
-      .then(res => res.arrayBuffer())
-      .then(buffer => {
-        if (!mounted) return;
-        audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-        return audioContext.decodeAudioData(buffer);
-      })
-      .then(audioBuffer => {
-        if (!mounted || !audioBuffer) return;
-        const channelData = audioBuffer.getChannelData(0);
-        const samplesPerPeak = Math.floor(channelData.length / BARS);
-        const realPeaks: number[] = [];
-
-        for (let i = 0; i < BARS; i++) {
-          const start = i * samplesPerPeak;
-          const end = Math.min(start + samplesPerPeak, channelData.length);
-          let max = 0;
-          for (let j = start; j < end; j++) {
-            const abs = Math.abs(channelData[j]);
-            if (abs > max) max = abs;
-          }
-          realPeaks.push(Math.max(0.1, max));
-        }
-
-        setPeaks(realPeaks);
-        audioContext?.close();
-      })
-      .catch(() => {});
 
     return () => {
       mounted = false;
@@ -139,9 +131,8 @@ function SVGWavePlayer({
       audio.src = "";
       AudioManager.unregister(playerIdRef.current);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      audioContext?.close();
     };
-  }, [src, onReadyChange, onNowPlayingChange]);
+  }, [src, onNowPlayingChange]);
 
   // Update progress with RAF
   useEffect(() => {
@@ -231,40 +222,41 @@ function SVGWavePlayer({
         </button>
 
         <div className="audio-wave">
-          <svg
-            ref={svgRef}
-            viewBox={`0 0 ${totalWidth} ${HEIGHT}`}
-            preserveAspectRatio="none"
-            className="audio-wave-svg"
-            onClick={seek}
-            style={{ cursor: "pointer", width: "100%", height: HEIGHT, display: "block" }}
-          >
-            {/* Background bars */}
-            {peaks.map((peak, i) => {
-              const h = peak * HEIGHT * 0.85;
-              const y = (HEIGHT - h) / 2;
-              const x = i * (BAR_WIDTH + BAR_GAP);
-              return (
-                <rect
-                  key={i}
-                  x={x}
-                  y={y}
-                  width={BAR_WIDTH}
-                  height={h}
-                  rx={1}
-                  fill={waveColor}
-                />
-              );
-            })}
-            {/* Progress overlay */}
-            <clipPath id={`progress-${playerIdRef.current}`}>
-              <rect x="0" y="0" width={progressWidth} height={HEIGHT} />
-            </clipPath>
-            <g clipPath={`url(#progress-${playerIdRef.current})`}>
+          {peaks ? (
+            <svg
+              ref={svgRef}
+              viewBox={`0 0 ${totalWidth} ${HEIGHT}`}
+              preserveAspectRatio="none"
+              className="audio-wave-svg"
+              onClick={seek}
+              style={{ cursor: "pointer", width: "100%", height: HEIGHT, display: "block" }}
+            >
+              {/* Background bars */}
               {peaks.map((peak, i) => {
-                const h = peak * HEIGHT * 0.85;
+                const h = Math.max(0.08, peak) * HEIGHT * 0.85;
                 const y = (HEIGHT - h) / 2;
                 const x = i * (BAR_WIDTH + BAR_GAP);
+                return (
+                  <rect
+                    key={i}
+                    x={x}
+                    y={y}
+                    width={BAR_WIDTH}
+                    height={h}
+                    rx={1}
+                    fill={waveColor}
+                  />
+                );
+              })}
+              {/* Progress overlay */}
+              <clipPath id={`progress-${playerIdRef.current}`}>
+                <rect x="0" y="0" width={progressWidth} height={HEIGHT} />
+              </clipPath>
+              <g clipPath={`url(#progress-${playerIdRef.current})`}>
+                {peaks.map((peak, i) => {
+                  const h = Math.max(0.08, peak) * HEIGHT * 0.85;
+                  const y = (HEIGHT - h) / 2;
+                  const x = i * (BAR_WIDTH + BAR_GAP);
                 return (
                   <rect
                     key={i}
@@ -277,8 +269,11 @@ function SVGWavePlayer({
                   />
                 );
               })}
-            </g>
-          </svg>
+              </g>
+            </svg>
+          ) : (
+            <div className="audio-loading">Loading...</div>
+          )}
         </div>
 
         {showVolumeIcon && (
