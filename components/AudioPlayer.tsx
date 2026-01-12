@@ -56,15 +56,15 @@ const getPeaksLength = (peaks: number[] | number[][]): number => {
   return Array.isArray(peaks[0]) ? (peaks[0] as number[]).length : (peaks as number[]).length;
 };
 
-// Cache up to 50 audio waveform peak data to prevent unbounded memory growth
-const peaksCache = new LRUCache<string, CachedPeaks>(50);
+// Cache up to 20 audio waveform peak data to reduce memory usage
+const peaksCache = new LRUCache<string, CachedPeaks>(20);
 
 const scheduleIdle = (cb: () => void) => {
   if (typeof window === "undefined") return null;
   if ("requestIdleCallback" in window) {
-    return (window as any).requestIdleCallback(cb, { timeout: 1500 });
+    return (window as any).requestIdleCallback(cb, { timeout: 2000 });
   }
-  return (window as any).setTimeout(cb, 0);
+  return (window as any).setTimeout(cb, 16);
 };
 
 const cancelIdle = (id: number | null) => {
@@ -75,6 +75,76 @@ const cancelIdle = (id: number | null) => {
   }
   (window as any).clearTimeout(id);
 };
+
+// Track which audio files are currently being preloaded to avoid duplicates
+const preloadingSet = new Set<string>();
+// Queue for sequential preloading to avoid overwhelming the browser
+const preloadQueue: string[] = [];
+let isProcessingQueue = false;
+
+// Process preload queue one at a time during idle time
+function processPreloadQueue() {
+  if (isProcessingQueue || preloadQueue.length === 0) return;
+  isProcessingQueue = true;
+
+  const processNext = () => {
+    if (preloadQueue.length === 0) {
+      isProcessingQueue = false;
+      return;
+    }
+    const src = preloadQueue.shift()!;
+    if (peaksCache.get(src) || preloadingSet.has(src)) {
+      scheduleIdle(processNext);
+      return;
+    }
+    preloadingSet.add(src);
+
+    fetch(src)
+      .then(res => res.arrayBuffer())
+      .then(arrayBuffer => {
+        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+        return audioContext.decodeAudioData(arrayBuffer).then(audioBuffer => {
+          const channelData = audioBuffer.getChannelData(0);
+          const duration = audioBuffer.duration;
+          const targetLength = 1024;
+          const samplesPerPeak = Math.floor(channelData.length / targetLength);
+          const peaks: number[] = [];
+
+          for (let i = 0; i < targetLength; i++) {
+            const start = i * samplesPerPeak;
+            const end = Math.min(start + samplesPerPeak, channelData.length);
+            let max = 0;
+            for (let j = start; j < end; j++) {
+              const abs = Math.abs(channelData[j]);
+              if (abs > max) max = abs;
+            }
+            peaks.push(Math.round(max * PEAKS_PRECISION) / PEAKS_PRECISION);
+          }
+
+          peaksCache.set(src, { peaks: [peaks], duration });
+          audioContext.close();
+        });
+      })
+      .catch(() => {})
+      .finally(() => {
+        preloadingSet.delete(src);
+        scheduleIdle(processNext);
+      });
+  };
+
+  scheduleIdle(processNext);
+}
+
+// Queue audio file for preloading (non-blocking)
+export function preloadWaveformPeaks(src: string): void {
+  if (!src || typeof window === "undefined") return;
+  if (peaksCache.get(src)) return;
+  if (preloadingSet.has(src)) return;
+  if (preloadQueue.includes(src)) return;
+
+  preloadQueue.push(src);
+  processPreloadQueue();
+}
 
 type Props = {
   src: string;
@@ -89,10 +159,10 @@ type Props = {
 };
 
 const WAVE_HEIGHT = 56;
-const PEAKS_MIN_LENGTH = 1024;
-const PEAKS_MAX_LENGTH = 12000;
-const PEAKS_PER_SECOND = 40;
-const PEAKS_PRECISION = 10000;
+const PEAKS_MIN_LENGTH = 512;
+const PEAKS_MAX_LENGTH = 4000;
+const PEAKS_PER_SECOND = 20;
+const PEAKS_PRECISION = 1000;
 
 const getDesiredPeaksLength = (node: HTMLDivElement | null, ws: any, duration = 0): number => {
   const width = node?.clientWidth || node?.parentElement?.clientWidth || 0;
@@ -356,8 +426,8 @@ export default function AudioPlayer({
           const flooredTime = Math.floor(t);
           const prevTime = currentTimeRef.current;
 
-          // Throttle updates to 4-5 times per second (200-250ms)
-          if (now - lastUpdateTimeRef.current >= 200 && flooredTime !== prevTime) {
+          // Throttle updates to 2 times per second (500ms) for better performance
+          if (now - lastUpdateTimeRef.current >= 500 && flooredTime !== prevTime) {
             lastUpdateTimeRef.current = now;
             currentTimeRef.current = flooredTime;
             setCurrentTime(flooredTime);
