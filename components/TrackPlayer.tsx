@@ -1,7 +1,7 @@
 "use client";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import SVGWavePlayer from "./SVGWavePlayer";
+import AudioPlayer, { preloadWaveformJsonBatch, loadDurationFromWaveform } from "./AudioPlayer";
 import { formatTime, getTitle } from "../lib/formatUtils";
 
 type Track = {
@@ -53,6 +53,13 @@ function TrackPlayer({
   const [hasPlayed, setHasPlayed] = useState(false);
   const [coverLoaded, setCoverLoaded] = useState<Record<string, boolean>>({});
 
+  // Preload waveform JSONs for all tracks immediately (very fast, just JSON)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const audioSources = tracks.map((t) => t.file);
+    preloadWaveformJsonBatch(audioSources);
+  }, [tracks]);
+
   // Preload covers only
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -70,38 +77,23 @@ function TrackPlayer({
     });
   }, [tracks, coverSrc]);
 
-  // Preload only current + next track metadata
+  // Load durations from waveform JSON files (much faster than loading audio metadata)
   useEffect(() => {
     let isMounted = true;
-    const audios: { audio: HTMLAudioElement; onMeta: () => void; index: number }[] = [];
 
-    // Load current and next track only
-    const indicesToLoad = [currentIndex, currentIndex + 1].filter(
-      (idx) => idx < tracks.length && durations[idx] === undefined
-    );
-
-    indicesToLoad.forEach((index) => {
-      const track = tracks[index];
-      const audio = new Audio(track.file);
-      audio.preload = "metadata";
-      const onMeta = () => {
-        if (!isMounted) return;
-        setDurations((prev) => ({ ...prev, [index]: Math.round(audio.duration) }));
-      };
-      audio.addEventListener("loadedmetadata", onMeta);
-      audio.addEventListener("error", onMeta);
-      audio.load();
-      audios.push({ audio, onMeta, index });
+    // Load durations for all tracks from waveform JSON (lightweight)
+    tracks.forEach((track, index) => {
+      if (durations[index] !== undefined) return;
+      loadDurationFromWaveform(track.file).then((dur) => {
+        if (!isMounted || dur === null) return;
+        setDurations((prev) => ({ ...prev, [index]: Math.round(dur) }));
+      });
     });
 
     return () => {
       isMounted = false;
-      audios.forEach(({ audio, onMeta }) => {
-        audio.removeEventListener("loadedmetadata", onMeta);
-        audio.removeEventListener("error", onMeta);
-      });
     };
-  }, [tracks, currentIndex, durations]);
+  }, [tracks, durations]);
 
   const currentTrack = useMemo(() => tracks[currentIndex], [tracks, currentIndex]);
 
@@ -130,7 +122,8 @@ function TrackPlayer({
         ) : null}
       </div>
       <div className="track-player-wave">
-        <SVGWavePlayer
+        <AudioPlayer
+          key={currentTrack.file}
           src={currentTrack.file}
           waveColor={waveColor}
           progressColor={progressColor}

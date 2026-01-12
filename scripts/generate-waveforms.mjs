@@ -12,11 +12,18 @@ import { execSync } from 'child_process';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const TRACKS_DIR = join(__dirname, '../public/uploads/tracks');
 const WAVEFORMS_DIR = join(__dirname, '../public/waveforms');
-const PEAKS_LENGTH = 120;
+const PEAKS_LENGTH = 800; // High definition waveforms
 
 // Ensure waveforms directory exists
 if (!existsSync(WAVEFORMS_DIR)) {
   mkdirSync(WAVEFORMS_DIR, { recursive: true });
+}
+
+function getDuration(filePath, sampleCount) {
+  // Calculate duration from sample count at 8000 Hz sample rate
+  // samples = duration * sampleRate
+  const sampleRate = 8000;
+  return sampleCount / sampleRate;
 }
 
 function generatePeaksWithFFmpeg(filePath) {
@@ -49,7 +56,8 @@ function generatePeaksWithFFmpeg(filePath) {
       peaks.push(Math.round(max * 100) / 100);
     }
 
-    return peaks;
+    const duration = getDuration(filePath, samples.length);
+    return { peaks, duration };
   } catch (err) {
     console.error(`    FFmpeg error: ${err.message}`);
     return null;
@@ -77,18 +85,12 @@ function processDirectory(dir, relativePath = '') {
 
       const outputFile = join(waveformDir, `${trackName}.json`);
 
-      // Skip if already exists
-      if (existsSync(outputFile)) {
-        console.log(`  Skip: ${relativePath}/${trackName} (exists)`);
-        continue;
-      }
-
       console.log(`  Processing: ${relativePath}/${trackName}...`);
-      const peaks = generatePeaksWithFFmpeg(fullPath);
+      const result = generatePeaksWithFFmpeg(fullPath);
 
-      if (peaks) {
-        writeFileSync(outputFile, JSON.stringify({ peaks }));
-        console.log(`  ✓ Generated: ${relativePath}/${trackName}.json`);
+      if (result) {
+        writeFileSync(outputFile, JSON.stringify({ peaks: result.peaks, duration: result.duration }));
+        console.log(`  ✓ Generated: ${relativePath}/${trackName}.json (${result.peaks.length} peaks, ${result.duration.toFixed(1)}s)`);
         count++;
       } else {
         console.log(`  ✗ Failed: ${relativePath}/${trackName}`);
