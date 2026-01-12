@@ -4,13 +4,9 @@ import React, { useCallback, useEffect, useRef, useState, useId } from "react";
 import { AudioManager } from "../lib/AudioManager";
 import { formatTime } from "../lib/formatUtils";
 
-let waveSurferImport: Promise<any> | null = null;
-const loadWaveSurfer = () => {
-  if (!waveSurferImport) {
-    waveSurferImport = import("wavesurfer.js");
-  }
-  return waveSurferImport;
-};
+// Preload WaveSurfer immediately when this module is imported
+const waveSurferImport = import("wavesurfer.js");
+const loadWaveSurfer = () => waveSurferImport;
 
 type CachedPeaks = {
   peaks: number[] | number[][];
@@ -21,11 +17,6 @@ const normalizePeaks = (peaks: number[] | number[][]): number[][] => {
   if (!peaks || peaks.length === 0) return [];
   if (Array.isArray(peaks[0])) return peaks as number[][];
   return [peaks as number[]];
-};
-
-const getPeaksLength = (peaks: number[] | number[][]): number => {
-  if (!peaks || peaks.length === 0) return 0;
-  return Array.isArray(peaks[0]) ? (peaks[0] as number[]).length : (peaks as number[]).length;
 };
 
 // Cache waveform peaks in-memory for the session
@@ -55,93 +46,6 @@ async function loadPreGeneratedPeaks(audioSrc: string): Promise<CachedPeaks | nu
     // Waveform file doesn't exist, will decode audio instead
   }
   return null;
-}
-
-const scheduleIdle = (cb: () => void) => {
-  if (typeof window === "undefined") return null;
-  if ("requestIdleCallback" in window) {
-    return (window as any).requestIdleCallback(cb, { timeout: 2000 });
-  }
-  return (window as any).setTimeout(cb, 16);
-};
-
-const cancelIdle = (id: number | null) => {
-  if (id == null || typeof window === "undefined") return;
-  if ("cancelIdleCallback" in window) {
-    (window as any).cancelIdleCallback(id);
-    return;
-  }
-  (window as any).clearTimeout(id);
-};
-
-// Track which audio files are currently being preloaded to avoid duplicates
-const preloadingSet = new Set<string>();
-// Queue for sequential preloading to avoid overwhelming the browser
-const preloadQueue: string[] = [];
-let isProcessingQueue = false;
-
-// Process preload queue one at a time during idle time
-function processPreloadQueue() {
-  if (isProcessingQueue || preloadQueue.length === 0) return;
-  isProcessingQueue = true;
-
-  const processNext = () => {
-    if (preloadQueue.length === 0) {
-      isProcessingQueue = false;
-      return;
-    }
-    const src = preloadQueue.shift()!;
-    if (peaksCache.get(src) || preloadingSet.has(src)) {
-      scheduleIdle(processNext);
-      return;
-    }
-    preloadingSet.add(src);
-
-    fetch(src, { cache: "force-cache" })
-      .then(res => res.arrayBuffer())
-      .then(arrayBuffer => {
-        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-        return audioContext.decodeAudioData(arrayBuffer).then(audioBuffer => {
-          const channelData = audioBuffer.getChannelData(0);
-          const duration = audioBuffer.duration;
-          const targetLength = 512;
-          const samplesPerPeak = Math.floor(channelData.length / targetLength);
-          const peaks: number[] = new Array(targetLength);
-
-          for (let i = 0; i < targetLength; i++) {
-            const start = i * samplesPerPeak;
-            const end = Math.min(start + samplesPerPeak, channelData.length);
-            let max = 0;
-            for (let j = start; j < end; j++) {
-              const abs = Math.abs(channelData[j]);
-              if (abs > max) max = abs;
-            }
-            peaks[i] = Math.round(max * 100) / 100;
-          }
-
-          peaksCache.set(src, { peaks: [peaks], duration });
-          audioContext.close();
-        });
-      })
-      .catch(() => {})
-      .finally(() => {
-        preloadingSet.delete(src);
-        scheduleIdle(processNext);
-      });
-  };
-
-  scheduleIdle(processNext);
-}
-
-// Queue audio file for preloading (non-blocking)
-export function preloadWaveformPeaks(src: string): void {
-  if (!src || typeof window === "undefined") return;
-  if (peaksCache.get(src)) return;
-  if (preloadingSet.has(src)) return;
-  if (preloadQueue.includes(src)) return;
-
-  preloadQueue.push(src);
-  processPreloadQueue();
 }
 
 // Track which waveforms are being prefetched to avoid duplicates
@@ -240,8 +144,6 @@ export default function AudioPlayer({
   const srcRef = useRef(src);
   const hasReadyRef = useRef(false);
   const lastLoadedSrcRef = useRef<string | null>(null);
-  const idleIdRef = useRef<number | null>(null);
-  const initIdleIdRef = useRef<number | null>(null);
   const pointerCleanupRef = useRef<(() => void) | null>(null);
   const visualReadyRef = useRef(false);
 
@@ -299,7 +201,7 @@ export default function AudioPlayer({
     return () => observer.disconnect();
   }, [requestInit, shouldInit]);
 
-  const loadTrack = useCallback(async (nextSrc: string) => {
+  const loadTrack = useCallback((nextSrc: string) => {
     const ws = wsRef.current;
     const node = containerRef.current;
     if (!ws || !node) return;
@@ -308,8 +210,6 @@ export default function AudioPlayer({
     if (lastLoadedSrcRef.current === nextSrc) return;
 
     lastLoadedSrcRef.current = nextSrc;
-    cancelIdle(idleIdRef.current);
-    idleIdRef.current = null;
 
     try {
       ws.pause();
@@ -329,25 +229,29 @@ export default function AudioPlayer({
       onReadyChangeRef.current(false);
     }
 
-    // Try to load pre-generated waveform first (fast!)
-    let cached = peaksCache.get(nextSrc);
-    if (!cached) {
-      const preGenerated = await loadPreGeneratedPeaks(nextSrc);
+    // Use cached peaks immediately if available (from preload)
+    const cached = peaksCache.get(nextSrc);
+    if (cached) {
+      const cachedPeaks = normalizePeaks(cached.peaks);
+      const loadResult = ws.load(nextSrc, cachedPeaks, cached.duration);
+      if (loadResult && typeof (loadResult as Promise<void>).catch === "function") {
+        (loadResult as Promise<void>).catch(() => {});
+      }
+      return;
+    }
+
+    // No cache - load waveform JSON in parallel with audio
+    const loadResult = ws.load(nextSrc);
+    if (loadResult && typeof (loadResult as Promise<void>).catch === "function") {
+      (loadResult as Promise<void>).catch(() => {});
+    }
+
+    // Fetch waveform JSON in background for future use
+    loadPreGeneratedPeaks(nextSrc).then((preGenerated) => {
       if (preGenerated) {
         peaksCache.set(nextSrc, preGenerated);
-        cached = preGenerated;
       }
-    }
-
-    const cachedPeaks = cached ? normalizePeaks(cached.peaks) : null;
-    const useCached = !!(cached && cachedPeaks && cachedPeaks.length > 0);
-
-    const loadResult = useCached && cached && cachedPeaks ? ws.load(nextSrc, cachedPeaks, cached.duration) : ws.load(nextSrc);
-    if (loadResult && typeof (loadResult as Promise<void>).catch === "function") {
-      (loadResult as Promise<void>).catch(() => {
-        // Swallow AbortError when component unmounts mid-load.
-      });
-    }
+    });
   }, []);
 
   useEffect(() => {
@@ -518,15 +422,11 @@ export default function AudioPlayer({
       });
     };
 
-    initIdleIdRef.current = scheduleIdle(() => {
-      initIdleIdRef.current = null;
-      initWaveSurfer();
-    });
+    // Initialize immediately without idle delay
+    initWaveSurfer();
 
     return () => {
       mounted = false;
-      cancelIdle(initIdleIdRef.current);
-      initIdleIdRef.current = null;
       if (resizeObserver) resizeObserver.disconnect();
       if (resizeHandler) window.removeEventListener("resize", resizeHandler);
       setIsReady(false);
@@ -535,8 +435,6 @@ export default function AudioPlayer({
         onReadyChangeRef.current(false);
       }
       lastLoadedSrcRef.current = null;
-      cancelIdle(idleIdRef.current);
-      idleIdRef.current = null;
 
       // Clean up any active pointer event listeners
       if (pointerCleanupRef.current) {
