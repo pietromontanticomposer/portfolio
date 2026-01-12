@@ -51,7 +51,6 @@ function TrackPlayer({
   const [durations, setDurations] = useState<Record<number, number>>({});
   const [nowPlaying, setNowPlaying] = useState<{ isPlaying: boolean; currentTime: number; duration: number }>({ isPlaying: false, currentTime: 0, duration: 0 });
   const [hasPlayed, setHasPlayed] = useState(false);
-  const [isWaveReady, setIsWaveReady] = useState(false);
   const [coverLoaded, setCoverLoaded] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
@@ -122,20 +121,14 @@ function TrackPlayer({
 
   const isCoverReady = !safeCoverSrc || coverLoaded[safeCoverSrc];
 
-  useEffect(() => {
-    setIsWaveReady(false);
-  }, [currentTrack?.file]);
-
   // Memoize callback to prevent AudioPlayer re-renders
   const handleNowPlayingChange = useCallback((d: { isPlaying: boolean; currentTime: number; duration: number }) => {
     setNowPlaying(d);
     if (d.isPlaying && !hasPlayed) setHasPlayed(true);
   }, [hasPlayed]);
-  const handleWaveReadyChange = useCallback((ready: boolean) => setIsWaveReady(ready), []);
-  const isVisualReady = isCoverReady && isWaveReady;
 
   return (
-    <div className="track-player" data-visual-ready={isVisualReady ? "true" : "false"}>
+    <div className="track-player" data-cover-ready={isCoverReady ? "true" : "false"}>
       <div className="track-player-cover-wrap">
         <CoverArt src={safeCoverSrc} />
         {hasPlayed ? (
@@ -153,7 +146,6 @@ function TrackPlayer({
           title={getTitle(currentTrack.context)}
           showNowPlaying={false}
           onNowPlayingChange={handleNowPlayingChange}
-          onReadyChange={handleWaveReadyChange}
         />
       </div>
       <div className="track-player-list" role="list">

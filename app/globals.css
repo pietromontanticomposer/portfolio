@@ -1684,11 +1684,9 @@ main {
 .track-player-wave {
   transition: opacity 200ms ease 50ms;
 }
-.track-player[data-visual-ready="false"] .track-player-cover-wrap,
-.track-player[data-visual-ready="false"] .track-player-wave {
+.track-player[data-cover-ready="false"] .track-player-wave {
   opacity: 0;
   pointer-events: none;
-  transition: none;
 }
 .track-player-cover-wrap {
   grid-area: cover;
@@ -1821,7 +1819,7 @@ main {
   height: 100%;
   display: block;
 }
-.track-player[data-visual-ready="false"] .audio-wave-container {
+.track-player[data-cover-ready="false"] .audio-wave-container {
   visibility: hidden;
 }
 .audio-wave-container wave,
