@@ -21,9 +21,14 @@ const HEIGHT = 56;
 
 // Convert audio URL to waveform JSON URL
 function getWaveformUrl(audioSrc: string): string | null {
+  // Handle both local paths and Vercel Blob URLs
+  // Local: /uploads/tracks/folder/file.mp3
+  // Blob: https://xxx.public.blob.vercel-storage.com/uploads/tracks/folder%20name/file.mp3
   const match = audioSrc.match(/\/uploads\/tracks\/(.+)\.mp3$/i);
   if (!match) return null;
-  return `/waveforms/${match[1]}.json`;
+  // Decode URL-encoded characters (e.g., %20 -> space)
+  const decoded = decodeURIComponent(match[1]);
+  return `/waveforms/${decoded}.json`;
 }
 
 // Cache for loaded waveforms
