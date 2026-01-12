@@ -1,7 +1,7 @@
 "use client";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import AudioPlayer, { preloadWaveformPeaks } from "./AudioPlayer";
+import AudioPlayer from "./AudioPlayer";
 import { formatTime, getTitle } from "../lib/formatUtils";
 
 type Track = {
@@ -54,14 +54,12 @@ function TrackPlayer({
   const [isWaveReady, setIsWaveReady] = useState(false);
   const [coverLoaded, setCoverLoaded] = useState<Record<string, boolean>>({});
 
-  // Preload all covers and waveforms on mount
+  // Preload covers only (waveforms load on-demand)
   useEffect(() => {
     if (typeof window === "undefined") return;
     const seenCovers = new Set<string>();
-    const seenAudio = new Set<string>();
 
     tracks.forEach((track) => {
-      // Preload cover
       const coverUrl = track.cover ?? coverSrc;
       if (coverUrl && !seenCovers.has(coverUrl)) {
         seenCovers.add(coverUrl);
@@ -69,12 +67,6 @@ function TrackPlayer({
         img.onload = () => setCoverLoaded((prev) => ({ ...prev, [coverUrl]: true }));
         img.onerror = () => setCoverLoaded((prev) => ({ ...prev, [coverUrl]: true }));
         img.src = coverUrl;
-      }
-
-      // Preload waveform peaks
-      if (track.file && !seenAudio.has(track.file)) {
-        seenAudio.add(track.file);
-        preloadWaveformPeaks(track.file);
       }
     });
   }, [tracks, coverSrc]);
