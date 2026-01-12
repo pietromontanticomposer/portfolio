@@ -18,7 +18,7 @@ export default function TrackPlayerClient(props: any) {
           observer.disconnect();
         }
       },
-      { rootMargin: "50px 0px" }
+      { rootMargin: "600px 0px" }
     );
 
     observer.observe(node);

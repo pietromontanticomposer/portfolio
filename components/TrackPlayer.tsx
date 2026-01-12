@@ -1,7 +1,7 @@
 "use client";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import AudioPlayer from "./AudioPlayer";
+import AudioPlayer, { preloadWaveformJson } from "./AudioPlayer";
 import { formatTime, getTitle } from "../lib/formatUtils";
 
 type Track = {
@@ -53,6 +53,14 @@ function TrackPlayer({
   const [hasPlayed, setHasPlayed] = useState(false);
   const [isWaveReady, setIsWaveReady] = useState(false);
   const [coverLoaded, setCoverLoaded] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const current = tracks[currentIndex];
+    if (current?.file) preloadWaveformJson(current.file);
+    const next = tracks[currentIndex + 1];
+    if (next?.file) preloadWaveformJson(next.file);
+  }, [tracks, currentIndex]);
 
   // Preload covers only (waveforms load on-demand)
   useEffect(() => {

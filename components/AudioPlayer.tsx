@@ -4,6 +4,14 @@ import React, { useCallback, useEffect, useRef, useState, useId } from "react";
 import { AudioManager } from "../lib/AudioManager";
 import { formatTime } from "../lib/formatUtils";
 
+let waveSurferImport: Promise<any> | null = null;
+const loadWaveSurfer = () => {
+  if (!waveSurferImport) {
+    waveSurferImport = import("wavesurfer.js");
+  }
+  return waveSurferImport;
+};
+
 type CachedPeaks = {
   peaks: number[] | number[][];
   duration: number;
@@ -172,6 +180,18 @@ export function preloadWaveformPeaks(src: string): void {
   processPreloadQueue();
 }
 
+export function preloadWaveformJson(src: string): void {
+  if (!src || typeof window === "undefined") return;
+  if (peaksCache.get(src)) return;
+
+  loadPreGeneratedPeaks(src)
+    .then((preGenerated) => {
+      if (!preGenerated) return;
+      peaksCache.set(src, preGenerated);
+    })
+    .catch(() => {});
+}
+
 type Props = {
   src: string;
   waveColor?: string;
@@ -242,6 +262,7 @@ export default function AudioPlayer({
   const desiredLengthRef = useRef(0);
   const pointerCleanupRef = useRef<(() => void) | null>(null);
   const usedCachedRef = useRef(false);
+  const visualReadyRef = useRef(false);
 
   if (!playerIdRef.current) {
     playerIdRef.current = `wave-${reactId}`;
@@ -292,6 +313,7 @@ export default function AudioPlayer({
 
     setIsReady(false);
     hasReadyRef.current = false;
+    visualReadyRef.current = false;
     if (typeof onReadyChangeRef.current === "function") {
       onReadyChangeRef.current(false);
     }
@@ -337,7 +359,7 @@ export default function AudioPlayer({
       hasInitialized = true;
 
       // Dynamic import WaveSurfer to reduce initial bundle size (~50KB)
-      import("wavesurfer.js").then((WaveSurferModule) => {
+      loadWaveSurfer().then((WaveSurferModule) => {
         if (!mounted || !containerRef.current) return;
 
         const WaveSurfer = WaveSurferModule.default;
@@ -358,7 +380,8 @@ export default function AudioPlayer({
           barGap: 2,
           barRadius: 2,
           barMinHeight: 1,
-          backend: "WebAudio",
+          backend: "MediaElement",
+          sampleRate: 4000,
           fetchParams: { cache: "force-cache" },
         } as any);
         wsRef.current = ws;
@@ -404,6 +427,14 @@ export default function AudioPlayer({
         requestAnimationFrame(syncWidth);
 
         loadTrack(srcRef.current);
+
+        ws.on("redraw", () => {
+          if (visualReadyRef.current) return;
+          visualReadyRef.current = true;
+          if (typeof onReadyChangeRef.current === "function") {
+            onReadyChangeRef.current(true);
+          }
+        });
 
         ws.on("ready", () => {
           const nextDuration = ws.getDuration() || 0;
@@ -621,7 +652,7 @@ export default function AudioPlayer({
   }, [showVolume]);
 
   const toggle = () => {
-    if (!wsRef.current) {
+    if (!wsRef.current || !hasReadyRef.current) {
       pendingPlayRef.current = true;
       return;
     }

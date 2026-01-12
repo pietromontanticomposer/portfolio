@@ -54,7 +54,7 @@ export default function TrackPlayerSection({
         });
       },
       {
-        rootMargin: '200px', // Load 200px before entering viewport
+        rootMargin: '600px',
       }
     );
 
