@@ -182,23 +182,8 @@ export default function AudioPlayer({
     const node = containerRef.current;
     if (!node) return;
 
-    if (typeof IntersectionObserver === "undefined") {
-      requestInit();
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          requestInit();
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "600px 0px" }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
+    // Initialize immediately - no need to wait for intersection
+    requestInit();
   }, [requestInit, shouldInit]);
 
   const loadTrack = useCallback((nextSrc: string) => {
