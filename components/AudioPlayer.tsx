@@ -69,10 +69,23 @@ const peaksCache = new LRUCache<string, CachedPeaks>(20);
 
 // Convert audio URL to waveform JSON URL
 function getWaveformUrl(audioSrc: string): string | null {
-  // /uploads/tracks/folder/file.mp3 -> /waveforms/folder/file.json
-  const match = audioSrc.match(/\/uploads\/tracks\/(.+)\.mp3$/i);
-  if (!match) return null;
-  return `/waveforms/${match[1]}.json`;
+  // Local: /uploads/tracks/folder/file.mp3 -> /waveforms/folder/file.json
+  const localMatch = audioSrc.match(/\/uploads\/tracks\/(.+)\.mp3$/i);
+  if (localMatch) {
+    return `/waveforms/${localMatch[1]}.json`;
+  }
+
+  // Vercel Blob: https://...blob.vercel-storage.com/tracks/musiche-claudio-re/The-Storm.mp3
+  // -> /waveforms/musiche claudio re/The Storm.json
+  const blobMatch = audioSrc.match(/blob\.vercel-storage\.com\/tracks\/([^/]+)\/([^.]+)\.mp3$/i);
+  if (blobMatch) {
+    // Convert kebab-case to spaces: "musiche-claudio-re" -> "musiche claudio re"
+    const folder = blobMatch[1].replace(/-/g, ' ');
+    const filename = blobMatch[2].replace(/-/g, ' ');
+    return `/waveforms/${folder}/${filename}.json`;
+  }
+
+  return null;
 }
 
 // Load pre-generated waveform JSON
@@ -763,8 +776,8 @@ export default function AudioPlayer({
           <span className="sr-only">{isPlaying ? "Pause" : "Play"}</span>
         </button>
         <div className="audio-wave">
-          {/* Show static SVG waveform instantly, hide when WaveSurfer is ready */}
-          {staticPeaks && !isReady ? (
+          {/* Show static SVG waveform instantly */}
+          {!isReady && staticPeaks && staticPeaks.length > 0 ? (
             <div className="audio-wave-static">
               <StaticWaveform
                 peaks={staticPeaks}
@@ -774,6 +787,10 @@ export default function AudioPlayer({
                 height={WAVE_HEIGHT}
               />
             </div>
+          ) : null}
+          {/* Loading state while peaks are being fetched */}
+          {!isReady && (!staticPeaks || staticPeaks.length === 0) ? (
+            <div className="audio-loading">Loading...</div>
           ) : null}
           {/* WaveSurfer container - only visible when ready */}
           <div
