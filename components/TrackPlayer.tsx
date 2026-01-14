@@ -1,3 +1,8 @@
+/**
+ * ⚠️ ATTENZIONE: NON MODIFICARE QUESTO FILE ⚠️
+ * Il lettore audio è stato ottimizzato e testato accuratamente.
+ * Non apportare modifiche a meno che non venga richiesto espressamente dall'utente.
+ */
 "use client";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";

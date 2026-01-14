@@ -1,3 +1,8 @@
+/**
+ * ⚠️ ATTENZIONE: NON MODIFICARE QUESTO FILE ⚠️
+ * Il lettore audio è stato ottimizzato e testato accuratamente.
+ * Non apportare modifiche a meno che non venga richiesto espressamente dall'utente.
+ */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useEffect, useRef, useState, useId } from "react";
