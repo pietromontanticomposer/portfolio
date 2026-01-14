@@ -222,6 +222,50 @@ const getDesiredPeaksLength = (node: HTMLDivElement | null, ws: any, duration = 
   return Math.min(PEAKS_MAX_LENGTH, desired);
 };
 
+// Static SVG waveform - renders instantly from pre-generated peaks
+function StaticWaveform({ peaks, waveColor, progressColor, progress, height }: {
+  peaks: number[];
+  waveColor: string;
+  progressColor: string;
+  progress: number;
+  height: number;
+}) {
+  if (!peaks || peaks.length === 0) return null;
+
+  const barWidth = 3;
+  const barGap = 2;
+  const totalBars = peaks.length;
+  const progressBars = Math.floor(totalBars * progress);
+
+  return (
+    <svg
+      width="100%"
+      height={height}
+      viewBox={`0 0 ${totalBars * (barWidth + barGap)} ${height}`}
+      preserveAspectRatio="none"
+      style={{ display: 'block' }}
+    >
+      {peaks.map((peak, i) => {
+        const barHeight = Math.max(2, peak * (height - 4));
+        const x = i * (barWidth + barGap);
+        const y = (height - barHeight) / 2;
+        const color = i < progressBars ? progressColor : waveColor;
+        return (
+          <rect
+            key={i}
+            x={x}
+            y={y}
+            width={barWidth}
+            height={barHeight}
+            rx={2}
+            fill={color}
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
 export default function AudioPlayer({
   src,
   waveColor = "#60a5fa",
@@ -242,6 +286,8 @@ export default function AudioPlayer({
   const [volume, setVolume] = useState(1);
   const [showVolume, setShowVolume] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const [staticPeaks, setStaticPeaks] = useState<number[] | null>(null);
+  const [wsInitialized, setWsInitialized] = useState(false);
   const audioToggleRef = useRef<HTMLButtonElement | null>(null);
   const popoverRef = useRef<HTMLLabelElement | null>(null);
   const isDraggingRef = useRef(false);
@@ -286,6 +332,36 @@ export default function AudioPlayer({
 
   useEffect(() => {
     srcRef.current = src;
+  }, [src]);
+
+  // Load static peaks immediately for instant waveform display
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadPeaks = async () => {
+      // Check cache first
+      const cached = peaksCache.get(src);
+      if (cached) {
+        const peaks = Array.isArray(cached.peaks[0]) ? cached.peaks[0] as number[] : cached.peaks as number[];
+        if (!cancelled) {
+          setStaticPeaks(peaks);
+          if (cached.duration) setDuration(cached.duration);
+        }
+        return;
+      }
+
+      // Load from JSON
+      const data = await loadPreGeneratedPeaks(src);
+      if (data && !cancelled) {
+        peaksCache.set(src, data);
+        const peaks = Array.isArray(data.peaks[0]) ? data.peaks[0] as number[] : data.peaks as number[];
+        setStaticPeaks(peaks);
+        if (data.duration) setDuration(data.duration);
+      }
+    };
+
+    loadPeaks();
+    return () => { cancelled = true; };
   }, [src]);
 
   const loadTrack = useCallback(async (nextSrc: string) => {
@@ -345,8 +421,9 @@ export default function AudioPlayer({
     }
   }, []);
 
+  // Initialize WaveSurfer only when needed (user clicks play)
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!wsInitialized || !containerRef.current) return;
 
     let ws: any = null;
     let mounted = true;
@@ -572,7 +649,7 @@ export default function AudioPlayer({
       }
       AudioManager.unregister(playerIdRef.current);
     };
-  }, [loadTrack, waveColor, progressColor]);
+  }, [loadTrack, waveColor, progressColor, wsInitialized]);
 
   useEffect(() => {
     if (!src) return;
@@ -652,6 +729,13 @@ export default function AudioPlayer({
   }, [showVolume]);
 
   const toggle = () => {
+    // If WaveSurfer not initialized yet, start it and queue play
+    if (!wsInitialized) {
+      pendingPlayRef.current = true;
+      setWsInitialized(true);
+      return;
+    }
+
     if (!wsRef.current || !hasReadyRef.current) {
       pendingPlayRef.current = true;
       return;
@@ -679,8 +763,24 @@ export default function AudioPlayer({
           <span className="sr-only">{isPlaying ? "Pause" : "Play"}</span>
         </button>
         <div className="audio-wave">
-          <div ref={containerRef} className="audio-wave-container" />
-          {!isReady ? <div className="audio-loading">Loading audio...</div> : null}
+          {/* Show static SVG waveform instantly, hide when WaveSurfer is ready */}
+          {staticPeaks && !isReady ? (
+            <div className="audio-wave-static">
+              <StaticWaveform
+                peaks={staticPeaks}
+                waveColor={waveColor}
+                progressColor={progressColor}
+                progress={duration > 0 ? currentTime / duration : 0}
+                height={WAVE_HEIGHT}
+              />
+            </div>
+          ) : null}
+          {/* WaveSurfer container - only visible when ready */}
+          <div
+            ref={containerRef}
+            className="audio-wave-container"
+            style={{ display: isReady ? 'block' : 'none' }}
+          />
         </div>
         {showVolumeIcon ? (
           <div translate="no" className={`audio-volume notranslate ${showVolume ? 'is-open' : ''} is-vertical`} style={{ ["--volume-accent" as any]: waveColor, ["--volume-fill" as any]: volume }}>
