@@ -1,8 +1,7 @@
 "use client";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import SVGWavePlayer from "./SVGWavePlayer";
-import { formatTime, getTitle } from "../lib/formatUtils";
+import AudioPlayer from "./AudioPlayer";
 
 type Track = {
   file: string;
@@ -13,35 +12,31 @@ type Track = {
 type Props = {
   tracks: Track[];
   coverSrc: string;
-  displayDurations?: Array<number | null>;
   waveColor?: string;
   progressColor?: string;
   showRowCover?: boolean;
   rowCoverSrc?: string;
 };
 
-const CoverArt = memo(function CoverArt({ src }: { src: string }) {
-  return (
-    <div className="track-player-cover">
-      {src ? (
-        <Image
-          src={src}
-          alt="Cover art"
-          fill
-          sizes="140px"
-          priority
-        />
-      ) : (
-        <div className="track-player-cover-empty" />
-      )}
-    </div>
-  );
-});
+const formatTime = (seconds: number) => {
+  if (!Number.isFinite(seconds) || seconds <= 0) return "--:--";
+  const mm = Math.floor(seconds / 60)
+    .toString()
+    .padStart(2, "0");
+  const ss = Math.floor(seconds % 60)
+    .toString()
+    .padStart(2, "0");
+  return `${mm}:${ss}`;
+};
 
-function TrackPlayer({
+const getTitle = (context: string) => {
+  const split = context.split("—");
+  return split[0]?.trim() || context;
+};
+
+export default function TrackPlayer({
   tracks,
   coverSrc,
-  displayDurations,
   waveColor = "#5b4bff",
   progressColor = "#4338ca",
   showRowCover = false,
@@ -51,24 +46,6 @@ function TrackPlayer({
   const [durations, setDurations] = useState<Record<number, number>>({});
   const [nowPlaying, setNowPlaying] = useState<{ isPlaying: boolean; currentTime: number; duration: number }>({ isPlaying: false, currentTime: 0, duration: 0 });
   const [hasPlayed, setHasPlayed] = useState(false);
-  const [coverLoaded, setCoverLoaded] = useState<Record<string, boolean>>({});
-
-  // Preload covers only
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const seenCovers = new Set<string>();
-
-    tracks.forEach((track) => {
-      const coverUrl = track.cover ?? coverSrc;
-      if (coverUrl && !seenCovers.has(coverUrl)) {
-        seenCovers.add(coverUrl);
-        const img = new window.Image();
-        img.onload = () => setCoverLoaded((prev) => ({ ...prev, [coverUrl]: true }));
-        img.onerror = () => setCoverLoaded((prev) => ({ ...prev, [coverUrl]: true }));
-        img.src = coverUrl;
-      }
-    });
-  }, [tracks, coverSrc]);
 
   // Preload only current + next track metadata
   useEffect(() => {
@@ -105,13 +82,11 @@ function TrackPlayer({
 
   const currentTrack = useMemo(() => tracks[currentIndex], [tracks, currentIndex]);
 
-  const safeCoverSrc = useMemo(() => {
+  const safeCoverSrc = (() => {
     const src = currentTrack?.cover ?? coverSrc;
-    if (!src) return "";
+    if (!src) return '';
     return src;
-  }, [currentTrack, coverSrc]);
-
-  const isCoverReady = !safeCoverSrc || coverLoaded[safeCoverSrc];
+  })();
 
   // Memoize callback to prevent AudioPlayer re-renders
   const handleNowPlayingChange = useCallback((d: { isPlaying: boolean; currentTime: number; duration: number }) => {
@@ -120,17 +95,24 @@ function TrackPlayer({
   }, [hasPlayed]);
 
   return (
-    <div className="track-player" data-cover-ready={isCoverReady ? "true" : "false"}>
+    <div className="track-player">
       <div className="track-player-cover-wrap">
-        <CoverArt src={safeCoverSrc} />
+        <div className="track-player-cover">
+          {safeCoverSrc ? (
+            <Image src={safeCoverSrc} alt="Cover art" fill sizes="140px" />
+          ) : (
+            <div className="track-player-cover-empty" />
+          )}
+        </div>
         {hasPlayed ? (
           <div className="track-player-now">
-            Now playing: {getTitle(currentTrack.context)} - {formatTime(nowPlaying.currentTime)}/{formatTime(displayDurations?.[currentIndex] ?? durations[currentIndex] ?? nowPlaying.duration)}
+            Now playing: {getTitle(currentTrack.context)} - {formatTime(nowPlaying.currentTime)}/{formatTime(durations[currentIndex] ?? nowPlaying.duration)}
           </div>
         ) : null}
       </div>
       <div className="track-player-wave">
-        <SVGWavePlayer
+        <AudioPlayer
+          key={currentTrack.file}
           src={currentTrack.file}
           waveColor={waveColor}
           progressColor={progressColor}
@@ -141,44 +123,37 @@ function TrackPlayer({
         />
       </div>
       <div className="track-player-list" role="list">
-        {tracks.map((track, index) => {
-          const isActive = index === currentIndex;
-          return (
-            <button
-              key={track.file}
-              type="button"
-              className={`track-row ${isActive ? "is-active" : ""}`}
-              onClick={() => {
-                if (!isActive) setCurrentIndex(index);
-              }}
-            >
-              <span className="track-row-title">
-                {showRowCover ? (
-                  <span className="track-row-thumb" aria-hidden="true">
-                    {(track.cover ?? rowCoverSrc ?? coverSrc) ? (
-                      <Image
-                        src={track.cover ?? rowCoverSrc ?? coverSrc}
-                        alt=""
-                        width={36}
-                        height={52}
-                      />
-                    ) : (
-                      <span className="track-row-thumb-empty" />
-                    )}
-                  </span>
-                ) : null}
+        {tracks.map((track, index) => (
+          <button
+            key={track.file}
+            type="button"
+            className={`track-row ${index === currentIndex ? "is-active" : ""}`}
+            onClick={() => setCurrentIndex(index)}
+          >
+            <span className="track-row-title">
+              {showRowCover ? (
+                <span className="track-row-thumb" aria-hidden="true">
+                  {(track.cover ?? rowCoverSrc ?? coverSrc) ? (
+                    <Image
+                      src={track.cover ?? rowCoverSrc ?? coverSrc}
+                      alt=""
+                      width={36}
+                      height={52}
+                    />
+                  ) : (
+                    <span className="track-row-thumb-empty" />
+                  )}
+                </span>
+              ) : null}
+              {index === currentIndex ? (
                 <span className="track-row-indicator" aria-hidden="true" />
-                {getTitle(track.context)}
-              </span>
-              <span className="track-row-time">
-                {formatTime(displayDurations?.[index] ?? durations[index])}
-              </span>
-            </button>
-          );
-        })}
+              ) : null}
+              {getTitle(track.context)}
+            </span>
+            <span className="track-row-time">{formatTime(durations[index])}</span>
+          </button>
+        ))}
       </div>
     </div>
   );
 }
-
-export default memo(TrackPlayer);

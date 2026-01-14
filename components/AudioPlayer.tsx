@@ -1,117 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useCallback, useEffect, useRef, useState, useId } from "react";
+import React, { useEffect, useRef, useState, useId } from "react";
 import { AudioManager } from "../lib/AudioManager";
-import { formatTime } from "../lib/formatUtils";
-
-let waveSurferImport: Promise<any> | null = null;
-const loadWaveSurfer = () => {
-  if (!waveSurferImport) {
-    waveSurferImport = import("wavesurfer.js");
-  }
-  return waveSurferImport;
-};
 
 type CachedPeaks = {
-  peaks: number[] | number[][];
+  peaks: Array<number[]>;
   duration: number;
 };
 
-// LRU cache implementation to prevent unbounded memory growth
-class LRUCache<K, V> {
-  private maxSize: number;
-  private cache: Map<K, V>;
-
-  constructor(maxSize: number) {
-    this.maxSize = maxSize;
-    this.cache = new Map();
-  }
-
-  get(key: K): V | undefined {
-    const value = this.cache.get(key);
-    if (value !== undefined) {
-      // Move to end (most recently used)
-      this.cache.delete(key);
-      this.cache.set(key, value);
-    }
-    return value;
-  }
-
-  set(key: K, value: V): void {
-    // Remove if exists (to update position)
-    if (this.cache.has(key)) {
-      this.cache.delete(key);
-    }
-    // Evict oldest if at capacity
-    else if (this.cache.size >= this.maxSize) {
-      const firstKey = this.cache.keys().next().value;
-      if (firstKey !== undefined) {
-        this.cache.delete(firstKey);
-      }
-    }
-    this.cache.set(key, value);
-  }
-}
-
-const normalizePeaks = (peaks: number[] | number[][]): number[][] => {
-  if (!peaks || peaks.length === 0) return [];
-  if (Array.isArray(peaks[0])) return peaks as number[][];
-  return [peaks as number[]];
-};
-
-const getPeaksLength = (peaks: number[] | number[][]): number => {
-  if (!peaks || peaks.length === 0) return 0;
-  return Array.isArray(peaks[0]) ? (peaks[0] as number[]).length : (peaks as number[]).length;
-};
-
-// Cache up to 20 audio waveform peak data to reduce memory usage
-const peaksCache = new LRUCache<string, CachedPeaks>(20);
-
-// Convert audio URL to waveform JSON URL
-function getWaveformUrl(audioSrc: string): string | null {
-  // Local: /uploads/tracks/folder/file.mp3 -> /waveforms/folder/file.json
-  const localMatch = audioSrc.match(/\/uploads\/tracks\/(.+)\.mp3$/i);
-  if (localMatch) {
-    return `/waveforms/${localMatch[1]}.json`;
-  }
-
-  // Vercel Blob: https://...blob.vercel-storage.com/tracks/musiche-claudio-re/The-Storm.mp3
-  // -> /waveforms/musiche claudio re/The Storm.json
-  const blobMatch = audioSrc.match(/blob\.vercel-storage\.com\/tracks\/([^/]+)\/([^.]+)\.mp3$/i);
-  if (blobMatch) {
-    // Convert kebab-case to spaces: "musiche-claudio-re" -> "musiche claudio re"
-    const folder = blobMatch[1].replace(/-/g, ' ');
-    const filename = blobMatch[2].replace(/-/g, ' ');
-    return `/waveforms/${folder}/${filename}.json`;
-  }
-
-  return null;
-}
-
-// Load pre-generated waveform JSON
-async function loadPreGeneratedPeaks(audioSrc: string): Promise<CachedPeaks | null> {
-  const url = getWaveformUrl(audioSrc);
-  if (!url) return null;
-
-  try {
-    const res = await fetch(url, { cache: "force-cache" });
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (data.peaks && Array.isArray(data.peaks)) {
-      return { peaks: data.peaks, duration: data.duration || 0 };
-    }
-  } catch {
-    // Waveform file doesn't exist, will decode audio instead
-  }
-  return null;
-}
+const peaksCache = new Map<string, CachedPeaks>();
 
 const scheduleIdle = (cb: () => void) => {
   if (typeof window === "undefined") return null;
   if ("requestIdleCallback" in window) {
-    return (window as any).requestIdleCallback(cb, { timeout: 2000 });
+    return (window as any).requestIdleCallback(cb, { timeout: 1500 });
   }
-  return (window as any).setTimeout(cb, 16);
+  return (window as any).setTimeout(cb, 0);
 };
 
 const cancelIdle = (id: number | null) => {
@@ -123,87 +27,16 @@ const cancelIdle = (id: number | null) => {
   (window as any).clearTimeout(id);
 };
 
-// Track which audio files are currently being preloaded to avoid duplicates
-const preloadingSet = new Set<string>();
-// Queue for sequential preloading to avoid overwhelming the browser
-const preloadQueue: string[] = [];
-let isProcessingQueue = false;
-
-// Process preload queue one at a time during idle time
-function processPreloadQueue() {
-  if (isProcessingQueue || preloadQueue.length === 0) return;
-  isProcessingQueue = true;
-
-  const processNext = () => {
-    if (preloadQueue.length === 0) {
-      isProcessingQueue = false;
-      return;
-    }
-    const src = preloadQueue.shift()!;
-    if (peaksCache.get(src) || preloadingSet.has(src)) {
-      scheduleIdle(processNext);
-      return;
-    }
-    preloadingSet.add(src);
-
-    fetch(src, { cache: "force-cache" })
-      .then(res => res.arrayBuffer())
-      .then(arrayBuffer => {
-        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-        return audioContext.decodeAudioData(arrayBuffer).then(audioBuffer => {
-          const channelData = audioBuffer.getChannelData(0);
-          const duration = audioBuffer.duration;
-          const targetLength = 512;
-          const samplesPerPeak = Math.floor(channelData.length / targetLength);
-          const peaks: number[] = new Array(targetLength);
-
-          for (let i = 0; i < targetLength; i++) {
-            const start = i * samplesPerPeak;
-            const end = Math.min(start + samplesPerPeak, channelData.length);
-            let max = 0;
-            for (let j = start; j < end; j++) {
-              const abs = Math.abs(channelData[j]);
-              if (abs > max) max = abs;
-            }
-            peaks[i] = Math.round(max * 100) / 100;
-          }
-
-          peaksCache.set(src, { peaks: [peaks], duration });
-          audioContext.close();
-        });
-      })
-      .catch(() => {})
-      .finally(() => {
-        preloadingSet.delete(src);
-        scheduleIdle(processNext);
-      });
-  };
-
-  scheduleIdle(processNext);
-}
-
-// Queue audio file for preloading (non-blocking)
-export function preloadWaveformPeaks(src: string): void {
-  if (!src || typeof window === "undefined") return;
-  if (peaksCache.get(src)) return;
-  if (preloadingSet.has(src)) return;
-  if (preloadQueue.includes(src)) return;
-
-  preloadQueue.push(src);
-  processPreloadQueue();
-}
-
-export function preloadWaveformJson(src: string): void {
-  if (!src || typeof window === "undefined") return;
-  if (peaksCache.get(src)) return;
-
-  loadPreGeneratedPeaks(src)
-    .then((preGenerated) => {
-      if (!preGenerated) return;
-      peaksCache.set(src, preGenerated);
-    })
-    .catch(() => {});
-}
+// Move format function outside component to prevent recreation
+const formatTime = (s: number) => {
+  const mm = Math.floor(s / 60)
+    .toString()
+    .padStart(2, "0");
+  const ss = Math.floor(s % 60)
+    .toString()
+    .padStart(2, "0");
+  return `${mm}:${ss}`;
+};
 
 type Props = {
   src: string;
@@ -213,71 +46,10 @@ type Props = {
   showVolumeIcon?: boolean;
   title?: string;
   showNowPlaying?: boolean;
-  onReadyChange?: (ready: boolean) => void;
   onNowPlayingChange?: (data: { isPlaying: boolean; currentTime: number; duration: number }) => void;
 };
 
 const WAVE_HEIGHT = 56;
-const PEAKS_MIN_LENGTH = 256;
-const PEAKS_MAX_LENGTH = 2000;
-const PEAKS_PER_SECOND = 10;
-const PEAKS_PRECISION = 100;
-
-const getDesiredPeaksLength = (node: HTMLDivElement | null, ws: any, duration = 0): number => {
-  const width = node?.clientWidth || node?.parentElement?.clientWidth || 0;
-  const barW = (ws?.params && (ws.params as any).barWidth) || 2;
-  const barG = (ws?.params && (ws.params as any).barGap) || 1;
-  const span = Math.max(1, barW + barG);
-  const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
-  const lengthByWidth = width ? Math.round((width / span) * dpr) : 0;
-  const lengthByDuration = duration > 0 ? Math.round(duration * PEAKS_PER_SECOND) : 0;
-  const desired = Math.max(PEAKS_MIN_LENGTH, lengthByWidth, lengthByDuration);
-  return Math.min(PEAKS_MAX_LENGTH, desired);
-};
-
-// Static SVG waveform - renders instantly from pre-generated peaks
-function StaticWaveform({ peaks, waveColor, progressColor, progress, height }: {
-  peaks: number[];
-  waveColor: string;
-  progressColor: string;
-  progress: number;
-  height: number;
-}) {
-  if (!peaks || peaks.length === 0) return null;
-
-  const barWidth = 3;
-  const barGap = 2;
-  const totalBars = peaks.length;
-  const progressBars = Math.floor(totalBars * progress);
-
-  return (
-    <svg
-      width="100%"
-      height={height}
-      viewBox={`0 0 ${totalBars * (barWidth + barGap)} ${height}`}
-      preserveAspectRatio="none"
-      style={{ display: 'block' }}
-    >
-      {peaks.map((peak, i) => {
-        const barHeight = Math.max(2, peak * (height - 4));
-        const x = i * (barWidth + barGap);
-        const y = (height - barHeight) / 2;
-        const color = i < progressBars ? progressColor : waveColor;
-        return (
-          <rect
-            key={i}
-            x={x}
-            y={y}
-            width={barWidth}
-            height={barHeight}
-            rx={2}
-            fill={color}
-          />
-        );
-      })}
-    </svg>
-  );
-}
 
 export default function AudioPlayer({
   src,
@@ -287,41 +59,30 @@ export default function AudioPlayer({
   showVolumeIcon = true,
   title,
   showNowPlaying = false,
-  onReadyChange,
   onNowPlayingChange,
 }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const wsRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [shouldInit, setShouldInit] = useState(false);
   const isPlayingRef = useRef(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(1);
   const [showVolume, setShowVolume] = useState(false);
   const [isReady, setIsReady] = useState(false);
-  const [staticPeaks, setStaticPeaks] = useState<number[] | null>(null);
-  const [wsInitialized, setWsInitialized] = useState(false);
   const audioToggleRef = useRef<HTMLButtonElement | null>(null);
   const popoverRef = useRef<HTMLLabelElement | null>(null);
   const isDraggingRef = useRef(false);
   const currentTimeRef = useRef(0);
   const lastUpdateTimeRef = useRef(0);
   const onNowPlayingChangeRef = useRef(onNowPlayingChange);
-  const onReadyChangeRef = useRef(onReadyChange);
   const durationRef = useRef(duration);
   const volumeRef = useRef(volume);
   const playerIdRef = useRef<string>("");
   const reactId = useId();
   const pendingPlayRef = useRef(false);
-  const srcRef = useRef(src);
-  const hasReadyRef = useRef(false);
-  const lastLoadedSrcRef = useRef<string | null>(null);
-  const idleIdRef = useRef<number | null>(null);
-  const shouldCacheRef = useRef(false);
-  const desiredLengthRef = useRef(0);
-  const pointerCleanupRef = useRef<(() => void) | null>(null);
-  const usedCachedRef = useRef(false);
-  const visualReadyRef = useRef(false);
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   if (!playerIdRef.current) {
     playerIdRef.current = `wave-${reactId}`;
@@ -332,10 +93,6 @@ export default function AudioPlayer({
   }, [onNowPlayingChange]);
 
   useEffect(() => {
-    onReadyChangeRef.current = onReadyChange;
-  }, [onReadyChange]);
-
-  useEffect(() => {
     durationRef.current = duration;
   }, [duration]);
 
@@ -344,104 +101,32 @@ export default function AudioPlayer({
   }, [volume]);
 
   useEffect(() => {
-    srcRef.current = src;
-  }, [src]);
-
-  // Load static peaks immediately for instant waveform display
-  useEffect(() => {
-    let cancelled = false;
-
-    const loadPeaks = async () => {
-      // Check cache first
-      const cached = peaksCache.get(src);
-      if (cached) {
-        const peaks = Array.isArray(cached.peaks[0]) ? cached.peaks[0] as number[] : cached.peaks as number[];
-        if (!cancelled) {
-          setStaticPeaks(peaks);
-          if (cached.duration) setDuration(cached.duration);
-        }
-        return;
-      }
-
-      // Load from JSON
-      const data = await loadPreGeneratedPeaks(src);
-      if (data && !cancelled) {
-        peaksCache.set(src, data);
-        const peaks = Array.isArray(data.peaks[0]) ? data.peaks[0] as number[] : data.peaks as number[];
-        setStaticPeaks(peaks);
-        if (data.duration) setDuration(data.duration);
-      }
-    };
-
-    loadPeaks();
-    return () => { cancelled = true; };
-  }, [src]);
-
-  const loadTrack = useCallback(async (nextSrc: string) => {
-    const ws = wsRef.current;
+    if (shouldInit) return;
     const node = containerRef.current;
-    if (!ws || !node) return;
-    if (!nextSrc) return;
+    if (!node || !("IntersectionObserver" in window)) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setShouldInit(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "300px 0px" }
+    );
+    observer.observe(node);
+    observerRef.current = observer;
+    return () => observer.disconnect();
+  }, [shouldInit]);
 
-    if (lastLoadedSrcRef.current === nextSrc) return;
-
-    lastLoadedSrcRef.current = nextSrc;
-    cancelIdle(idleIdRef.current);
-    idleIdRef.current = null;
-
-    try {
-      ws.pause();
-    } catch {}
-    try {
-      ws.setTime(0);
-    } catch {}
-    isPlayingRef.current = false;
-    setIsPlaying(false);
-    currentTimeRef.current = 0;
-    setCurrentTime(0);
-
-    setIsReady(false);
-    hasReadyRef.current = false;
-    visualReadyRef.current = false;
-    if (typeof onReadyChangeRef.current === "function") {
-      onReadyChangeRef.current(false);
-    }
-
-    // Try to load pre-generated waveform first (fast!)
-    let cached = peaksCache.get(nextSrc);
-    if (!cached) {
-      const preGenerated = await loadPreGeneratedPeaks(nextSrc);
-      if (preGenerated) {
-        peaksCache.set(nextSrc, preGenerated);
-        cached = preGenerated;
-      }
-    }
-
-    const cachedDuration = cached?.duration ?? 0;
-    const desiredLength = getDesiredPeaksLength(node, ws, cachedDuration);
-    desiredLengthRef.current = desiredLength;
-    const cachedPeaks = cached ? normalizePeaks(cached.peaks) : null;
-    const cachedLength = cached ? getPeaksLength(cached.peaks) : 0;
-    const useCached = !!(cached && cachedPeaks && cachedLength > 0);
-    usedCachedRef.current = useCached;
-    shouldCacheRef.current = !useCached;
-
-    const loadResult = useCached && cached && cachedPeaks ? ws.load(nextSrc, cachedPeaks, cached.duration) : ws.load(nextSrc);
-    if (loadResult && typeof (loadResult as Promise<void>).catch === "function") {
-      (loadResult as Promise<void>).catch(() => {
-        // Swallow AbortError when component unmounts mid-load.
-      });
-    }
-  }, []);
-
-  // Initialize WaveSurfer only when needed (user clicks play)
   useEffect(() => {
-    if (!wsInitialized || !containerRef.current) return;
+    if (!containerRef.current) return;
+    if (!shouldInit) return;
 
     let ws: any = null;
     let mounted = true;
     let resizeObserver: ResizeObserver | null = null;
     let resizeHandler: (() => void) | null = null;
+    let idleId: number | null = null;
     let hasInitialized = false;
 
     const initWaveSurfer = () => {
@@ -449,30 +134,22 @@ export default function AudioPlayer({
       hasInitialized = true;
 
       // Dynamic import WaveSurfer to reduce initial bundle size (~50KB)
-      loadWaveSurfer().then((WaveSurferModule) => {
+      import("wavesurfer.js").then((WaveSurferModule) => {
         if (!mounted || !containerRef.current) return;
 
         const WaveSurfer = WaveSurferModule.default;
         // create wavesurfer
-        if (containerRef.current) {
-          containerRef.current.innerHTML = "";
-        }
         ws = WaveSurfer.create({
           container: containerRef.current,
           waveColor,
           progressColor,
           cursorColor: "transparent",
           cursorWidth: 0,
-          normalize: false,
-          splitChannels: false,
+          normalize: true,
           height: WAVE_HEIGHT,
-          barWidth: 3,
-          barGap: 2,
+          barWidth: 2,
+          barGap: 1,
           barRadius: 2,
-          barMinHeight: 1,
-          backend: "MediaElement",
-          sampleRate: 4000,
-          fetchParams: { cache: "force-cache" },
         } as any);
         wsRef.current = ws;
         AudioManager.register(
@@ -498,11 +175,7 @@ export default function AudioPlayer({
           const nextWidth = parent?.clientWidth ?? containerRef.current.clientWidth;
           if (!nextWidth || nextWidth === lastWidth) return;
           lastWidth = nextWidth;
-          ws.setOptions({ width: nextWidth, height: WAVE_HEIGHT, splitChannels: false });
-          const nextLength = getDesiredPeaksLength(containerRef.current, ws, durationRef.current);
-          if (nextLength > desiredLengthRef.current) {
-            desiredLengthRef.current = nextLength;
-          }
+          ws.setOptions({ width: nextWidth, height: WAVE_HEIGHT });
         };
         if (typeof ResizeObserver !== "undefined") {
           resizeObserver = new ResizeObserver(() => {
@@ -516,25 +189,49 @@ export default function AudioPlayer({
         // Ensure correct width after initial layout.
         requestAnimationFrame(syncWidth);
 
-        loadTrack(srcRef.current);
+        const safeSrc = src;
+        // Determine desired peaks length based on container width and bar sizing
+        const barW = (ws.params && (ws.params as any).barWidth) || 2;
+        const barG = (ws.params && (ws.params as any).barGap) || 1;
+        const desiredLength = Math.max(512, Math.round(containerRef.current!.clientWidth / (barW + barG)));
 
-        ws.on("redraw", () => {
-          if (visualReadyRef.current) return;
-          visualReadyRef.current = true;
-          if (typeof onReadyChangeRef.current === "function") {
-            onReadyChangeRef.current(true);
-          }
-        });
+        const cached = peaksCache.get(safeSrc);
+        let loadResult: any;
+        if (cached && Array.isArray(cached.peaks) && cached.peaks.length === desiredLength) {
+          loadResult = ws.load(safeSrc, cached.peaks, cached.duration);
+        } else {
+          loadResult = ws.load(safeSrc);
+        }
+        if (loadResult && typeof (loadResult as Promise<void>).catch === "function") {
+          (loadResult as Promise<void>).catch(() => {
+            // Swallow AbortError when component unmounts mid-load.
+          });
+        }
 
         ws.on("ready", () => {
-          const nextDuration = ws.getDuration() || 0;
-          hasReadyRef.current = true;
+          const nextDuration = Math.round(ws.getDuration());
+          if (!cached) {
+            idleId = scheduleIdle(() => {
+              if (wsRef.current !== ws || !containerRef.current) return;
+              const barW2 = (ws.params && (ws.params as any).barWidth) || 2;
+              const barG2 = (ws.params && (ws.params as any).barGap) || 1;
+              const length = Math.max(512, Math.round(containerRef.current.clientWidth / (barW2 + barG2)));
+              let peaks: any;
+              try {
+                if (ws.backend && typeof (ws.backend as any).getPeaks === 'function') {
+                  peaks = Array.from((ws.backend as any).getPeaks(length));
+                } else {
+                  peaks = ws.exportPeaks({ maxLength: length, precision: 2 });
+                }
+              } catch {
+                peaks = ws.exportPeaks({ maxLength: length, precision: 2 });
+              }
+              peaksCache.set(safeSrc, { peaks, duration: nextDuration });
+            });
+          }
           setIsReady(true);
           durationRef.current = nextDuration;
           setDuration(nextDuration);
-          if (typeof onReadyChangeRef.current === "function") {
-            onReadyChangeRef.current(true);
-          }
           if (pendingPlayRef.current) {
             pendingPlayRef.current = false;
             try {
@@ -548,35 +245,6 @@ export default function AudioPlayer({
               duration: nextDuration,
             });
           }
-          const cacheSrc = lastLoadedSrcRef.current;
-          if (cacheSrc) {
-            const desiredLength = getDesiredPeaksLength(containerRef.current, ws, nextDuration);
-            if (desiredLength > desiredLengthRef.current) {
-              desiredLengthRef.current = desiredLength;
-            }
-            const cached = peaksCache.get(cacheSrc);
-            const cachedLength = cached ? getPeaksLength(cached.peaks) : 0;
-            const needsBetterPeaks = cachedLength < desiredLengthRef.current;
-            if (shouldCacheRef.current || needsBetterPeaks) {
-              shouldCacheRef.current = false;
-              const cacheLength = desiredLengthRef.current;
-              idleIdRef.current = scheduleIdle(() => {
-                if (wsRef.current !== ws || !containerRef.current) return;
-                const length = Math.max(cacheLength, getDesiredPeaksLength(containerRef.current, ws, nextDuration));
-                let peaks: number[][] = [];
-                try {
-                  peaks = normalizePeaks(ws.exportPeaks({ channels: 2, maxLength: length, precision: PEAKS_PRECISION }) as number[][]);
-                } catch {
-                  peaks = normalizePeaks(ws.exportPeaks({ channels: 2, maxLength: length, precision: PEAKS_PRECISION }) as number[][]);
-                }
-                if (!peaks.length) return;
-                peaksCache.set(cacheSrc, { peaks, duration: nextDuration });
-                if (usedCachedRef.current) {
-                  ws.setOptions({ peaks, duration: nextDuration } as any);
-                }
-              });
-            }
-          }
         });
 
         ws.on("audioprocess", (t: number) => {
@@ -584,8 +252,8 @@ export default function AudioPlayer({
           const flooredTime = Math.floor(t);
           const prevTime = currentTimeRef.current;
 
-          // Throttle updates to 2 times per second (500ms) for better performance
-          if (now - lastUpdateTimeRef.current >= 500 && flooredTime !== prevTime) {
+          // Throttle updates to 4-5 times per second (200-250ms)
+          if (now - lastUpdateTimeRef.current >= 200 && flooredTime !== prevTime) {
             lastUpdateTimeRef.current = now;
             currentTimeRef.current = flooredTime;
             setCurrentTime(flooredTime);
@@ -612,7 +280,7 @@ export default function AudioPlayer({
         ws.on("finish", () => {
           isPlayingRef.current = false;
           setIsPlaying(false);
-          const endDuration = ws.getDuration() || 0;
+          const endDuration = Math.round(ws.getDuration() || 0);
           durationRef.current = endDuration;
           if (typeof onNowPlayingChangeRef.current === "function") {
             onNowPlayingChangeRef.current({
@@ -627,29 +295,26 @@ export default function AudioPlayer({
       });
     };
 
-    initWaveSurfer();
+    const startWhenIdle = () => {
+      if ("requestIdleCallback" in window) {
+        (window as any).requestIdleCallback(initWaveSurfer, { timeout: 1200 });
+      } else {
+        setTimeout(initWaveSurfer, 0);
+      }
+    };
+
+    startWhenIdle();
 
     return () => {
       mounted = false;
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
       if (resizeObserver) resizeObserver.disconnect();
       if (resizeHandler) window.removeEventListener("resize", resizeHandler);
       setIsReady(false);
-      hasReadyRef.current = false;
-      if (typeof onReadyChangeRef.current === "function") {
-        onReadyChangeRef.current(false);
-      }
-      lastLoadedSrcRef.current = null;
-      shouldCacheRef.current = false;
-      desiredLengthRef.current = 0;
-      cancelIdle(idleIdRef.current);
-      idleIdRef.current = null;
-
-      // Clean up any active pointer event listeners
-      if (pointerCleanupRef.current) {
-        pointerCleanupRef.current();
-        pointerCleanupRef.current = null;
-      }
-
+      cancelIdle(idleId);
       if (ws) {
         try {
           ws.unAll();
@@ -662,13 +327,7 @@ export default function AudioPlayer({
       }
       AudioManager.unregister(playerIdRef.current);
     };
-  }, [loadTrack, waveColor, progressColor, wsInitialized]);
-
-  useEffect(() => {
-    if (!src) return;
-    if (!wsRef.current) return;
-    loadTrack(src);
-  }, [loadTrack, src]);
+  }, [src, waveColor, progressColor, shouldInit]);
 
   useEffect(() => {
     if (!wsRef.current) return;
@@ -692,13 +351,6 @@ export default function AudioPlayer({
   const onPointerDown = (e: React.PointerEvent) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     e.preventDefault();
-
-    // Clean up any existing pointer listeners before adding new ones
-    if (pointerCleanupRef.current) {
-      pointerCleanupRef.current();
-      pointerCleanupRef.current = null;
-    }
-
     isDraggingRef.current = true;
     try { (e.target as Element).setPointerCapture?.(e.pointerId); } catch {}
     handlePointerMove(e.clientY);
@@ -708,17 +360,9 @@ export default function AudioPlayer({
       try { (e.target as Element).releasePointerCapture?.(e.pointerId); } catch {}
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerup', onUp);
-      pointerCleanupRef.current = null;
     };
     window.addEventListener('pointermove', onMove);
     window.addEventListener('pointerup', onUp);
-
-    // Store cleanup function to call on unmount
-    pointerCleanupRef.current = () => {
-      isDraggingRef.current = false;
-      window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('pointerup', onUp);
-    };
   };
 
   // close popover on click outside or Escape
@@ -741,16 +385,14 @@ export default function AudioPlayer({
     };
   }, [showVolume]);
 
-  const toggle = () => {
-    // If WaveSurfer not initialized yet, start it and queue play
-    if (!wsInitialized) {
-      pendingPlayRef.current = true;
-      setWsInitialized(true);
-      return;
-    }
+  const requestInit = () => {
+    if (!shouldInit) setShouldInit(true);
+  };
 
-    if (!wsRef.current || !hasReadyRef.current) {
+  const toggle = () => {
+    if (!wsRef.current) {
       pendingPlayRef.current = true;
+      requestInit();
       return;
     }
     const next = !isPlayingRef.current;
@@ -769,6 +411,8 @@ export default function AudioPlayer({
   return (
     <div
       className={`audio-player ${showVolume ? "is-volume-open" : ""}`}
+      onPointerEnter={requestInit}
+      onFocus={requestInit}
     >
       <div className="audio-player-row">
         <button onClick={toggle} className="audio-play" aria-label={isPlaying ? "Pause" : "Play"}>
@@ -776,28 +420,8 @@ export default function AudioPlayer({
           <span className="sr-only">{isPlaying ? "Pause" : "Play"}</span>
         </button>
         <div className="audio-wave">
-          {/* Show static SVG waveform instantly */}
-          {!isReady && staticPeaks && staticPeaks.length > 0 ? (
-            <div className="audio-wave-static">
-              <StaticWaveform
-                peaks={staticPeaks}
-                waveColor={waveColor}
-                progressColor={progressColor}
-                progress={duration > 0 ? currentTime / duration : 0}
-                height={WAVE_HEIGHT}
-              />
-            </div>
-          ) : null}
-          {/* Loading state while peaks are being fetched */}
-          {!isReady && (!staticPeaks || staticPeaks.length === 0) ? (
-            <div className="audio-loading">Loading...</div>
-          ) : null}
-          {/* WaveSurfer container - only visible when ready */}
-          <div
-            ref={containerRef}
-            className="audio-wave-container"
-            style={{ display: isReady ? 'block' : 'none' }}
-          />
+          <div ref={containerRef} className="audio-wave-container" />
+          {!isReady ? <div className="audio-loading">Loading audio...</div> : null}
         </div>
         {showVolumeIcon ? (
           <div translate="no" className={`audio-volume notranslate ${showVolume ? 'is-open' : ''} is-vertical`} style={{ ["--volume-accent" as any]: waveColor, ["--volume-fill" as any]: volume }}>
