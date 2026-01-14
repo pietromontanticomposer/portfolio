@@ -402,7 +402,6 @@ export default function AudioPlayer({
         </button>
         <div className="audio-wave">
           <div ref={containerRef} className="audio-wave-container" />
-          {!isReady ? <div className="audio-loading">Loading audio...</div> : null}
         </div>
         {showVolumeIcon ? (
           <div translate="no" className={`audio-volume notranslate ${showVolume ? 'is-open' : ''} is-vertical`} style={{ ["--volume-accent" as any]: waveColor, ["--volume-fill" as any]: volume }}>
