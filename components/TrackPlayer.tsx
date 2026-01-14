@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import AudioPlayer from "./AudioPlayer";
+import AudioPlayer, { prefetchWaveform, preloadWaveSurfer, getCachedDuration } from "./AudioPlayer";
 
 type Track = {
   file: string;
@@ -47,38 +47,36 @@ export default function TrackPlayer({
   const [nowPlaying, setNowPlaying] = useState<{ isPlaying: boolean; currentTime: number; duration: number }>({ isPlaying: false, currentTime: 0, duration: 0 });
   const [hasPlayed, setHasPlayed] = useState(false);
 
-  // Preload only current + next track metadata
+  // Prefetch all waveforms on mount + preload WaveSurfer module
   useEffect(() => {
-    let isMounted = true;
-    const audios: { audio: HTMLAudioElement; onMeta: () => void; index: number }[] = [];
-
-    // Load current and next track only
-    const indicesToLoad = [currentIndex, currentIndex + 1].filter(
-      (idx) => idx < tracks.length && durations[idx] === undefined
-    );
-
-    indicesToLoad.forEach((index) => {
-      const track = tracks[index];
-      const audio = new Audio(track.file);
-      audio.preload = "metadata";
-      const onMeta = () => {
-        if (!isMounted) return;
-        setDurations((prev) => ({ ...prev, [index]: Math.round(audio.duration) }));
-      };
-      audio.addEventListener("loadedmetadata", onMeta);
-      audio.addEventListener("error", onMeta);
-      audio.load();
-      audios.push({ audio, onMeta, index });
+    preloadWaveSurfer();
+    tracks.forEach((track, idx) => {
+      prefetchWaveform(track.file);
     });
+  }, [tracks]);
 
-    return () => {
-      isMounted = false;
-      audios.forEach(({ audio, onMeta }) => {
-        audio.removeEventListener("loadedmetadata", onMeta);
-        audio.removeEventListener("error", onMeta);
+  // Update durations from cache as they become available
+  useEffect(() => {
+    const interval = setInterval(() => {
+      let updated = false;
+      const newDurations = { ...durations };
+      tracks.forEach((track, idx) => {
+        if (newDurations[idx] === undefined) {
+          const cached = getCachedDuration(track.file);
+          if (cached) {
+            newDurations[idx] = cached;
+            updated = true;
+          }
+        }
       });
-    };
-  }, [tracks, currentIndex, durations]);
+      if (updated) setDurations(newDurations);
+      // Stop checking once all durations are loaded
+      if (Object.keys(newDurations).length === tracks.length) {
+        clearInterval(interval);
+      }
+    }, 100);
+    return () => clearInterval(interval);
+  }, [tracks, durations]);
 
   const currentTrack = useMemo(() => tracks[currentIndex], [tracks, currentIndex]);
 
@@ -92,7 +90,11 @@ export default function TrackPlayer({
   const handleNowPlayingChange = useCallback((d: { isPlaying: boolean; currentTime: number; duration: number }) => {
     setNowPlaying(d);
     if (d.isPlaying && !hasPlayed) setHasPlayed(true);
-  }, [hasPlayed]);
+    // Update duration from AudioPlayer if not cached
+    if (d.duration && !durations[currentIndex]) {
+      setDurations(prev => ({ ...prev, [currentIndex]: Math.round(d.duration) }));
+    }
+  }, [hasPlayed, currentIndex, durations]);
 
   return (
     <div className="track-player">

@@ -10,6 +10,31 @@ type CachedPeaks = {
 
 const peaksCache = new Map<string, CachedPeaks>();
 
+// Preload WaveSurfer module in background
+let waveSurferPromise: Promise<any> | null = null;
+export function preloadWaveSurfer() {
+  if (!waveSurferPromise && typeof window !== "undefined") {
+    waveSurferPromise = import("wavesurfer.js");
+  }
+  return waveSurferPromise;
+}
+
+// Prefetch waveform JSON (non-blocking, for next tracks)
+export function prefetchWaveform(src: string) {
+  if (peaksCache.has(src)) return;
+  const url = getWaveformUrl(src);
+  if (url) {
+    fetch(url, { cache: "force-cache" }).then(r => r.json()).then(data => {
+      if (data?.peaks) peaksCache.set(src, { peaks: data.peaks, duration: data.duration || 0 });
+    }).catch(() => {});
+  }
+}
+
+// Get cached duration (for TrackPlayer)
+export function getCachedDuration(src: string): number | null {
+  return peaksCache.get(src)?.duration || null;
+}
+
 // Convert audio URL to waveform JSON URL
 function getWaveformUrl(audioSrc: string): string | null {
   // Local: /uploads/tracks/folder/file.mp3 -> /waveforms/folder/file.json
@@ -161,7 +186,7 @@ export default function AudioPlayer({
 
       if (!mounted || !containerRef.current) return;
 
-      const WaveSurferModule = await import("wavesurfer.js");
+      const WaveSurferModule = await (waveSurferPromise || import("wavesurfer.js"));
       if (!mounted || !containerRef.current) return;
 
       const WaveSurfer = WaveSurferModule.default;
