@@ -1,7 +1,7 @@
 "use client";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import AudioPlayer, { preloadWaveformJsonBatch, loadDurationFromWaveform } from "./AudioPlayer";
+import SVGWavePlayer from "./SVGWavePlayer";
 import { formatTime, getTitle } from "../lib/formatUtils";
 
 type Track = {
@@ -51,33 +51,57 @@ function TrackPlayer({
   const [durations, setDurations] = useState<Record<number, number>>({});
   const [nowPlaying, setNowPlaying] = useState<{ isPlaying: boolean; currentTime: number; duration: number }>({ isPlaying: false, currentTime: 0, duration: 0 });
   const [hasPlayed, setHasPlayed] = useState(false);
+  const [coverLoaded, setCoverLoaded] = useState<Record<string, boolean>>({});
 
-  // Preload waveform JSONs for all tracks immediately (very fast, just JSON)
+  // Preload covers only
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const audioSources = tracks.map((t) => t.file);
-    preloadWaveformJsonBatch(audioSources);
-  }, [tracks]);
+    const seenCovers = new Set<string>();
 
-  // Load durations from waveform JSON files (much faster than loading audio metadata)
+    tracks.forEach((track) => {
+      const coverUrl = track.cover ?? coverSrc;
+      if (coverUrl && !seenCovers.has(coverUrl)) {
+        seenCovers.add(coverUrl);
+        const img = new window.Image();
+        img.onload = () => setCoverLoaded((prev) => ({ ...prev, [coverUrl]: true }));
+        img.onerror = () => setCoverLoaded((prev) => ({ ...prev, [coverUrl]: true }));
+        img.src = coverUrl;
+      }
+    });
+  }, [tracks, coverSrc]);
+
+  // Preload only current + next track metadata
   useEffect(() => {
     let isMounted = true;
+    const audios: { audio: HTMLAudioElement; onMeta: () => void; index: number }[] = [];
 
-    // Load durations for all tracks from waveform JSON (lightweight)
-    tracks.forEach((track, index) => {
-      loadDurationFromWaveform(track.file).then((dur) => {
-        if (!isMounted || dur === null) return;
-        setDurations((prev) => {
-          if (prev[index] !== undefined) return prev; // Already loaded
-          return { ...prev, [index]: Math.round(dur) };
-        });
-      });
+    // Load current and next track only
+    const indicesToLoad = [currentIndex, currentIndex + 1].filter(
+      (idx) => idx < tracks.length && durations[idx] === undefined
+    );
+
+    indicesToLoad.forEach((index) => {
+      const track = tracks[index];
+      const audio = new Audio(track.file);
+      audio.preload = "metadata";
+      const onMeta = () => {
+        if (!isMounted) return;
+        setDurations((prev) => ({ ...prev, [index]: Math.round(audio.duration) }));
+      };
+      audio.addEventListener("loadedmetadata", onMeta);
+      audio.addEventListener("error", onMeta);
+      audio.load();
+      audios.push({ audio, onMeta, index });
     });
 
     return () => {
       isMounted = false;
+      audios.forEach(({ audio, onMeta }) => {
+        audio.removeEventListener("loadedmetadata", onMeta);
+        audio.removeEventListener("error", onMeta);
+      });
     };
-  }, [tracks]); // Remove durations dependency - causes infinite loop
+  }, [tracks, currentIndex, durations]);
 
   const currentTrack = useMemo(() => tracks[currentIndex], [tracks, currentIndex]);
 
@@ -87,18 +111,16 @@ function TrackPlayer({
     return src;
   }, [currentTrack, coverSrc]);
 
-  // Use ref to avoid re-creating callback when hasPlayed changes
-  const hasPlayedRef = useRef(hasPlayed);
-  hasPlayedRef.current = hasPlayed;
+  const isCoverReady = !safeCoverSrc || coverLoaded[safeCoverSrc];
 
-  // Stable callback - never changes, prevents AudioPlayer re-renders
+  // Memoize callback to prevent AudioPlayer re-renders
   const handleNowPlayingChange = useCallback((d: { isPlaying: boolean; currentTime: number; duration: number }) => {
     setNowPlaying(d);
-    if (d.isPlaying && !hasPlayedRef.current) setHasPlayed(true);
-  }, []);
+    if (d.isPlaying && !hasPlayed) setHasPlayed(true);
+  }, [hasPlayed]);
 
   return (
-    <div className="track-player">
+    <div className="track-player" data-cover-ready={isCoverReady ? "true" : "false"}>
       <div className="track-player-cover-wrap">
         <CoverArt src={safeCoverSrc} />
         {hasPlayed ? (
@@ -108,8 +130,7 @@ function TrackPlayer({
         ) : null}
       </div>
       <div className="track-player-wave">
-        <AudioPlayer
-          key={currentTrack.file}
+        <SVGWavePlayer
           src={currentTrack.file}
           waveColor={waveColor}
           progressColor={progressColor}
