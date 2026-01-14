@@ -21,14 +21,25 @@ const HEIGHT = 56;
 
 // Convert audio URL to waveform JSON URL
 function getWaveformUrl(audioSrc: string): string | null {
-  // Handle both local paths and Vercel Blob URLs
-  // Local: /uploads/tracks/folder/file.mp3
-  // Blob: https://xxx.public.blob.vercel-storage.com/uploads/tracks/folder%20name/file.mp3
-  const match = audioSrc.match(/\/uploads\/tracks\/(.+)\.mp3$/i);
-  if (!match) return null;
-  // Decode URL-encoded characters (e.g., %20 -> space)
-  const decoded = decodeURIComponent(match[1]);
-  return `/waveforms/${decoded}.json`;
+  // Local: /uploads/tracks/folder/file.mp3 -> /waveforms/folder/file.json
+  const localMatch = audioSrc.match(/\/uploads\/tracks\/(.+)\.mp3$/i);
+  if (localMatch) {
+    const decoded = decodeURIComponent(localMatch[1]);
+    return `/waveforms/${decoded}.json`;
+  }
+
+  // Vercel Blob: https://...blob.vercel-storage.com/tracks/musiche-i-veneti-antichi/Convivium.mp3
+  // -> /waveforms/musiche i veneti antichi/Convivium.json
+  const blobMatch = audioSrc.match(/blob\.vercel-storage\.com\/tracks\/([^/]+)\/([^.]+)\.mp3$/i);
+  if (blobMatch) {
+    // Convert kebab-case to spaces for folder: "musiche-i-veneti-antichi" -> "musiche i veneti antichi"
+    const folder = blobMatch[1].replace(/-/g, ' ');
+    // Filename may or may not have hyphens, convert them to spaces
+    const filename = blobMatch[2].replace(/-/g, ' ');
+    return `/waveforms/${folder}/${filename}.json`;
+  }
+
+  return null;
 }
 
 // Cache for loaded waveforms
