@@ -72,12 +72,6 @@ type GuideSection = {
   emphasis?: string;
 };
 
-const siaeLinks = {
-  moduli: "https://www.siae.it/it/moduli/",
-  mod109Tf:
-    "https://d2aod8qfhzlk6j.cloudfront.net/SITOIS/Mod_109_TF_versione_1_1_d69e2bd12f.xlsx",
-};
-
 const siaeGuideData: Record<"it" | "en", { title: string; subtitle: string; intro: string[]; sections: GuideSection[] }> = {
   it: {
     title: "Musiche originali e SIAE",
@@ -94,7 +88,7 @@ const siaeGuideData: Record<"it" | "en", { title: string; subtitle: string; intr
             heading: "Io, come compositore",
             bullets: [
               "Preparo e compilo il modulo ufficiale SIAE con tutte le informazioni musicali.",
-              "Vi mando il file già pronto, così non dovete occuparvi della parte tecnica.",
+              "Giro alla produzione i moduli SIAE già compilati.",
             ],
           },
           {
@@ -109,28 +103,11 @@ const siaeGuideData: Record<"it" | "en", { title: string; subtitle: string; intr
         ],
       },
       {
-        title: "2) Quale modulo si usa e dove si scarica",
+        title: "2) Moduli SIAE",
         paragraphs: [
-          <>
-            Il modulo è quello ufficiale SIAE, scaricato dalla pagina moduli:{" "}
-            <a href={siaeLinks.moduli} target="_blank" rel="noreferrer">
-              siae.it/it/moduli
-            </a>
-            .
-          </>,
-          "In base al progetto si usa:",
+          "I moduli SIAE li preparo io e li inoltro già compilati alla produzione.",
+          "Non dovete scaricarli né scegliere il modello.",
         ],
-        labeledBullets: [
-          {
-            label: "Programma Musicale Film, Mod. 109, Excel",
-            text: "per film, cortometraggi e documentari destinati a proiezione.",
-          },
-          {
-            label: "Programma Musicale Film TV, Mod. 109 TF, Excel",
-            text: "per TV, web, VOD, serie e contenuti per piattaforme.",
-          },
-        ],
-        note: "Nota pratica: usare sempre il modulo scaricato dal sito SIAE, non copie vecchie o modificate.",
       },
       {
         title: "3) Cosa mi serve da voi per compilarlo",
@@ -157,13 +134,7 @@ const siaeGuideData: Record<"it" | "en", { title: string; subtitle: string; intr
         title: "5) Come dovete inviarlo alla SIAE",
         paragraphs: [
           "L'invio del Programma Musicale deve essere fatto via PEC, seguendo le istruzioni riportate nel modulo.",
-          <>
-            Per il Mod. 109 TF nel modello è riportato l'indirizzo PEC{" "}
-            <a href={siaeLinks.mod109Tf} target="_blank" rel="noreferrer">
-              MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT
-            </a>
-            .
-          </>,
+          "Nel modulo è riportato l'indirizzo PEC corretto per l'invio.",
           "In generale, attenetevi sempre a quanto indicato nel file che vi ho inviato.",
         ],
       },
@@ -220,7 +191,7 @@ const siaeGuideData: Record<"it" | "en", { title: string; subtitle: string; intr
             heading: "Me, as the composer",
             bullets: [
               "I prepare and fill in the official SIAE form with all musical information.",
-              "I send you the file already prepared, so you don't have to handle the technical part.",
+              "I forward the SIAE forms to production already filled in.",
             ],
           },
           {
@@ -235,29 +206,11 @@ const siaeGuideData: Record<"it" | "en", { title: string; subtitle: string; intr
         ],
       },
       {
-        title: "2) Which form to use and where to download it",
+        title: "2) SIAE forms",
         paragraphs: [
-          <>
-            The form is the official SIAE one, downloaded from the forms page:{" "}
-            <a href={siaeLinks.moduli} target="_blank" rel="noreferrer">
-              siae.it/it/moduli
-            </a>
-            .
-          </>,
-          "Depending on the project, use:",
+          "I prepare the SIAE forms and send them to production already filled in.",
+          "You don't need to download them or choose a template.",
         ],
-        labeledBullets: [
-          {
-            label: "Programma Musicale Film, Mod. 109, Excel",
-            text: "for films, shorts, and documentaries intended for theatrical screening.",
-          },
-          {
-            label: "Programma Musicale Film TV, Mod. 109 TF, Excel",
-            text: "for TV, web, VOD, series, and platform content.",
-          },
-        ],
-        note:
-          "Practical note: always use the form downloaded from the SIAE site, not old or modified copies.",
       },
       {
         title: "3) What I need from you to fill it in",
@@ -284,13 +237,7 @@ const siaeGuideData: Record<"it" | "en", { title: string; subtitle: string; intr
         title: "5) How to send it to SIAE",
         paragraphs: [
           "The Programma Musicale must be sent via PEC, following the instructions provided in the form.",
-          <>
-            For Mod. 109 TF, the template lists the PEC address{" "}
-            <a href={siaeLinks.mod109Tf} target="_blank" rel="noreferrer">
-              MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT
-            </a>
-            .
-          </>,
+          "The form lists the correct PEC address for sending.",
           "In general, always follow what is indicated in the file I sent you.",
         ],
       },
