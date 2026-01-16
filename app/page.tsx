@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import LazyShowreel from "../components/LazyShowreel";
+import ShowreelSection from "../components/ShowreelSection";
 import AudiencePaths from "../components/AudiencePaths";
 import HeroSection from "../components/HeroSection";
 import HomeSections from "../components/HomeSections";
@@ -57,7 +57,7 @@ export default function Home() {
         />
         <HeroSection heroCredits={heroCredits} />
 
-        <LazyShowreel embedUrl={showreelEmbedUrl} />
+        <ShowreelSection embedUrl={showreelEmbedUrl} />
 
         <AudiencePaths />
 

@@ -1,7 +1,6 @@
 "use client";
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { useEffect, useState, useRef } from 'react';
 import ContactPopover from "./ContactPopover";
 import { useLanguage } from "../lib/LanguageContext";
 import { getText } from "../lib/translations";
@@ -32,8 +31,6 @@ export default function TrackPlayerSection({
   placeholderTracks = [],
 }: Props) {
   const { t, language } = useLanguage();
-  const [shouldLoad, setShouldLoad] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
   const playableTracks = tracks.filter(
     (track) => typeof track.file === "string" && track.file.trim().length > 0
   );
@@ -46,31 +43,8 @@ export default function TrackPlayerSection({
     displayTracks[0]?.cover ??
     "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/foto-sito.webp";
 
-  useEffect(() => {
-    // Lazy load TrackPlayer only when section is near viewport
-    if (!sectionRef.current || !hasPlayableTracks) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setShouldLoad(true);
-            observer.disconnect();
-          }
-        });
-      },
-      {
-        rootMargin: '600px',
-      }
-    );
-
-    observer.observe(sectionRef.current);
-
-    return () => observer.disconnect();
-  }, [hasPlayableTracks]);
-
   return (
-    <section id="selected-tracks" className="card-shell p-8" ref={sectionRef}>
+    <section id="selected-tracks" className="card-shell p-8">
       <div className="flex items-center justify-between">
         <h3 className="section-title text-2xl text-[color:var(--foreground)]">
           {t("Tracce Selezionate", "Selected Tracks")}
@@ -78,13 +52,7 @@ export default function TrackPlayerSection({
       </div>
       <div className="mt-6">
         {hasPlayableTracks ? (
-          shouldLoad ? (
-            <TrackPlayer tracks={playableTracks} coverSrc={coverSrc} />
-          ) : (
-            <div className="track-player-skeleton" style={{ minHeight: '400px' }}>
-              {t("Scorri per caricare il player...", "Scroll to load player...")}
-            </div>
-          )
+          <TrackPlayer tracks={playableTracks} coverSrc={coverSrc} />
         ) : (
           <div className="track-player">
             <div className="track-player-cover-wrap">
