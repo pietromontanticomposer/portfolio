@@ -87,16 +87,17 @@ const siaeGuideData: Record<"it" | "en", { title: string; subtitle: string; intr
           {
             heading: "Io, come compositore",
             bullets: [
-              "Preparo e compilo il modulo ufficiale SIAE con tutte le informazioni musicali.",
-              "Giro alla produzione i moduli SIAE già compilati.",
+              "Preparo i dati musicali (titoli, autori, durate, utilizzi).",
+              "Vi fornisco i dati delle musiche da inserire nei moduli.",
             ],
           },
           {
             heading: "Voi, come produzione",
             bullets: [
               "Verificate i dati generali del progetto.",
-              "Firmate il modulo dove richiesto.",
-              "Inviate il modulo alla SIAE via PEC, come indicato nel modello.",
+              "Compilate entrambi i moduli con i dati musicali che vi invio.",
+              "Firmate i moduli dove richiesto.",
+              "Inviate i moduli alla SIAE via PEC, come indicato nel modello.",
               "Mi inoltrate la conferma dell'invio.",
             ],
           },
@@ -105,13 +106,24 @@ const siaeGuideData: Record<"it" | "en", { title: string; subtitle: string; intr
       {
         title: "2) Moduli SIAE",
         paragraphs: [
-          "I moduli SIAE li preparo io e li inoltro già compilati alla produzione.",
-          "Non dovete scaricarli né scegliere il modello.",
+          <>
+            I moduli sono disponibili qui:{" "}
+            <a
+              href="https://drive.google.com/drive/folders/1CRbEA4gRUjnmiTKNlgZZkGX4l_4QOcmv?usp=sharing"
+              target="_blank"
+              rel="noreferrer"
+            >
+              cartella Google Drive
+            </a>
+            .
+          </>,
+          "Vanno compilati entrambi i moduli presenti nella cartella.",
+          "Io vi invio i dati musicali da inserire, voi completate e firmate.",
         ],
       },
       {
-        title: "3) Cosa mi serve da voi per compilarlo",
-        paragraphs: ["Per compilare correttamente il modulo mi bastano questi dati:"],
+        title: "3) Dati necessari per compilare i moduli",
+        paragraphs: ["Per compilare correttamente i moduli servono questi dati:"],
         bullets: [
           "Titolo definitivo dell'opera.",
           "Durata totale dell'opera.",
@@ -121,7 +133,7 @@ const siaeGuideData: Record<"it" | "en", { title: string; subtitle: string; intr
           "Data prevista di prima proiezione o messa in onda, se già disponibile.",
         ],
         note:
-          "La parte musicale la gestisco io: titoli dei brani, autori, eventuali editori, durate effettive in scena, tipo di utilizzo.",
+          "La parte musicale la preparo io e ve la invio: titoli dei brani, autori, eventuali editori, durate effettive in scena, tipo di utilizzo.",
       },
       {
         title: "4) Quando si finalizza",
@@ -190,16 +202,17 @@ const siaeGuideData: Record<"it" | "en", { title: string; subtitle: string; intr
           {
             heading: "Me, as the composer",
             bullets: [
-              "I prepare and fill in the official SIAE form with all musical information.",
-              "I forward the SIAE forms to production already filled in.",
+              "I prepare the music data (titles, authors, durations, usage).",
+              "I provide you with the music data to insert into the forms.",
             ],
           },
           {
             heading: "You, as the production",
             bullets: [
               "You verify the project's general details.",
-              "You sign the form where required.",
-              "You send the form to SIAE via PEC, as indicated in the template.",
+              "You fill in both forms with the music data I send you.",
+              "You sign the forms where required.",
+              "You send the forms to SIAE via PEC, as indicated in the template.",
               "You forward me the sending confirmation.",
             ],
           },
@@ -208,13 +221,24 @@ const siaeGuideData: Record<"it" | "en", { title: string; subtitle: string; intr
       {
         title: "2) SIAE forms",
         paragraphs: [
-          "I prepare the SIAE forms and send them to production already filled in.",
-          "You don't need to download them or choose a template.",
+          <>
+            The forms are available here:{" "}
+            <a
+              href="https://drive.google.com/drive/folders/1CRbEA4gRUjnmiTKNlgZZkGX4l_4QOcmv?usp=sharing"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Google Drive folder
+            </a>
+            .
+          </>,
+          "Both forms in the folder must be completed.",
+          "I send you the music data to insert; you complete and sign.",
         ],
       },
       {
-        title: "3) What I need from you to fill it in",
-        paragraphs: ["To fill in the form correctly, I only need these details:"],
+        title: "3) Project data needed to complete the forms",
+        paragraphs: ["To complete the forms correctly, you need these details:"],
         bullets: [
           "Final title of the work.",
           "Total duration of the work.",
@@ -224,7 +248,7 @@ const siaeGuideData: Record<"it" | "en", { title: string; subtitle: string; intr
           "Expected first screening or broadcast date, if already available.",
         ],
         note:
-          "I handle the musical side: cue titles, authors, any publishers, actual on-screen durations, type of use.",
+          "I prepare the musical data and send it to you: cue titles, authors, any publishers, actual on-screen durations, type of use.",
       },
       {
         title: "4) When it is finalized",
