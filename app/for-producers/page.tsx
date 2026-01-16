@@ -424,6 +424,41 @@ export default function ForProducersPage() {
 
       <section className="card-shell p-8">
         <h2 className="section-title text-2xl text-[color:var(--foreground)]">
+          {t("Case study delivery", "Delivery case studies")}
+        </h2>
+        <div className="mt-6 grid gap-8 md:grid-cols-2">
+          {caseStudies.map((study) => (
+            <div key={study.title}>
+              <h3 className="text-lg font-semibold text-[color:var(--foreground)]">
+                {study.title}
+              </h3>
+              <div className="mt-4 space-y-3 text-sm text-[color:var(--muted)]">
+                <div>
+                  <span className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
+                    Brief
+                  </span>
+                  <p className="mt-1">{study.brief}</p>
+                </div>
+                <div>
+                  <span className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
+                    {t("Scelta musicale", "Musical choice")}
+                  </span>
+                  <p className="mt-1">{study.musicalChoice}</p>
+                </div>
+                <div>
+                  <span className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
+                    Deliverables
+                  </span>
+                  <p className="mt-1">{study.deliverables}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="card-shell p-8">
+        <h2 className="section-title text-2xl text-[color:var(--foreground)]">
           {guide.title}
         </h2>
         <p className="mt-2 text-sm text-[color:var(--muted)]">
@@ -492,41 +527,6 @@ export default function ForProducersPage() {
                   {section.note}
                 </p>
               )}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="card-shell p-8">
-        <h2 className="section-title text-2xl text-[color:var(--foreground)]">
-          {t("Case study delivery", "Delivery case studies")}
-        </h2>
-        <div className="mt-6 grid gap-8 md:grid-cols-2">
-          {caseStudies.map((study) => (
-            <div key={study.title}>
-              <h3 className="text-lg font-semibold text-[color:var(--foreground)]">
-                {study.title}
-              </h3>
-              <div className="mt-4 space-y-3 text-sm text-[color:var(--muted)]">
-                <div>
-                  <span className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
-                    Brief
-                  </span>
-                  <p className="mt-1">{study.brief}</p>
-                </div>
-                <div>
-                  <span className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
-                    {t("Scelta musicale", "Musical choice")}
-                  </span>
-                  <p className="mt-1">{study.musicalChoice}</p>
-                </div>
-                <div>
-                  <span className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
-                    Deliverables
-                  </span>
-                  <p className="mt-1">{study.deliverables}</p>
-                </div>
-              </div>
             </div>
           ))}
         </div>
