@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, memo } from "react";
+import { useLanguage } from "../lib/LanguageContext";
 
 function LazyIframe({
   src,
@@ -9,7 +10,7 @@ function LazyIframe({
   allow,
   className,
   autoLoad,
-  buttonLabel = "Carica media",
+  buttonLabel,
 }: {
   src: string;
   title?: string;
@@ -19,6 +20,9 @@ function LazyIframe({
   autoLoad?: boolean;
   buttonLabel?: string;
 }) {
+  const { t } = useLanguage();
+  const resolvedButtonLabel = buttonLabel ?? t("Carica media", "Load media");
+  const mediaLabel = title ?? t("media", "media");
   const [loaded, setLoaded] = useState(Boolean((autoLoad as boolean) || false));
 
   // Memoize the iframe src calculation
@@ -49,9 +53,9 @@ function LazyIframe({
           <button
             onClick={() => setLoaded(true)}
             className="modal-close"
-            aria-label={`Load ${title || "media"}`}
+            aria-label={`${t("Carica", "Load")} ${mediaLabel}`}
           >
-            {buttonLabel}
+            {resolvedButtonLabel}
           </button>
         </div>
       ) : (

@@ -7,10 +7,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import AudioPlayer, { prefetchWaveform, preloadWaveSurfer, getCachedDuration } from "./AudioPlayer";
+import { useLanguage } from "../lib/LanguageContext";
+import { getText } from "../lib/translations";
 
 type Track = {
   file: string;
-  context: string;
+  context: { it: string; en: string } | string;
   cover?: string;
 };
 
@@ -47,6 +49,7 @@ export default function TrackPlayer({
   showRowCover = false,
   rowCoverSrc,
 }: Props) {
+  const { language, t } = useLanguage();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [durations, setDurations] = useState<Record<number, number>>({});
   const [nowPlaying, setNowPlaying] = useState<{ isPlaying: boolean; currentTime: number; duration: number }>({ isPlaying: false, currentTime: 0, duration: 0 });
@@ -101,19 +104,21 @@ export default function TrackPlayer({
     }
   }, [hasPlayed, currentIndex, durations]);
 
+  const currentContextText = getText(currentTrack.context, language);
+
   return (
     <div className="track-player">
       <div className="track-player-cover-wrap">
         <div className="track-player-cover">
           {safeCoverSrc ? (
-            <Image src={safeCoverSrc} alt="Cover art" fill sizes="140px" />
+            <Image src={safeCoverSrc} alt={t("Copertina", "Cover art")} fill sizes="140px" />
           ) : (
             <div className="track-player-cover-empty" />
           )}
         </div>
         {hasPlayed ? (
           <div className="track-player-now">
-            Now playing: {getTitle(currentTrack.context)} - {formatTime(nowPlaying.currentTime)}/{formatTime(durations[currentIndex] ?? nowPlaying.duration)}
+            {t("In riproduzione", "Now playing")}: {getTitle(currentContextText)} - {formatTime(nowPlaying.currentTime)}/{formatTime(durations[currentIndex] ?? nowPlaying.duration)}
           </div>
         ) : null}
       </div>
@@ -124,42 +129,45 @@ export default function TrackPlayer({
           waveColor={waveColor}
           progressColor={progressColor}
           showTime={false}
-          title={getTitle(currentTrack.context)}
+          title={getTitle(currentContextText)}
           showNowPlaying={false}
           onNowPlayingChange={handleNowPlayingChange}
         />
       </div>
       <div className="track-player-list" role="list">
-        {tracks.map((track, index) => (
-          <button
-            key={track.file}
-            type="button"
-            className={`track-row ${index === currentIndex ? "is-active" : ""}`}
-            onClick={() => setCurrentIndex(index)}
-          >
-            <span className="track-row-title">
-              {showRowCover ? (
-                <span className="track-row-thumb" aria-hidden="true">
-                  {(track.cover ?? rowCoverSrc ?? coverSrc) ? (
-                    <Image
-                      src={track.cover ?? rowCoverSrc ?? coverSrc}
-                      alt=""
-                      width={36}
-                      height={52}
-                    />
-                  ) : (
-                    <span className="track-row-thumb-empty" />
-                  )}
-                </span>
-              ) : null}
-              {index === currentIndex ? (
-                <span className="track-row-indicator" aria-hidden="true" />
-              ) : null}
-              {getTitle(track.context)}
-            </span>
-            <span className="track-row-time">{formatTime(durations[index])}</span>
-          </button>
-        ))}
+        {tracks.map((track, index) => {
+          const contextText = getText(track.context, language);
+          return (
+            <button
+              key={track.file}
+              type="button"
+              className={`track-row ${index === currentIndex ? "is-active" : ""}`}
+              onClick={() => setCurrentIndex(index)}
+            >
+              <span className="track-row-title">
+                {showRowCover ? (
+                  <span className="track-row-thumb" aria-hidden="true">
+                    {(track.cover ?? rowCoverSrc ?? coverSrc) ? (
+                      <Image
+                        src={track.cover ?? rowCoverSrc ?? coverSrc}
+                        alt=""
+                        width={36}
+                        height={52}
+                      />
+                    ) : (
+                      <span className="track-row-thumb-empty" />
+                    )}
+                  </span>
+                ) : null}
+                {index === currentIndex ? (
+                  <span className="track-row-indicator" aria-hidden="true" />
+                ) : null}
+                {getTitle(contextText)}
+              </span>
+              <span className="track-row-time">{formatTime(durations[index])}</span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

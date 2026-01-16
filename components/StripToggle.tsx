@@ -3,6 +3,7 @@
 import { useState, memo } from "react";
 import AutoScrollStrip from "./AutoScrollStrip";
 import PosterCard from "./PosterCard";
+import { useLanguage } from "../lib/LanguageContext";
 
 type Poster = {
   slug: string;
@@ -13,13 +14,19 @@ type Poster = {
 };
 
 export function ToggleButton({ view, onToggle }: { view: "strip" | "grid"; onToggle: () => void }) {
+  const { t } = useLanguage();
+  const buttonTitle =
+    view === "strip"
+      ? t("Apri vista griglia", "Open grid view")
+      : t("Torna alla vista scorrimento", "Back to scroll view");
+
   return (
     <div className="strip-toggle-controls">
       <button
         aria-pressed={view === "grid"}
         onClick={onToggle}
         className={`strip-toggle-button strip-toggle-icon ${view === "grid" ? "is-active" : ""}`}
-        title={view === "strip" ? "Open grid view" : "Back to scroll view"}
+        title={buttonTitle}
       >
         {view === "strip" ? (
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="7" height="7" rx="2" fill="currentColor"/><rect x="13" y="4" width="7" height="7" rx="2" fill="currentColor"/><rect x="4" y="13" width="7" height="7" rx="2" fill="currentColor"/><rect x="13" y="13" width="7" height="7" rx="2" fill="currentColor"/></svg>
@@ -33,9 +40,10 @@ export function ToggleButton({ view, onToggle }: { view: "strip" | "grid"; onTog
 
 function StripToggle({ posters }: { posters: Poster[] }) {
   const [view, setView] = useState<"strip" | "grid">("strip");
+  const { t } = useLanguage();
 
   const isStrip = view === "strip";
-  const toggleLabel = isStrip ? "Grid view" : "Scroll view";
+  const toggleLabel = isStrip ? t("Vista griglia", "Grid view") : t("Vista scorrimento", "Scroll view");
 
   return (
     <div className="strip-toggle" style={{ marginTop: 8 }}>

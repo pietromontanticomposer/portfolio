@@ -45,6 +45,11 @@ const labelsData = {
     contact: "Contattami",
     moreInfoShort: "Per maggiori info sul corto",
     loadClip: "Carica clip",
+    clipLabel: "clip",
+    videoFallback: "Il tuo browser non supporta il tag video.",
+    caseStudiesAria: "Case studies",
+    claudioReAria: "Vedi case study di Claudio Re",
+    claudioReAlt: "Poster di Claudio Re",
     embedNotSet:
       "Embed URL non impostato. Incolla l'URL HLS (.m3u8) o embed Vimeo/YouTube in data/caseStudies.ts (embedUrl).",
   },
@@ -74,6 +79,11 @@ const labelsData = {
     contact: "Contact",
     moreInfoShort: "For more info on the short",
     loadClip: "Load clip",
+    clipLabel: "clip",
+    videoFallback: "Your browser does not support the video tag.",
+    caseStudiesAria: "Case studies",
+    claudioReAria: "View Claudio Re case study",
+    claudioReAlt: "Claudio Re poster",
     embedNotSet:
       "Embed URL not set yet. Paste the HLS playlist (.m3u8) or Vimeo/YouTube embed URL in data/caseStudies.ts (embedUrl).",
   },
@@ -109,10 +119,10 @@ function MediaBlock({
             playsInline
             preload="metadata"
             poster={item.posterImage || posterUrl || undefined}
-            aria-label={`${getText(item.title, language)} clip`}
+            aria-label={`${getText(item.title, language)} ${labels.clipLabel}`}
           >
             <source src={src ?? undefined} type="video/mp4" />
-            Your browser does not support the video tag.
+            {labels.videoFallback}
           </video>
         </div>
       </div>
@@ -126,7 +136,7 @@ function MediaBlock({
           <CaseStudyVideo
             hlsUrl={src}
             mp4Url={mp4Fallback}
-            title={`${getText(item.title, language)} clip`}
+            title={`${getText(item.title, language)} ${labels.clipLabel}`}
             poster={item.posterImage}
           />
         </div>
@@ -139,7 +149,7 @@ function MediaBlock({
       <div className="video-wrapper">
         <LazyIframe
           src={src}
-          title={`${item.title} clip`}
+          title={`${getText(item.title, language)} ${labels.clipLabel}`}
           height={360}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           autoLoad
@@ -665,11 +675,11 @@ function CaseStudyCard({
                 <Link
                   href={claudioReHref}
                   className="group relative overflow-hidden rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card-inset-bg)] p-3 shadow-[0_18px_45px_var(--shadow)] transition hover:border-[color:rgba(255,255,255,0.3)] hover:shadow-[0_22px_55px_var(--shadow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent)]"
-                  aria-label="View Claudio Re case study"
+                  aria-label={labels.claudioReAria}
                 >
                   <Image
                     src={claudioRePosterSrc}
-                    alt="Claudio Re poster"
+                    alt={labels.claudioReAlt}
                     width={400}
                     height={600}
                     className="h-auto w-full rounded-xl object-cover transition-transform duration-300 group-hover:scale-[1.01]"
@@ -709,7 +719,7 @@ export default function CaseStudiesPage() {
         </p>
       </header>
 
-      <section className="space-y-6" aria-label="Case studies">
+      <section className="space-y-6" aria-label={labels.caseStudiesAria}>
         <CaseStudiesAccordion className="case-studies-grid grid gap-6 md:grid-cols-2">
           {caseStudiesNormalized.map((item, index) => (
             <CaseStudyCard

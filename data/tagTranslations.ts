@@ -49,4 +49,14 @@ export const tagTranslations: Record<string, { it: string; en: string }> = {
   "Orchestral climb": { it: "Crescendo orchestrale", en: "Orchestral climb" },
   "Running rhythm": { it: "Ritmo di corsa", en: "Running rhythm" },
   "Hard stop": { it: "Stop secco", en: "Hard stop" },
+  // Project tags
+  "Short": { it: "Corto", en: "Short" },
+  "Feature": { it: "Lungometraggio", en: "Feature" },
+  "Documentary": { it: "Documentario", en: "Documentary" },
+  "Theatre": { it: "Teatro", en: "Theatre" },
+  "Music": { it: "Musica", en: "Music" },
+  "Coming Soon": { it: "Prossimamente", en: "Coming Soon" },
+  "Poster": { it: "Poster", en: "Poster" },
+  "Project": { it: "Progetto", en: "Project" },
+  "Film": { it: "Film", en: "Film" },
 };

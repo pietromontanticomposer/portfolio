@@ -46,7 +46,7 @@ function HeroSection({ heroCredits }: HeroSectionProps) {
             panelId="contact-popover-hero"
           />
         </div>
-        <div className="hero-credits" aria-label="Credits">
+        <div className="hero-credits" aria-label={t("Crediti", "Credits")}>
           <span className="hero-credits-line" aria-hidden="true" />
           <p className="hero-credits-text">{language === "it" ? heroCredits.it : heroCredits.en}</p>
           <span className="hero-credits-line" aria-hidden="true" />

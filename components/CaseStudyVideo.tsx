@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useLanguage } from "../lib/LanguageContext";
 
 type CaseStudyVideoProps = {
   hlsUrl: string;
@@ -15,6 +16,7 @@ export default function CaseStudyVideo({
   title,
   poster,
 }: CaseStudyVideoProps) {
+  const { t } = useLanguage();
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<unknown>(null);
 
@@ -132,7 +134,7 @@ export default function CaseStudyVideo({
       src={normalizedHls ? undefined : normalizedMp4 ?? undefined}
       aria-label={title}
     >
-      Your browser does not support the video tag.
+      {t("Il tuo browser non supporta il tag video.", "Your browser does not support the video tag.")}
     </video>
   );
 }

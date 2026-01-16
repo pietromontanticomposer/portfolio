@@ -11,7 +11,9 @@ function HomeSections() {
     <>
       <section className="card-shell p-6 sm:p-8">
         <div className="section-header flex items-center justify-between">
-          <h3 className="section-title text-2xl text-[color:var(--foreground)]">Case Studies</h3>
+          <h3 className="section-title text-2xl text-[color:var(--foreground)]">
+            {t("Case Studies", "Case Studies")}
+          </h3>
         </div>
         <p className="mt-2 text-sm text-[color:var(--muted)]">
           {t(
@@ -28,7 +30,9 @@ function HomeSections() {
 
       <section className="card-shell p-6 sm:p-8">
         <div className="section-header flex items-center justify-between">
-          <h3 className="section-title text-2xl text-[color:var(--foreground)]">Portfolio</h3>
+          <h3 className="section-title text-2xl text-[color:var(--foreground)]">
+            {t("Portfolio", "Portfolio")}
+          </h3>
         </div>
         <p className="mt-2 text-sm text-[color:var(--muted)]">
           {t(

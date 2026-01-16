@@ -4,13 +4,16 @@ import { memo, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useLanguage } from "../lib/LanguageContext";
 
-const ShowreelSection = dynamic(() => import("./ShowreelSection"), {
-  loading: () => (
+function ShowreelLoading() {
+  const { t } = useLanguage();
+  const showreelLabel = t("Showreel", "Showreel");
+
+  return (
     <section id="showreel" className="w-full">
       <div className="card-shell p-6 sm:p-8">
         <div className="section-header flex items-center justify-between">
           <h3 className="section-title text-2xl text-[color:var(--foreground)]">
-            Showreel
+            {showreelLabel}
           </h3>
         </div>
         <div className="mt-6">
@@ -22,7 +25,11 @@ const ShowreelSection = dynamic(() => import("./ShowreelSection"), {
         </div>
       </div>
     </section>
-  ),
+  );
+}
+
+const ShowreelSection = dynamic(() => import("./ShowreelSection"), {
+  loading: ShowreelLoading,
   ssr: false,
 });
 
@@ -34,6 +41,7 @@ function LazyShowreel({ embedUrl }: LazyShowreelProps) {
   const [shouldLoad, setShouldLoad] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
+  const showreelLabel = t("Showreel", "Showreel");
 
   useEffect(() => {
     const container = containerRef.current;
@@ -67,7 +75,7 @@ function LazyShowreel({ embedUrl }: LazyShowreelProps) {
           <div className="card-shell p-6 sm:p-8">
             <div className="section-header flex items-center justify-between">
               <h3 className="section-title text-2xl text-[color:var(--foreground)]">
-                Showreel
+                {showreelLabel}
               </h3>
             </div>
             <div className="mt-6">

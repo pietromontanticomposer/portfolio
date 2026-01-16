@@ -6,9 +6,12 @@ import LazyIframe from "../../../components/LazyIframe";
 import AudioPlayer from "../../../components/AudioPlayer";
 import TrackPlayer from "../../../components/TrackPlayerClient";
 import { useLanguage } from "../../../lib/LanguageContext";
+import { getTagTranslation, getText } from "../../../lib/translations";
+
+type BilingualText = { it: string; en: string };
 
 type Track = {
-  context: string;
+  context: BilingualText | string;
   file?: string;
   embedUrl?: string;
   height?: number;
@@ -17,7 +20,7 @@ type Track = {
 type Project = {
   slug: string;
   title: string;
-  description?: string;
+  description?: BilingualText | string;
   image?: string;
   largeImage?: string;
   videoEmbed?: string;
@@ -34,6 +37,8 @@ const labelsData = {
     year: "Anno:",
     project: "Progetto",
     soundtrack: "Colonna sonora",
+    clip: "Clip",
+    still: "Fotogramma",
   },
   en: {
     backHome: "Back Home",
@@ -42,11 +47,13 @@ const labelsData = {
     year: "Year:",
     project: "Project",
     soundtrack: "Soundtrack",
+    clip: "Clip",
+    still: "Still",
   },
 };
 
-const getParagraphs = (text?: string) =>
-  String(text ?? "")
+const getParagraphs = (text: string) =>
+  text
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean);
@@ -59,11 +66,14 @@ export default function ProjectPageClient({ project }: Props) {
   const { language } = useLanguage();
   const labels = labelsData[language];
 
-  const paragraphs = getParagraphs(project.description);
+  const descriptionText = getText(project.description, language);
+  const paragraphs = getParagraphs(descriptionText);
   const tracks = (project.tracks ?? []) as Track[];
   const allFileTracks =
     tracks.length > 0 && tracks.every((track) => !!track.file);
   const coverSrc = project.image ?? project.largeImage ?? "";
+  const tagLabel = project.tag ? getTagTranslation(project.tag, language) : labels.project;
+  const yearLabel = project.year ? getTagTranslation(String(project.year), language) : "—";
 
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-16 lg:px-20">
@@ -80,10 +90,10 @@ export default function ProjectPageClient({ project }: Props) {
         <div className="project-meta">
           <span>{labels.role}</span>
           <span>
-            {labels.format} {project.tag ?? labels.project}
+            {labels.format} {tagLabel}
           </span>
           <span>
-            {labels.year} {project.year ?? "—"}
+            {labels.year} {yearLabel}
           </span>
         </div>
         <div className="modal-desc space-y-3 text-sm">
@@ -98,7 +108,7 @@ export default function ProjectPageClient({ project }: Props) {
           <div className="video-wrapper">
             <iframe
               src={project.videoEmbed}
-              title={`${project.title} clip`}
+              title={`${project.title} ${labels.clip}`}
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
@@ -116,13 +126,13 @@ export default function ProjectPageClient({ project }: Props) {
           <div className="tracks">
             {allFileTracks ? (
               <TrackPlayer
-                tracks={tracks as { file: string; context: string }[]}
+                tracks={tracks as { file: string; context: BilingualText | string }[]}
                 coverSrc={coverSrc}
               />
             ) : (
               tracks.map((track, index) => (
                 <div key={`${track.context}-${index}`} className="track">
-                  <div className="track-context">{track.context}</div>
+                  <div className="track-context">{getText(track.context, language)}</div>
                   <div className="track-embed">
                     {track.file ? (
                       <AudioPlayer
@@ -150,7 +160,7 @@ export default function ProjectPageClient({ project }: Props) {
         <section className="card-shell p-6 sm:p-8">
           <Image
             src={project.largeImage}
-            alt={`${project.title} still`}
+            alt={`${project.title} ${labels.still}`}
             className="modal-large-image h-auto w-full"
             width={1100}
             height={620}

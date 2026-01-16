@@ -4,6 +4,7 @@ import { memo } from "react";
 import Link from 'next/link'
 import Image from 'next/image'
 import { useLanguage } from "../lib/LanguageContext";
+import { getTagTranslation } from "../lib/translations";
 
 type PosterProps = {
   title: string;
@@ -15,11 +16,13 @@ type PosterProps = {
 };
 
 function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const normalized = title ? title.toLowerCase().replace(/[^a-z0-9]/g, "") : "";
   const isFreak =
     normalized.includes("freakshakespeare") || (title || "").toLowerCase().includes("freak shakespeare");
   const safeImage = image ?? undefined;
+  const displayTag = tag ? getTagTranslation(tag, language) : undefined;
+  const displayYear = year ? getTagTranslation(String(year), language) : year;
   // image styling is handled in CSS classes (grid vs strip views)
 
   const cardClassName = `poster-card group${isFreak ? " poster-card-freak" : ""}`;
@@ -61,7 +64,7 @@ function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
       <div className="poster-image mt-4 poster-placeholder">
         <div className="poster-placeholder-inner">
           <div className="poster-placeholder-title">{title}</div>
-          <div className="poster-placeholder-tag">{tag ?? t("Prossimamente", "Coming Soon")}</div>
+          <div className="poster-placeholder-tag">{displayTag ?? t("Prossimamente", "Coming Soon")}</div>
         </div>
       </div>
     );
@@ -71,8 +74,8 @@ function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
     <div className="mt-6">
       <div className="poster-title">{title}</div>
       <div className="poster-footer mt-5">
-        <span>{year}</span>
-        <span>{tag}</span>
+        <span>{displayYear}</span>
+        <span>{displayTag}</span>
       </div>
     </div>
   );

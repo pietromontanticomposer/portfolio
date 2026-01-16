@@ -7,6 +7,7 @@
 "use client";
 import React, { useEffect, useRef, useState, useId } from "react";
 import { AudioManager } from "../lib/AudioManager";
+import { useLanguage } from "../lib/LanguageContext";
 
 type CachedPeaks = {
   peaks: number[];
@@ -109,6 +110,7 @@ export default function AudioPlayer({
   showNowPlaying = false,
   onNowPlayingChange,
 }: Props) {
+  const { t } = useLanguage();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const wsRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -401,9 +403,15 @@ export default function AudioPlayer({
       onFocus={requestInit}
     >
       <div className="audio-player-row">
-        <button onClick={toggle} className="audio-play" aria-label={isPlaying ? "Pause" : "Play"}>
+        <button
+          onClick={toggle}
+          className="audio-play"
+          aria-label={isPlaying ? t("Pausa", "Pause") : t("Riproduci", "Play")}
+        >
           <span className={`audio-icon ${isPlaying ? "is-pause" : "is-play"}`} aria-hidden="true" />
-          <span className="sr-only">{isPlaying ? "Pause" : "Play"}</span>
+          <span className="sr-only">
+            {isPlaying ? t("Pausa", "Pause") : t("Riproduci", "Play")}
+          </span>
         </button>
         <div className="audio-wave">
           <div ref={containerRef} className="audio-wave-container" />
@@ -413,7 +421,7 @@ export default function AudioPlayer({
             <button
               type="button"
               className="audio-volume-toggle"
-              aria-label="Volume"
+              aria-label={t("Volume", "Volume")}
               aria-expanded={showVolume}
               ref={audioToggleRef}
               onClick={toggleVolumePopover}
@@ -433,7 +441,7 @@ export default function AudioPlayer({
               translate="no"
               data-no-translate="1"
             >
-              <span className="sr-only">Volume</span>
+              <span className="sr-only">{t("Volume", "Volume")}</span>
               <input
                 type="range"
                 min={0}
@@ -441,7 +449,7 @@ export default function AudioPlayer({
                 step={0.01}
                 value={volume}
                 onChange={(event) => setVolume(Number(event.target.value))}
-                aria-label="Volume"
+                aria-label={t("Volume", "Volume")}
                 style={{ pointerEvents: 'none' }}
               />
               <span translate="no" className="slider-thumb notranslate" aria-hidden="true" />
@@ -451,7 +459,9 @@ export default function AudioPlayer({
       </div>
       {showTime ? <div className="audio-time">{formatTime(duration)}</div> : null}
       {showNowPlaying ? (
-        <div className="now-playing">Now playing: {title ?? ''} - {formatTime(currentTime)}/{formatTime(duration)}</div>
+        <div className="now-playing">
+          {t("In riproduzione", "Now playing")}: {title ?? ""} - {formatTime(currentTime)}/{formatTime(duration)}
+        </div>
       ) : null}
     </div>
   );

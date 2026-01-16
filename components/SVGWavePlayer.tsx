@@ -2,6 +2,7 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { AudioManager } from "../lib/AudioManager";
 import { formatTime } from "../lib/formatUtils";
+import { useLanguage } from "../lib/LanguageContext";
 
 type Props = {
   src: string;
@@ -79,6 +80,7 @@ function SVGWavePlayer({
   onReadyChange,
   onNowPlayingChange,
 }: Props) {
+  const { t } = useLanguage();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
@@ -233,7 +235,11 @@ function SVGWavePlayer({
   return (
     <div className="audio-player">
       <div className="audio-player-row">
-        <button onClick={toggle} className="audio-play" aria-label={isPlaying ? "Pause" : "Play"}>
+        <button
+          onClick={toggle}
+          className="audio-play"
+          aria-label={isPlaying ? t("Pausa", "Pause") : t("Riproduci", "Play")}
+        >
           <span className={`audio-icon ${isPlaying ? "is-pause" : "is-play"}`} aria-hidden="true" />
         </button>
 
@@ -288,7 +294,7 @@ function SVGWavePlayer({
               </g>
             </svg>
           ) : (
-            <div className="audio-loading">Loading...</div>
+            <div className="audio-loading">{t("Caricamento...", "Loading...")}</div>
           )}
         </div>
 
@@ -298,7 +304,7 @@ function SVGWavePlayer({
               ref={audioToggleRef}
               type="button"
               className="audio-volume-toggle"
-              aria-label="Volume"
+              aria-label={t("Volume", "Volume")}
               onClick={() => setShowVolume(v => !v)}
             >
               <svg className="audio-volume-svg" viewBox="0 0 24 24" width="22" height="22">
@@ -325,7 +331,7 @@ function SVGWavePlayer({
       {showTime && <div className="audio-time">{formatTime(duration)}</div>}
       {showNowPlaying && (
         <div className="now-playing">
-          Now playing: {title ?? ""} - {formatTime(currentTime)}/{formatTime(duration)}
+          {t("In riproduzione", "Now playing")}: {title ?? ""} - {formatTime(currentTime)}/{formatTime(duration)}
         </div>
       )}
     </div>

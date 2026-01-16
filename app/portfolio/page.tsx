@@ -58,7 +58,7 @@ export default function PortfolioPage() {
     <main className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-16 lg:px-20">
       <header>
         <h1 className="section-title text-4xl text-[color:var(--foreground)]">
-          Portfolio
+          {t("Portfolio", "Portfolio")}
         </h1>
         <p className="mt-3 text-sm text-[color:var(--muted)]">
           {t("Lavori in evidenza e lista completa dei progetti.", "Curated highlights and full project list.")}
@@ -78,7 +78,7 @@ export default function PortfolioPage() {
         <div className="mt-6 aspect-video w-full overflow-hidden rounded-lg">
           <iframe
             src="https://www.youtube.com/embed/uyxIoQIE-cM"
-            title="Video"
+            title={t("Video", "Video")}
             width="100%"
             height="100%"
             frameBorder="0"

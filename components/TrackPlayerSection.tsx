@@ -4,15 +4,21 @@ import Image from 'next/image';
 import { useEffect, useState, useRef } from 'react';
 import ContactPopover from "./ContactPopover";
 import { useLanguage } from "../lib/LanguageContext";
+import { getText } from "../lib/translations";
+
+function TrackPlayerLoading() {
+  const { t } = useLanguage();
+  return <div className="track-player-skeleton">{t("Caricamento player...", "Loading player...")}</div>;
+}
 
 const TrackPlayer = dynamic(() => import('./TrackPlayerClient'), {
   ssr: false,
-  loading: () => <div className="track-player-skeleton">Loading player...</div>
+  loading: TrackPlayerLoading,
 });
 
 type Track = {
   file?: string;
-  context: string;
+  context: { it: string; en: string } | string;
   cover?: string;
 };
 
@@ -25,7 +31,7 @@ export default function TrackPlayerSection({
   tracks,
   placeholderTracks = [],
 }: Props) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [shouldLoad, setShouldLoad] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const playableTracks = tracks.filter(
@@ -84,7 +90,13 @@ export default function TrackPlayerSection({
             <div className="track-player-cover-wrap">
               <div className="track-player-cover">
                 {coverSrc ? (
-                  <Image src={coverSrc} alt="Placeholder cover" width={400} height={400} className="object-cover" />
+                  <Image
+                    src={coverSrc}
+                    alt={t("Copertina placeholder", "Placeholder cover")}
+                    width={400}
+                    height={400}
+                    className="object-cover"
+                  />
                 ) : (
                   <div className="track-player-cover-empty" />
                 )}
@@ -98,7 +110,7 @@ export default function TrackPlayerSection({
                     className="audio-play"
                     disabled
                     aria-disabled="true"
-                    aria-label="Playback disabled"
+                    aria-label={t("Riproduzione disattivata", "Playback disabled")}
                   >
                     <span className="audio-icon is-play" aria-hidden="true" />
                   </button>
@@ -113,7 +125,7 @@ export default function TrackPlayerSection({
                       className="audio-volume-toggle"
                       disabled
                       aria-disabled="true"
-                      aria-label="Volume disabled"
+                      aria-label={t("Volume disattivato", "Volume disabled")}
                     >
                       <svg
                         className="audio-volume-svg"
@@ -155,7 +167,7 @@ export default function TrackPlayerSection({
                   className="track-row"
                   style={{ cursor: "default" }}
                 >
-                  <span className="track-row-title">{track.context}</span>
+                  <span className="track-row-title">{getText(track.context, language)}</span>
                   <span className="track-row-time">--:--</span>
                 </div>
               ))}

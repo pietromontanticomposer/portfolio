@@ -14,6 +14,7 @@ type ShowreelSectionProps = {
 
 export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
   const { t } = useLanguage();
+  const showreelLabel = t("Showreel", "Showreel");
   const hasEmbed = typeof embedUrl === "string" && embedUrl.trim().length > 0;
   const trimmedUrl = embedUrl?.trim() ?? "";
   const isHls = hasEmbed && (trimmedUrl.endsWith(".m3u8") || trimmedUrl.includes("/_hls/"));
@@ -30,7 +31,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
       <div className="card-shell p-6 sm:p-8">
         <div className="section-header flex items-center justify-between">
           <h3 className="section-title text-2xl text-[color:var(--foreground)]">
-            Showreel
+            {showreelLabel}
           </h3>
         </div>
         {!hasEmbed && (
@@ -44,7 +45,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
               <CaseStudyVideo
                 hlsUrl={trimmedUrl}
                 mp4Url={mp4Fallback}
-                title="Showreel"
+                title={showreelLabel}
                 poster="https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Showreel%20Sito.jpg"
               />
             ) : hasEmbed && isMp4 ? (
@@ -53,15 +54,15 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
                 controls
                 playsInline
                 preload="metadata"
-                aria-label="Showreel video"
+                aria-label={t("Video showreel", "Showreel video")}
               >
                 <source src={encodeURI(trimmedUrl)} type="video/mp4" />
-                Your browser does not support the video tag.
+                {t("Il tuo browser non supporta il tag video.", "Your browser does not support the video tag.")}
               </video>
             ) : hasEmbed ? (
               <iframe
                 src={encodeURI(trimmedUrl)}
-                title="Showreel"
+                title={showreelLabel}
                 frameBorder="0"
                 loading="lazy"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -73,11 +74,11 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
                 controls
                 playsInline
                 preload="metadata"
-                aria-label="Showreel placeholder video"
+                aria-label={t("Video placeholder showreel", "Showreel placeholder video")}
               >
                 <source src={PLACEHOLDER_WEBM} type="video/webm" />
                 <source src={PLACEHOLDER_MP4} type="video/mp4" />
-                Your browser does not support the video tag.
+                {t("Il tuo browser non supporta il tag video.", "Your browser does not support the video tag.")}
               </video>
             )}
           </div>
