@@ -13,8 +13,8 @@ type LanguageContextType = {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  // Always start with "it" for SSR consistency
-  const [language, setLanguageState] = useState<Language>("it");
+  // Always start with "en" for SSR consistency
+  const [language, setLanguageState] = useState<Language>("en");
   const [mounted, setMounted] = useState(false);
 
   // After mount, read from localStorage using layout effect to avoid flicker
@@ -35,14 +35,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, []);
 
   // Helper function to get translated text
-  // Always return Italian until mounted to prevent hydration mismatch
+  // Always return English until mounted to prevent hydration mismatch
   const t = useCallback((it: string, en: string): string => {
-    if (!mounted) return it;
+    if (!mounted) return en;
     return language === "it" ? it : en;
   }, [mounted, language]);
 
   // For direct language access, also respect mounted state
-  const effectiveLanguage = mounted ? language : "it";
+  const effectiveLanguage = mounted ? language : "en";
 
   return (
     <LanguageContext.Provider value={{ language: effectiveLanguage, setLanguage, t }}>

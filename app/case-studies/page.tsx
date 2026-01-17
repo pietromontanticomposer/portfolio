@@ -674,6 +674,7 @@ function CaseStudyCard({
               <div className="flex flex-col gap-3">
                 <Link
                   href={claudioReHref}
+                  prefetch={false}
                   className="group relative overflow-hidden rounded-2xl border border-[color:var(--card-border)] bg-[color:var(--card-inset-bg)] p-3 shadow-[0_18px_45px_var(--shadow)] transition hover:border-[color:rgba(255,255,255,0.3)] hover:shadow-[0_22px_55px_var(--shadow)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent)]"
                   aria-label={labels.claudioReAria}
                 >

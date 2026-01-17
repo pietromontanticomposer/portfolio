@@ -284,6 +284,7 @@ function BackgroundVideo() {
       lastAdvance = performance.now();
     };
     const onPause = () => {
+      if (document.hidden) return;
       isPlayingRef.current = false;
       setIsPlaying(false);
     };

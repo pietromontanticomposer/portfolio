@@ -18,21 +18,21 @@ export const placeholderProjects = [
     title: "Project Title",
     year: "Year",
     tag: "Film",
-    image: "[object Object]",
+    image: "/placeholders/poster-3.jpg",
   },
   {
     slug: "placeholder-4",
     title: "Project Title",
     year: "Year",
     tag: "Film",
-    image: "[object Object]",
+    image: "/placeholders/poster-4.jpg",
   },
   {
     slug: "placeholder-5",
     title: "Project Title",
     year: "Year",
     tag: "Film",
-    image: "[object Object]",
+    image: "/placeholders/poster-5.jpg",
   },
   {
     slug: "placeholder-6",
@@ -55,9 +55,9 @@ export const placeholderCollaborations = [
 export const placeholderTracks = [
   { context: "Track 01", cover: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/placeholders/poster-1.jpg" },
   { context: "Track 02", cover: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/placeholders/poster-2.jpg" },
-  { context: "Track 03", cover: "[object Object]" },
-  { context: "Track 04", cover: "[object Object]" },
-  { context: "Track 05", cover: "[object Object]" },
+  { context: "Track 03", cover: "/placeholders/poster-3.jpg" },
+  { context: "Track 04", cover: "/placeholders/poster-4.jpg" },
+  { context: "Track 05", cover: "/placeholders/poster-5.jpg" },
   { context: "Track 06", cover: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/placeholders/poster-6.jpg" },
 ];
 
@@ -66,24 +66,24 @@ export const comingSoonPosters = [
     slug: "coming-soon-freefall",
     title: "Freefall",
     tag: "Coming Soon",
-    image: undefined,
+    image: "/placeholders/poster-4.jpg",
   },
   {
     slug: "coming-soon-polvere-sotto-al-tappeto",
     title: "Polvere Sotto Al Tappeto",
     tag: "Coming Soon",
-    image: undefined,
+    image: "/placeholders/poster-5.jpg",
   },
   {
     slug: "coming-soon-non-ce-casa-in-paradiso",
     title: "Non C'è Casa In Paradiso",
     tag: "Coming Soon",
-    image: undefined,
+    image: "/placeholders/poster-6.jpg",
   },
   {
     slug: "coming-soon-airborne",
     title: "Airborne",
     tag: "Coming Soon",
-    image: undefined,
+    image: "/placeholders/poster-3.jpg",
   },
 ];

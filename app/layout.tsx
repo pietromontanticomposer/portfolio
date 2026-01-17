@@ -6,7 +6,6 @@ import ScrollController from "../components/ScrollController";
 import BackgroundVideo from "../components/BackgroundVideo";
 import Header from "../components/Header";
 import ScrollPerformance from "../components/ScrollPerformance";
-import WaveSurferPreloader from "../components/WaveSurferPreloader";
 import { LanguageProvider } from "../lib/LanguageContext";
 import { getSiteUrl, siteMetadata } from "../lib/siteConfig";
 
@@ -90,12 +89,6 @@ export default function RootLayout({
           as="image"
           href="https://4glkq64bdlmmple5.public.blob.vercel-storage.com/background-poster.jpg"
         />
-        <link
-          rel="prefetch"
-          href="/waveforms/selected tracks/My Crown My Ambition My Queen.json"
-          as="fetch"
-          crossOrigin="anonymous"
-        />
       </head>
       <body
         className={`${bodoni.variable} ${workSans.variable} ${jetbrainsMono.variable} antialiased`}
@@ -105,7 +98,6 @@ export default function RootLayout({
           {SHOW_BG_VIDEO && <BackgroundVideo />}
           <ScrollController />
           <ScrollPerformance />
-          <WaveSurferPreloader />
           {children}
           <Footer />
         </LanguageProvider>

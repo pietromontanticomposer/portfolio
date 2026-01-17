@@ -140,7 +140,7 @@ function ContactPopover({
           id={resolvedPanelId}
           role="dialog"
           aria-label={t("Opzioni contatto", "Contact options")}
-          className={`absolute top-full z-50 mt-3 w-[min(92vw,360px)] rounded-2xl border border-white/10 bg-[color:var(--card)]/95 p-4 shadow-[0_20px_50px_rgba(2,6,23,0.55)] backdrop-blur-sm ${panelAlignment} ${panelClassName ?? ""}`}
+          className={`absolute top-full z-50 mt-3 w-[min(92vw,360px)] rounded-2xl border border-[color:var(--btn-border)] bg-[color:var(--btn-bg)] p-4 shadow-[0_16px_40px_var(--shadow)] backdrop-blur-sm ${panelAlignment} ${panelClassName ?? ""}`}
         >
           <div className="flex flex-col gap-2">
             <button

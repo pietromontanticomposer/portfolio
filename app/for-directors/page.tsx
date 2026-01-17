@@ -601,7 +601,7 @@ export default function ForDirectorsPage() {
           </CaseStudiesAccordion>
         </div>
         <div className="mt-6">
-          <Link href="/case-studies" className="hero-btn hero-btn-secondary">
+          <Link href="/case-studies" prefetch={false} className="hero-btn hero-btn-secondary">
             {labels.viewAllCaseStudies}
           </Link>
         </div>

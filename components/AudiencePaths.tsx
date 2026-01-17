@@ -21,6 +21,7 @@ function AudiencePaths() {
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           <Link
             href="/for-directors"
+            prefetch={false}
             className="card-inset rounded-2xl p-8 flex flex-col gap-2 text-center transition hover:brightness-110"
           >
             <span className="section-title text-2xl text-[color:var(--foreground)]">
@@ -35,6 +36,7 @@ function AudiencePaths() {
           </Link>
           <Link
             href="/for-producers"
+            prefetch={false}
             className="card-inset rounded-2xl p-8 flex flex-col gap-2 text-center transition hover:brightness-110"
           >
             <span className="section-title text-2xl text-[color:var(--foreground)]">

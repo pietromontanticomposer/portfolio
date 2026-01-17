@@ -31,8 +31,8 @@ function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
     const isComingSoon = (tag ?? "").toLowerCase().includes("coming");
     const comingSoonLabel = t("PROSSIMAMENTE", "COMING SOON");
 
-    // For "Coming Soon" items always render a transparent placeholder with label
-    if (isComingSoon) {
+    // For "Coming Soon" items, only render a placeholder if no image is provided
+    if (isComingSoon && !safeImage) {
       return (
         <div className="poster-image mt-4 poster-placeholder" aria-hidden>
           <div className="poster-placeholder-inner">
@@ -92,7 +92,7 @@ function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
   if (href) {
     if (href.startsWith("/")) {
       return (
-        <Link href={href} className={cardClassName} aria-label={title}>
+        <Link href={href} prefetch={false} className={cardClassName} aria-label={title}>
           {renderPosterImage()}
           {renderFooter()}
         </Link>

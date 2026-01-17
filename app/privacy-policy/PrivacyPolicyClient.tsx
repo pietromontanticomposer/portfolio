@@ -1,13 +1,16 @@
 "use client";
 
 import { useLanguage } from "../../lib/LanguageContext";
+import { getText } from "../../lib/translations";
+
+type BilingualText = { it: string; en: string };
 
 type PrivacyConfig = {
   titolare: string;
   email_contatto: string;
   hosting: string;
-  finalita: string[];
-  diritti: string[];
+  finalita: BilingualText[];
+  diritti: BilingualText[];
 };
 
 const labelsData = {
@@ -82,8 +85,8 @@ export default function PrivacyPolicyClient({ config, configError }: Props) {
             {labels.purposes}
           </div>
           <ul className="mt-2 list-disc space-y-1 pl-5">
-            {config.finalita.map((item) => (
-              <li key={item}>{item}</li>
+            {config.finalita.map((item, index) => (
+              <li key={`purpose-${index}`}>{getText(item, language)}</li>
             ))}
           </ul>
         </div>
@@ -92,8 +95,8 @@ export default function PrivacyPolicyClient({ config, configError }: Props) {
             {labels.rights}
           </div>
           <ul className="mt-2 list-disc space-y-1 pl-5">
-            {config.diritti.map((item) => (
-              <li key={item}>{item}</li>
+            {config.diritti.map((item, index) => (
+              <li key={`right-${index}`}>{getText(item, language)}</li>
             ))}
           </ul>
         </div>

@@ -765,7 +765,10 @@ export const caseStudies: CaseStudyInput[] = [
   },
   {
     id: "scene-05",
-    title: "A Close Encounter in the Wood, Scream to Face-to-Face (Reveal)",
+    title: {
+      it: "Un incontro ravvicinato nel bosco, dall'urlo al faccia a faccia (Rivelazione)",
+      en: "A Close Encounter in the Wood, Scream to Face-to-Face (Reveal)"
+    },
     projectLabel: "La Sonata Del Chaos",
     sceneType: "Reveal",
     duration: "01:02",
@@ -783,61 +786,102 @@ export const caseStudies: CaseStudyInput[] = [
     embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/La%20Sonata%20Del%20Caos/La%20Sonata%20Del%20Caos%20A%20Close%20Encounter%20In%20The%20Wood/index.m3u8",
     posterImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/La%20Sonata%20Del%20Caos%20A%20Close%20Encounter%20In%20The%20Wood.jpg",
 
-    context:
-      "La Sonata Del Chaos is a short film where a family folktale, the Basci (Banshee), shifts from a spoken legend into a real force inside the home. The story follows Eris through grief after her violin teacher’s death, and the Banshee idea later becomes inseparable from an incurable illness that hits the mother and then Talia.\n\nIn this scene Eris wakes from a nightmare, hears Talia coughing, checks on her, then hears the Banshee screaming from the woods. She goes outside to confront it and finds it face-to-face.",
-    goal: "Turn a domestic night cue into a real external threat in one clean arc. Start from Talia’s fragile presence, introduce the Banshee identity the moment the scream is heard, drive Eris’ run with rhythm, then stop the music exactly on the first sight of the Banshee so the reveal lands on picture and the line can stay clear.",
+    context: {
+      it: "La Sonata Del Chaos e un cortometraggio in cui un racconto di famiglia, i Basci (Banshee), passa da leggenda raccontata a forza reale dentro casa. La storia segue Eris nel lutto dopo la morte della sua insegnante di violino, e l'idea della Banshee diventa poi inseparabile da una malattia incurabile che colpisce la madre e poi Talia.\n\nIn questa scena Eris si sveglia da un incubo, sente Talia tossire, va a controllarla, poi sente la Banshee urlare dal bosco. Esce per affrontarla e la trova faccia a faccia.",
+      en: "La Sonata Del Chaos is a short film where a family folktale, the Basci (Banshee), shifts from a spoken legend into a real force inside the home. The story follows Eris through grief after her violin teacher’s death, and the Banshee idea later becomes inseparable from an incurable illness that hits the mother and then Talia.\n\nIn this scene Eris wakes from a nightmare, hears Talia coughing, checks on her, then hears the Banshee screaming from the woods. She goes outside to confront it and finds it face-to-face."
+    },
+    goal: {
+      it: "Trasformare un cue notturno domestico in una minaccia esterna reale in un arco pulito. Partire dalla presenza fragile di Talia, introdurre l'identita della Banshee nel momento in cui si sente l'urlo, spingere la corsa di Eris con il ritmo, poi fermare la musica esattamente alla prima visione della Banshee cosi la rivelazione cade in immagine e la battuta resta chiara.",
+      en: "Turn a domestic night cue into a real external threat in one clean arc. Start from Talia’s fragile presence, introduce the Banshee identity the moment the scream is heard, drive Eris’ run with rhythm, then stop the music exactly on the first sight of the Banshee so the reveal lands on picture and the line can stay clear."
+    },
     chosen: {
       key: "B",
-      summary:
-        "Talia motif on celesta at 00:00, Banshee incipit in contrabasses at 00:20, orchestral climb and rhythmic drive for the run, hard stop on reveal.",
-      reason: "Balances identity handoff with propulsion and leaves the reveal clean."
+      summary: {
+        it: "Motivo di Talia al celesta a 00:00, incipit della Banshee nei contrabbassi a 00:20, salita orchestrale e spinta ritmica per la corsa, stop secco sulla rivelazione.",
+        en: "Talia motif on celesta at 00:00, Banshee incipit in contrabasses at 00:20, orchestral climb and rhythmic drive for the run, hard stop on reveal."
+      },
+      reason: {
+        it: "Bilancia il passaggio di identita con la propulsione e lascia pulita la rivelazione.",
+        en: "Balances identity handoff with propulsion and leaves the reveal clean."
+      }
     },
-    result: "The audience feels the threat arrive as an identity, not as generic horror mood. The escalation motivates Eris’ movement, and the hard stop makes the face-to-face moment hit as a visual shock rather than a musical sting.",
+    result: {
+      it: "Il pubblico percepisce la minaccia come identita, non come generico mood horror. L'escalation motiva il movimento di Eris e lo stop netto fa arrivare il faccia a faccia come shock visivo invece che come stinger musicale.",
+      en: "The audience feels the threat arrive as an identity, not as generic horror mood. The escalation motivates Eris’ movement, and the hard stop makes the face-to-face moment hit as a visual shock rather than a musical sting."
+    },
     trackTitle: "A Close Encounter in the Wood",
     timing: {
-      in: { time: "00:00", label: "Talia motif enters on celesta." },
+      in: {
+        time: "00:00",
+        label: { it: "Entra il motivo di Talia al celesta.", en: "Talia motif enters on celesta." }
+      },
       turn: {
         time: "00:20",
-        label:
-          "Banshee incipit starts in contrabasses, then climbs through the strings as Eris runs into the woods."
+        label: {
+          it: "L'incipit della Banshee parte nei contrabbassi, poi sale attraverso gli archi mentre Eris corre nel bosco.",
+          en: "Banshee incipit starts in contrabasses, then climbs through the strings as Eris runs into the woods."
+        }
       },
-      out: { time: "01:02", label: "Cue ends exactly on the first sight of the Banshee." }
+      out: {
+        time: "01:02",
+        label: { it: "Il cue finisce esattamente alla prima visione della Banshee.", en: "Cue ends exactly on the first sight of the Banshee." }
+      }
     },
-    spottingNote:
-      "No early horror signalling. Use a clear identity handoff at 00:20, then convert the motif into propulsion for the run. End with a hard stop on the reveal so the image, the scream, and the line remain the focus.",
+    spottingNote: {
+      it: "Nessun segnale horror anticipato. Usa un passaggio di identita chiaro a 00:20, poi trasforma il motivo in propulsione per la corsa. Chiudi con uno stop secco sulla rivelazione cosi l'immagine, l'urlo e la battuta restano il focus.",
+      en: "No early horror signalling. Use a clear identity handoff at 00:20, then convert the motif into propulsion for the run. End with a hard stop on the reveal so the image, the scream, and the line remain the focus."
+    },
 
-    directorWanted:
-      "A believable escalation from inside the house to the woods. Clear space for the scream. No trailer stings. Let the reveal land on picture.",
-    directorAvoid:
-      "Generic horror pads. Telegraphed jump scares. Music continuing under the reveal and stealing focus from the face-to-face moment.",
+    directorWanted: {
+      it: "Una escalation credibile dall'interno della casa al bosco. Spazio chiaro per l'urlo. Niente stinger da trailer. Lascia che la rivelazione cada in immagine.",
+      en: "A believable escalation from inside the house to the woods. Clear space for the scream. No trailer stings. Let the reveal land on picture."
+    },
+    directorAvoid: {
+      it: "Pad horror generici. Jump scare telefonati. Musica che continua sotto la rivelazione e ruba attenzione al faccia a faccia.",
+      en: "Generic horror pads. Telegraphed jump scares. Music continuing under the reveal and stealing focus from the face-to-face moment."
+    },
 
     versionsTested: {
-      A: "Atmosphere only, save the motif for the reveal. Too neutral and the run feels less motivated.",
-      B: "Talia motif on celesta at 00:00, Banshee incipit in contrabasses at 00:20, orchestral climb into celli, violas, violins, then a more rhythmic drive for the run, hard stop on reveal.",
-      C: "Banshee theme stated strongly before the scream. It announces the monster early and kills the discovery."
+      A: {
+        it: "Solo atmosfera, tenere il motivo per la rivelazione. Troppo neutro e la corsa risulta meno motivata.",
+        en: "Atmosphere only, save the motif for the reveal. Too neutral and the run feels less motivated."
+      },
+      B: {
+        it: "Motivo di Talia al celesta a 00:00, incipit della Banshee nei contrabbassi a 00:20, salita orchestrale in violoncelli, viole, violini, poi spinta piu ritmica per la corsa, stop secco sulla rivelazione.",
+        en: "Talia motif on celesta at 00:00, Banshee incipit in contrabasses at 00:20, orchestral climb into celli, violas, violins, then a more rhythmic drive for the run, hard stop on reveal."
+      },
+      C: {
+        it: "Tema della Banshee dichiarato forte prima dell'urlo. Annuncia il mostro troppo presto e uccide la scoperta.",
+        en: "Banshee theme stated strongly before the scream. It announces the monster early and kills the discovery."
+      }
     },
-    finalChoice: "B",
+    finalChoice: { it: "B", en: "B" },
 
-    delivered: "Final mix plus alternates, clearly labelled. Revisions tracked.",
+    delivered: {
+      it: "Mix finale piu alternate, etichettate chiaramente. Revisioni tracciate.",
+      en: "Final mix plus alternates, clearly labelled. Revisions tracked."
+    },
     technicalDeliverables: [
-      "48 kHz, 24 bit stereo master",
-      "Alt: no-music",
-      "Stems: pads, room tone"
+      { it: "Master stereo 48 kHz, 24 bit", en: "48 kHz, 24 bit stereo master" },
+      { it: "Alt: senza musica", en: "Alt: no-music" },
+      { it: "Stem: pad, rumore di sala", en: "Stems: pads, room tone" }
     ],
-    musicalLanguage:
-      "This cue is built as an identity handoff.\n\n00:00: Talia’s motif enters on celesta, framing the house as fragile and innocent.\n\n00:20 to end: the Banshee incipit starts in contrabasses, then transfers upward to celli, violas and violins, as if the threat is rising out of the ground and taking over the sonic space. As Eris runs into the woods the writing becomes more rhythmic, turning the motif into propulsion rather than a static horror colour.\n\nThe cue ends exactly when Eris sees the Banshee, creating a hard stop that lets the face-to-face moment land on the image instead of on a musical sting.",
+    musicalLanguage: {
+      it: "Questo cue e costruito come un passaggio di identita.\n\n00:00: il motivo di Talia entra al celesta, incorniciando la casa come fragile e innocente.\n\n00:20 fino alla fine: l'incipit della Banshee parte nei contrabbassi e poi si trasferisce verso l'alto in violoncelli, viole e violini, come se la minaccia stesse risalendo dal terreno e occupando lo spazio sonoro. Quando Eris corre nel bosco la scrittura diventa piu ritmica, trasformando il motivo in propulsione invece che in colore horror statico.\n\nIl cue finisce esattamente quando Eris vede la Banshee, creando uno stop secco che lascia il faccia a faccia cadere sull'immagine invece che su uno stinger musicale.",
+      en: "This cue is built as an identity handoff.\n\n00:00: Talia’s motif enters on celesta, framing the house as fragile and innocent.\n\n00:20 to end: the Banshee incipit starts in contrabasses, then transfers upward to celli, violas and violins, as if the threat is rising out of the ground and taking over the sonic space. As Eris runs into the woods the writing becomes more rhythmic, turning the motif into propulsion rather than a static horror colour.\n\nThe cue ends exactly when Eris sees the Banshee, creating a hard stop that lets the face-to-face moment land on the image instead of on a musical sting."
+    },
 
     technicalNotes: [
-      "Delivery format: WAV (linear PCM)",
-      "Specs: 48 kHz, 24-bit",
-      "Sync: aligned to final picture",
-      "Alt: no-music",
-      "Stems: pads, room tone"
+      { it: "Formato delivery: WAV (linear PCM)", en: "Delivery format: WAV (linear PCM)" },
+      { it: "Specifiche: 48 kHz, 24-bit", en: "Specs: 48 kHz, 24-bit" },
+      { it: "Sync: allineato al picture finale", en: "Sync: aligned to final picture" },
+      { it: "Alt: senza musica", en: "Alt: no-music" },
+      { it: "Stem: pad, rumore di sala", en: "Stems: pads, room tone" }
     ]
   },
   {
     id: "scene-04",
-    title: "Talia's Farewell, Last Story (Reveal)",
+    title: { it: "Addio di Talia, l'ultima storia (Rivelazione)", en: "Talia's Farewell, Last Story (Reveal)" },
     projectLabel: "La Sonata Del Chaos",
     sceneType: "Reveal",
     duration: "02:00",
@@ -847,48 +891,75 @@ export const caseStudies: CaseStudyInput[] = [
     embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/La%20Sonata%20Del%20Caos/La%20Sonata%20Del%20Caos%20Talia_s%20Farewell/index.m3u8",
     posterImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/La%20Sonata%20Del%20Caos%20Talia_s%20Farewell.jpg",
 
-    context:
-      "La Sonata Del Chaos is a short film where a family folktale, the Basci (Banshee), shifts from a spoken legend into a real force inside the home, later inseparable from an incurable illness that hits the mother and then Talia.\n\nIn this scene Eris reads Talia’s favourite story one last time. The music functions as a soft eulogy: it does not comment on death, it accompanies the act of love that survives it.",
-    goal: "Write a funeral elegy that stays gentle and intimate, supporting Eris reading without turning the scene into melodrama. Make Talia feel pure and present even as the illness wins, and let the cue carry the goodbye without stealing focus from the story.",
+    context: {
+      it: "La Sonata Del Chaos e un cortometraggio in cui un racconto di famiglia, i Basci (Banshee), passa da leggenda raccontata a forza reale dentro casa, poi inseparabile da una malattia incurabile che colpisce la madre e poi Talia.\n\nIn questa scena Eris legge per l'ultima volta la storia preferita di Talia. La musica funziona come un'elegia morbida: non commenta la morte, accompagna l'atto d'amore che la supera.",
+      en: "La Sonata Del Chaos is a short film where a family folktale, the Basci (Banshee), shifts from a spoken legend into a real force inside the home, later inseparable from an incurable illness that hits the mother and then Talia.\n\nIn this scene Eris reads Talia’s favourite story one last time. The music functions as a soft eulogy: it does not comment on death, it accompanies the act of love that survives it."
+    },
+    goal: {
+      it: "Scrivere un'elegia funebre che resti delicata e intima, sostenendo la lettura di Eris senza trasformare la scena in melodramma. Far sentire Talia pura e presente anche mentre la malattia vince, e lasciare che il cue porti l'addio senza rubare il focus alla storia.",
+      en: "Write a funeral elegy that stays gentle and intimate, supporting Eris reading without turning the scene into melodrama. Make Talia feel pure and present even as the illness wins, and let the cue carry the goodbye without stealing focus from the story."
+    },
     chosen: {
       key: "B",
-      summary: "Strings-led melody with soft synth bed and wordless choir, held back under the reading.",
-      reason: "Keeps the farewell intimate and dialogue-first without melodrama."
+      summary: {
+        it: "Melodia guidata dagli archi con letto di synth morbido e coro senza parole, trattenuta sotto la lettura.",
+        en: "Strings-led melody with soft synth bed and wordless choir, held back under the reading."
+      },
+      reason: {
+        it: "Mantiene l'addio intimo e con il dialogo in primo piano senza melodramma.",
+        en: "Keeps the farewell intimate and dialogue-first without melodrama."
+      }
     },
-    result: "The scene feels like a tender farewell rather than a dramatic hit. The music reads as love and dignity, with a quiet sense of inevitability. Talia is framed as innocent, while the shadow of the Banshee remains implied, not announced.",
+    result: {
+      it: "La scena si percepisce come un addio tenero piu che come un colpo drammatico. La musica comunica amore e dignita, con un senso quieto di inevitabilita. Talia e inquadrata come innocente, mentre l'ombra della Banshee resta implicata, non dichiarata.",
+      en: "The scene feels like a tender farewell rather than a dramatic hit. The music reads as love and dignity, with a quiet sense of inevitability. Talia is framed as innocent, while the shadow of the Banshee remains implied, not announced."
+    },
     trackTitle: "Talia's Farewell",
     timing: {
-      in: { time: "00:00", label: "Eris reads Talia’s favourite story." },
-      out: { time: "02:00", label: "End of the farewell beat." }
+      in: {
+        time: "00:00",
+        label: { it: "Eris legge la storia preferita di Talia.", en: "Eris reads Talia’s favourite story." }
+      },
+      out: { time: "02:00", label: { it: "Fine del beat di addio.", en: "End of the farewell beat." } }
     },
-    spottingNote:
-      "The cue must stay under the voice and breathe with the reading. No horror signalling. No ‘scare’ gesture. The emotion comes from warmth, restraint, and a slow harmonic surrender.",
+    spottingNote: {
+      it: "Il cue deve restare sotto la voce e respirare con la lettura. Niente segnali horror. Nessun gesto da 'spavento'. L'emozione arriva da calore, trattenimento e una lenta resa armonica.",
+      en: "The cue must stay under the voice and breathe with the reading. No horror signalling. No ‘scare’ gesture. The emotion comes from warmth, restraint, and a slow harmonic surrender."
+    },
 
-    directorWanted: "Intimate, dialogue-first elegy. No melodrama.",
-    directorAvoid: "Horror signalling. Over-scoring. Masking the reading.",
+    directorWanted: { it: "Elegia intima, dialogo in primo piano. Niente melodramma.", en: "Intimate, dialogue-first elegy. No melodrama." },
+    directorAvoid: { it: "Segnali horror. Over-scoring. Coprire la lettura.", en: "Horror signalling. Over-scoring. Masking the reading." },
 
     versionsTested: {
-      A: "Only pads and choir. Too vague, lacked emotional contour.",
-      B: "Strings-led melody with soft synth bed and wordless choir, held back dynamically under the reading.",
-      C: "Stronger orchestral swell. Felt theatrical and pulled focus."
+      A: { it: "Solo pad e coro. Troppo vago, mancava un contorno emotivo.", en: "Only pads and choir. Too vague, lacked emotional contour." },
+      B: {
+        it: "Melodia guidata dagli archi con letto di synth morbido e coro senza parole, trattenuta dinamicamente sotto la lettura.",
+        en: "Strings-led melody with soft synth bed and wordless choir, held back dynamically under the reading."
+      },
+      C: { it: "Swell orchestrale piu forte. Sembrava teatrale e rubava il focus.", en: "Stronger orchestral swell. Felt theatrical and pulled focus." }
     },
-    finalChoice: "B",
+    finalChoice: { it: "B", en: "B" },
 
-    delivered: "Final mix plus alternates, clearly labelled. Revisions tracked.",
+    delivered: {
+      it: "Mix finale piu alternate, etichettate chiaramente. Revisioni tracciate.",
+      en: "Final mix plus alternates, clearly labelled. Revisions tracked."
+    },
     technicalDeliverables: [
-      "48 kHz, 24 bit stereo master",
-      "Alt: lighter pulse",
-      "Stems: pulse, low hits, textures"
+      { it: "Master stereo 48 kHz, 24 bit", en: "48 kHz, 24 bit stereo master" },
+      { it: "Alt: pulsazione piu leggera", en: "Alt: lighter pulse" },
+      { it: "Stem: pulsazione, colpi bassi, texture", en: "Stems: pulse, low hits, textures" }
     ],
-    musicalLanguage:
-      "D minor, built as a lullaby that slowly becomes a requiem.\n\nThe cue starts at 00:00 with warm strings, a soft synth bed, and wordless choir, not to dramatise the moment, but to make it feel sacred and close, like a whispered funeral praise. The orchestration stays light on purpose, so Eris’ reading remains the foreground and the music feels like a private breath around it.\n\nHarmonically the cue sits in D minor, one whole step above the Banshee’s centre, as if Talia’s innocence is placed ‘above’ the curse rather than inside it. That distance is the point: the illness wins physically, but the music frames Talia as untouched in spirit. The choir stays pure and non-theatrical, almost like air, while the strings carry the melody with long, unbroken lines, avoiding sharp attacks.\n\nBy the final stretch the harmony stops searching and simply accepts. The cue does not resolve with triumph. It resolves with tenderness. It ends at 02:00 like the last page of a story being closed, gently, without noise.",
+    musicalLanguage: {
+      it: "Re minore, costruito come una ninna nanna che lentamente diventa un requiem.\n\nIl cue parte a 00:00 con archi caldi, un letto di synth morbido e coro senza parole, non per drammatizzare il momento ma per farlo sentire sacro e vicino, come una lode funebre sussurrata. L'orchestrazione resta volutamente leggera, cosi la lettura di Eris rimane in primo piano e la musica sembra un respiro privato attorno a essa.\n\nArmonicamente il cue sta in Re minore, un tono intero sopra il centro della Banshee, come se l'innocenza di Talia fosse posta 'sopra' la maledizione invece che dentro. Quella distanza e il punto: la malattia vince fisicamente, ma la musica inquadra Talia come intatta nello spirito. Il coro resta puro e non teatrale, quasi aria, mentre gli archi portano la melodia con linee lunghe e continue, evitando attacchi netti.\n\nNell'ultima parte l'armonia smette di cercare e semplicemente accetta. Il cue non si risolve con trionfo. Si risolve con tenerezza. Finisce a 02:00 come l'ultima pagina di una storia che si chiude, delicatamente, senza rumore.",
+      en: "D minor, built as a lullaby that slowly becomes a requiem.\n\nThe cue starts at 00:00 with warm strings, a soft synth bed, and wordless choir, not to dramatise the moment, but to make it feel sacred and close, like a whispered funeral praise. The orchestration stays light on purpose, so Eris’ reading remains the foreground and the music feels like a private breath around it.\n\nHarmonically the cue sits in D minor, one whole step above the Banshee’s centre, as if Talia’s innocence is placed ‘above’ the curse rather than inside it. That distance is the point: the illness wins physically, but the music frames Talia as untouched in spirit. The choir stays pure and non-theatrical, almost like air, while the strings carry the melody with long, unbroken lines, avoiding sharp attacks.\n\nBy the final stretch the harmony stops searching and simply accepts. The cue does not resolve with triumph. It resolves with tenderness. It ends at 02:00 like the last page of a story being closed, gently, without noise."
+    },
 
     technicalNotes: [
-      "Delivery format: WAV (linear PCM)",
-      "Specs: 48 kHz, 24-bit",
-      "Sync: aligned to final picture",
-      "Alt: lighter pulse",
-      "Stems: pulse, low hits, textures"
+      { it: "Formato delivery: WAV (linear PCM)", en: "Delivery format: WAV (linear PCM)" },
+      { it: "Specifiche: 48 kHz, 24-bit", en: "Specs: 48 kHz, 24-bit" },
+      { it: "Sync: allineato al picture finale", en: "Sync: aligned to final picture" },
+      { it: "Alt: pulsazione piu leggera", en: "Alt: lighter pulse" },
+      { it: "Stem: pulsazione, colpi bassi, texture", en: "Stems: pulse, low hits, textures" }
     ]
   },
   {

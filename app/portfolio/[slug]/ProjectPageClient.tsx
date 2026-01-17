@@ -79,6 +79,7 @@ export default function ProjectPageClient({ project }: Props) {
     <main className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-16 lg:px-20">
       <Link
         href="/"
+        prefetch={false}
         className="hero-btn hero-btn-secondary modal-close back-home"
       >
         {labels.backHome}
@@ -171,6 +172,7 @@ export default function ProjectPageClient({ project }: Props) {
       ) : null}
       <Link
         href="/"
+        prefetch={false}
         className="hero-btn hero-btn-secondary modal-close back-home"
       >
         {labels.backHome}

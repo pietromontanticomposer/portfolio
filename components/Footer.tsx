@@ -103,8 +103,8 @@ export default function Footer() {
           <div className="font-medium">VAT 04593080239</div>
           <div className="font-medium">© 2025 Pietro Montanti</div>
           <div className="flex gap-4 justify-center">
-            <Link href="/privacy-policy" className="hover:underline">{t("Informativa Privacy", "Privacy Policy")}</Link>
-            <Link href="/cookie-policy" className="hover:underline">{t("Cookie Policy", "Cookie Policy")}</Link>
+            <Link href="/privacy-policy" prefetch={false} className="hover:underline">{t("Informativa Privacy", "Privacy Policy")}</Link>
+            <Link href="/cookie-policy" prefetch={false} className="hover:underline">{t("Cookie Policy", "Cookie Policy")}</Link>
           </div>
         </div>
       </div>

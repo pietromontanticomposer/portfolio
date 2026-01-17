@@ -53,7 +53,8 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
                 className="case-study-video absolute inset-0 h-full w-full rounded-xl"
                 controls
                 playsInline
-                preload="metadata"
+                preload="none"
+                poster="https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Showreel%20Sito.jpg"
                 aria-label={t("Video showreel", "Showreel video")}
               >
                 <source src={encodeURI(trimmedUrl)} type="video/mp4" />
@@ -73,7 +74,8 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
                 className="case-study-video absolute inset-0 h-full w-full rounded-xl"
                 controls
                 playsInline
-                preload="metadata"
+                preload="none"
+                poster="https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Showreel%20Sito.jpg"
                 aria-label={t("Video placeholder showreel", "Showreel placeholder video")}
               >
                 <source src={PLACEHOLDER_WEBM} type="video/webm" />

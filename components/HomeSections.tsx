@@ -41,7 +41,7 @@ function HomeSections() {
           )}
         </p>
         <div className="mt-4">
-          <Link href="/portfolio" className="hero-btn hero-btn-secondary">
+          <Link href="/portfolio" prefetch={false} className="hero-btn hero-btn-secondary">
             {t("Vedi portfolio", "View portfolio")}
           </Link>
         </div>
@@ -58,7 +58,7 @@ function HomeSections() {
           )}
         </p>
         <div className="mt-4">
-          <Link href="/about" className="hero-btn hero-btn-secondary">
+          <Link href="/about" prefetch={false} className="hero-btn hero-btn-secondary">
             {t("Scopri di più", "Learn more")}
           </Link>
         </div>

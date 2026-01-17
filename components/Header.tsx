@@ -66,7 +66,8 @@ function Header() {
         <div className="ml-2 sm:ml-4">
           {!isHome && (
             <Link 
-              href="/" 
+              href="/"
+              prefetch={false}
               className="inline-flex items-center gap-2 text-sm text-[color:var(--muted)] transition hover:text-[color:var(--foreground)]"
             >
               <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style={{ display: 'block' }}>
@@ -80,13 +81,13 @@ function Header() {
           <Link href="/#showreel" className="transition hover:text-[color:var(--foreground)]">
             {t("Showreel", "Showreel")}
           </Link>
-          <Link href="/portfolio" prefetch={true} className="transition hover:text-[color:var(--foreground)]">
+          <Link href="/portfolio" prefetch={false} className="transition hover:text-[color:var(--foreground)]">
             {t("Portfolio", "Portfolio")}
           </Link>
-          <Link href="/case-studies" prefetch={true} className="transition hover:text-[color:var(--foreground)]">
+          <Link href="/case-studies" prefetch={false} className="transition hover:text-[color:var(--foreground)]">
             {t("Case Studies", "Case Studies")}
           </Link>
-          <Link href="/about" prefetch={true} className="transition hover:text-[color:var(--foreground)]">
+          <Link href="/about" prefetch={false} className="transition hover:text-[color:var(--foreground)]">
             {t("Chi sono", "About")}
           </Link>
           <Link href="/#contact" className="transition hover:text-[color:var(--foreground)]">

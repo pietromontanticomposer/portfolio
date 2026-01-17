@@ -6,22 +6,26 @@ import AutoScrollStrip from "../../components/AutoScrollStrip";
 import CollaborationsSection from "../../components/CollaborationsSection";
 import TrackPlayerSection from "../../components/TrackPlayerSection";
 import { projects, featuredProjects } from "../../data/projects";
-import { comingSoonPosters } from "../../data/placeholders";
+import { comingSoonPosters, placeholderProjects } from "../../data/placeholders";
 import { partners, selectedTracks } from "../../data/homeContent";
 import { useLanguage } from "../../lib/LanguageContext";
 
-const postersFromProjects = projects.map((p) => ({
-  slug: p.slug,
-  title: p.title,
-  year: (p as { year?: string }).year ?? '',
-  tag: p.tag || "Poster",
-  image: p.image,
-  href: `/portfolio/${p.slug}`,
-})).filter((poster): poster is typeof poster & { image: string } => Boolean(poster.image));
+const projectTitles = new Set(projects.map((p) => p.title.toLowerCase()));
+const postersFromProjects = projects.map((p, index) => {
+  const fallback = placeholderProjects[index % placeholderProjects.length];
+  return {
+    slug: p.slug,
+    title: p.title,
+    year: (p as { year?: string }).year ?? '',
+    tag: p.tag || "Poster",
+    image: p.image ?? fallback.image,
+    href: `/portfolio/${p.slug}`,
+  };
+}).filter((poster): poster is typeof poster & { image: string } => Boolean(poster.image));
 
 const posters = [
   ...postersFromProjects,
-  ...comingSoonPosters.map((p) => ({
+  ...comingSoonPosters.filter((p) => !projectTitles.has(p.title.toLowerCase())).map((p) => ({
     slug: p.slug,
     title: p.title,
     year: (p as { year?: string }).year ?? '',
@@ -41,13 +45,15 @@ const selectedPosterTiles = selectedProjects.map((project) => ({
   image: project.image,
   href: `/portfolio/${project.slug}`,
 }));
-const comingSoonStrip = comingSoonPosters.map((poster) => ({
-  slug: poster.slug,
-  title: poster.title,
-  year: (poster as { year?: string }).year ?? '',
-  tag: poster.tag,
-  image: poster.image,
-}));
+const comingSoonStrip = comingSoonPosters
+  .filter((poster) => !projectTitles.has(poster.title.toLowerCase()))
+  .map((poster) => ({
+    slug: poster.slug,
+    title: poster.title,
+    year: (poster as { year?: string }).year ?? '',
+    tag: poster.tag,
+    image: poster.image,
+  }));
 const selectedWorkPosters = [...selectedPosterTiles, ...comingSoonStrip];
 
 export default function PortfolioPage() {
