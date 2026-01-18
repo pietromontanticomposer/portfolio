@@ -5,7 +5,7 @@ import PosterCard from "../../components/PosterCard";
 import AutoScrollStrip from "../../components/AutoScrollStrip";
 import CollaborationsSection from "../../components/CollaborationsSection";
 import TrackPlayerSection from "../../components/TrackPlayerSection";
-import { projects, featuredProjects } from "../../data/projects";
+import { projects } from "../../data/projects";
 import { comingSoonPosters, placeholderProjects } from "../../data/placeholders";
 import { partners, selectedTracks } from "../../data/homeContent";
 import { useLanguage } from "../../lib/LanguageContext";
@@ -28,36 +28,18 @@ const postersFromProjects = projects.map((p, index) => {
 
 const posters = [
   ...postersFromProjects,
-  ...comingSoonPosters.filter((p) => !projectTitles.has(normalizeTitle(p.title))).map((p) => ({
-    slug: p.slug,
-    title: p.title,
-    year: (p as { year?: string }).year ?? '',
-    tag: p.tag || "Poster",
-    image: p.image,
-    href: `/portfolio/${p.slug}`,
-  })).filter((poster): poster is typeof poster & { image: string } => Boolean(poster.image)),
+  ...comingSoonPosters
+    .filter((p) => !projectTitles.has(normalizeTitle(p.title)))
+    .map((p) => ({
+      slug: p.slug,
+      title: p.title,
+      year: (p as { year?: string }).year ?? '',
+      tag: p.tag || "Poster",
+      image: p.image,
+      href: undefined,
+    }))
+    .filter((poster): poster is typeof poster & { image: string } => Boolean(poster.image)),
 ];
-
-// Selected work section data
-const selectedProjects = featuredProjects.slice(0, 6);
-const selectedPosterTiles = selectedProjects.map((project) => ({
-  slug: project.slug,
-  title: project.title,
-  year: project.year,
-  tag: project.tag,
-  image: project.image,
-  href: `/portfolio/${project.slug}`,
-}));
-const comingSoonStrip = comingSoonPosters
-  .filter((poster) => !projectTitles.has(normalizeTitle(poster.title)))
-  .map((poster) => ({
-    slug: poster.slug,
-    title: poster.title,
-    year: (poster as { year?: string }).year ?? '',
-    tag: poster.tag,
-    image: poster.image,
-  }));
-const selectedWorkPosters = [...selectedPosterTiles, ...comingSoonStrip];
 
 export default function PortfolioPage() {
   const [showAllProjects, setShowAllProjects] = useState(false);
@@ -83,7 +65,7 @@ export default function PortfolioPage() {
         <p className="mt-2 text-sm text-[color:var(--muted)]">
           {t("Lavori in evidenza. Lista completa sotto.", "Curated highlights. Full list below.")}
         </p>
-        <AutoScrollStrip posters={selectedWorkPosters} />
+        <AutoScrollStrip posters={posters} />
         <div className="mt-6 aspect-video w-full overflow-hidden rounded-lg">
           <iframe
             src="https://www.youtube.com/embed/uyxIoQIE-cM"

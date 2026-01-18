@@ -13,7 +13,7 @@ export default function KeepPlayingVideo({
   ...props
 }: KeepPlayingVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  useResumeVideoOnVisibility(videoRef);
+  useResumeVideoOnVisibility(videoRef, { keepPlayingWhenHidden: true });
 
   return (
     <video ref={videoRef} {...props}>

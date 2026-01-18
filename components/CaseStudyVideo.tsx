@@ -21,7 +21,7 @@ export default function CaseStudyVideo({
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<unknown>(null);
 
-  useResumeVideoOnVisibility(videoRef);
+  useResumeVideoOnVisibility(videoRef, { keepPlayingWhenHidden: true });
 
   const normalizedHls = hlsUrl?.trim();
   const normalizedMp4 = mp4Url?.trim() ?? null;

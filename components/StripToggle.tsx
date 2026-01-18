@@ -11,6 +11,7 @@ type Poster = {
   year?: string;
   tag?: string;
   image?: string;
+  href?: string;
 };
 
 function StripToggle({ posters }: { posters: Poster[] }) {
@@ -65,7 +66,7 @@ function StripToggle({ posters }: { posters: Poster[] }) {
                   year={p.year}
                   tag={p.tag}
                   image={p.image}
-                  href={`/portfolio/${p.slug}`}
+                  href={p.href}
                 />
               </div>
             ))}

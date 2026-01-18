@@ -125,9 +125,9 @@ function AutoScrollStrip({ posters }: { posters: Poster[] }) {
     };
   }, [posters]);
 
-  const renderItems = useCallback((items: Poster[]) => {
+  const renderItems = useCallback((items: Poster[], loopIndex: number) => {
     return items.map((p, idx) => (
-      <div key={`${p.slug}-${idx}`} className="w-fit">
+      <div key={`${loopIndex}-${p.slug}-${idx}`} className="w-fit">
         <div className="poster-wrapper">
           <PosterCard
             title={p.title}
@@ -144,8 +144,8 @@ function AutoScrollStrip({ posters }: { posters: Poster[] }) {
   return (
     <div className="scroll-strip mt-6" ref={containerRef}>
       <div className="scroll-track" ref={trackRef}>
-        {renderItems(posters)}
-        {renderItems(posters)}
+        {renderItems(posters, 0)}
+        {renderItems(posters, 1)}
       </div>
     </div>
   );

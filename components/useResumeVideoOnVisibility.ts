@@ -3,12 +3,19 @@
 import { useEffect, useRef } from "react";
 import type { RefObject } from "react";
 
+type UseResumeVideoOnVisibilityOptions = {
+  keepPlayingWhenHidden?: boolean;
+};
+
 export default function useResumeVideoOnVisibility(
-  videoRef: RefObject<HTMLVideoElement | null>
+  videoRef: RefObject<HTMLVideoElement | null>,
+  { keepPlayingWhenHidden = false }: UseResumeVideoOnVisibilityOptions = {}
 ) {
   const shouldResumeRef = useRef(false);
   const hiddenAtRef = useRef<number | null>(null);
   const hiddenTimeRef = useRef<number | null>(null);
+  const hiddenRetryIdRef = useRef<number | null>(null);
+  const hiddenRetryCountRef = useRef(0);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -16,30 +23,76 @@ export default function useResumeVideoOnVisibility(
 
     shouldResumeRef.current = !video.paused && !video.ended;
 
+    const clearHiddenRetry = () => {
+      if (hiddenRetryIdRef.current !== null) {
+        window.clearTimeout(hiddenRetryIdRef.current);
+        hiddenRetryIdRef.current = null;
+      }
+      hiddenRetryCountRef.current = 0;
+    };
+
+    const scheduleHiddenRetry = () => {
+      if (!keepPlayingWhenHidden) return;
+      if (!document.hidden) return;
+      if (!shouldResumeRef.current) return;
+      if (hiddenRetryIdRef.current !== null) return;
+      if (hiddenRetryCountRef.current >= 3) return;
+
+      const delay = 800 * Math.pow(2, hiddenRetryCountRef.current);
+      hiddenRetryIdRef.current = window.setTimeout(() => {
+        hiddenRetryIdRef.current = null;
+        if (!document.hidden || !shouldResumeRef.current) {
+          clearHiddenRetry();
+          return;
+        }
+        hiddenRetryCountRef.current += 1;
+        video.play().catch(() => {});
+        scheduleHiddenRetry();
+      }, delay);
+    };
+
     const handlePlay = () => {
       shouldResumeRef.current = true;
+      clearHiddenRetry();
     };
 
     const handlePause = () => {
-      if (document.hidden) return;
+      if (document.hidden) {
+        if (shouldResumeRef.current && hiddenAtRef.current === null) {
+          hiddenAtRef.current = performance.now();
+          hiddenTimeRef.current = video.currentTime;
+        }
+        scheduleHiddenRetry();
+        return;
+      }
       shouldResumeRef.current = false;
+      hiddenAtRef.current = null;
+      hiddenTimeRef.current = null;
+      clearHiddenRetry();
     };
 
     const handleEnded = () => {
       shouldResumeRef.current = false;
+      hiddenAtRef.current = null;
+      hiddenTimeRef.current = null;
+      clearHiddenRetry();
     };
 
     const handleVisibilityChange = () => {
       if (document.hidden) {
-        if (shouldResumeRef.current && !video.paused) {
+        if (shouldResumeRef.current) {
           hiddenAtRef.current = performance.now();
           hiddenTimeRef.current = video.currentTime;
+          scheduleHiddenRetry();
         } else {
           hiddenAtRef.current = null;
           hiddenTimeRef.current = null;
+          clearHiddenRetry();
         }
         return;
       }
+
+      clearHiddenRetry();
 
       if (!shouldResumeRef.current) {
         hiddenAtRef.current = null;
@@ -88,6 +141,7 @@ export default function useResumeVideoOnVisibility(
       video.removeEventListener("pause", handlePause);
       video.removeEventListener("ended", handleEnded);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
+      clearHiddenRetry();
     };
-  }, [videoRef]);
+  }, [videoRef, keepPlayingWhenHidden]);
 }
