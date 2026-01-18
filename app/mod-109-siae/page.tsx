@@ -103,7 +103,7 @@ const guideData: Record<
             heading: "D) Firma e invio",
             bullets: [
               "Il modulo va inviato dalla produzione.",
-              "Tramite PEC.",
+              "Una volta compilati, i moduli vanno inviati tramite PEC a MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
               "In formato Excel o PDF digitale (non scansione).",
             ],
           },
@@ -283,7 +283,7 @@ const guideData: Record<
             heading: "D) Signature and submission",
             bullets: [
               "The form must be sent by the production.",
-              "Via PEC.",
+              "Once completed, the forms must be sent via PEC to MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
               "In Excel or digital PDF format (not scanned).",
             ],
           },

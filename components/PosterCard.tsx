@@ -51,7 +51,6 @@ function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
             />
           ) : null}
           <div className="poster-placeholder-inner">
-            <div className="poster-placeholder-title">{title}</div>
             <div className="poster-placeholder-tag">{comingSoonLabel}</div>
           </div>
         </div>
