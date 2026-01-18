@@ -10,22 +10,25 @@ import { comingSoonPosters, placeholderProjects } from "../../data/placeholders"
 import { partners, selectedTracks } from "../../data/homeContent";
 import { useLanguage } from "../../lib/LanguageContext";
 
-const projectTitles = new Set(projects.map((p) => p.title.toLowerCase()));
+const normalizeTitle = (title: string) => title.toLowerCase().replace(/[^a-z0-9]/g, "");
+const projectTitles = new Set(projects.map((p) => normalizeTitle(p.title)));
+const comingSoonByTitle = new Map(comingSoonPosters.map((p) => [normalizeTitle(p.title), p]));
 const postersFromProjects = projects.map((p, index) => {
   const fallback = placeholderProjects[index % placeholderProjects.length];
+  const comingSoonPoster = comingSoonByTitle.get(normalizeTitle(p.title));
   return {
     slug: p.slug,
     title: p.title,
     year: (p as { year?: string }).year ?? '',
-    tag: p.tag || "Poster",
-    image: p.image ?? fallback.image,
+    tag: p.tag || comingSoonPoster?.tag || "Poster",
+    image: p.image ?? comingSoonPoster?.image ?? fallback.image,
     href: `/portfolio/${p.slug}`,
   };
 }).filter((poster): poster is typeof poster & { image: string } => Boolean(poster.image));
 
 const posters = [
   ...postersFromProjects,
-  ...comingSoonPosters.filter((p) => !projectTitles.has(p.title.toLowerCase())).map((p) => ({
+  ...comingSoonPosters.filter((p) => !projectTitles.has(normalizeTitle(p.title))).map((p) => ({
     slug: p.slug,
     title: p.title,
     year: (p as { year?: string }).year ?? '',
@@ -46,7 +49,7 @@ const selectedPosterTiles = selectedProjects.map((project) => ({
   href: `/portfolio/${project.slug}`,
 }));
 const comingSoonStrip = comingSoonPosters
-  .filter((poster) => !projectTitles.has(poster.title.toLowerCase()))
+  .filter((poster) => !projectTitles.has(normalizeTitle(poster.title)))
   .map((poster) => ({
     slug: poster.slug,
     title: poster.title,

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { useLanguage } from "../lib/LanguageContext";
 
 const DEBUG_BG =
@@ -15,25 +15,33 @@ function BackgroundVideo() {
   const [isPaused, setIsPaused] = useState(false);
   const isPlayingRef = useRef(false);
   const hasLoadedRef = useRef(false);
-
-  // Clear any saved pause state on page load so video always starts
-  useEffect(() => {
-    localStorage.removeItem('bg-video-paused');
-  }, []);
+  const isPausedRef = useRef(false);
 
   // Delay load to not block initial render and scroll
   useEffect(() => {
     if (hasLoadedRef.current) return;
 
-    // Wait for page to be interactive before loading video
-    const timer = setTimeout(() => {
-      if (!hasLoadedRef.current) {
-        hasLoadedRef.current = true;
-        setShouldLoadSrc(true);
-      }
-    }, 1500); // Delay 1.5s to prioritize main content
+    const loadVideo = () => {
+      if (hasLoadedRef.current) return;
+      hasLoadedRef.current = true;
+      setShouldLoadSrc(true);
+    };
 
-    return () => clearTimeout(timer);
+    let idleId: number | null = null;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      idleId = (window as any).requestIdleCallback(loadVideo, { timeout: 2500 });
+    } else {
+      timer = setTimeout(loadVideo, 1500);
+    }
+
+    return () => {
+      if (idleId !== null && "cancelIdleCallback" in window) {
+        (window as any).cancelIdleCallback(idleId);
+      }
+      if (timer) clearTimeout(timer);
+    };
   }, []);
 
   // Attach sources and attempt playback
@@ -284,9 +292,14 @@ function BackgroundVideo() {
       lastAdvance = performance.now();
     };
     const onPause = () => {
-      if (document.hidden) return;
       isPlayingRef.current = false;
       setIsPlaying(false);
+      if (!isPausedRef.current) {
+        const id = setTimeout(() => {
+          if (mounted && !isPausedRef.current) tryPlayImmediate();
+        }, 200);
+        timeoutIds.push(id);
+      }
     };
     const onCanPlay = () => tryPlayImmediate();
     const onCanPlayThrough = () => tryPlayImmediate();
@@ -316,6 +329,11 @@ function BackgroundVideo() {
     video.addEventListener("waiting", onWaiting, { passive: true });
     video.addEventListener("stalled", onStalled, { passive: true });
     video.addEventListener("timeupdate", onTimeUpdate, { passive: true });
+    const onPlay = () => {
+      if (isPausedRef.current) {
+        video.pause();
+      }
+    };
     const onError = (e: Event) => {
       try {
         const mediaError = video.error;
@@ -331,6 +349,7 @@ function BackgroundVideo() {
       } catch {}
     };
     video.addEventListener("error", onError);
+    video.addEventListener("play", onPlay);
 
     // Watchdog interval optimized for smooth performance
     const watchdogId = window.setInterval(() => {
@@ -378,6 +397,7 @@ function BackgroundVideo() {
       video.removeEventListener("stalled", onStalled);
       video.removeEventListener("timeupdate", onTimeUpdate);
       video.removeEventListener("error", onError);
+      video.removeEventListener("play", onPlay);
 
       // Clear watchdog interval
       if (watchdogId) window.clearInterval(watchdogId);
@@ -399,54 +419,20 @@ function BackgroundVideo() {
     };
   }, [shouldLoadSrc]);
 
-  const togglePause = useCallback(() => {
+  const togglePause = () => {
     const video = videoRef.current;
     if (!video) return;
-    
-    if (isPaused) {
-      video.play().catch(() => {});
+
+    if (isPausedRef.current) {
+      isPausedRef.current = false;
       setIsPaused(false);
-      localStorage.setItem('bg-video-paused', 'false');
+      video.play().catch(() => {});
     } else {
-      video.pause();
+      isPausedRef.current = true;
       setIsPaused(true);
-      localStorage.setItem('bg-video-paused', 'true');
+      video.pause();
     }
-  }, [isPaused]);
-
-  // Handle pause state during session (not persisted across page loads)
-  useEffect(() => {
-    if (!shouldLoadSrc || !videoRef.current) return;
-    const video = videoRef.current;
-
-    // Handle page visibility changes (tab switch)
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        // Don't do anything when tab is hidden - let browser handle it
-        return;
-      } else {
-        // When returning to tab, respect current pause state
-        if (isPaused) {
-          video.pause();
-        }
-      }
-    };
-
-    // Intercept play events only if user has paused during this session
-    const handlePlay = () => {
-      if (isPaused) {
-        video.pause();
-      }
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    video.addEventListener('play', handlePlay);
-
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      video.removeEventListener('play', handlePlay);
-    };
-  }, [shouldLoadSrc, isPaused]);
+  };
 
   return (
     <>
@@ -473,7 +459,7 @@ function BackgroundVideo() {
       />
 
       <div
-        className={`bg-video-poster ${isPlaying || isPaused ? "is-hidden" : ""}`}
+        className={`bg-video-poster ${isPlaying ? "is-hidden" : ""}`}
         style={{
           backgroundImage: `url('https://4glkq64bdlmmple5.public.blob.vercel-storage.com/background-poster.jpg')`,
           transform: "translate3d(0, 0, 0)",
@@ -500,7 +486,9 @@ function BackgroundVideo() {
       />
 
       <div className="bg-video-toggle">
-        <span className="bg-video-toggle-label">{t("Blocca video di sfondo", "Block background video")}</span>
+        <span className="bg-video-toggle-label">
+          {t("Blocca video di sfondo", "Block background video")}
+        </span>
         <button
           onClick={togglePause}
           className="bg-video-toggle-btn"
