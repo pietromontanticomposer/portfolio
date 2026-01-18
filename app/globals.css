@@ -1078,10 +1078,19 @@ main {
   background: transparent;
   border: 0;
   box-shadow: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   aspect-ratio: 210 / 297; /* enforce A4 for placeholders */
+  position: relative;
+  overflow: hidden;
+}
+
+.poster-image.poster-placeholder::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(2, 6, 23, 0.65) 0%, rgba(2, 6, 23, 0.35) 100%);
+  z-index: 1;
 }
 
 .poster-placeholder-inner {
@@ -1089,6 +1098,9 @@ main {
   padding: 2rem;
   display: grid;
   gap: 0.8rem;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
 }
 
 .poster-placeholder-title {
@@ -1114,6 +1126,18 @@ main {
   object-fit: cover;
   object-position: center;
   border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.poster-img-coming-soon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 8px;
+  z-index: 0;
+  border: none;
 }
 
 /* soft ground shadow to sell the 3D effect */
@@ -1225,14 +1249,6 @@ main {
   display: none !important;
 }
 
-.poster-card-coming-soon .poster-title,
-.poster-card-coming-soon .poster-footer {
-  display: block !important;
-}
-
-.poster-card-coming-soon .poster-footer {
-  display: flex !important;
-}
 
 /* Grid view for posters: large, evenly sized cards */
 .poster-grid-gridview {
@@ -1303,6 +1319,10 @@ main {
   box-shadow: none;
   padding: 0;
   aspect-ratio: 210 / 297; /* A4 */
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
 }
 
 /* Grid: poster fills the card entirely (no white padding) */

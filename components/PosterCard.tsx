@@ -35,10 +35,21 @@ function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
   const renderPosterImage = () => {
     const comingSoonLabel = t("PROSSIMAMENTE", "COMING SOON");
 
-    // For "Coming Soon" items, only render a placeholder if no image is provided
-    if (isComingSoon && !safeImage) {
+    if (isComingSoon) {
       return (
-        <div className="poster-image mt-4 poster-placeholder" aria-hidden>
+        <div className="poster-image mt-4 relative poster-placeholder" aria-hidden>
+          {safeImage ? (
+            <Image
+              src={safeImage}
+              alt={title}
+              width={400}
+              height={600}
+              className="poster-img poster-img-coming-soon"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : null}
           <div className="poster-placeholder-inner">
             <div className="poster-placeholder-title">{title}</div>
             <div className="poster-placeholder-tag">{comingSoonLabel}</div>
@@ -75,6 +86,7 @@ function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
   };
 
   const renderFooter = () => {
+    if (isComingSoon) return null;
     const footerItems: string[] = [];
     if (displayYear) footerItems.push(displayYear);
     if (displayTag && displayTag !== displayYear) footerItems.push(displayTag);
