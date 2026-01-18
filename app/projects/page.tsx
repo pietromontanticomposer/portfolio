@@ -6,6 +6,8 @@ import { comingSoonPosters, placeholderProjects } from "../../data/placeholders"
 import { useLanguage } from "../../lib/LanguageContext";
 
 const normalizeTitle = (title: string) => title.toLowerCase().replace(/[^a-z0-9]/g, "");
+const isComingSoonProject = (tag?: string, year?: string | number) =>
+  [tag, year].filter(Boolean).some((value) => String(value).toLowerCase().includes("coming"));
 const projectTitles = new Set(projects.map((p) => normalizeTitle(p.title)));
 const comingSoonByTitle = new Map(comingSoonPosters.map((p) => [normalizeTitle(p.title), p]));
 
@@ -13,9 +15,10 @@ const postersFromProjects = projects
   .map((p, index) => {
     const fallback = placeholderProjects[index % placeholderProjects.length];
     const comingSoonPoster = comingSoonByTitle.get(normalizeTitle(p.title));
+    const isComingSoon = isComingSoonProject(p.tag, (p as { year?: string | number }).year);
     return {
       slug: p.slug,
-      title: p.title,
+      title: isComingSoon && comingSoonPoster?.title ? comingSoonPoster.title : p.title,
       year: p.year,
       tag: p.tag || comingSoonPoster?.tag || "Poster",
       image: p.image ?? comingSoonPoster?.image ?? fallback.image,
