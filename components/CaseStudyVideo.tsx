@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useLanguage } from "../lib/LanguageContext";
+import useResumeVideoOnVisibility from "./useResumeVideoOnVisibility";
 
 type CaseStudyVideoProps = {
   hlsUrl: string;
@@ -19,6 +20,8 @@ export default function CaseStudyVideo({
   const { t } = useLanguage();
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<unknown>(null);
+
+  useResumeVideoOnVisibility(videoRef);
 
   const normalizedHls = hlsUrl?.trim();
   const normalizedMp4 = mp4Url?.trim() ?? null;

@@ -7,6 +7,7 @@ import CaseStudiesAccordion from "../../components/CaseStudiesAccordion";
 import CaseStudyVideo from "../../components/CaseStudyVideo";
 import ContactPopover from "../../components/ContactPopover";
 import CaseStudyDuration from "../../components/CaseStudyDuration";
+import KeepPlayingVideo from "../../components/KeepPlayingVideo";
 import LazyIframe from "../../components/LazyIframe";
 import TrackPlayerClient from "../../components/TrackPlayerClient";
 import { caseStudiesNormalized, type CaseStudy } from "../../data/caseStudies";
@@ -113,7 +114,7 @@ function MediaBlock({
     return (
       <div>
         <div className="video-wrapper">
-          <video
+          <KeepPlayingVideo
             className="case-study-video absolute inset-0 h-full w-full rounded-xl"
             controls
             playsInline
@@ -123,7 +124,7 @@ function MediaBlock({
           >
             <source src={src ?? undefined} type="video/mp4" />
             {labels.videoFallback}
-          </video>
+          </KeepPlayingVideo>
         </div>
       </div>
     );

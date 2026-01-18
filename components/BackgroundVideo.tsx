@@ -2,6 +2,7 @@
 "use client";
 import { memo, useEffect, useRef, useState } from "react";
 import { useLanguage } from "../lib/LanguageContext";
+import useResumeVideoOnVisibility from "./useResumeVideoOnVisibility";
 
 const DEBUG_BG =
   process.env.NEXT_PUBLIC_BG_DEBUG === "1" ||
@@ -16,6 +17,9 @@ function BackgroundVideo() {
   const isPlayingRef = useRef(false);
   const hasLoadedRef = useRef(false);
   const isPausedRef = useRef(false);
+  const pausedTimeRef = useRef<number | null>(null);
+
+  useResumeVideoOnVisibility(videoRef);
 
   // Delay load to not block initial render and scroll
   useEffect(() => {
@@ -104,6 +108,7 @@ function BackgroundVideo() {
     const timeoutIds: ReturnType<typeof setTimeout>[] = [];
 
     const tryPlayImmediate = () => {
+      if (isPausedRef.current) return;
       if (!hasSource || !mounted) return;
       try {
         video.muted = true;
@@ -151,6 +156,7 @@ function BackgroundVideo() {
             enableWorker: true,
             lowLatencyMode: false,
             capLevelToPlayerSize: true,
+            maxDevicePixelRatio: 1,
             startLevel: 0,
             backBufferLength: 1,
             maxBufferLength: 3,
@@ -187,8 +193,7 @@ function BackgroundVideo() {
             } else if (downlink !== null) {
               if (downlink <= 1.5) maxHeight = 360;
               else if (downlink <= 3) maxHeight = 540;
-              else if (downlink <= 6) maxHeight = 720;
-              else maxHeight = 900;
+              else maxHeight = 720;
             } else if (isLowPower) {
               maxHeight = 540;
             }
@@ -305,13 +310,13 @@ function BackgroundVideo() {
     const onCanPlayThrough = () => tryPlayImmediate();
     const onWaiting = () => {
       const id = setTimeout(() => {
-        if (mounted) tryPlayImmediate();
+        if (mounted && !isPausedRef.current) tryPlayImmediate();
       }, 250);
       timeoutIds.push(id);
     };
     const onStalled = () => {
       const id = setTimeout(() => {
-        if (mounted) tryPlayImmediate();
+        if (mounted && !isPausedRef.current) tryPlayImmediate();
       }, 500);
       timeoutIds.push(id);
     };
@@ -334,6 +339,21 @@ function BackgroundVideo() {
         video.pause();
       }
     };
+    const onEnded = () => {
+      if (isPausedRef.current) return;
+      try {
+        hls?.startLoad(0);
+      } catch {}
+      try {
+        video.currentTime = 0;
+      } catch {}
+      tryPlayImmediate();
+    };
+    const onVisibilityChange = () => {
+      if (!document.hidden && !isPausedRef.current) {
+        tryPlayImmediate();
+      }
+    };
     const onError = (e: Event) => {
       try {
         const mediaError = video.error;
@@ -350,11 +370,18 @@ function BackgroundVideo() {
     };
     video.addEventListener("error", onError);
     video.addEventListener("play", onPlay);
+    video.addEventListener("ended", onEnded);
+    document.addEventListener("visibilitychange", onVisibilityChange);
 
     // Watchdog interval optimized for smooth performance
     const watchdogId = window.setInterval(() => {
       if (document.hidden) return;
-      if (video.paused || video.seeking || !isPlayingRef.current) return;
+      if (isPausedRef.current) return;
+      if (video.paused) {
+        tryPlayImmediate();
+        return;
+      }
+      if (video.seeking || !isPlayingRef.current) return;
       const sinceAdvance = performance.now() - lastAdvance;
       if (sinceAdvance < 7000) return;
       const now = performance.now();
@@ -398,6 +425,8 @@ function BackgroundVideo() {
       video.removeEventListener("timeupdate", onTimeUpdate);
       video.removeEventListener("error", onError);
       video.removeEventListener("play", onPlay);
+      video.removeEventListener("ended", onEnded);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
 
       // Clear watchdog interval
       if (watchdogId) window.clearInterval(watchdogId);
@@ -426,10 +455,20 @@ function BackgroundVideo() {
     if (isPausedRef.current) {
       isPausedRef.current = false;
       setIsPaused(false);
+      if (pausedTimeRef.current !== null && Number.isFinite(pausedTimeRef.current)) {
+        try {
+          if (Number.isFinite(video.duration) && video.duration > 0) {
+            video.currentTime = Math.min(pausedTimeRef.current, Math.max(0, video.duration - 0.05));
+          } else {
+            video.currentTime = Math.max(0, pausedTimeRef.current);
+          }
+        } catch {}
+      }
       video.play().catch(() => {});
     } else {
       isPausedRef.current = true;
       setIsPaused(true);
+      pausedTimeRef.current = Number.isFinite(video.currentTime) ? video.currentTime : null;
       video.pause();
     }
   };

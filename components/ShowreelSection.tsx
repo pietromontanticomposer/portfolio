@@ -1,6 +1,7 @@
 "use client";
 
 import CaseStudyVideo from "./CaseStudyVideo";
+import KeepPlayingVideo from "./KeepPlayingVideo";
 import { useLanguage } from "../lib/LanguageContext";
 
 const PLACEHOLDER_WEBM =
@@ -49,7 +50,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
                 poster="https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Showreel%20Sito.jpg"
               />
             ) : hasEmbed && isMp4 ? (
-              <video
+              <KeepPlayingVideo
                 className="case-study-video absolute inset-0 h-full w-full rounded-xl"
                 controls
                 playsInline
@@ -59,7 +60,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
               >
                 <source src={encodeURI(trimmedUrl)} type="video/mp4" />
                 {t("Il tuo browser non supporta il tag video.", "Your browser does not support the video tag.")}
-              </video>
+              </KeepPlayingVideo>
             ) : hasEmbed ? (
               <iframe
                 src={encodeURI(trimmedUrl)}
@@ -70,7 +71,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
                 allowFullScreen
               />
             ) : (
-              <video
+              <KeepPlayingVideo
                 className="case-study-video absolute inset-0 h-full w-full rounded-xl"
                 controls
                 playsInline
@@ -81,7 +82,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
                 <source src={PLACEHOLDER_WEBM} type="video/webm" />
                 <source src={PLACEHOLDER_MP4} type="video/mp4" />
                 {t("Il tuo browser non supporta il tag video.", "Your browser does not support the video tag.")}
-              </video>
+              </KeepPlayingVideo>
             )}
           </div>
         </div>
