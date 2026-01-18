@@ -19,7 +19,7 @@ function BackgroundVideo() {
   const isPausedRef = useRef(false);
   const pausedTimeRef = useRef<number | null>(null);
 
-  useResumeVideoOnVisibility(videoRef);
+  useResumeVideoOnVisibility(videoRef, { keepPlayingWhenHidden: true });
 
   // Delay load to not block initial render and scroll
   useEffect(() => {
@@ -34,10 +34,9 @@ function BackgroundVideo() {
     let idleId: number | null = null;
     let timer: ReturnType<typeof setTimeout> | null = null;
 
+    timer = setTimeout(loadVideo, 250);
     if (typeof window !== "undefined" && "requestIdleCallback" in window) {
-      idleId = (window as any).requestIdleCallback(loadVideo, { timeout: 2500 });
-    } else {
-      timer = setTimeout(loadVideo, 1500);
+      idleId = (window as any).requestIdleCallback(loadVideo, { timeout: 800 });
     }
 
     return () => {
@@ -103,8 +102,10 @@ function BackgroundVideo() {
     let lastAdvance = performance.now();
     let lastRecoverAt = 0;
     let stallCount = 0;
+    let hlsFatalCount = 0;
     let hasSource = false;
     let mounted = true;
+    let fallbackUsed = false;
     const timeoutIds: ReturnType<typeof setTimeout>[] = [];
 
     const tryPlayImmediate = () => {
@@ -129,6 +130,76 @@ function BackgroundVideo() {
       }
     };
 
+    const hlsUrl =
+      process.env.NEXT_PUBLIC_BG_HLS_URL ||
+      "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/hls/background/master.m3u8";
+    const fallbackMp4Url =
+      process.env.NEXT_PUBLIC_BG_MP4_URL ||
+      "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/videos/background.mp4";
+    const fallbackWebmUrl =
+      process.env.NEXT_PUBLIC_BG_WEBM_URL ||
+      "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/videos/background.webm";
+    const fallbackUrl =
+      (fallbackWebmUrl && video.canPlayType("video/webm")) ? fallbackWebmUrl :
+      (fallbackMp4Url && video.canPlayType("video/mp4")) ? fallbackMp4Url :
+      null;
+
+    const cleanupHls = () => {
+      const conn = (navigator as any).connection;
+      if (conn && connectionChangeHandler && typeof conn.removeEventListener === "function") {
+        conn.removeEventListener("change", connectionChangeHandler);
+        connectionChangeHandler = null;
+      }
+      if (hls) {
+        try {
+          hls.destroy();
+          hls = null;
+        } catch {}
+      }
+      HlsClass = null;
+    };
+
+    const switchToFallback = (reason: string) => {
+      if (!fallbackUrl || fallbackUsed) return;
+      fallbackUsed = true;
+      log("switching to fallback", reason);
+      cleanupHls();
+      hasSource = true;
+      try {
+        video.src = fallbackUrl;
+        video.preload = "auto";
+        video.load();
+      } catch {}
+      tryPlayImmediate();
+    };
+
+    const recoverPlayback = (reason: string) => {
+      if (!mounted || isPausedRef.current || fallbackUsed) return;
+      stallCount += 1;
+      if (fallbackUrl && stallCount >= 3) {
+        switchToFallback(`stall-${reason}`);
+        return;
+      }
+      try {
+        if (hls && HlsClass) {
+          if (stallCount % 2 === 0) {
+            hls.stopLoad();
+            hls.detachMedia();
+            hls.attachMedia(video);
+          }
+          hls.startLoad();
+          hls.recoverMediaError();
+        }
+        if (video.readyState < 2) {
+          video.load();
+        }
+        if (video.currentTime > 0.1) {
+          video.currentTime = Math.max(0, video.currentTime - 0.05);
+        }
+      } catch {}
+      tryPlayImmediate();
+    };
+
     try {
       video.muted = true;
       video.playsInline = true;
@@ -141,10 +212,6 @@ function BackgroundVideo() {
       try {
         video.autoplay = true;
       } catch {}
-
-      const hlsUrl =
-        process.env.NEXT_PUBLIC_BG_HLS_URL ||
-        "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/hls/background/master.m3u8";
 
       // Dynamic import HLS.js to reduce initial bundle (~80KB)
       import("hls.js").then((HlsModule) => {
@@ -159,10 +226,10 @@ function BackgroundVideo() {
             maxDevicePixelRatio: 1,
             startLevel: 0,
             backBufferLength: 1,
-            maxBufferLength: 3,
-            maxMaxBufferLength: 6,
-            maxBufferSize: 3 * 1000 * 1000,
-            maxBufferHole: 0.5,
+            maxBufferLength: 12,
+            maxMaxBufferLength: 24,
+            maxBufferSize: 12 * 1000 * 1000,
+            maxBufferHole: 0.7,
             abrBandWidthFactor: 0.65,
             abrBandWidthUpFactor: 0.55,
             fragLoadingTimeOut: 10000,
@@ -187,24 +254,29 @@ function BackgroundVideo() {
               window.matchMedia("(pointer: coarse)").matches;
             const vw = video.videoWidth || video.clientWidth || window.innerWidth;
 
-            let maxHeight = 720;
+            let maxHeight = 540;
             if (saveData) {
               maxHeight = 360;
             } else if (downlink !== null) {
               if (downlink <= 1.5) maxHeight = 360;
               else if (downlink <= 3) maxHeight = 540;
-              else maxHeight = 720;
+              else maxHeight = 540;
             } else if (isLowPower) {
-              maxHeight = 540;
+              maxHeight = 360;
             }
 
             const limit = Math.min(maxHeight, vw);
-            const level = hls.levels?.findIndex(
-              (l: any) => (l?.height ?? 0) > 0 && (l?.height ?? 0) <= limit
-            );
-            if (typeof level === "number" && level >= 0) {
-              hls.autoLevelCapping = level;
-            }
+            let bestLevel = 0;
+            let bestHeight = 0;
+            (hls.levels || []).forEach((level: any, idx: number) => {
+              const height = level?.height ?? 0;
+              if (height > 0 && height <= limit && height >= bestHeight) {
+                bestHeight = height;
+                bestLevel = idx;
+              }
+            });
+            hls.autoLevelCapping = bestLevel;
+            hls.nextLevel = bestLevel;
           };
 
           hls.on(HlsClass.Events.MANIFEST_PARSED, chooseCapLevel);
@@ -244,8 +316,7 @@ function BackgroundVideo() {
             }
 
             if (data?.details === HlsClass.ErrorDetails.BUFFER_STALLED_ERROR) {
-              hls?.startLoad();
-              tryPlayImmediate();
+              recoverPlayback("buffer-stalled");
               return;
             }
 
@@ -255,6 +326,11 @@ function BackgroundVideo() {
             }
 
             logError('HLS fatal error', data);
+            hlsFatalCount += 1;
+            if (fallbackUrl && hlsFatalCount >= 2) {
+              switchToFallback("fatal-error");
+              return;
+            }
             if (data.type === HlsClass.ErrorTypes.NETWORK_ERROR) {
               hls?.startLoad();
             } else if (data.type === HlsClass.ErrorTypes.MEDIA_ERROR) {
@@ -277,14 +353,19 @@ function BackgroundVideo() {
             hasSource = true;
             tryPlayImmediate();
           } catch {}
+        } else if (fallbackUrl) {
+          switchToFallback("no-hls-support");
         }
 
         if (hasSource) {
-          video.preload = "metadata";
+          video.preload = "auto";
           video.load();
         }
       }).catch((err) => {
         logError('Failed to load HLS.js', err);
+        if (fallbackUrl) {
+          switchToFallback("hls-import-failed");
+        }
       });
 
     } catch {
@@ -295,6 +376,7 @@ function BackgroundVideo() {
       isPlayingRef.current = true;
       setIsPlaying(true);
       lastAdvance = performance.now();
+      stallCount = 0;
     };
     const onPause = () => {
       isPlayingRef.current = false;
@@ -306,24 +388,31 @@ function BackgroundVideo() {
         timeoutIds.push(id);
       }
     };
-    const onCanPlay = () => tryPlayImmediate();
-    const onCanPlayThrough = () => tryPlayImmediate();
+    const onCanPlay = () => {
+      stallCount = 0;
+      tryPlayImmediate();
+    };
+    const onCanPlayThrough = () => {
+      stallCount = 0;
+      tryPlayImmediate();
+    };
     const onWaiting = () => {
       const id = setTimeout(() => {
-        if (mounted && !isPausedRef.current) tryPlayImmediate();
-      }, 250);
+        if (mounted && !isPausedRef.current) recoverPlayback("waiting");
+      }, 350);
       timeoutIds.push(id);
     };
     const onStalled = () => {
       const id = setTimeout(() => {
-        if (mounted && !isPausedRef.current) tryPlayImmediate();
-      }, 500);
+        if (mounted && !isPausedRef.current) recoverPlayback("stalled");
+      }, 450);
       timeoutIds.push(id);
     };
     const onTimeUpdate = () => {
       if (video.currentTime !== lastTime) {
         lastTime = video.currentTime;
         lastAdvance = performance.now();
+        stallCount = 0;
       }
     };
 
@@ -383,30 +472,12 @@ function BackgroundVideo() {
       }
       if (video.seeking || !isPlayingRef.current) return;
       const sinceAdvance = performance.now() - lastAdvance;
-      if (sinceAdvance < 7000) return;
+      if (sinceAdvance < 3500) return;
       const now = performance.now();
-      if (now - lastRecoverAt < 5000) return;
+      if (now - lastRecoverAt < 2500) return;
       lastRecoverAt = now;
-      stallCount += 1;
-      try {
-        if (hls && HlsClass) {
-          if (stallCount % 3 === 0) {
-            hls.stopLoad();
-            hls.detachMedia();
-            hls.attachMedia(video);
-          }
-          hls.startLoad();
-          hls.recoverMediaError();
-        }
-        if (video.readyState < 2) {
-          video.load();
-        }
-        if (video.currentTime > 0.1) {
-          video.currentTime = Math.max(0, video.currentTime - 0.05);
-        }
-        tryPlayImmediate();
-      } catch {}
-    }, 7000);
+      recoverPlayback("watchdog");
+    }, 3500);
 
     return () => {
       mounted = false;
@@ -431,20 +502,7 @@ function BackgroundVideo() {
       // Clear watchdog interval
       if (watchdogId) window.clearInterval(watchdogId);
 
-      // Remove connection change listener
-      const conn = (navigator as any).connection;
-      if (conn && connectionChangeHandler && typeof conn.removeEventListener === "function") {
-        conn.removeEventListener("change", connectionChangeHandler);
-        connectionChangeHandler = null;
-      }
-
-      // Destroy HLS instance
-      if (hls) {
-        try {
-          hls.destroy();
-          hls = null;
-        } catch {}
-      }
+      cleanupHls();
     };
   }, [shouldLoadSrc]);
 

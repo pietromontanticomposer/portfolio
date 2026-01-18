@@ -1225,6 +1225,15 @@ main {
   display: none !important;
 }
 
+.poster-card-coming-soon .poster-title,
+.poster-card-coming-soon .poster-footer {
+  display: block !important;
+}
+
+.poster-card-coming-soon .poster-footer {
+  display: flex !important;
+}
+
 /* Grid view for posters: large, evenly sized cards */
 .poster-grid-gridview {
   display: grid;

@@ -23,12 +23,16 @@ function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
   const safeImage = image ?? undefined;
   const displayTag = tag ? getTagTranslation(tag, language) : undefined;
   const displayYear = year ? getTagTranslation(String(year), language) : year;
+  const isComingSoon = [tag, year]
+    .filter(Boolean)
+    .some((value) => String(value).toLowerCase().includes("coming"));
   // image styling is handled in CSS classes (grid vs strip views)
 
-  const cardClassName = `poster-card group${isFreak ? " poster-card-freak" : ""}`;
+  const cardClassName = `poster-card group${isFreak ? " poster-card-freak" : ""}${
+    isComingSoon ? " poster-card-coming-soon" : ""
+  }`;
 
   const renderPosterImage = () => {
-    const isComingSoon = (tag ?? "").toLowerCase().includes("coming");
     const comingSoonLabel = t("PROSSIMAMENTE", "COMING SOON");
 
     // For "Coming Soon" items, only render a placeholder if no image is provided
@@ -70,15 +74,22 @@ function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
     );
   };
 
-  const renderFooter = () => (
-    <div className="mt-6">
-      <div className="poster-title">{title}</div>
-      <div className="poster-footer mt-5">
-        <span>{displayYear}</span>
-        <span>{displayTag}</span>
+  const renderFooter = () => {
+    const footerItems: string[] = [];
+    if (displayYear) footerItems.push(displayYear);
+    if (displayTag && displayTag !== displayYear) footerItems.push(displayTag);
+
+    return (
+      <div className="mt-6">
+        <div className="poster-title">{title}</div>
+        <div className="poster-footer mt-5">
+          {footerItems.map((item) => (
+            <span key={item}>{item}</span>
+          ))}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   if (onClick) {
     return (
