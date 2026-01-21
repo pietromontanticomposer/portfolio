@@ -17,7 +17,7 @@ type ShowreelSectionProps = {
 export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
   const { t } = useLanguage();
   const showreelLabel = t("Showreel", "Showreel");
-  const { isHls, isMp4, src, mp4Fallback } = getMediaSources(embedUrl);
+  const { isHls, isMp4, src, mp4Fallback } = getMediaSources(embedUrl ?? undefined);
   const hasEmbed = !!src;
   const showreelPoster =
     "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Showreel%20Sito.jpg";

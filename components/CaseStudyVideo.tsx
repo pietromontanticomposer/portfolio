@@ -115,7 +115,7 @@ export default function CaseStudyVideo({
     };
 
     const scheduleRecover = (delay = 350) => {
-      const id = window.setTimeout(() => recoverPlayback(), delay);
+      const id = setTimeout(() => recoverPlayback(), delay);
       timeoutIds.push(id);
     };
 
