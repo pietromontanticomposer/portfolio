@@ -14,6 +14,7 @@ function BackgroundVideo() {
   const [shouldLoadSrc, setShouldLoadSrc] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
   const isPlayingRef = useRef(false);
   const hasLoadedRef = useRef(false);
   const isPausedRef = useRef(false);
@@ -21,11 +22,30 @@ function BackgroundVideo() {
 
   useResumeVideoOnVisibility(videoRef, { keepPlayingWhenHidden: true });
 
-  // Load video immediately for faster start
+  // Delay load to not block initial render and scroll
   useEffect(() => {
     if (hasLoadedRef.current) return;
-    hasLoadedRef.current = true;
-    setShouldLoadSrc(true);
+
+    const loadVideo = () => {
+      if (hasLoadedRef.current) return;
+      hasLoadedRef.current = true;
+      setShouldLoadSrc(true);
+    };
+
+    let idleId: number | null = null;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
+    timer = setTimeout(loadVideo, 250);
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      idleId = (window as any).requestIdleCallback(loadVideo, { timeout: 800 });
+    }
+
+    return () => {
+      if (idleId !== null && "cancelIdleCallback" in window) {
+        (window as any).cancelIdleCallback(idleId);
+      }
+      if (timer) clearTimeout(timer);
+    };
   }, []);
 
   // Attach sources and attempt playback
@@ -206,23 +226,20 @@ function BackgroundVideo() {
             capLevelToPlayerSize: true,
             maxDevicePixelRatio: 1,
             startLevel: 0,
-            startFragPrefetch: true,
             backBufferLength: 1,
-            maxBufferLength: 30,
-            maxMaxBufferLength: 60,
-            maxBufferSize: 30 * 1000 * 1000,
-            maxBufferHole: 0.5,
-            abrBandWidthFactor: 0.7,
-            abrBandWidthUpFactor: 0.6,
+            maxBufferLength: 12,
+            maxMaxBufferLength: 24,
+            maxBufferSize: 12 * 1000 * 1000,
+            maxBufferHole: 0.7,
+            abrBandWidthFactor: 0.65,
+            abrBandWidthUpFactor: 0.55,
             fragLoadingTimeOut: 10000,
-            fragLoadingMaxRetry: 5,
+            fragLoadingMaxRetry: 4,
             fragLoadingRetryDelay: 1000,
             fragLoadingMaxRetryTimeout: 8000,
-            manifestLoadingMaxRetry: 5,
+            manifestLoadingMaxRetry: 4,
             manifestLoadingRetryDelay: 1000,
             manifestLoadingMaxRetryTimeout: 8000,
-            nudgeOffset: 0.1,
-            nudgeMaxRetry: 5,
           });
           hls.loadSource(hlsUrl);
           hls.attachMedia(video);
@@ -359,6 +376,7 @@ function BackgroundVideo() {
     const onPlaying = () => {
       isPlayingRef.current = true;
       setIsPlaying(true);
+      setHasStartedPlaying(true);
       lastAdvance = performance.now();
       stallCount = 0;
     };
@@ -495,41 +513,14 @@ function BackgroundVideo() {
     if (!video) return;
 
     if (isPausedRef.current) {
-      // Resume playback
+      // Resume - just play from current position
       isPausedRef.current = false;
       setIsPaused(false);
-
-      const savedTime = pausedTimeRef.current;
-
-      // First restore the time position, then play
-      if (savedTime !== null && Number.isFinite(savedTime)) {
-        try {
-          const targetTime = Number.isFinite(video.duration) && video.duration > 0
-            ? Math.min(savedTime, Math.max(0, video.duration - 0.05))
-            : Math.max(0, savedTime);
-          video.currentTime = targetTime;
-        } catch {}
-      }
-
-      video.play().then(() => {
-        // After play succeeds, verify position is correct
-        if (savedTime !== null && Number.isFinite(savedTime)) {
-          const targetTime = Number.isFinite(video.duration) && video.duration > 0
-            ? Math.min(savedTime, Math.max(0, video.duration - 0.05))
-            : Math.max(0, savedTime);
-          // If position drifted too far, correct it
-          if (Math.abs(video.currentTime - targetTime) > 1) {
-            try {
-              video.currentTime = targetTime;
-            } catch {}
-          }
-        }
-      }).catch(() => {});
+      video.play().catch(() => {});
     } else {
-      // Pause playback
+      // Pause - just pause, video stays on current frame
       isPausedRef.current = true;
       setIsPaused(true);
-      pausedTimeRef.current = Number.isFinite(video.currentTime) ? video.currentTime : null;
       video.pause();
     }
   };
@@ -538,9 +529,9 @@ function BackgroundVideo() {
     <>
       <video
         ref={videoRef}
-        className={`bg-video ${isPlaying || isPaused ? "is-visible" : ""}`}
+        className={`bg-video ${hasStartedPlaying ? "is-visible" : ""}`}
         autoPlay
-        preload="auto"
+        preload="metadata"
         muted
         loop
         playsInline
@@ -559,7 +550,7 @@ function BackgroundVideo() {
       />
 
       <div
-        className={`bg-video-poster ${isPlaying || isPaused ? "is-hidden" : ""}`}
+        className={`bg-video-poster ${hasStartedPlaying ? "is-hidden" : ""}`}
         style={{
           backgroundImage: `url('https://4glkq64bdlmmple5.public.blob.vercel-storage.com/background-poster.jpg')`,
           transform: "translate3d(0, 0, 0)",
