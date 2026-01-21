@@ -22,30 +22,13 @@ function BackgroundVideo() {
 
   useResumeVideoOnVisibility(videoRef, { keepPlayingWhenHidden: true });
 
-  // Delay load to not block initial render and scroll
+  // Start loading video quickly after mount
   useEffect(() => {
     if (hasLoadedRef.current) return;
-
-    const loadVideo = () => {
-      if (hasLoadedRef.current) return;
-      hasLoadedRef.current = true;
-      setShouldLoadSrc(true);
-    };
-
-    let idleId: number | null = null;
-    let timer: ReturnType<typeof setTimeout> | null = null;
-
-    timer = setTimeout(loadVideo, 250);
-    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
-      idleId = (window as any).requestIdleCallback(loadVideo, { timeout: 800 });
-    }
-
-    return () => {
-      if (idleId !== null && "cancelIdleCallback" in window) {
-        (window as any).cancelIdleCallback(idleId);
-      }
-      if (timer) clearTimeout(timer);
-    };
+    hasLoadedRef.current = true;
+    // Minimal delay to let critical content render first
+    const timer = setTimeout(() => setShouldLoadSrc(true), 50);
+    return () => clearTimeout(timer);
   }, []);
 
   // Attach sources and attempt playback
@@ -464,14 +447,15 @@ function BackgroundVideo() {
     video.addEventListener("ended", onEnded);
     document.addEventListener("visibilitychange", onVisibilityChange);
 
-    // Watchdog interval optimized for smooth performance
+    // Watchdog interval - keeps video playing even when tab is hidden
     const watchdogId = window.setInterval(() => {
-      if (document.hidden) return;
       if (isPausedRef.current) return;
       if (video.paused) {
         tryPlayImmediate();
         return;
       }
+      // Skip stall detection when tab is hidden (browser may throttle)
+      if (document.hidden) return;
       if (video.seeking || !isPlayingRef.current) return;
       const sinceAdvance = performance.now() - lastAdvance;
       if (sinceAdvance < 3500) return;

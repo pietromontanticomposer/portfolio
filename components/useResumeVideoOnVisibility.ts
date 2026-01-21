@@ -36,9 +36,9 @@ export default function useResumeVideoOnVisibility(
       if (!document.hidden) return;
       if (!shouldResumeRef.current) return;
       if (hiddenRetryIdRef.current !== null) return;
-      if (hiddenRetryCountRef.current >= 3) return;
 
-      const delay = 800 * Math.pow(2, hiddenRetryCountRef.current);
+      // Keep retrying indefinitely while hidden (every 2 seconds)
+      const delay = 2000;
       hiddenRetryIdRef.current = window.setTimeout(() => {
         hiddenRetryIdRef.current = null;
         if (!document.hidden || !shouldResumeRef.current) {
