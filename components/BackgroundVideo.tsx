@@ -21,30 +21,11 @@ function BackgroundVideo() {
 
   useResumeVideoOnVisibility(videoRef, { keepPlayingWhenHidden: true });
 
-  // Delay load to not block initial render and scroll
+  // Load video immediately for faster start
   useEffect(() => {
     if (hasLoadedRef.current) return;
-
-    const loadVideo = () => {
-      if (hasLoadedRef.current) return;
-      hasLoadedRef.current = true;
-      setShouldLoadSrc(true);
-    };
-
-    let idleId: number | null = null;
-    let timer: ReturnType<typeof setTimeout> | null = null;
-
-    timer = setTimeout(loadVideo, 250);
-    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
-      idleId = (window as any).requestIdleCallback(loadVideo, { timeout: 800 });
-    }
-
-    return () => {
-      if (idleId !== null && "cancelIdleCallback" in window) {
-        (window as any).cancelIdleCallback(idleId);
-      }
-      if (timer) clearTimeout(timer);
-    };
+    hasLoadedRef.current = true;
+    setShouldLoadSrc(true);
   }, []);
 
   // Attach sources and attempt playback
@@ -557,9 +538,9 @@ function BackgroundVideo() {
     <>
       <video
         ref={videoRef}
-        className={`bg-video ${isPlaying ? "is-visible" : ""}`}
+        className={`bg-video ${isPlaying || isPaused ? "is-visible" : ""}`}
         autoPlay
-        preload="metadata"
+        preload="auto"
         muted
         loop
         playsInline
@@ -578,7 +559,7 @@ function BackgroundVideo() {
       />
 
       <div
-        className={`bg-video-poster ${isPlaying ? "is-hidden" : ""}`}
+        className={`bg-video-poster ${isPlaying || isPaused ? "is-hidden" : ""}`}
         style={{
           backgroundImage: `url('https://4glkq64bdlmmple5.public.blob.vercel-storage.com/background-poster.jpg')`,
           transform: "translate3d(0, 0, 0)",
