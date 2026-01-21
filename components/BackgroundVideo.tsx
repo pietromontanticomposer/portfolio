@@ -225,20 +225,23 @@ function BackgroundVideo() {
             capLevelToPlayerSize: true,
             maxDevicePixelRatio: 1,
             startLevel: 0,
+            startFragPrefetch: true,
             backBufferLength: 1,
-            maxBufferLength: 12,
-            maxMaxBufferLength: 24,
-            maxBufferSize: 12 * 1000 * 1000,
-            maxBufferHole: 0.7,
-            abrBandWidthFactor: 0.65,
-            abrBandWidthUpFactor: 0.55,
+            maxBufferLength: 30,
+            maxMaxBufferLength: 60,
+            maxBufferSize: 30 * 1000 * 1000,
+            maxBufferHole: 0.5,
+            abrBandWidthFactor: 0.7,
+            abrBandWidthUpFactor: 0.6,
             fragLoadingTimeOut: 10000,
-            fragLoadingMaxRetry: 4,
+            fragLoadingMaxRetry: 5,
             fragLoadingRetryDelay: 1000,
             fragLoadingMaxRetryTimeout: 8000,
-            manifestLoadingMaxRetry: 4,
+            manifestLoadingMaxRetry: 5,
             manifestLoadingRetryDelay: 1000,
             manifestLoadingMaxRetryTimeout: 8000,
+            nudgeOffset: 0.1,
+            nudgeMaxRetry: 5,
           });
           hls.loadSource(hlsUrl);
           hls.attachMedia(video);
@@ -511,19 +514,38 @@ function BackgroundVideo() {
     if (!video) return;
 
     if (isPausedRef.current) {
+      // Resume playback
       isPausedRef.current = false;
       setIsPaused(false);
-      if (pausedTimeRef.current !== null && Number.isFinite(pausedTimeRef.current)) {
+
+      const savedTime = pausedTimeRef.current;
+
+      // First restore the time position, then play
+      if (savedTime !== null && Number.isFinite(savedTime)) {
         try {
-          if (Number.isFinite(video.duration) && video.duration > 0) {
-            video.currentTime = Math.min(pausedTimeRef.current, Math.max(0, video.duration - 0.05));
-          } else {
-            video.currentTime = Math.max(0, pausedTimeRef.current);
-          }
+          const targetTime = Number.isFinite(video.duration) && video.duration > 0
+            ? Math.min(savedTime, Math.max(0, video.duration - 0.05))
+            : Math.max(0, savedTime);
+          video.currentTime = targetTime;
         } catch {}
       }
-      video.play().catch(() => {});
+
+      video.play().then(() => {
+        // After play succeeds, verify position is correct
+        if (savedTime !== null && Number.isFinite(savedTime)) {
+          const targetTime = Number.isFinite(video.duration) && video.duration > 0
+            ? Math.min(savedTime, Math.max(0, video.duration - 0.05))
+            : Math.max(0, savedTime);
+          // If position drifted too far, correct it
+          if (Math.abs(video.currentTime - targetTime) > 1) {
+            try {
+              video.currentTime = targetTime;
+            } catch {}
+          }
+        }
+      }).catch(() => {});
     } else {
+      // Pause playback
       isPausedRef.current = true;
       setIsPaused(true);
       pausedTimeRef.current = Number.isFinite(video.currentTime) ? video.currentTime : null;

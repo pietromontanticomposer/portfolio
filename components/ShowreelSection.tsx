@@ -3,6 +3,7 @@
 import CaseStudyVideo from "./CaseStudyVideo";
 import KeepPlayingVideo from "./KeepPlayingVideo";
 import { useLanguage } from "../lib/LanguageContext";
+import { getMediaSources } from "../lib/mediaUtils";
 
 const PLACEHOLDER_WEBM =
   "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/videos/background.webm";
@@ -16,16 +17,10 @@ type ShowreelSectionProps = {
 export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
   const { t } = useLanguage();
   const showreelLabel = t("Showreel", "Showreel");
-  const hasEmbed = typeof embedUrl === "string" && embedUrl.trim().length > 0;
-  const trimmedUrl = embedUrl?.trim() ?? "";
-  const isHls = hasEmbed && (trimmedUrl.endsWith(".m3u8") || trimmedUrl.includes("/_hls/"));
-  const isMp4 = hasEmbed && /\.mp4(?:\?|$)/i.test(trimmedUrl);
-  const mp4Fallback =
-    trimmedUrl.startsWith("/uploads/video/_hls/") && trimmedUrl.endsWith("/index.m3u8")
-      ? trimmedUrl
-          .replace("/uploads/video/_hls/", "/uploads/video/")
-          .replace("/index.m3u8", ".mp4")
-      : null;
+  const { isHls, isMp4, src, mp4Fallback } = getMediaSources(embedUrl);
+  const hasEmbed = !!src;
+  const showreelPoster =
+    "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Showreel%20Sito.jpg";
 
   return (
     <section id="showreel" className="w-full">
@@ -44,10 +39,10 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
           <div className="video-wrapper">
             {hasEmbed && isHls ? (
               <CaseStudyVideo
-                hlsUrl={trimmedUrl}
+                hlsUrl={src ?? ""}
                 mp4Url={mp4Fallback}
                 title={showreelLabel}
-                poster="https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Showreel%20Sito.jpg"
+                poster={showreelPoster}
               />
             ) : hasEmbed && isMp4 ? (
               <KeepPlayingVideo
@@ -55,15 +50,15 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
                 controls
                 playsInline
                 preload="none"
-                poster="https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Showreel%20Sito.jpg"
+                poster={showreelPoster}
                 aria-label={t("Video showreel", "Showreel video")}
               >
-                <source src={encodeURI(trimmedUrl)} type="video/mp4" />
+                <source src={encodeURI(src ?? "")} type="video/mp4" />
                 {t("Il tuo browser non supporta il tag video.", "Your browser does not support the video tag.")}
               </KeepPlayingVideo>
             ) : hasEmbed ? (
               <iframe
-                src={encodeURI(trimmedUrl)}
+                src={encodeURI(src ?? "")}
                 title={showreelLabel}
                 frameBorder="0"
                 loading="lazy"

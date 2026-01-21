@@ -29,13 +29,7 @@ export function getMediaSources(embedUrl?: string) {
   const isHls = lower.endsWith(".m3u8") || trimmedUrl.includes("/_hls/");
   const isMp4 = lower.endsWith(".mp4") || lower.includes(".mp4");
   const src = trimmedUrl;
-  const mp4Fallback =
-    trimmedUrl.startsWith("/uploads/video/_hls/") &&
-    trimmedUrl.endsWith("/index.m3u8")
-      ? trimmedUrl
-          .replace("/uploads/video/_hls/", "/uploads/video/")
-          .replace("/index.m3u8", ".mp4")
-      : null;
+  const mp4Fallback = getMp4Fallback(trimmedUrl);
   const posterUrl =
     isMp4 && trimmedUrl.endsWith(".mp4")
       ? trimmedUrl.replace(/\.mp4$/i, ".jpg")
@@ -44,4 +38,34 @@ export function getMediaSources(embedUrl?: string) {
         : null;
 
   return { isHls, isMp4, src, mp4Fallback, posterUrl } as const;
+}
+
+function getMp4Fallback(url: string): string | null {
+  const hlsSegment = "/uploads/video/_hls/";
+  const hlsSuffix = "/index.m3u8";
+  if (!url.includes(hlsSegment)) return null;
+  if (!url.endsWith(hlsSuffix)) {
+    const absoluteMatch = /^https?:\/\//i.test(url);
+    if (!absoluteMatch) return null;
+  }
+
+  if (/^https?:\/\//i.test(url)) {
+    try {
+      const parsed = new URL(url);
+      if (!parsed.pathname.includes(hlsSegment) || !parsed.pathname.endsWith(hlsSuffix)) {
+        return null;
+      }
+      parsed.pathname = parsed.pathname
+        .replace(hlsSegment, "/uploads/video/")
+        .replace(hlsSuffix, ".mp4");
+      return parsed.toString();
+    } catch {
+      // Fallback to string replacement below.
+    }
+  }
+
+  if (!url.endsWith(hlsSuffix)) return null;
+  return url
+    .replace(hlsSegment, "/uploads/video/")
+    .replace(hlsSuffix, ".mp4");
 }
