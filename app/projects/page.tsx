@@ -2,7 +2,7 @@
 
 import StripToggle from "../../components/StripToggle";
 import { projects } from "../../data/projects";
-import { comingSoonPosters, placeholderProjects } from "../../data/placeholders";
+import { comingSoonPosters } from "../../data/placeholders";
 import { useLanguage } from "../../lib/LanguageContext";
 
 const normalizeTitle = (title: string) => title.toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -12,8 +12,7 @@ const projectTitles = new Set(projects.map((p) => normalizeTitle(p.title)));
 const comingSoonByTitle = new Map(comingSoonPosters.map((p) => [normalizeTitle(p.title), p]));
 
 const postersFromProjects = projects
-  .map((p, index) => {
-    const fallback = placeholderProjects[index % placeholderProjects.length];
+  .map((p) => {
     const comingSoonPoster = comingSoonByTitle.get(normalizeTitle(p.title));
     const isComingSoon = isComingSoonProject(p.tag, (p as { year?: string | number }).year);
     return {
@@ -21,7 +20,7 @@ const postersFromProjects = projects
       title: isComingSoon && comingSoonPoster?.title ? comingSoonPoster.title : p.title,
       year: p.year,
       tag: p.tag || comingSoonPoster?.tag || "Poster",
-      image: p.image ?? comingSoonPoster?.image ?? fallback.image,
+      image: p.image ?? comingSoonPoster?.image,
       href: `/portfolio/${p.slug}`,
     };
   })

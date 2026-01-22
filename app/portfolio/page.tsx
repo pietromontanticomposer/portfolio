@@ -6,7 +6,7 @@ import AutoScrollStrip from "../../components/AutoScrollStrip";
 import CollaborationsSection from "../../components/CollaborationsSection";
 import TrackPlayerSection from "../../components/TrackPlayerSection";
 import { projects } from "../../data/projects";
-import { comingSoonPosters, placeholderProjects } from "../../data/placeholders";
+import { comingSoonPosters } from "../../data/placeholders";
 import { partners, selectedTracks } from "../../data/homeContent";
 import { useLanguage } from "../../lib/LanguageContext";
 
@@ -15,8 +15,7 @@ const isComingSoonProject = (tag?: string, year?: string | number) =>
   [tag, year].filter(Boolean).some((value) => String(value).toLowerCase().includes("coming"));
 const projectTitles = new Set(projects.map((p) => normalizeTitle(p.title)));
 const comingSoonByTitle = new Map(comingSoonPosters.map((p) => [normalizeTitle(p.title), p]));
-const postersFromProjects = projects.map((p, index) => {
-  const fallback = placeholderProjects[index % placeholderProjects.length];
+const postersFromProjects = projects.map((p) => {
   const comingSoonPoster = comingSoonByTitle.get(normalizeTitle(p.title));
   const isComingSoon = isComingSoonProject(p.tag, (p as { year?: string | number }).year);
   return {
@@ -24,7 +23,7 @@ const postersFromProjects = projects.map((p, index) => {
     title: isComingSoon && comingSoonPoster?.title ? comingSoonPoster.title : p.title,
     year: (p as { year?: string }).year ?? '',
     tag: p.tag || comingSoonPoster?.tag || "Poster",
-    image: p.image ?? comingSoonPoster?.image ?? fallback.image,
+    image: p.image ?? comingSoonPoster?.image,
     href: `/portfolio/${p.slug}`,
   };
 }).filter((poster): poster is typeof poster & { image: string } => Boolean(poster.image));
