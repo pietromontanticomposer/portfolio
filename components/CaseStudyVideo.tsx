@@ -5,11 +5,31 @@ import type Hls from "hls.js";
 import { useLanguage } from "../lib/LanguageContext";
 import useResumeVideoOnVisibility from "./useResumeVideoOnVisibility";
 
+type NetworkInformation = {
+  downlink?: number;
+  saveData?: boolean;
+  addEventListener?: (type: "change", listener: () => void) => void;
+  removeEventListener?: (type: "change", listener: () => void) => void;
+};
+
+type NavigatorWithConnection = Navigator & {
+  connection?: NetworkInformation;
+  mozConnection?: NetworkInformation;
+  webkitConnection?: NetworkInformation;
+};
+
+const getNetworkConnection = (): NetworkInformation | null => {
+  if (typeof navigator === "undefined") return null;
+  const nav = navigator as NavigatorWithConnection;
+  return nav.connection || nav.mozConnection || nav.webkitConnection || null;
+};
+
 type CaseStudyVideoProps = {
   hlsUrl: string;
   mp4Url?: string | null;
   title: string;
   poster?: string | null;
+  autoPlay?: boolean;
 };
 
 export default function CaseStudyVideo({
@@ -17,6 +37,7 @@ export default function CaseStudyVideo({
   mp4Url,
   title,
   poster,
+  autoPlay = false,
 }: CaseStudyVideoProps) {
   const { t } = useLanguage();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -58,6 +79,9 @@ export default function CaseStudyVideo({
     const handleCanPlay = () => {
       video.muted = false;
       video.volume = 1.0;
+      if (autoPlay) {
+        video.play().catch(() => {});
+      }
     };
 
     const switchToMp4 = () => {
@@ -72,7 +96,7 @@ export default function CaseStudyVideo({
         video.preload = "auto";
         video.load();
       } catch {}
-      if (!video.paused) {
+      if (!video.paused || autoPlay) {
         video.play().catch(() => {});
       }
     };
@@ -168,6 +192,9 @@ export default function CaseStudyVideo({
       video.src = normalizedHls;
       video.preload = "auto";
       video.load();
+      if (autoPlay) {
+        video.play().catch(() => {});
+      }
     } else {
       // Dynamic import hls.js to reduce bundle size (~80KB saved)
       import("hls.js")
@@ -215,7 +242,7 @@ export default function CaseStudyVideo({
           hls.startLoad();
 
           const chooseCapLevel = () => {
-            const conn = (navigator as any).connection;
+            const conn = getNetworkConnection();
             const downlink = typeof conn?.downlink === "number" ? conn.downlink : null;
             const saveData = !!conn?.saveData;
             const isLowPower =
@@ -253,6 +280,9 @@ export default function CaseStudyVideo({
             video.muted = false;
             video.volume = 1.0;
             chooseCapLevel();
+            if (autoPlay) {
+              video.play().catch(() => {});
+            }
           });
 
           hls.on(Hls.Events.ERROR, (_event: unknown, data: { fatal?: boolean; type?: string; details?: string }) => {
@@ -290,7 +320,7 @@ export default function CaseStudyVideo({
             }
           });
 
-          const conn = (navigator as any).connection;
+          const conn = getNetworkConnection();
           if (conn && typeof conn.addEventListener === "function") {
             connectionChangeHandler = chooseCapLevel;
             conn.addEventListener("change", connectionChangeHandler);
@@ -317,7 +347,7 @@ export default function CaseStudyVideo({
       if (watchdogId !== null) {
         window.clearInterval(watchdogId);
       }
-      const conn = (navigator as any).connection;
+      const conn = getNetworkConnection();
       if (conn && connectionChangeHandler && typeof conn.removeEventListener === "function") {
         conn.removeEventListener("change", connectionChangeHandler);
         connectionChangeHandler = null;
@@ -327,7 +357,7 @@ export default function CaseStudyVideo({
         hlsRef.current = null;
       }
     };
-  }, [normalizedHls, normalizedMp4]);
+  }, [normalizedHls, normalizedMp4, autoPlay]);
 
   return (
     <video

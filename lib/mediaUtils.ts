@@ -1,7 +1,8 @@
 /**
  * Parse duration string (MM:SS) to seconds
  */
-export function parseDurationToSeconds(value: string): number | null {
+export function parseDurationToSeconds(value: string | null | undefined): number | null {
+  if (!value) return null;
   const match = value.match(/^(\d{2}):(\d{2})$/);
   if (!match) return null;
   const minutes = Number.parseInt(match[1], 10);

@@ -46,7 +46,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  const projectEntries = projects.map(
+  const projectEntries = projects.filter((project) => !project.isDraft).map(
     (project): MetadataRoute.Sitemap[number] => ({
       url: `${siteUrl}/portfolio/${project.slug}`,
       lastModified: new Date(),

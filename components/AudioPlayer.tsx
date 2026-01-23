@@ -54,7 +54,7 @@ function getWaveformUrl(audioSrc: string): string | null {
     // Convert folder: selected-tracks -> selected tracks, musiche-claudio-re -> musiche claudio re
     const folder = blobMatch[1].replace(/-/g, ' ');
     // Convert filename: remove -alt suffix, convert hyphens to spaces
-    let filename = blobMatch[2].replace(/-alt$/, '').replace(/-/g, ' ');
+    const filename = blobMatch[2].replace(/-alt$/, '').replace(/-/g, ' ');
     return `/waveforms/${folder}/${filename}.json`;
   }
   return null;
@@ -120,7 +120,6 @@ export default function AudioPlayer({
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(1);
   const [showVolume, setShowVolume] = useState(false);
-  const [isReady, setIsReady] = useState(false);
   const [preloadedPeaks, setPreloadedPeaks] = useState<CachedPeaks | null>(null);
   const audioToggleRef = useRef<HTMLButtonElement | null>(null);
   const popoverRef = useRef<HTMLLabelElement | null>(null);
@@ -246,7 +245,6 @@ export default function AudioPlayer({
 
       ws.on("ready", () => {
         const nextDuration = Math.round(ws.getDuration());
-        setIsReady(true);
         durationRef.current = nextDuration;
         setDuration(nextDuration);
         if (pendingPlayRef.current) {
@@ -312,7 +310,6 @@ export default function AudioPlayer({
         observerRef.current = null;
       }
       if (resizeObserver) resizeObserver.disconnect();
-      setIsReady(false);
       if (ws) {
         try { ws.unAll(); ws.destroy(); } catch {}
         if (wsRef.current === ws) wsRef.current = null;

@@ -36,7 +36,7 @@ export type CaseStudy = {
   title: BilingualText;
   projectLabel: string;
   sceneType: SceneType;
-  duration: string;
+  duration: string | null;
   tags: CaseStudyTag[];
   isPublic: boolean;
   festivalCirculation: boolean;
@@ -51,9 +51,9 @@ export type CaseStudy = {
   chosen: { key: "A" | "B" | "C"; summary: BilingualText; reason: BilingualText };
   result: BilingualText;
   timing: {
-    in: { time: string; label: BilingualText };
-    turn?: { time: string; label: BilingualText };
-    out: { time: string; label: BilingualText };
+    in: { time: string | null; label: BilingualText };
+    turn?: { time: string | null; label: BilingualText };
+    out: { time: string | null; label: BilingualText };
   };
   spottingNote?: BilingualText;
 
@@ -82,7 +82,7 @@ export type CaseStudyInput = {
   title: BilingualOrString;
   projectLabel: string;
   sceneType: string;
-  duration: string;
+  duration?: string | null;
   tags?: CaseStudyTag[];
   isPublic: boolean;
   festivalCirculation: boolean;
@@ -93,9 +93,9 @@ export type CaseStudyInput = {
   chosen: { key: "A" | "B" | "C"; summary: BilingualOrString; reason: BilingualOrString };
   result: BilingualOrString;
   timing: {
-    in: { time: string; label: BilingualOrString };
-    turn?: { time: string; label: BilingualOrString };
-    out: { time: string; label: BilingualOrString };
+    in: { time: string | null; label: BilingualOrString };
+    turn?: { time: string | null; label: BilingualOrString };
+    out: { time: string | null; label: BilingualOrString };
   };
   spottingNote?: BilingualOrString;
   directorWanted: BilingualOrString;
@@ -164,7 +164,7 @@ const lowPriorityMoodTags = new Set(["Emotion", "Release"]);
 
 // Validation functions (replacing Zod schemas)
 function isValidDuration(value: string): boolean {
-  return value === "00:??" || /^\d{2}:\d{2}$/.test(value);
+  return /^\d{2}:\d{2}$/.test(value);
 }
 
 function isBilingualText(value: unknown): value is BilingualText {
@@ -184,7 +184,9 @@ function validateCaseStudyBase(data: CaseStudyInput): string[] {
   if (!data.title || (!isBilingualText(data.title) && typeof data.title !== "string")) errors.push("title is required");
   if (!data.projectLabel || typeof data.projectLabel !== "string") errors.push("projectLabel is required");
   if (!data.sceneType || typeof data.sceneType !== "string") errors.push("sceneType is required");
-  if (!data.duration || !isValidDuration(data.duration)) errors.push(`duration must be MM:SS or 00:?? (got: ${data.duration})`);
+  if (data.duration && !isValidDuration(data.duration)) {
+    errors.push(`duration must be MM:SS (got: ${data.duration})`);
+  }
   return errors;
 }
 
@@ -338,7 +340,7 @@ function normalizeCaseStudy(data: CaseStudyInput): CaseStudy {
     title: toBilingual(data.title),
     projectLabel: data.projectLabel,
     sceneType,
-    duration: data.duration,
+    duration: data.duration ?? null,
     tags,
     isPublic: data.isPublic,
     festivalCirculation: data.festivalCirculation,
@@ -353,9 +355,9 @@ function normalizeCaseStudy(data: CaseStudyInput): CaseStudy {
     },
     result: toBilingual(data.result),
     timing: {
-      in: { time: data.timing.in.time, label: toBilingual(data.timing.in.label) },
-      turn: data.timing.turn ? { time: data.timing.turn.time, label: toBilingual(data.timing.turn.label) } : undefined,
-      out: { time: data.timing.out.time, label: toBilingual(data.timing.out.label) },
+      in: { time: data.timing.in.time ?? null, label: toBilingual(data.timing.in.label) },
+      turn: data.timing.turn ? { time: data.timing.turn.time ?? null, label: toBilingual(data.timing.turn.label) } : undefined,
+      out: { time: data.timing.out.time ?? null, label: toBilingual(data.timing.out.label) },
     },
     spottingNote: toBilingualOptional(data.spottingNote),
     directorWanted: toBilingual(data.directorWanted),
@@ -574,7 +576,7 @@ export const caseStudies: CaseStudyInput[] = [
     },
     projectLabel: "La Sonata Del Chaos",
     sceneType: "Dialogue",
-    duration: "00:??",
+    duration: null,
     tags: ["Dialogue", "Theme layering", "Motif seed", "Foreshadowing", "Piano", "Banshee motif"],
     isPublic: false,
     festivalCirculation: true,
@@ -614,14 +616,14 @@ export const caseStudies: CaseStudyInput[] = [
         }
       },
       turn: {
-        time: "00:??",
+        time: null,
         label: {
           it: "La paura sale mentre il mito viene trattato come reale. Talia esprime dubbio e paura.",
           en: "Fear rises as the myth is treated as real. Talia voices doubt and fear."
         }
       },
       out: {
-        time: "00:??",
+        time: null,
         label: {
           it: "La madre tossisce tre volte, liquida il fatto, le manda a letto. Tag finale.",
           en: "Mother coughs three times, dismisses it, sends them to bed. End tag."
@@ -1177,7 +1179,7 @@ export const caseStudies: CaseStudyInput[] = [
     title: "No Shuffling Up There, The Spectre Wins (Vision Fight)",
     projectLabel: "Claudio re",
     sceneType: "Action",
-    duration: "00:??",
+    duration: null,
     tags: [
       "Vision",
       "Guilt",
@@ -1211,7 +1213,7 @@ export const caseStudies: CaseStudyInput[] = [
         label: "Music enters right after ‘And then, what remains?’"
       },
       out: {
-        time: "00:??",
+        time: null,
         label: "The Spectre stabs Claudio. The kick stops."
       }
     },
@@ -1273,7 +1275,7 @@ export const caseStudies: CaseStudyInput[] = [
     trackTitle: "What Can Repentance Do",
     timing: {
       in: { time: "00:00", label: "Music enters right after ‘…repenting.’" },
-      out: { time: "00:??", label: "End of cue." }
+      out: { time: null, label: "End of cue." }
     },
     spottingNote:
       "No trailer language. Drone as judgment, not groove. Strings as prison. Trombones as escalation without redemption. Hits as a system advancing, not “cool” accents.",

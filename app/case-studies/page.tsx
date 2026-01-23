@@ -193,9 +193,11 @@ function MediaThumbnail({ item, language }: { item: CaseStudy; language: Languag
           </svg>
         </div>
       </div>
-      <div className="absolute bottom-3 right-3">
-        <CaseStudyDuration duration={item.duration} />
-      </div>
+      {item.duration ? (
+        <div className="absolute bottom-3 right-3">
+          <CaseStudyDuration duration={item.duration} />
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -215,6 +217,12 @@ function CaseStudyCard({
   const videoAnchorId = `video-${item.id}`;
   const musicalLanguageText = getText(item.musicalLanguage ?? item.musicChoices, language)?.trim();
   const trackTitle = item.trackTitle?.trim();
+  const durationMarkup = item.duration ? (
+    <CaseStudyDuration duration={item.duration} />
+  ) : null;
+  const timingInText = formatTimingEntry(item.timing.in, language);
+  const timingTurnText = item.timing.turn ? formatTimingEntry(item.timing.turn, language) : "";
+  const timingOutText = formatTimingEntry(item.timing.out, language);
 
   return (
     <details
@@ -229,8 +237,8 @@ function CaseStudyCard({
               {getText(item.title, language)}
             </h2>
             <p className="mt-2 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
-              {item.projectLabel} · {item.sceneType} ·{" "}
-              <CaseStudyDuration duration={item.duration} />
+              {item.projectLabel} · {item.sceneType}
+              {durationMarkup ? <> · {durationMarkup}</> : null}
             </p>
           </div>
           <svg
@@ -320,26 +328,30 @@ function CaseStudyCard({
               {labels.timing}
             </div>
             <div className="mt-3 space-y-2 text-sm text-[color:var(--muted)]">
-              <div>
-                <span className="font-semibold text-[color:var(--foreground)]">
-                  {labels.timingIn}
-                </span>{" "}
-                {formatTimingEntry(item.timing.in, language)}
-              </div>
-              {item.timing.turn ? (
+              {timingInText ? (
+                <div>
+                  <span className="font-semibold text-[color:var(--foreground)]">
+                    {labels.timingIn}
+                  </span>{" "}
+                  {timingInText}
+                </div>
+              ) : null}
+              {item.timing.turn && timingTurnText ? (
                 <div>
                   <span className="font-semibold text-[color:var(--foreground)]">
                     {labels.timingShift}
                   </span>{" "}
-                  {formatTimingEntry(item.timing.turn, language)}
+                  {timingTurnText}
                 </div>
               ) : null}
-              <div>
-                <span className="font-semibold text-[color:var(--foreground)]">
-                  {labels.timingOut}
-                </span>{" "}
-                {formatTimingEntry(item.timing.out, language)}
-              </div>
+              {timingOutText ? (
+                <div>
+                  <span className="font-semibold text-[color:var(--foreground)]">
+                    {labels.timingOut}
+                  </span>{" "}
+                  {timingOutText}
+                </div>
+              ) : null}
             </div>
             <div className="mt-3 text-sm text-[color:var(--muted)]">
               <span className="font-semibold text-[color:var(--foreground)]">

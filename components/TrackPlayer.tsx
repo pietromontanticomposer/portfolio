@@ -58,7 +58,7 @@ export default function TrackPlayer({
   // Prefetch all waveforms on mount + preload WaveSurfer module
   useEffect(() => {
     preloadWaveSurfer();
-    tracks.forEach((track, idx) => {
+    tracks.forEach((track) => {
       prefetchWaveform(track.file);
     });
   }, [tracks]);

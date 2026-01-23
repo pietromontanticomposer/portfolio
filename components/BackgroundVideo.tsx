@@ -12,13 +12,11 @@ function BackgroundVideo() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const { t } = useLanguage();
   const [shouldLoadSrc, setShouldLoadSrc] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
   const isPlayingRef = useRef(false);
   const hasLoadedRef = useRef(false);
   const isPausedRef = useRef(false);
-  const pausedTimeRef = useRef<number | null>(null);
 
   useResumeVideoOnVisibility(videoRef, { keepPlayingWhenHidden: true });
 
@@ -84,6 +82,8 @@ function BackgroundVideo() {
     let connectionChangeHandler: (() => void) | null = null;
     let lastTime = 0;
     let lastAdvance = performance.now();
+    const forwardProgressEps = 0.01;
+    const loopBackThreshold = 0.5;
     let lastRecoverAt = 0;
     let stallCount = 0;
     let hlsFatalCount = 0;
@@ -177,9 +177,6 @@ function BackgroundVideo() {
         if (video.readyState < 2) {
           video.load();
         }
-        if (video.currentTime > 0.1) {
-          video.currentTime = Math.max(0, video.currentTime - 0.05);
-        }
       } catch {}
       tryPlayImmediate();
     };
@@ -216,6 +213,8 @@ function BackgroundVideo() {
             maxBufferHole: 0.7,
             abrBandWidthFactor: 0.65,
             abrBandWidthUpFactor: 0.55,
+            nudgeOffset: 0.1,
+            nudgeMaxRetry: 5,
             fragLoadingTimeOut: 10000,
             fragLoadingMaxRetry: 4,
             fragLoadingRetryDelay: 1000,
@@ -358,14 +357,12 @@ function BackgroundVideo() {
 
     const onPlaying = () => {
       isPlayingRef.current = true;
-      setIsPlaying(true);
       setHasStartedPlaying(true);
       lastAdvance = performance.now();
       stallCount = 0;
     };
     const onPause = () => {
       isPlayingRef.current = false;
-      setIsPlaying(false);
       if (!isPausedRef.current) {
         const id = setTimeout(() => {
           if (mounted && !isPausedRef.current) tryPlayImmediate();
@@ -394,8 +391,15 @@ function BackgroundVideo() {
       timeoutIds.push(id);
     };
     const onTimeUpdate = () => {
-      if (video.currentTime !== lastTime) {
-        lastTime = video.currentTime;
+      const currentTime = video.currentTime;
+      if (currentTime > lastTime + forwardProgressEps) {
+        lastTime = currentTime;
+        lastAdvance = performance.now();
+        stallCount = 0;
+        return;
+      }
+      if (currentTime < lastTime - loopBackThreshold) {
+        lastTime = currentTime;
         lastAdvance = performance.now();
         stallCount = 0;
       }
@@ -421,6 +425,9 @@ function BackgroundVideo() {
       try {
         video.currentTime = 0;
       } catch {}
+      lastTime = 0;
+      lastAdvance = performance.now();
+      stallCount = 0;
       tryPlayImmediate();
     };
     const onVisibilityChange = () => {

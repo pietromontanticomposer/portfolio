@@ -296,6 +296,7 @@ export const projects = [
     year: "Coming Soon",
     tag: "Coming Soon",
     featured: false,
+    isDraft: true,
     description: {
       it: `Free / Fall è un cortometraggio diretto da Francesco La Barbera e Daniele Murgia, che esplora la dipendenza dal gioco d'azzardo attraverso il crollo soggettivo di un giovane intrappolato in un ciclo ripetitivo di compulsione ed evitamento.
   La colonna sonora è costruita su synth, pianoforte e archi, oscillando tra tonalità maggiori e minori per rispecchiare i picchi dopaminici e i crolli emotivi tipici della dipendenza. Nei momenti di maggiore conflitto interno, questi spostamenti armonici risultano volutamente dissonanti rispetto al materiale melodico circostante, generando attrito che riflette l'instabilità psicologica del personaggio.
@@ -325,6 +326,7 @@ export const projects = [
     year: "Coming Soon",
     tag: "Coming Soon",
     featured: false,
+    isDraft: true,
     description: {
       it: `Polvere sotto al tappeto è un cortometraggio horror drammatico diretto da Gianluca Volpe, centrato su un uomo che uccide la propria compagna dopo aver scoperto il tradimento e costruisce una rete di giustificazioni narcisistiche per legittimare il gesto.
   La narrazione si svolge interamente dal punto di vista soggettivo del protagonista, con la voce nella sua testa che prende la forma della compagna uccisa, comprimendo colpa, negazione e autoassoluzione in un unico dialogo interiore distorto.
@@ -366,6 +368,7 @@ export const projects = [
     year: "Coming Soon",
     tag: "Coming Soon",
     featured: false,
+    isDraft: true,
     description: {
       it: `Non c'è casa in paradiso è un cortometraggio documentario diretto da Federico Scienza e Manuela Boezio, che affronta l'emergenza abitativa in Trentino e il suo impatto concreto su persone e famiglie escluse dal sistema abitativo.
   La colonna sonora è concepita come un supporto narrativo misurato, pensato per accompagnare testimonianze e situazioni senza amplificarle o drammatizzarle. La musica opera sullo sfondo, rafforzando continuità e ancoraggio emotivo mentre lascia spazio a voci, silenzi e tensioni reali.
@@ -381,4 +384,4 @@ export const projects = [
 export type Project = typeof projects[number];
 
 // Derive featured projects from main array (avoids data duplication)
-export const featuredProjects = projects.filter((p) => p.featured);
+export const featuredProjects = projects.filter((p) => p.featured && !p.isDraft);

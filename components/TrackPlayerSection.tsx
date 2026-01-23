@@ -1,13 +1,42 @@
 "use client";
-import dynamic from 'next/dynamic';
-import Image from 'next/image';
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import Image from "next/image";
 import ContactPopover from "./ContactPopover";
 import { useLanguage } from "../lib/LanguageContext";
 import { getText } from "../lib/translations";
 
 function TrackPlayerLoading() {
   const { t } = useLanguage();
-  return <div className="track-player-skeleton">{t("Caricamento player...", "Loading player...")}</div>;
+  const [showFallback, setShowFallback] = useState(false);
+
+  useEffect(() => {
+    const id = window.setTimeout(() => setShowFallback(true), 3500);
+    return () => window.clearTimeout(id);
+  }, []);
+
+  if (!showFallback) {
+    return <div className="track-player-skeleton" style={{ minHeight: "400px" }} />;
+  }
+
+  return (
+    <div className="track-player-skeleton" style={{ minHeight: "400px" }}>
+      <div className="audio-loading">
+        {t(
+          "Tracce selezionate disponibili su richiesta.",
+          "Selected tracks available on request."
+        )}
+      </div>
+      <div className="mt-4">
+        <ContactPopover
+          buttonLabel={t("Richiedi link di ascolto", "Request listening link")}
+          buttonClassName="hero-btn hero-btn-secondary"
+          align="left"
+          panelId="contact-popover-tracks-loading"
+        />
+      </div>
+    </div>
+  );
 }
 
 const TrackPlayer = dynamic(() => import('./TrackPlayerClient'), {

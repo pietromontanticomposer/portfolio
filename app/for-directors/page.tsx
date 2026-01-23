@@ -238,9 +238,11 @@ function MediaThumbnail({ item, language }: { item: CaseStudy; language: Languag
           </svg>
         </div>
       </div>
-      <div className="absolute bottom-3 right-3">
-        <CaseStudyDuration duration={item.duration} />
-      </div>
+      {item.duration ? (
+        <div className="absolute bottom-3 right-3">
+          <CaseStudyDuration duration={item.duration} />
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -258,6 +260,9 @@ function CaseStudyCard({
   const videoAnchorId = `video-${item.id}`;
   const musicalLanguageText = getText(item.musicalLanguage ?? item.musicChoices, language)?.trim();
   const trackTitle = item.trackTitle?.trim();
+  const durationMarkup = item.duration ? (
+    <CaseStudyDuration duration={item.duration} />
+  ) : null;
 
   return (
     <details
@@ -272,8 +277,8 @@ function CaseStudyCard({
               {getText(item.title, language)}
             </h2>
             <p className="mt-2 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
-              {item.projectLabel} · {item.sceneType} ·{" "}
-              <CaseStudyDuration duration={item.duration} />
+              {item.projectLabel} · {item.sceneType}
+              {durationMarkup ? <> · {durationMarkup}</> : null}
             </p>
           </div>
           <svg

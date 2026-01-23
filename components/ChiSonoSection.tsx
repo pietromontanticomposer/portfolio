@@ -35,6 +35,8 @@ export default function ChiSonoSection({
     .filter(Boolean);
 
   const currentStats = stats ? (language === "it" ? stats.it : stats.en) : undefined;
+  const statsColumns =
+    currentStats && currentStats.length <= 2 ? "grid-cols-2" : "grid-cols-3";
   const currentSkills = skills ? (language === "it" ? skills.it : skills.en) : undefined;
 
   return (
@@ -69,7 +71,7 @@ export default function ChiSonoSection({
           )}
 
           {currentStats && currentStats.length > 0 && (
-            <div className="grid grid-cols-3 gap-4">
+            <div className={`grid ${statsColumns} gap-4`}>
               {currentStats.map((stat, index) => (
                 <div
                   key={`${stat.label}-${index}`}

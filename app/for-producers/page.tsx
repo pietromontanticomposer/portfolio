@@ -77,8 +77,9 @@ const mod109CtaData = {
   },
 };
 
-const caseStudyProjects = projects.filter((project) => project.description).slice(2, 4);
-const fallbackCaseStudies = projects.slice(0, 2);
+const activeProjects = projects.filter((project) => !project.isDraft);
+const caseStudyProjects = activeProjects.filter((project) => project.description).slice(2, 4);
+const fallbackCaseStudies = activeProjects.slice(0, 2);
 const producerCaseStudies =
   caseStudyProjects.length > 0 ? caseStudyProjects : fallbackCaseStudies;
 

@@ -20,12 +20,10 @@ export const bioStats = {
   it: [
     { label: "Esperienza", value: "10+ anni" },
     { label: "Progetti", value: "50+" },
-    { label: "In evidenza", value: "Mostra del Cinema di Venezia" },
   ],
   en: [
     { label: "Experience", value: "10+ years" },
     { label: "Projects", value: "50+" },
-    { label: "Highlights", value: "Venice Film Festival" },
   ],
 };
 

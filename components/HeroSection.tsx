@@ -10,6 +10,9 @@ type HeroSectionProps = {
 
 function HeroSection({ heroCredits }: HeroSectionProps) {
   const { t, language } = useLanguage();
+  const openShowreel = () => {
+    window.dispatchEvent(new Event("showreel:open"));
+  };
 
   return (
     <header className="relative z-40">
@@ -37,9 +40,9 @@ function HeroSection({ heroCredits }: HeroSectionProps) {
           )}
         </p>
         <div className="hero-actions">
-          <a href="#showreel" className="hero-btn hero-btn-primary">
+          <button type="button" onClick={openShowreel} className="hero-btn hero-btn-primary">
             {t("Guarda showreel", "Watch showreel")}
-          </a>
+          </button>
           <ContactPopover
             buttonLabel={t("Contatti", "Contact")}
             buttonClassName="hero-btn hero-btn-secondary"

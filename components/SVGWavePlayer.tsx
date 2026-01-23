@@ -1,5 +1,5 @@
 "use client";
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect, useId, useRef, useState } from "react";
 import { AudioManager } from "../lib/AudioManager";
 import { formatTime } from "../lib/formatUtils";
 import { useLanguage } from "../lib/LanguageContext";
@@ -89,10 +89,13 @@ function SVGWavePlayer({
   const [volume, setVolume] = useState(1);
   const [showVolume, setShowVolume] = useState(false);
   const [peaks, setPeaks] = useState<number[] | null>(null);
-  const playerIdRef = useRef(`audio-${Math.random().toString(36).slice(2)}`);
+  const playerId = useId();
   const svgRef = useRef<SVGSVGElement>(null);
   const rafRef = useRef<number | undefined>(undefined);
   const audioToggleRef = useRef<HTMLButtonElement | null>(null);
+
+  const playerIdValue = `audio-${playerId.replace(/:/g, "")}`;
+  const clipPathId = `progress-${playerIdValue}`;
 
   const numBars = peaks?.length || 120;
   const totalWidth = numBars * (BAR_WIDTH + BAR_GAP) - BAR_GAP;
@@ -114,6 +117,7 @@ function SVGWavePlayer({
     const audio = new Audio();
     audio.preload = "metadata";
     audioRef.current = audio;
+    const playerIdForManager = playerIdValue;
 
     let mounted = true;
 
@@ -133,7 +137,7 @@ function SVGWavePlayer({
     audio.addEventListener("ended", onEnded);
 
     AudioManager.register(
-      playerIdRef.current,
+      playerIdForManager,
       { pause: () => audio.pause() },
       () => audio.pause(),
       () => { audio.src = ""; }
@@ -147,10 +151,10 @@ function SVGWavePlayer({
       audio.removeEventListener("ended", onEnded);
       audio.pause();
       audio.src = "";
-      AudioManager.unregister(playerIdRef.current);
+      AudioManager.unregister(playerIdForManager);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [src, onNowPlayingChange]);
+  }, [src, onNowPlayingChange, playerIdValue]);
 
   // Update progress with RAF
   useEffect(() => {
@@ -188,11 +192,11 @@ function SVGWavePlayer({
       audio.pause();
       setIsPlaying(false);
     } else {
-      AudioManager.setActive(playerIdRef.current);
+      AudioManager.setActive(playerIdValue);
       audio.play().catch(() => {});
       setIsPlaying(true);
     }
-  }, [isPlaying]);
+  }, [isPlaying, playerIdValue]);
 
   const seek = useCallback((e: React.MouseEvent<SVGSVGElement>) => {
     const audio = audioRef.current;
@@ -271,10 +275,10 @@ function SVGWavePlayer({
                 );
               })}
               {/* Progress overlay */}
-              <clipPath id={`progress-${playerIdRef.current}`}>
+              <clipPath id={clipPathId}>
                 <rect x="0" y="0" width={progressWidth} height={HEIGHT} />
               </clipPath>
-              <g clipPath={`url(#progress-${playerIdRef.current})`}>
+              <g clipPath={`url(#${clipPathId})`}>
                 {peaks.map((peak, i) => {
                   const h = Math.max(0.08, peak) * HEIGHT * 0.85;
                   const y = (HEIGHT - h) / 2;

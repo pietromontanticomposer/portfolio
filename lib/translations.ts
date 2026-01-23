@@ -23,9 +23,10 @@ export function getTagTranslation(tag: string, lang: Language): string {
  * Format timing entry with label
  */
 export function formatTimingEntry(
-  entry: { time: string; label: BilingualText | string },
+  entry: { time: string | null; label: BilingualText | string },
   lang: Language
 ): string {
+  if (!entry.time) return "";
   const labelText = getText(entry.label, lang)?.trim();
   return labelText ? `${entry.time} ${labelText}` : entry.time;
 }
