@@ -1463,6 +1463,16 @@ main {
   object-fit: cover;
   z-index: -3;
   pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.bg-video.is-degraded {
+  opacity: 0;
+}
+
+body.is-scrolling .bg-video {
+  will-change: transform !important;
+  pointer-events: none !important;
 }
 
 .bg-video-poster {

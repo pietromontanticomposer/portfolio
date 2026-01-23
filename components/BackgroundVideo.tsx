@@ -2,7 +2,6 @@
 "use client";
 import { memo, useEffect, useRef, useState } from "react";
 import { useLanguage } from "../lib/LanguageContext";
-import useResumeVideoOnVisibility from "./useResumeVideoOnVisibility";
 
 const DEBUG_BG =
   process.env.NEXT_PUBLIC_BG_DEBUG === "1" ||
@@ -14,11 +13,11 @@ function BackgroundVideo() {
   const [shouldLoadSrc, setShouldLoadSrc] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
+  const [isDegraded, setIsDegraded] = useState(false);
   const isPlayingRef = useRef(false);
   const hasLoadedRef = useRef(false);
   const isPausedRef = useRef(false);
-
-  useResumeVideoOnVisibility(videoRef, { keepPlayingWhenHidden: true });
+  const isDegradedRef = useRef(false);
 
   // Start loading video quickly after mount
   useEffect(() => {
@@ -93,6 +92,7 @@ function BackgroundVideo() {
     const timeoutIds: ReturnType<typeof setTimeout>[] = [];
 
     const tryPlayImmediate = () => {
+      if (isDegradedRef.current) return;
       if (isPausedRef.current) return;
       if (!hasSource || !mounted) return;
       try {
@@ -162,7 +162,7 @@ function BackgroundVideo() {
     };
 
     const recoverPlayback = (reason: string) => {
-      if (!mounted || isPausedRef.current || fallbackUsed) return;
+      if (!mounted || isPausedRef.current || fallbackUsed || isDegradedRef.current) return;
       stallCount += 1;
       if (fallbackUrl && stallCount >= 3) {
         switchToFallback(`stall-${reason}`);
@@ -183,6 +183,38 @@ function BackgroundVideo() {
         }
       } catch {}
       tryPlayImmediate();
+    };
+
+    const degradeVideo = (reason: string) => {
+      if (!mounted || isDegradedRef.current) return;
+      isDegradedRef.current = true;
+      log("degrading background video", reason);
+      setIsDegraded(true);
+      setHasStartedPlaying(false);
+      isPausedRef.current = true;
+      setIsPaused(true);
+      try {
+        video.pause();
+      } catch {}
+      cleanupHls();
+    };
+
+    let stallWindowStart = performance.now();
+    let stallWindowCount = 0;
+    const stallWindowMs = 12000;
+    const stallLimit = 4;
+
+    const trackStall = (reason: string) => {
+      if (isDegradedRef.current) return;
+      const now = performance.now();
+      if (now - stallWindowStart > stallWindowMs) {
+        stallWindowStart = now;
+        stallWindowCount = 0;
+      }
+      stallWindowCount += 1;
+      if (stallWindowCount >= stallLimit) {
+        degradeVideo(`stall-${reason}`);
+      }
     };
 
     try {
@@ -379,20 +411,26 @@ function BackgroundVideo() {
       }
     };
     const onCanPlay = () => {
+      if (isDegradedRef.current) return;
       stallCount = 0;
       tryPlayImmediate();
     };
     const onCanPlayThrough = () => {
+      if (isDegradedRef.current) return;
       stallCount = 0;
       tryPlayImmediate();
     };
     const onWaiting = () => {
+      if (isDegradedRef.current) return;
+      trackStall("waiting");
       const id = setTimeout(() => {
         if (mounted && !isPausedRef.current) recoverPlayback("waiting");
       }, 350);
       timeoutIds.push(id);
     };
     const onStalled = () => {
+      if (isDegradedRef.current) return;
+      trackStall("stalled");
       const id = setTimeout(() => {
         if (mounted && !isPausedRef.current) recoverPlayback("stalled");
       }, 450);
@@ -407,6 +445,7 @@ function BackgroundVideo() {
         return;
       }
       if (currentTime < lastTime - loopBackThreshold) {
+        trackStall("loopback");
         lastTime = currentTime;
         lastAdvance = performance.now();
         stallCount = 0;
@@ -444,6 +483,7 @@ function BackgroundVideo() {
       }
     };
     const onError = (e: Event) => {
+      if (isDegradedRef.current) return;
       try {
         const mediaError = video.error;
         const errorInfo = mediaError
@@ -455,6 +495,7 @@ function BackgroundVideo() {
           networkState: video.networkState,
           error: errorInfo,
         });
+        trackStall("error");
       } catch {}
     };
     video.addEventListener("error", onError);
@@ -464,7 +505,7 @@ function BackgroundVideo() {
 
     // Watchdog interval - keeps video playing even when tab is hidden
     const watchdogId = window.setInterval(() => {
-      if (isPausedRef.current) return;
+      if (isPausedRef.current || isDegradedRef.current) return;
       if (video.paused) {
         tryPlayImmediate();
         return;
@@ -515,6 +556,10 @@ function BackgroundVideo() {
       // Resume - just play from current position
       isPausedRef.current = false;
       setIsPaused(false);
+      if (isDegradedRef.current) {
+        isDegradedRef.current = false;
+        setIsDegraded(false);
+      }
       video.play().catch(() => {});
     } else {
       // Pause - just pause, video stays on current frame
@@ -528,9 +573,9 @@ function BackgroundVideo() {
     <>
       <video
         ref={videoRef}
-        className={`bg-video ${hasStartedPlaying ? "is-visible" : ""}`}
+        className={`bg-video ${hasStartedPlaying ? "is-visible" : ""} ${isDegraded ? "is-degraded" : ""}`}
         autoPlay
-        preload="metadata"
+        preload="auto"
         muted
         loop
         playsInline
