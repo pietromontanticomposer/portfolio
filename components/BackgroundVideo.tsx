@@ -127,6 +127,10 @@ function BackgroundVideo() {
       (fallbackWebmUrl && video.canPlayType("video/webm")) ? fallbackWebmUrl :
       (fallbackMp4Url && video.canPlayType("video/mp4")) ? fallbackMp4Url :
       null;
+    const preferHls =
+      process.env.NEXT_PUBLIC_BG_USE_HLS === "1" ||
+      process.env.NEXT_PUBLIC_BG_USE_HLS === "true";
+    const shouldUseHls = preferHls || !fallbackUrl;
 
     const cleanupHls = () => {
       const conn = (navigator as any).connection;
@@ -194,162 +198,166 @@ function BackgroundVideo() {
         video.autoplay = true;
       } catch {}
 
-      // Dynamic import HLS.js to reduce initial bundle (~80KB)
-      import("hls.js").then((HlsModule) => {
-        if (!mounted) return;
-        HlsClass = HlsModule.default;
+      if (!shouldUseHls && fallbackUrl) {
+        switchToFallback("prefer-fallback");
+      } else {
+        // Dynamic import HLS.js to reduce initial bundle (~80KB)
+        import("hls.js").then((HlsModule) => {
+          if (!mounted) return;
+          HlsClass = HlsModule.default;
 
-        if (HlsClass.isSupported()) {
-          hls = new HlsClass({
-            enableWorker: true,
-            lowLatencyMode: false,
-            capLevelToPlayerSize: true,
-            maxDevicePixelRatio: 1,
-            startLevel: 0,
-            backBufferLength: 1,
-            maxBufferLength: 12,
-            maxMaxBufferLength: 24,
-            maxBufferSize: 12 * 1000 * 1000,
-            maxBufferHole: 0.7,
-            abrBandWidthFactor: 0.65,
-            abrBandWidthUpFactor: 0.55,
-            nudgeOffset: 0.1,
-            nudgeMaxRetry: 5,
-            fragLoadingTimeOut: 10000,
-            fragLoadingMaxRetry: 4,
-            fragLoadingRetryDelay: 1000,
-            fragLoadingMaxRetryTimeout: 8000,
-            manifestLoadingMaxRetry: 4,
-            manifestLoadingRetryDelay: 1000,
-            manifestLoadingMaxRetryTimeout: 8000,
-          });
-          hls.loadSource(hlsUrl);
-          hls.attachMedia(video);
-          hasSource = true;
+          if (HlsClass.isSupported()) {
+            hls = new HlsClass({
+              enableWorker: true,
+              lowLatencyMode: false,
+              capLevelToPlayerSize: true,
+              maxDevicePixelRatio: 1,
+              startLevel: 0,
+              backBufferLength: 1,
+              maxBufferLength: 12,
+              maxMaxBufferLength: 24,
+              maxBufferSize: 12 * 1000 * 1000,
+              maxBufferHole: 0.7,
+              abrBandWidthFactor: 0.65,
+              abrBandWidthUpFactor: 0.55,
+              nudgeOffset: 0.1,
+              nudgeMaxRetry: 5,
+              fragLoadingTimeOut: 10000,
+              fragLoadingMaxRetry: 4,
+              fragLoadingRetryDelay: 1000,
+              fragLoadingMaxRetryTimeout: 8000,
+              manifestLoadingMaxRetry: 4,
+              manifestLoadingRetryDelay: 1000,
+              manifestLoadingMaxRetryTimeout: 8000,
+            });
+            hls.loadSource(hlsUrl);
+            hls.attachMedia(video);
+            hasSource = true;
 
-          const chooseCapLevel = () => {
-            if (!hls) return;
+            const chooseCapLevel = () => {
+              if (!hls) return;
+              const conn = (navigator as any).connection;
+              const downlink = typeof conn?.downlink === "number" ? conn.downlink : null;
+              const saveData = !!conn?.saveData;
+              const isLowPower =
+                window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+                window.matchMedia("(pointer: coarse)").matches;
+              const vw = video.videoWidth || video.clientWidth || window.innerWidth;
+
+              let maxHeight = 540;
+              if (saveData) {
+                maxHeight = 360;
+              } else if (downlink !== null) {
+                if (downlink <= 1.5) maxHeight = 360;
+                else if (downlink <= 3) maxHeight = 540;
+                else maxHeight = 540;
+              } else if (isLowPower) {
+                maxHeight = 360;
+              }
+
+              const limit = Math.min(maxHeight, vw);
+              let bestLevel = 0;
+              let bestHeight = 0;
+              (hls.levels || []).forEach((level: any, idx: number) => {
+                const height = level?.height ?? 0;
+                if (height > 0 && height <= limit && height >= bestHeight) {
+                  bestHeight = height;
+                  bestLevel = idx;
+                }
+              });
+              hls.autoLevelCapping = bestLevel;
+              hls.nextLevel = bestLevel;
+            };
+
+            hls.on(HlsClass.Events.MANIFEST_PARSED, chooseCapLevel);
+            hls.on(HlsClass.Events.MEDIA_ATTACHED, () => log('HLS MEDIA_ATTACHED'));
+            hls.on(HlsClass.Events.BUFFER_APPENDED, () => log('HLS BUFFER_APPENDED'));
             const conn = (navigator as any).connection;
-            const downlink = typeof conn?.downlink === "number" ? conn.downlink : null;
-            const saveData = !!conn?.saveData;
-            const isLowPower =
-              window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-              window.matchMedia("(pointer: coarse)").matches;
-            const vw = video.videoWidth || video.clientWidth || window.innerWidth;
-
-            let maxHeight = 540;
-            if (saveData) {
-              maxHeight = 360;
-            } else if (downlink !== null) {
-              if (downlink <= 1.5) maxHeight = 360;
-              else if (downlink <= 3) maxHeight = 540;
-              else maxHeight = 540;
-            } else if (isLowPower) {
-              maxHeight = 360;
+            if (conn && typeof conn.addEventListener === "function") {
+              connectionChangeHandler = chooseCapLevel;
+              conn.addEventListener("change", connectionChangeHandler);
             }
 
-            const limit = Math.min(maxHeight, vw);
-            let bestLevel = 0;
-            let bestHeight = 0;
-            (hls.levels || []).forEach((level: any, idx: number) => {
-              const height = level?.height ?? 0;
-              if (height > 0 && height <= limit && height >= bestHeight) {
-                bestHeight = height;
-                bestLevel = idx;
+            hls.on(HlsClass.Events.ERROR, (_event: any, data: any) => {
+              try {
+                const info = {
+                  type: data?.type,
+                  details: data?.details,
+                  fatal: data?.fatal,
+                  response: data?.response
+                    ? {
+                      url: (data.response as any)?.url || (data.response as any)?.uri,
+                      code: (data.response as any)?.code,
+                      text: (data.response as any)?.text
+                    }
+                    : null,
+                  context: data?.context
+                    ? {
+                        fragUrl: (data.context as any)?.frag?.url,
+                        fragByteRange: (data.context as any)?.frag?.byteRange,
+                        loader: (data.context as any)?.loader?.url,
+                        type: (data.context as any)?.type,
+                      }
+                    : null,
+                };
+                log('HLS ERROR EVENT', info, _event);
+              } catch (e) {
+                logError('Error serializing HLS error', e, data);
+              }
+
+              if (data?.details === HlsClass.ErrorDetails.BUFFER_STALLED_ERROR) {
+                recoverPlayback("buffer-stalled");
+                return;
+              }
+
+              if (!data?.fatal) {
+                log('HLS non-fatal error', data);
+                return;
+              }
+
+              logError('HLS fatal error', data);
+              hlsFatalCount += 1;
+              if (fallbackUrl && hlsFatalCount >= 2) {
+                switchToFallback("fatal-error");
+                return;
+              }
+              if (data.type === HlsClass.ErrorTypes.NETWORK_ERROR) {
+                hls?.startLoad();
+              } else if (data.type === HlsClass.ErrorTypes.MEDIA_ERROR) {
+                hls?.recoverMediaError();
+              } else {
+                try {
+                  hls?.destroy();
+                } catch (e) {
+                  logError('Error destroying HLS instance', e);
+                }
               }
             });
-            hls.autoLevelCapping = bestLevel;
-            hls.nextLevel = bestLevel;
-          };
 
-          hls.on(HlsClass.Events.MANIFEST_PARSED, chooseCapLevel);
-          hls.on(HlsClass.Events.MEDIA_ATTACHED, () => log('HLS MEDIA_ATTACHED'));
-          hls.on(HlsClass.Events.BUFFER_APPENDED, () => log('HLS BUFFER_APPENDED'));
-          const conn = (navigator as any).connection;
-          if (conn && typeof conn.addEventListener === "function") {
-            connectionChangeHandler = chooseCapLevel;
-            conn.addEventListener("change", connectionChangeHandler);
+            // Start playback after HLS is ready
+            tryPlayImmediate();
+          } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+            // Safari: native HLS
+            try {
+              video.src = hlsUrl;
+              hasSource = true;
+              tryPlayImmediate();
+            } catch {}
+          } else if (fallbackUrl) {
+            switchToFallback("no-hls-support");
           }
 
-          hls.on(HlsClass.Events.ERROR, (_event: any, data: any) => {
-            try {
-              const info = {
-                type: data?.type,
-                details: data?.details,
-                fatal: data?.fatal,
-                response: data?.response
-                  ? {
-                    url: (data.response as any)?.url || (data.response as any)?.uri,
-                    code: (data.response as any)?.code,
-                    text: (data.response as any)?.text
-                  }
-                  : null,
-                context: data?.context
-                  ? {
-                      fragUrl: (data.context as any)?.frag?.url,
-                      fragByteRange: (data.context as any)?.frag?.byteRange,
-                      loader: (data.context as any)?.loader?.url,
-                      type: (data.context as any)?.type,
-                    }
-                  : null,
-              };
-              log('HLS ERROR EVENT', info, _event);
-            } catch (e) {
-              logError('Error serializing HLS error', e, data);
-            }
-
-            if (data?.details === HlsClass.ErrorDetails.BUFFER_STALLED_ERROR) {
-              recoverPlayback("buffer-stalled");
-              return;
-            }
-
-            if (!data?.fatal) {
-              log('HLS non-fatal error', data);
-              return;
-            }
-
-            logError('HLS fatal error', data);
-            hlsFatalCount += 1;
-            if (fallbackUrl && hlsFatalCount >= 2) {
-              switchToFallback("fatal-error");
-              return;
-            }
-            if (data.type === HlsClass.ErrorTypes.NETWORK_ERROR) {
-              hls?.startLoad();
-            } else if (data.type === HlsClass.ErrorTypes.MEDIA_ERROR) {
-              hls?.recoverMediaError();
-            } else {
-              try {
-                hls?.destroy();
-              } catch (e) {
-                logError('Error destroying HLS instance', e);
-              }
-            }
-          });
-
-          // Start playback after HLS is ready
-          tryPlayImmediate();
-        } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-          // Safari: native HLS
-          try {
-            video.src = hlsUrl;
-            hasSource = true;
-            tryPlayImmediate();
-          } catch {}
-        } else if (fallbackUrl) {
-          switchToFallback("no-hls-support");
-        }
-
-        if (hasSource) {
-          video.preload = "auto";
-          video.load();
-        }
-      }).catch((err) => {
-        logError('Failed to load HLS.js', err);
-        if (fallbackUrl) {
-          switchToFallback("hls-import-failed");
-        }
-      });
+          if (hasSource) {
+            video.preload = "auto";
+            video.load();
+          }
+        }).catch((err) => {
+          logError('Failed to load HLS.js', err);
+          if (fallbackUrl) {
+            switchToFallback("hls-import-failed");
+          }
+        });
+      }
 
     } catch {
       // ignore

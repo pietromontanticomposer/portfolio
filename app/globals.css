@@ -1669,17 +1669,59 @@ main {
 .modal-body { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 1rem; }
 @media (min-width: 900px) { .modal-body { grid-template-columns: 2fr 1fr; } }
 
-/* Showreel modal: single-column, full-width video */
+/* Showreel modal: full-screen video */
+.showreel-modal-overlay {
+  padding: 0;
+  align-items: stretch;
+  justify-content: stretch;
+}
+
 .showreel-modal-panel {
-  width: min(1400px, 96vw);
+  width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+  border-radius: 0;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  background: rgba(2,6,23,0.98);
+  display: flex;
+  flex-direction: column;
+}
+
+.showreel-modal-panel .modal-header {
+  position: absolute;
+  inset: 0 0 auto 0;
+  padding: 1.1rem 1.5rem;
+  z-index: 2;
+  background: linear-gradient(180deg, rgba(2,6,23,0.85), rgba(2,6,23,0));
+}
+
+.showreel-modal-panel .modal-title {
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .showreel-modal-body {
-  margin-top: 1rem;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .showreel-modal-body .video-wrapper {
-  max-width: 100%;
+  width: min(100vw, calc(100vh * 16 / 9));
+  height: min(100vh, calc(100vw * 9 / 16));
+  padding-top: 0;
+  margin: 0;
+  max-width: none;
+}
+
+.showreel-modal-body .video-wrapper iframe,
+.showreel-modal-body .video-wrapper video,
+.showreel-modal-body .case-study-video {
+  border-radius: 0;
 }
 
 .video-wrapper {

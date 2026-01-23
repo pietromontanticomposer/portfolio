@@ -108,7 +108,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
       </div>
 
       {isOpen ? (
-        <div className="modal-overlay" role="dialog" aria-modal="true" aria-label={showreelLabel} onClick={closeModal}>
+        <div className="modal-overlay showreel-modal-overlay" role="dialog" aria-modal="true" aria-label={showreelLabel} onClick={closeModal}>
           <div className="modal-panel showreel-modal-panel" onClick={(event) => event.stopPropagation()}>
             <div className="modal-header">
               <div className="modal-title">{showreelLabel}</div>
