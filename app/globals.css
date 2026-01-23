@@ -1669,6 +1669,19 @@ main {
 .modal-body { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 1rem; }
 @media (min-width: 900px) { .modal-body { grid-template-columns: 2fr 1fr; } }
 
+/* Showreel modal: single-column, full-width video */
+.showreel-modal-panel {
+  width: min(1400px, 96vw);
+}
+
+.showreel-modal-body {
+  margin-top: 1rem;
+}
+
+.showreel-modal-body .video-wrapper {
+  max-width: 100%;
+}
+
 .video-wrapper {
   position: relative;
   padding-top: 56.25%;
