@@ -1718,6 +1718,8 @@ body.is-scrolling .bg-video {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  z-index: 1;
 }
 
 .showreel-modal-body .video-wrapper {
