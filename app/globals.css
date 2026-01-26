@@ -1703,8 +1703,14 @@ body.is-scrolling .bg-video {
   position: absolute;
   inset: 0 0 auto 0;
   padding: 1.1rem 1.5rem;
-  z-index: 2;
+  z-index: 2147483647;
   background: linear-gradient(180deg, rgba(2,6,23,0.85), rgba(2,6,23,0));
+  pointer-events: auto;
+}
+.showreel-modal-panel .modal-header .modal-close {
+  pointer-events: auto;
+  position: relative;
+  z-index: 2147483647;
 }
 
 .showreel-modal-panel .modal-title {
