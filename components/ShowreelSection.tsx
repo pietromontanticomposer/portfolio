@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import CaseStudyVideo from "./CaseStudyVideo";
 import KeepPlayingVideo from "./KeepPlayingVideo";
 import { useLanguage } from "../lib/LanguageContext";
@@ -14,6 +15,7 @@ type ShowreelSectionProps = {
 export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
   const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
+  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
   const showreelLabel = t("Showreel", "Showreel");
   const { isHls, isMp4, src, mp4Fallback } = getMediaSources(embedUrl ?? undefined);
   const hasEmbed = !!src;
@@ -57,6 +59,18 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    document.body.classList.add("showreel-open");
+    return () => {
+      document.body.classList.remove("showreel-open");
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    setPortalTarget(document.body);
+  }, []);
+
   const autoplayEmbedUrl = useMemo(() => {
     if (!src || isHls || isMp4) return src;
     try {
@@ -69,6 +83,62 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
       return src;
     }
   }, [isHls, isMp4, src]);
+
+  const modalContent = isOpen ? (
+    <div className="modal-overlay showreel-modal-overlay" role="dialog" aria-modal="true" aria-label={showreelLabel} onClick={closeModal}>
+      <div className="modal-panel showreel-modal-panel" onClick={(event) => event.stopPropagation()}>
+        <div className="modal-header">
+          <div className="modal-title">{showreelLabel}</div>
+          <button type="button" className="modal-close" onClick={closeModal}>
+            {t("Chiudi", "Close")}
+          </button>
+        </div>
+        <div className="showreel-modal-body">
+          {hasEmbed ? (
+            <div className="video-wrapper">
+              {isHls ? (
+                <CaseStudyVideo
+                  hlsUrl={src ?? ""}
+                  mp4Url={mp4Fallback}
+                  title={showreelLabel}
+                  poster={showreelPoster}
+                  autoPlay
+                />
+              ) : isMp4 ? (
+                <KeepPlayingVideo
+                  className="case-study-video absolute inset-0 h-full w-full rounded-xl"
+                  controls
+                  playsInline
+                  autoPlay
+                  preload="auto"
+                  poster={showreelPoster}
+                  aria-label={t("Video showreel", "Showreel video")}
+                >
+                  <source src={encodeURI(src ?? "")} type="video/mp4" />
+                  {t("Il tuo browser non supporta il tag video.", "Your browser does not support the video tag.")}
+                </KeepPlayingVideo>
+              ) : (
+                <iframe
+                  src={encodeURI(autoplayEmbedUrl ?? "")}
+                  title={showreelLabel}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              )}
+            </div>
+          ) : (
+            <div className="text-sm text-[color:var(--muted)]">
+              {t(
+                "Showreel disponibile su richiesta. Contattami per ricevere il link.",
+                "Showreel available on request. Contact me for the private link."
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  ) : null;
 
   return (
     <section id="showreel" className="w-full">
@@ -107,61 +177,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
         </div>
       </div>
 
-      {isOpen ? (
-        <div className="modal-overlay showreel-modal-overlay" role="dialog" aria-modal="true" aria-label={showreelLabel} onClick={closeModal}>
-          <div className="modal-panel showreel-modal-panel" onClick={(event) => event.stopPropagation()}>
-            <div className="modal-header">
-              <div className="modal-title">{showreelLabel}</div>
-              <button type="button" className="modal-close" onClick={closeModal}>
-                {t("Chiudi", "Close")}
-              </button>
-            </div>
-            <div className="showreel-modal-body">
-              {hasEmbed ? (
-                <div className="video-wrapper">
-                  {isHls ? (
-                    <CaseStudyVideo
-                      hlsUrl={src ?? ""}
-                      mp4Url={mp4Fallback}
-                      title={showreelLabel}
-                      poster={showreelPoster}
-                      autoPlay
-                    />
-                  ) : isMp4 ? (
-                    <KeepPlayingVideo
-                      className="case-study-video absolute inset-0 h-full w-full rounded-xl"
-                      controls
-                      playsInline
-                      autoPlay
-                      preload="auto"
-                      poster={showreelPoster}
-                      aria-label={t("Video showreel", "Showreel video")}
-                    >
-                      <source src={encodeURI(src ?? "")} type="video/mp4" />
-                      {t("Il tuo browser non supporta il tag video.", "Your browser does not support the video tag.")}
-                    </KeepPlayingVideo>
-                  ) : (
-                    <iframe
-                      src={encodeURI(autoplayEmbedUrl ?? "")}
-                      title={showreelLabel}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  )}
-                </div>
-              ) : (
-                <div className="text-sm text-[color:var(--muted)]">
-                  {t(
-                    "Showreel disponibile su richiesta. Contattami per ricevere il link.",
-                    "Showreel available on request. Contact me for the private link."
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      ) : null}
+      {portalTarget && modalContent ? createPortal(modalContent, portalTarget) : null}
     </section>
   );
 }

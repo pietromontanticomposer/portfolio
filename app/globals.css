@@ -1636,6 +1636,16 @@ body.is-scrolling .bg-video {
   z-index: 60;
   padding: 2rem;
 }
+
+body.showreel-open header {
+  pointer-events: none;
+  opacity: 0;
+}
+
+body.showreel-open .bg-video-toggle {
+  pointer-events: none;
+  opacity: 0;
+}
 .modal-panel {
   width: min(1100px, 98%);
   max-height: 92vh;
