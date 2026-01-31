@@ -59,7 +59,7 @@ export default function Home() {
         />
         <HeroSection heroCredits={heroCredits} />
 
-        <ProofQuotes quotes={proofQuotes} heading="Proof Quotes" />
+        <ProofQuotes quotes={proofQuotes} />
 
         <ShowreelSection embedUrl={showreelEmbedUrl} />
 

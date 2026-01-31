@@ -66,7 +66,7 @@ type Props = {
 };
 
 export default function ProjectPageClient({ project }: Props) {
-  const { language, t } = useLanguage();
+  const { language } = useLanguage();
   const labels = labelsData[language];
 
   const descriptionText = getText(project.description, language);
@@ -78,7 +78,6 @@ export default function ProjectPageClient({ project }: Props) {
   const tagLabel = project.tag ? getTagTranslation(project.tag, language) : labels.project;
   const yearLabel = project.year ? getTagTranslation(String(project.year), language) : "—";
   const showProofQuotes = !!project.proofQuotes;
-  const proofQuotesHeading = t("Proof Quotes", "Proof Quotes");
 
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-16 lg:px-20">
@@ -123,9 +122,7 @@ export default function ProjectPageClient({ project }: Props) {
               />
             </div>
           </section>
-          {showProofQuotes ? (
-            <ProofQuotes quotes={proofQuotes} heading={proofQuotesHeading} />
-          ) : null}
+          {showProofQuotes ? <ProofQuotes quotes={proofQuotes} /> : null}
         </>
       ) : null}
 
@@ -167,9 +164,7 @@ export default function ProjectPageClient({ project }: Props) {
         </section>
       ) : null}
 
-      {!project.videoEmbed && showProofQuotes ? (
-        <ProofQuotes quotes={proofQuotes} heading={proofQuotesHeading} />
-      ) : null}
+      {!project.videoEmbed && showProofQuotes ? <ProofQuotes quotes={proofQuotes} /> : null}
 
       {project.largeImage ? (
         <section className="card-shell p-6 sm:p-8">
