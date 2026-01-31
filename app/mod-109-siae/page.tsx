@@ -168,7 +168,7 @@ const guideData: Record<"it" | "en", GuideContent> = {
       {
         title: "Cosa determina che la musica venga pagata",
         bullets: [
-          "Ogni brano originale deve essere depositato correttamente a SIAE (titolo, autori, eventuale editore, quote).",
+          "Ogni brano originale deve essere depositato correttamente a SIAE (titolo, autori, eventuale editore, quote in percentuale).",
           "Prima di compilare l'Allegato 1, verifica i dati nel Repertorio (titolo, autori, editore, codici).",
           "Il cue list deve usare gli stessi nomi del deposito, non varianti creative.",
         ],
@@ -359,7 +359,7 @@ const guideData: Record<"it" | "en", GuideContent> = {
       {
         title: "What determines whether music gets paid",
         bullets: [
-          "Every original track must be correctly deposited with SIAE (title, authors, publisher if any, splits).",
+          "Every original track must be correctly deposited with SIAE (title, authors, publisher if any, percentage splits).",
           "Before filling Annex 1, verify the data in the Repertoire (title, authors, publisher, codes).",
           "The cue list must use the same names as the deposit, not creative variants.",
         ],
