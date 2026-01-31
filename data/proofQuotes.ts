@@ -10,6 +10,12 @@ export const proofQuoteAttribution = [
   "Project: I Veneti antichi",
 ] as const;
 
+export const soggettoObsoletoAttribution = [
+  "Nicola Pegg",
+  "Director & Producer",
+  "Project: Soggetto Obsoleto",
+] as const;
+
 export const proofQuotes: ProofQuote[] = [
   {
     quote:
@@ -18,7 +24,7 @@ export const proofQuotes: ProofQuote[] = [
   },
   {
     quote: "\"We got along very well with Pietro’s workflow.\"",
-    attribution: proofQuoteAttribution,
+    attribution: soggettoObsoletoAttribution,
   },
   {
     quote:
