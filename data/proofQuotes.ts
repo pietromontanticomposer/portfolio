@@ -21,6 +21,12 @@ export const soggettoObsoletoAttribution = [
   { it: "Progetto: Soggetto Obsoleto", en: "Project: Soggetto Obsoleto" },
 ] as const;
 
+export const claudioReAttribution = [
+  { it: "Marco Martini", en: "Marco Martini" },
+  { it: "Regista e produttore", en: "Director & Producer" },
+  { it: "Progetto: Claudio Re", en: "Project: Claudio Re" },
+] as const;
+
 export const proofQuotes: ProofQuote[] = [
   {
     quote: {
@@ -41,6 +47,6 @@ export const proofQuotes: ProofQuote[] = [
       it: "\"Pietro è una scelta eccellente e un partner importante per un progetto complesso.\"",
       en: "\"Pietro is an excellent choice and an important partner for a complex project.\"",
     },
-    attribution: proofQuoteAttribution,
+    attribution: claudioReAttribution,
   },
 ];
