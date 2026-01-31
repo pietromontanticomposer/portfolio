@@ -5,6 +5,8 @@ import Image from "next/image";
 import LazyIframe from "../../../components/LazyIframe";
 import AudioPlayer from "../../../components/AudioPlayer";
 import TrackPlayer from "../../../components/TrackPlayerClient";
+import ProofQuotes from "../../../components/ProofQuotes";
+import { proofQuotes } from "../../../data/proofQuotes";
 import { useLanguage } from "../../../lib/LanguageContext";
 import { getTagTranslation, getText } from "../../../lib/translations";
 
@@ -27,6 +29,7 @@ type Project = {
   tracks?: Track[];
   tag?: string;
   year?: string | number;
+  proofQuotes?: boolean;
 };
 
 const labelsData = {
@@ -63,7 +66,7 @@ type Props = {
 };
 
 export default function ProjectPageClient({ project }: Props) {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const labels = labelsData[language];
 
   const descriptionText = getText(project.description, language);
@@ -74,6 +77,8 @@ export default function ProjectPageClient({ project }: Props) {
   const coverSrc = project.image ?? project.largeImage ?? "";
   const tagLabel = project.tag ? getTagTranslation(project.tag, language) : labels.project;
   const yearLabel = project.year ? getTagTranslation(String(project.year), language) : "—";
+  const showProofQuotes = !!project.proofQuotes;
+  const proofQuotesHeading = t("Proof Quotes", "Proof Quotes");
 
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-16 lg:px-20">
@@ -105,18 +110,23 @@ export default function ProjectPageClient({ project }: Props) {
       </section>
 
       {project.videoEmbed ? (
-        <section className="card-shell p-6 sm:p-8">
-          <div className="video-wrapper">
-            <iframe
-              src={project.videoEmbed}
-              title={`${project.title} ${labels.clip}`}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              loading="lazy"
-            />
-          </div>
-        </section>
+        <>
+          <section className="card-shell p-6 sm:p-8">
+            <div className="video-wrapper">
+              <iframe
+                src={project.videoEmbed}
+                title={`${project.title} ${labels.clip}`}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                loading="lazy"
+              />
+            </div>
+          </section>
+          {showProofQuotes ? (
+            <ProofQuotes quotes={proofQuotes} heading={proofQuotesHeading} />
+          ) : null}
+        </>
       ) : null}
 
       {tracks.length > 0 ? (
@@ -155,6 +165,10 @@ export default function ProjectPageClient({ project }: Props) {
             )}
           </div>
         </section>
+      ) : null}
+
+      {!project.videoEmbed && showProofQuotes ? (
+        <ProofQuotes quotes={proofQuotes} heading={proofQuotesHeading} />
       ) : null}
 
       {project.largeImage ? (
