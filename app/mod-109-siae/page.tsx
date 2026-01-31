@@ -7,6 +7,7 @@ type GuideBlock = {
   heading: string;
   paragraphs?: ReactNode[];
   bullets?: string[];
+  variant?: "warning";
 };
 
 type GuideSection = {
@@ -92,6 +93,33 @@ const guideData: Record<"it" | "en", GuideContent> = {
         ],
       },
       {
+        title: "Download moduli (fonte primaria)",
+        paragraphs: [
+          <>
+            Pagina Moduli SIAE (Mod. 109 e Mod. 109TF):{" "}
+            <a href={moduliUrl} target="_blank" rel="noreferrer">
+              {moduliUrl}
+            </a>
+            .
+          </>,
+          <>
+            Pagina Video cinema-tv SIAE (stessi modelli linkati nel contesto
+            video):{" "}
+            <a href={videoCinemaTvUrl} target="_blank" rel="noreferrer">
+              {videoCinemaTvUrl}
+            </a>
+            .
+          </>,
+          <>
+            Copia di comodo (opzionale, potrebbe non essere aggiornata):{" "}
+            <a href={driveUrl} target="_blank" rel="noreferrer">
+              Cartella Drive
+            </a>
+            .
+          </>,
+        ],
+      },
+      {
         title: "Chi fa cosa",
         blocks: [
           {
@@ -141,6 +169,7 @@ const guideData: Record<"it" | "en", GuideContent> = {
           "Compositore (ed eventuale elaboratore solo per pubblico dominio).",
           "Editore (se esiste, altrimenti lascia vuoto).",
           "Durata in secondi (solo numero intero, niente testo).",
+          "Genere di utilizzazione della musica (di fondo, vocale, strumentale, visibile sullo schermo).",
         ],
         blocks: [
           {
@@ -150,7 +179,15 @@ const guideData: Record<"it" | "en", GuideContent> = {
           {
             heading: "Esempio riga All.1",
             bullets: [
-              'Scena 12 | "Braga Theme" | Pietro Montanti | (vuoto) | 34',
+              'Scena 12 | "Braga Theme" | Pietro Montanti | (vuoto) | 34 | di fondo',
+            ],
+          },
+          {
+            heading: "Non fare mai",
+            variant: "warning",
+            bullets: [
+              "Non inserire percentuali in Allegato 1.",
+              "Non usare categorie tipo background o main title: usa solo \"di fondo, vocale, strumentale, visibile sullo schermo\".",
             ],
           },
         ],
@@ -159,23 +196,39 @@ const guideData: Record<"it" | "en", GuideContent> = {
         title: "Regole anti errore",
         bullets: [
           'Non scrivere "2:00". Scrivi "120".',
-          "TBD va bene solo nei campi testuali dove ha senso.",
-          "Mai nella durata: deve essere un numero intero in secondi.",
+          "Se un campo e' ignoto, lascia vuoto.",
+          "Non scrivere mai \"to be defined\" nei campi numerici, soprattutto nelle durate.",
           "Non cambiare i nomi dei fogli. Non rompere le formule.",
           'Se usi brani preesistenti, inserisci titolo e autore reali, non "track 3".',
         ],
       },
       {
-        title: "Cosa determina che la musica venga pagata",
+        title: "Per non perdere soldi",
         bullets: [
-          "Ogni brano originale deve essere depositato correttamente a SIAE (titolo, autori, eventuale editore, quote in percentuale).",
-          "Prima di compilare l'Allegato 1, verifica i dati nel Repertorio (titolo, autori, editore, codici).",
-          "Il cue list deve usare gli stessi nomi del deposito, non varianti creative.",
+          "Deposita le opere musicali in SIAE e mantieni titoli e nominativi coerenti fra deposito e Mod. 109.",
+          "Chiedi sempre alla produzione copia del Mod. 109 inviato e ricevute PEC.",
+          "Bonus: nella pagina Moduli SIAE esistono moduli per maggiorazione e provvidenze. Non e' automatico ne' garantito, ma e' utile saperlo.",
+        ],
+        blocks: [
+          {
+            heading: "Link utili (moduli SIAE)",
+            paragraphs: [
+              <>
+                Moduli SIAE:{" "}
+                <a href={moduliUrl} target="_blank" rel="noreferrer">
+                  {moduliUrl}
+                </a>
+                .
+              </>,
+            ],
+          },
         ],
       },
       {
         title: "Invio (blindato)",
-        paragraphs: ["Il modello va trasmesso dal produttore esclusivamente via PEC."],
+        paragraphs: [
+          "Il modello va trasmesso dal produttore esclusivamente via PEC.",
+        ],
         bullets: [
           "File finale inviato.",
           "Ricevuta accettazione PEC.",
@@ -283,6 +336,32 @@ const guideData: Record<"it" | "en", GuideContent> = {
         ],
       },
       {
+        title: "Download the forms (primary source)",
+        paragraphs: [
+          <>
+            Moduli SIAE page (Mod. 109 and Mod. 109TF):{" "}
+            <a href={moduliUrl} target="_blank" rel="noreferrer">
+              {moduliUrl}
+            </a>
+            .
+          </>,
+          <>
+            Video cinema-tv SIAE page (same forms linked in the video context):{" "}
+            <a href={videoCinemaTvUrl} target="_blank" rel="noreferrer">
+              {videoCinemaTvUrl}
+            </a>
+            .
+          </>,
+          <>
+            Convenience copy (optional, may be out of date):{" "}
+            <a href={driveUrl} target="_blank" rel="noreferrer">
+              Drive folder
+            </a>
+            .
+          </>,
+        ],
+      },
+      {
         title: "Who does what",
         blocks: [
           {
@@ -332,6 +411,7 @@ const guideData: Record<"it" | "en", GuideContent> = {
           "Composer (and arranger only for public domain works).",
           "Publisher (if any, otherwise leave blank).",
           "Duration in seconds (whole number only, no text).",
+          "Genere di utilizzazione della musica (di fondo, vocale, strumentale, visibile sullo schermo).",
         ],
         blocks: [
           {
@@ -341,7 +421,15 @@ const guideData: Record<"it" | "en", GuideContent> = {
           {
             heading: "Example Annex 1 row",
             bullets: [
-              'Scene 12 | "Braga Theme" | Pietro Montanti | (blank) | 34',
+              'Scene 12 | "Braga Theme" | Pietro Montanti | (blank) | 34 | di fondo',
+            ],
+          },
+          {
+            heading: "Never do this",
+            variant: "warning",
+            bullets: [
+              "Do not insert percentages in Annex 1.",
+              "Do not use categories like background or main title: use only \"di fondo, vocale, strumentale, visibile sullo schermo\".",
             ],
           },
         ],
@@ -350,18 +438,32 @@ const guideData: Record<"it" | "en", GuideContent> = {
         title: "Anti-error rules",
         bullets: [
           'Do not write "2:00". Write "120".',
-          "TBD is only for text fields where it makes sense.",
-          "Never in duration: it must be a whole number in seconds.",
+          "If a field is unknown, leave it blank.",
+          'Never write "to be defined" in numeric fields, especially durations.',
           "Do not rename the sheets. Do not break the formulas.",
           'If you use pre-existing tracks, enter the real title and author, not "track 3".',
         ],
       },
       {
-        title: "What determines whether music gets paid",
+        title: "To avoid losing money",
         bullets: [
-          "Every original track must be correctly deposited with SIAE (title, authors, publisher if any, percentage splits).",
-          "Before filling Annex 1, verify the data in the Repertoire (title, authors, publisher, codes).",
-          "The cue list must use the same names as the deposit, not creative variants.",
+          "Deposit the musical works with SIAE and keep titles and names consistent between the deposit and Mod. 109.",
+          "Always ask the production for a copy of the submitted Mod. 109 and the PEC receipts.",
+          "Bonus: the Moduli SIAE page includes forms for maggiorazione and provvidenze. It is not automatic or guaranteed, but it is useful to know.",
+        ],
+        blocks: [
+          {
+            heading: "Useful links (SIAE forms)",
+            paragraphs: [
+              <>
+                Moduli SIAE:{" "}
+                <a href={moduliUrl} target="_blank" rel="noreferrer">
+                  {moduliUrl}
+                </a>
+                .
+              </>,
+            ],
+          },
         ],
       },
       {
@@ -489,27 +591,41 @@ export default function Mod109SiaePage() {
             ))}
           {section.blocks && (
             <div className="mt-4 space-y-4">
-              {section.blocks.map((block, blockIndex) => (
-                <div key={`${block.heading}-${blockIndex}`}>
-                  <div className="text-sm font-semibold text-[color:var(--foreground)]">
-                    {block.heading}
-                  </div>
-                  {block.paragraphs && (
-                    <div className="mt-2 space-y-2 text-sm text-[color:var(--muted)] leading-relaxed">
-                      {block.paragraphs.map((line, lineIndex) => (
-                        <p key={`${block.heading}-p-${lineIndex}`}>{line}</p>
-                      ))}
+              {section.blocks.map((block, blockIndex) => {
+                const isWarning = block.variant === "warning";
+                return (
+                  <div
+                    key={`${block.heading}-${blockIndex}`}
+                    className={isWarning ? "card-inset rounded-2xl p-4" : undefined}
+                    style={
+                      isWarning
+                        ? {
+                            borderColor: "#ff5a5a",
+                            background: "rgba(255, 90, 90, 0.08)",
+                          }
+                        : undefined
+                    }
+                  >
+                    <div className="text-sm font-semibold text-[color:var(--foreground)]">
+                      {block.heading}
                     </div>
-                  )}
-                  {block.bullets && (
-                    <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-[color:var(--muted)]">
-                      {block.bullets.map((item, itemIndex) => (
-                        <li key={`${block.heading}-b-${itemIndex}`}>{item}</li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              ))}
+                    {block.paragraphs && (
+                      <div className="mt-2 space-y-2 text-sm text-[color:var(--muted)] leading-relaxed">
+                        {block.paragraphs.map((line, lineIndex) => (
+                          <p key={`${block.heading}-p-${lineIndex}`}>{line}</p>
+                        ))}
+                      </div>
+                    )}
+                    {block.bullets && (
+                      <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-[color:var(--muted)]">
+                        {block.bullets.map((item, itemIndex) => (
+                          <li key={`${block.heading}-b-${itemIndex}`}>{item}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
           {section.closing && (
