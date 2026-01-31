@@ -10,7 +10,7 @@ type ProofQuotesProps = {
 };
 
 export default function ProofQuotes({ quotes, heading, variant = "default" }: ProofQuotesProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const headingText = heading ?? t("Testimonianze", "Proof Quotes");
   const sectionPadding = variant === "compact" ? "p-5 sm:p-6" : "p-6 sm:p-8";
   const gridSpacing = variant === "compact" ? "mt-4 gap-4" : "mt-6 gap-6";
@@ -27,17 +27,20 @@ export default function ProofQuotes({ quotes, heading, variant = "default" }: Pr
       ) : null}
       <div className={`grid ${gridSpacing} md:grid-cols-3`}>
         {quotes.map((quote) => (
-          <figure key={quote.quote} className={`card-inset rounded-2xl ${cardPadding}`}>
+          <figure
+            key={quote.quote.en}
+            className={`card-inset rounded-2xl ${cardPadding}`}
+          >
             <blockquote className="text-sm leading-relaxed text-[color:var(--foreground)]">
-              {quote.quote}
+              {language === "it" ? quote.quote.it : quote.quote.en}
             </blockquote>
             <figcaption className="mt-4 text-xs text-[color:var(--muted)]">
               {quote.attribution.map((line, index) => (
                 <span
-                  key={`${line}-${index}`}
+                  key={`${line.en}-${index}`}
                   className={index === 0 ? "block font-semibold text-[color:var(--foreground)]" : "block"}
                 >
-                  {line}
+                  {language === "it" ? line.it : line.en}
                 </span>
               ))}
             </figcaption>
