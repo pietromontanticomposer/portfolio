@@ -3,8 +3,6 @@
 import { memo } from "react";
 import { useLanguage } from "../lib/LanguageContext";
 import ContactPopover from "./ContactPopover";
-import ProofQuotes from "./ProofQuotes";
-import { proofQuotes } from "../data/proofQuotes";
 
 type HeroSectionProps = {
   heroCredits: { it: string; en: string };
@@ -49,13 +47,6 @@ function HeroSection({ heroCredits }: HeroSectionProps) {
             buttonLabel={t("Contatti", "Contact")}
             buttonClassName="hero-btn hero-btn-secondary"
             panelId="contact-popover-hero"
-          />
-        </div>
-        <div className="mt-10">
-          <ProofQuotes
-            quotes={proofQuotes}
-            heading={t("Proof Quotes", "Proof Quotes")}
-            variant="compact"
           />
         </div>
         <div className="hero-credits" aria-label={t("Crediti", "Credits")}>

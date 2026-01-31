@@ -3,7 +3,9 @@ import ShowreelSection from "../components/ShowreelSection";
 import AudiencePaths from "../components/AudiencePaths";
 import HeroSection from "../components/HeroSection";
 import HomeSections from "../components/HomeSections";
+import ProofQuotes from "../components/ProofQuotes";
 import { heroCredits } from "../data/homeContent";
+import { proofQuotes } from "../data/proofQuotes";
 import { getSiteUrl, getShowreelUrl, siteMetadata } from "../lib/siteConfig";
 
 export const metadata: Metadata = {
@@ -56,6 +58,8 @@ export default function Home() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <HeroSection heroCredits={heroCredits} />
+
+        <ProofQuotes quotes={proofQuotes} heading="Proof Quotes" />
 
         <ShowreelSection embedUrl={showreelEmbedUrl} />
 
