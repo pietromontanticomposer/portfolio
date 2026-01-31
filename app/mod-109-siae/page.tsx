@@ -3,387 +3,379 @@
 import type { ReactNode } from "react";
 import { useLanguage } from "../../lib/LanguageContext";
 
-const guideData: Record<
-  "it" | "en",
-  {
-    title: string;
-    subtitle: string;
-    intro: string[];
-    download: { label: string; linkLabel: string; url: string };
-    sections: Array<{
-      title: string;
-      paragraphs?: ReactNode[];
-      bullets?: string[];
-      blocks?: Array<{ heading: string; bullets: string[] }>;
-      closing?: ReactNode[];
-    }>;
-    faq: Array<{ question: string; answer: ReactNode[] }>;
-    summary: string[];
-  }
-> = {
+type GuideBlock = {
+  heading: string;
+  paragraphs?: ReactNode[];
+  bullets?: string[];
+};
+
+type GuideSection = {
+  title: string;
+  paragraphs?: ReactNode[];
+  bullets?: string[];
+  ordered?: boolean;
+  blocks?: GuideBlock[];
+  closing?: ReactNode[];
+};
+
+type GuideFooter = {
+  heading: string;
+  lines: ReactNode[];
+};
+
+type GuideHighlight = {
+  heading: string;
+  lines: ReactNode[];
+};
+
+type GuideContent = {
+  title: string;
+  subtitle: string;
+  intro?: ReactNode[];
+  highlight: GuideHighlight;
+  sections: GuideSection[];
+  footer: GuideFooter;
+};
+
+const driveUrl =
+  "https://drive.google.com/drive/folders/1CRbEA4gRUjnmiTKNlgZZkGX4l_4QOcmv?usp=sharing";
+const moduliUrl = "https://www.siae.it/it/moduli/";
+
+const guideData: Record<"it" | "en", GuideContent> = {
   it: {
-    title: "Guida SIAE per registi e produttori",
-    subtitle: "Mod. 109 e Mod. 109 TF – Programma Musicale per opere audiovisive",
-    intro: [
-      "Questa guida e' pensata per registi e produzioni, in particolare indipendenti, per gestire in modo semplice e corretto gli adempimenti SIAE legati alle musiche di un'opera audiovisiva.",
-      "L'obiettivo e' lavorare bene, senza complicazioni inutili, tutelando tutti.",
-    ],
-    download: {
-      label: "Scarica i moduli",
-      linkLabel: "Cartella Drive con i moduli pronti all'uso",
-      url: "https://drive.google.com/drive/folders/1CRbEA4gRUjnmiTKNlgZZkGX4l_4QOcmv?usp=sharing",
+    title: "Guida SIAE. Mod. 109 e Mod. 109TF (programma musicale opere audiovisive)",
+    subtitle:
+      "Per produzioni e registi. Compilazione semplice, corretta, senza errori che bloccano o deviano i compensi.",
+    intro: [],
+    highlight: {
+      heading: "Prima regola",
+      lines: [
+        <>
+          Usa sempre l'ultima versione ufficiale dei moduli SIAE. Link:{" "}
+          <a href={moduliUrl} target="_blank" rel="noreferrer">
+            {moduliUrl}
+          </a>{" "}
+          (Deposito Opere Audiovisive: Mod. 109 e Mod. 109TF).
+        </>,
+        <>
+          Mirror Drive (opzionale, potrebbe non essere aggiornato):{" "}
+          <a href={driveUrl} target="_blank" rel="noreferrer">
+            Cartella Drive
+          </a>
+          .
+        </>,
+        "Se usi un Drive o un template salvato mesi fa, rischi di compilare campi sbagliati.",
+      ],
     },
     sections: [
       {
-        title: "1) Cos'e' il Mod. 109",
-        paragraphs: [
-          "Il Mod. 109 e' il documento con cui la produzione comunica alla SIAE:",
-        ],
+        title: "Checklist veloce (10 minuti)",
+        ordered: true,
         bullets: [
-          "Quale opera audiovisiva e' stata realizzata.",
-          "Quali musiche sono utilizzate al suo interno.",
-        ],
-        closing: [
-          "E' una procedura standard che permette la corretta gestione dei diritti d'autore.",
+          "Scegli il modulo: Mod. 109 (opera cinematografica) o Mod. 109TF (opera televisiva e/o Video On Demand).",
+          "Compila il foglio \"Dichiarazione\" con i dati certi.",
+          "Compila il foglio \"All.1 - Elenco composizioni\" con TUTTI i brani presenti nell'opera.",
+          "Controlla che le durate siano in secondi interi.",
+          "Esporta e invia via PEC in Excel oppure PDF digitale (non scansione) a MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
+          "Archivia: file inviato, ricevuta di accettazione PEC, ricevuta di consegna PEC.",
         ],
       },
       {
-        title: "2) Quale modulo usare",
-        bullets: [
-          "Mod. 109: film cinematografici, cortometraggi, documentari.",
-          "Mod. 109 TF: film TV, serie, episodi, contenuti destinati a TV o piattaforme.",
-        ],
-        closing: [
-          "Se la destinazione cambia in seguito, il deposito puo' essere aggiornato.",
-        ],
-      },
-      {
-        title: "3) Chi compila e chi fornisce i dati",
-        bullets: [
-          "La produzione o il regista produttore compila e invia il Mod. 109.",
-          "Il compositore fornisce l'elenco completo delle musiche e i relativi dati tecnici.",
-        ],
-        closing: [
-          "La responsabilita' dell'invio resta sempre della produzione.",
-        ],
-      },
-      {
-        title: "4) Come compilare il modulo (passo per passo)",
+        title: "Chi fa cosa",
         blocks: [
           {
-            heading: "A) Dichiarazione",
+            heading: "Produzione",
             bullets: [
-              "Titolo.",
-              "Tipologia (film, corto, documentario, serie, ecc.).",
-              "Durata totale.",
-              "Dati della produzione e contatti.",
-              "Regia e informazioni richieste nel modulo.",
+              "Compila e invia il modulo via PEC.",
+              "E' responsabilita' della produzione.",
             ],
           },
           {
-            heading: "B) Allegato 1 - Elenco musiche",
+            heading: "Compositore",
             bullets: [
-              "Titolo del brano.",
-              "Autore o autori.",
-              "Percentuali.",
-              "Durata effettiva in scena, in secondi.",
-              "Tipo di utilizzo (sottofondo, in scena, sigla, ecc.).",
+              "Fornisce un elenco pulito dei brani e i dati corretti (titoli, nomi, durate, editore se esiste).",
             ],
           },
-          {
-            heading: "C) Controllo finale",
-            bullets: [
-              "Titolo e durata dell'opera.",
-              "Elenco musiche completo.",
-              "Durate coerenti.",
-              "Nomi degli autori corretti.",
-            ],
-          },
-          {
-            heading: "D) Firma e invio",
-            bullets: [
-              "Il modulo va inviato dalla produzione.",
-              "Una volta compilati, i moduli vanno inviati tramite PEC a MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
-              "In formato Excel o PDF digitale (non scansione).",
-            ],
-          },
-        ],
-        closing: [
-          "Dopo l'invio, conservare il file inviato e le ricevute PEC di accettazione e consegna.",
         ],
       },
       {
-        title: "5) Se non e' ancora chiara la distribuzione",
+        title: "Quando farlo",
         paragraphs: [
-          "Nei progetti indipendenti e' normale non sapere subito:",
+          "Fallo quando montaggio e musica sono definitivi, e comunque prima della prima uscita o diffusione.",
         ],
+      },
+      {
+        title: "Come compilare \"Dichiarazione\" (solo quello che conta)",
+        paragraphs: ["Campi tipici:"],
         bullets: [
-          "Dove verra' distribuito il film.",
-          "Se passera' da festival, TV o piattaforme.",
-          "Le date di uscita.",
+          "Titolo dell'opera.",
+          "Genere.",
+          "Dati produzione e contatti.",
+          "Prima diffusione: se non disponibile, lascia vuoto o compila solo cio' che e' certo.",
+          "Responsabile della sincronizzazione: la persona che ha gestito le autorizzazioni o la parte musica lato produzione.",
+          "Compositore o editore della musica: nominativo e contatti.",
         ],
         closing: [
-          "In questi casi: compilare tutti i dati certi su opera e musiche.",
-          "Indicare i campi non noti come " +
-            "\"da definire\" (o lasciarli vuoti se il modulo lo consente).",
-          "Il deposito resta valido e puo' essere aggiornato in seguito.",
+          "Nota importante: la \"Durata musica\" non va inserita a mano. Si calcola automaticamente sommando le durate in All.1.",
+          "Nota specifica Mod. 109 (cinema): la \"Lunghezza\" del film va inserita come ore, minuti, secondi, oppure solo in secondi (numero intero).",
+        ],
+      },
+      {
+        title:
+          "Come compilare \"All.1 - Elenco composizioni\" (questa e' la parte che decide i compensi)",
+        paragraphs: ["In All.1 devi inserire, una riga per brano:"],
+        bullets: [
+          "Numero d'ordine della scena.",
+          "Titolo della composizione musicale.",
+          "Compositore (scrivi i nomi come risultano nel deposito SIAE dell'opera).",
+          "Editore (se esiste, altrimenti lascia vuoto).",
+          "Durata in secondi (solo numeri interi, esempio 120).",
+        ],
+        blocks: [
+          {
+            heading: "Esempio conversione durata",
+            bullets: ["2:00 = 120", "0:35 = 35", "3:12 = 192"],
+          },
+          {
+            heading: "Esempio riga All.1",
+            bullets: [
+              'Scena 12 | "Braga Theme" | Pietro Montanti | (vuoto) | 34',
+            ],
+          },
+        ],
+      },
+      {
+        title: "Regole anti errore",
+        bullets: [
+          'Non scrivere "2:00". Scrivi "120".',
+          'Non scrivere "da definire" in campi numerici. Lascia vuoto.',
+          "Non cambiare i nomi dei fogli. Non rompere le formule.",
+          'Se usi brani preesistenti, inserisci titolo e autore reali, non "track 3".',
+        ],
+      },
+      {
+        title: "Errori che ti fanno perdere soldi",
+        ordered: true,
+        bullets: [
+          "Titoli in All.1 diversi dai titoli depositati in SIAE.",
+          "Brani non depositati (original score) oppure depositati con quote sbagliate.",
+          "Durate non in secondi, o con testo invece di numeri.",
+          "Mancano brani presenti nel film, quindi non risultano dichiarati.",
+          "Invio non via PEC o invio di scansione (file \"immagine\").",
+          "Produzione non conserva le ricevute PEC, poi non prova l'invio.",
+        ],
+      },
+      {
+        title: "Massimizzare i compensi (senza fantasia)",
+        ordered: true,
+        bullets: [
+          "Deposita le opere musicali in SIAE con titoli coerenti al cue list e quote corrette (percentuali nei depositi).",
+          "Verifica nel Repertorio SIAE che titolo, autori, editore siano corretti prima dell'invio del Mod. 109.",
+          "Bonus: esistono richieste SIAE di \"maggiorazione\" e \"provvidenze\" per musiche da film. Non e' automatico ne' garantito, ma se hai i requisiti e' una leva concreta.",
+        ],
+        blocks: [
+          {
+            heading: "Link moduli (nei moduli SIAE)",
+            paragraphs: [
+              <>
+                Moduli SIAE (Deposito Opere Audiovisive):{" "}
+                <a href={moduliUrl} target="_blank" rel="noreferrer">
+                  Moduli SIAE
+                </a>
+                .
+              </>,
+            ],
+            bullets: [
+              "Domanda di attribuzione della maggiorazione per opere musicali composte per film, telefilm e opere drammatiche.",
+              "Domanda di attribuzione delle provvidenze per opere musicali inserite nelle colonne sonore di film di produzione o coproduzione italiana.",
+              "Domanda di attribuzione delle provvidenze per l'identita' culturale italiana.",
+            ],
+          },
         ],
       },
     ],
-    faq: [
-      {
-        question: "Devo compilare tutti i campi del Mod. 109?",
-        answer: [
-          "No.",
-          "E' necessario compilare correttamente i campi essenziali: dati dell'opera, dati della produzione ed elenco musiche.",
-          "Gli altri possono essere \"da definire\".",
-        ],
-      },
-      {
-        question: "Se non sappiamo ancora dove andra' distribuito il film, e' un problema?",
-        answer: [
-          "No.",
-          "Il Mod. 109 e' valido anche se la distribuzione non e' ancora definita.",
-          "Potra' essere aggiornata in seguito.",
-        ],
-      },
-      {
-        question: "Chi deve inviare il Mod. 109 alla SIAE?",
-        answer: [
-          "La produzione o il regista produttore.",
-          "Il compositore non invia il modulo.",
-        ],
-      },
-      {
-        question: "Il compositore puo' compilarlo al posto nostro?",
-        answer: [
-          "Il compositore puo' preparare l'elenco delle musiche, ma la compilazione finale e l'invio restano a carico della produzione.",
-        ],
-      },
-      {
-        question: "Se ci accorgiamo di un errore dopo l'invio?",
-        answer: [
-          "Nessun problema.",
-          "Il modulo puo' essere corretto e reinviato.",
-        ],
-      },
-      {
-        question: "Cosa succede se la distribuzione cambia?",
-        answer: [
-          "E' normale.",
-          "Si aggiorna o si reinvia il Mod. 109 con le nuove informazioni.",
-        ],
-      },
-      {
-        question: "In che formato va inviato il modulo?",
-        answer: [
-          "In formato Excel o PDF digitale, non scansionato, tramite PEC.",
-        ],
-      },
-      {
-        question: "Dobbiamo comunicare qualcosa anche al compositore?",
-        answer: [
-          "Si'. E' buona prassi condividere:",
-          "Una copia del Mod. 109 inviato.",
-          "Le ricevute PEC di accettazione e consegna.",
-        ],
-      },
-      {
-        question: "Quando e' il momento giusto per compilarlo?",
-        answer: [
-          "Quando il montaggio e' stabile e le musiche sono definite, e comunque prima di qualunque distribuzione o pubblicazione.",
-        ],
-      },
-    ],
-    summary: [
-      "Non serve avere tutto chiaro sul futuro del progetto.",
-      "E' sufficiente dichiarare correttamente che opera e' e quali musiche contiene.",
-      "Per qualsiasi dubbio operativo, il dialogo tra produzione e compositore rende il processo semplice, fluido e senza complicazioni.",
-    ],
+    footer: {
+      heading: "Footer breve",
+      lines: [
+        "Se vuoi, posso fornire alla produzione un file All.1 gia' pronto con titoli e durate in secondi, cosi' devono solo copiare e inviare via PEC.",
+        <>
+          Contatto:{" "}
+          <a href="mailto:pietromontanticomposer@gmail.com">
+            pietromontanticomposer@gmail.com
+          </a>
+        </>,
+      ],
+    },
   },
   en: {
-    title: "SIAE Guide for Directors and Producers",
-    subtitle: "Mod. 109 and Mod. 109 TF – Music Program for audiovisual works",
-    intro: [
-      "This guide is meant for directors and productions, especially independent ones, to handle SIAE obligations related to music in an audiovisual work in a simple and correct way.",
-      "The goal is to work well, without unnecessary complications, protecting everyone.",
-    ],
-    download: {
-      label: "Download the forms",
-      linkLabel: "Drive folder with ready-to-use forms",
-      url: "https://drive.google.com/drive/folders/1CRbEA4gRUjnmiTKNlgZZkGX4l_4QOcmv?usp=sharing",
+    title: "SIAE Guide. Mod. 109 and Mod. 109TF (music program for audiovisual works)",
+    subtitle:
+      "For productions and directors. Simple, correct completion, without errors that block or divert royalties.",
+    intro: [],
+    highlight: {
+      heading: "First rule",
+      lines: [
+        <>
+          Always use the latest official SIAE forms. Link:{" "}
+          <a href={moduliUrl} target="_blank" rel="noreferrer">
+            SIAE forms (Deposito Opere Audiovisive: Mod. 109 and Mod. 109TF)
+          </a>
+          .
+        </>,
+        <>
+          Drive mirror (optional, may be out of date):{" "}
+          <a href={driveUrl} target="_blank" rel="noreferrer">
+            Drive folder
+          </a>
+          .
+        </>,
+        "If you use an old Drive or a template saved months ago, you risk filling the wrong fields.",
+      ],
     },
     sections: [
       {
-        title: "1) What Mod. 109 is",
-        paragraphs: [
-          "Mod. 109 is the document through which the production communicates to SIAE:",
-        ],
+        title: "Quick checklist (10 minutes)",
+        ordered: true,
         bullets: [
-          "Which audiovisual work has been made.",
-          "Which music is used inside it.",
-        ],
-        closing: [
-          "It is a standard procedure that enables proper copyright management.",
+          "Choose the form: Mod. 109 (cinema) or Mod. 109TF (TV and/or Video On Demand).",
+          "Fill in the \"Declaration\" sheet with confirmed data.",
+          "Fill in the \"Annex 1 - List of compositions\" sheet with ALL the tracks used in the work.",
+          "Make sure durations are whole seconds.",
+          "Export and send via PEC in Excel or digital PDF (not scanned) to MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
+          "Archive: sent file, PEC acceptance receipt, PEC delivery receipt.",
         ],
       },
       {
-        title: "2) Which form to use",
-        bullets: [
-          "Mod. 109: feature films, shorts, documentaries.",
-          "Mod. 109 TF: TV films, series, episodes, content for TV or platforms.",
-        ],
-        closing: [
-          "If the destination changes later, the filing can be updated.",
-        ],
-      },
-      {
-        title: "3) Who completes it and who provides the data",
-        bullets: [
-          "The production or director-producer completes and submits Mod. 109.",
-          "The composer provides the full list of music and the related technical data.",
-        ],
-        closing: [
-          "Responsibility for submission always stays with the production.",
-        ],
-      },
-      {
-        title: "4) How to fill the form (step by step)",
+        title: "Who does what",
         blocks: [
           {
-            heading: "A) Declaration",
+            heading: "Production",
             bullets: [
-              "Title.",
-              "Type (film, short, documentary, series, etc.).",
-              "Total duration.",
-              "Production details and contacts.",
-              "Direction and information required in the form.",
+              "Completes and submits the form via PEC.",
+              "Responsibility stays with the production.",
             ],
           },
           {
-            heading: "B) Annex 1 - Music list",
+            heading: "Composer",
             bullets: [
-              "Track title.",
-              "Author or authors.",
-              "Percentages.",
-              "Actual on-screen duration, in seconds.",
-              "Type of use (background, on-screen, main title, etc.).",
+              "Provides a clean list of tracks and correct data (titles, names, durations, publisher if any).",
             ],
           },
-          {
-            heading: "C) Final check",
-            bullets: [
-              "Title and duration of the work.",
-              "Complete music list.",
-              "Consistent durations.",
-              "Correct author names.",
-            ],
-          },
-          {
-            heading: "D) Signature and submission",
-            bullets: [
-              "The form must be sent by the production.",
-              "Once completed, the forms must be sent via PEC to MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
-              "In Excel or digital PDF format (not scanned).",
-            ],
-          },
-        ],
-        closing: [
-          "After sending, keep the file sent and the PEC acceptance and delivery receipts.",
         ],
       },
       {
-        title: "5) If distribution is not yet clear",
+        title: "When to do it",
         paragraphs: [
-          "In independent projects it is normal not to know right away:",
+          "Do it when the edit and the music are final, and in any case before the first release or broadcast.",
         ],
+      },
+      {
+        title: "How to fill \"Declaration\" (only what matters)",
+        paragraphs: ["Typical fields:"],
         bullets: [
-          "Where the film will be distributed.",
-          "Whether it will go through festivals, TV, or platforms.",
-          "Release dates.",
+          "Title of the work.",
+          "Genre.",
+          "Production details and contacts.",
+          "First release: if not available, leave blank or fill only what is certain.",
+          "Synchronization manager: the person who handled clearances or the music on the production side.",
+          "Composer or publisher of the music: name and contacts.",
         ],
         closing: [
-          "In these cases: fill in all the certain data about the work and the music.",
-          "Mark unknown fields as \"to be defined\" (or leave them blank if the form allows).",
-          "The filing remains valid and can be updated later.",
+          "Important note: the \"Music duration\" must not be typed manually. It is calculated automatically by summing the durations in Annex 1.",
+          "Mod. 109 (cinema) note: the film \"Length\" should be entered as hours, minutes, seconds, or only seconds (whole number).",
+        ],
+      },
+      {
+        title:
+          "How to fill \"Annex 1 - List of compositions\" (this is what decides royalties)",
+        paragraphs: ["In Annex 1 you must enter one row per track:"],
+        bullets: [
+          "Scene order number.",
+          "Title of the musical composition.",
+          "Composer (use the names as filed in the SIAE deposit for the work).",
+          "Publisher (if any, otherwise leave blank).",
+          "Duration in seconds (whole numbers only, example: 120).",
+        ],
+        blocks: [
+          {
+            heading: "Example duration conversion",
+            bullets: ["2:00 = 120", "0:35 = 35", "3:12 = 192"],
+          },
+          {
+            heading: "Example Annex 1 row",
+            bullets: [
+              'Scene 12 | "Braga Theme" | Pietro Montanti | (blank) | 34',
+            ],
+          },
+        ],
+      },
+      {
+        title: "Anti-error rules",
+        bullets: [
+          'Do not write "2:00". Write "120".',
+          'Do not write "to be defined" in numeric fields. Leave blank.',
+          "Do not rename the sheets. Do not break the formulas.",
+          'If you use pre-existing tracks, enter the real title and author, not "track 3".',
+        ],
+      },
+      {
+        title: "Errors that make you lose money",
+        ordered: true,
+        bullets: [
+          "Titles in Annex 1 differ from titles filed with SIAE.",
+          "Tracks not deposited (original score) or deposited with wrong splits.",
+          "Durations not in seconds, or text instead of numbers.",
+          "Missing tracks used in the film, so they are not declared.",
+          "Submission not via PEC or a scanned submission (image file).",
+          "Production does not keep PEC receipts and cannot prove submission.",
+        ],
+      },
+      {
+        title: "Maximize royalties (no hype)",
+        ordered: true,
+        bullets: [
+          "Deposit the musical works with SIAE using titles consistent with the cue list and correct splits (percentages in deposits).",
+          "Check in the SIAE Repertoire that title, authors, publisher are correct before sending Mod. 109.",
+          "Bonus: there are SIAE requests for \"maggiorazione\" and \"provvidenze\" for film music. It is not automatic or guaranteed, but if you meet the requirements it is a real lever.",
+        ],
+        blocks: [
+          {
+            heading: "Forms link (within SIAE forms)",
+            paragraphs: [
+              <>
+                SIAE forms (Deposito Opere Audiovisive):{" "}
+                <a href={moduliUrl} target="_blank" rel="noreferrer">
+                  SIAE forms
+                </a>
+                .
+              </>,
+            ],
+            bullets: [
+              "Domanda di attribuzione della maggiorazione per opere musicali composte per film, telefilm e opere drammatiche.",
+              "Domanda di attribuzione delle provvidenze per opere musicali inserite nelle colonne sonore di film di produzione o coproduzione italiana.",
+              "Domanda di attribuzione delle provvidenze per l'identita' culturale italiana.",
+            ],
+          },
         ],
       },
     ],
-    faq: [
-      {
-        question: "Do I have to fill in every field in Mod. 109?",
-        answer: [
-          "No.",
-          "You must correctly fill the essential fields: work details, production details, and music list.",
-          "The others can be marked as \"to be defined\".",
-        ],
-      },
-      {
-        question: "If we do not yet know where the film will be distributed, is it a problem?",
-        answer: [
-          "No.",
-          "Mod. 109 is valid even if distribution is not yet defined.",
-          "It can be updated later.",
-        ],
-      },
-      {
-        question: "Who must submit Mod. 109 to SIAE?",
-        answer: [
-          "The production or director-producer.",
-          "The composer does not submit the form.",
-        ],
-      },
-      {
-        question: "Can the composer fill it in for us?",
-        answer: [
-          "The composer can prepare the music list, but the final completion and submission remain the production's responsibility.",
-        ],
-      },
-      {
-        question: "What if we notice a mistake after submission?",
-        answer: [
-          "No problem.",
-          "The form can be corrected and resubmitted.",
-        ],
-      },
-      {
-        question: "What happens if distribution changes?",
-        answer: [
-          "That is normal.",
-          "You update or resend Mod. 109 with the new information.",
-        ],
-      },
-      {
-        question: "In what format should the form be sent?",
-        answer: [
-          "In Excel or digital PDF format, not scanned, via PEC.",
-        ],
-      },
-      {
-        question: "Should we communicate anything to the composer?",
-        answer: [
-          "Yes. It is good practice to share:",
-          "A copy of the submitted Mod. 109.",
-          "The PEC acceptance and delivery receipts.",
-        ],
-      },
-      {
-        question: "When is the right time to complete it?",
-        answer: [
-          "When the edit is stable and the music is defined, and in any case before any distribution or publication.",
-        ],
-      },
-    ],
-    summary: [
-      "You do not need to have everything clear about the project's future.",
-      "It is enough to declare correctly what the work is and which music it contains.",
-      "For any operational question, dialogue between production and composer keeps the process simple, smooth, and complication-free.",
-    ],
+    footer: {
+      heading: "Footer",
+      lines: [
+        "If you want, I can provide the production with an All.1 file already filled with titles and durations in seconds, so they only need to copy and send via PEC.",
+        <>
+          Contact:{" "}
+          <a href="mailto:pietromontanticomposer@gmail.com">
+            pietromontanticomposer@gmail.com
+          </a>
+        </>,
+      ],
+    },
   },
 };
 
 export default function Mod109SiaePage() {
-  const { language, t } = useLanguage();
+  const { language } = useLanguage();
   const guide = guideData[language];
 
   return (
@@ -395,26 +387,27 @@ export default function Mod109SiaePage() {
         <p className="mt-2 text-sm text-[color:var(--muted)]">
           {guide.subtitle}
         </p>
-        <div className="mt-5 space-y-3 text-sm text-[color:var(--muted)] leading-relaxed">
-          {guide.intro.map((line) => (
-            <p key={line}>{line}</p>
-          ))}
+        {guide.intro && guide.intro.length > 0 && (
+          <div className="mt-5 space-y-3 text-sm text-[color:var(--muted)] leading-relaxed">
+            {guide.intro.map((line, index) => (
+              <p key={`intro-${index}`}>{line}</p>
+            ))}
+          </div>
+        )}
+        <div className="mt-6 card-inset rounded-2xl p-4">
+          <div className="text-sm font-semibold text-[color:var(--foreground)]">
+            {guide.highlight.heading}
+          </div>
+          <div className="mt-2 space-y-2 text-sm text-[color:var(--muted)] leading-relaxed">
+            {guide.highlight.lines.map((line, index) => (
+              <p key={`highlight-${index}`}>{line}</p>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="card-shell p-8">
-        <h2 className="section-title text-2xl text-[color:var(--foreground)]">
-          {guide.download.label}
-        </h2>
-        <p className="mt-4 text-sm text-[color:var(--muted)]">
-          <a href={guide.download.url} target="_blank" rel="noreferrer">
-            {guide.download.linkLabel}
-          </a>
-        </p>
-      </section>
-
-      {guide.sections.map((section) => (
-        <section key={section.title} className="card-shell p-8">
+      {guide.sections.map((section, sectionIndex) => (
+        <section key={`${section.title}-${sectionIndex}`} className="card-shell p-8">
           <h2 className="section-title text-2xl text-[color:var(--foreground)]">
             {section.title}
           </h2>
@@ -425,25 +418,41 @@ export default function Mod109SiaePage() {
               ))}
             </div>
           )}
-          {section.bullets && (
-            <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-[color:var(--muted)]">
-              {section.bullets.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          )}
+          {section.bullets &&
+            (section.ordered ? (
+              <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-[color:var(--muted)]">
+                {section.bullets.map((item, index) => (
+                  <li key={`${section.title}-o-${index}`}>{item}</li>
+                ))}
+              </ol>
+            ) : (
+              <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-[color:var(--muted)]">
+                {section.bullets.map((item, index) => (
+                  <li key={`${section.title}-b-${index}`}>{item}</li>
+                ))}
+              </ul>
+            ))}
           {section.blocks && (
             <div className="mt-4 space-y-4">
-              {section.blocks.map((block) => (
-                <div key={block.heading}>
+              {section.blocks.map((block, blockIndex) => (
+                <div key={`${block.heading}-${blockIndex}`}>
                   <div className="text-sm font-semibold text-[color:var(--foreground)]">
                     {block.heading}
                   </div>
-                  <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-[color:var(--muted)]">
-                    {block.bullets.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
+                  {block.paragraphs && (
+                    <div className="mt-2 space-y-2 text-sm text-[color:var(--muted)] leading-relaxed">
+                      {block.paragraphs.map((line, lineIndex) => (
+                        <p key={`${block.heading}-p-${lineIndex}`}>{line}</p>
+                      ))}
+                    </div>
+                  )}
+                  {block.bullets && (
+                    <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-[color:var(--muted)]">
+                      {block.bullets.map((item, itemIndex) => (
+                        <li key={`${block.heading}-b-${itemIndex}`}>{item}</li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               ))}
             </div>
@@ -460,31 +469,11 @@ export default function Mod109SiaePage() {
 
       <section className="card-shell p-8">
         <h2 className="section-title text-2xl text-[color:var(--foreground)]">
-          FAQ - {t("Domande frequenti", "Frequently asked questions")}
-        </h2>
-        <div className="mt-4 space-y-6">
-          {guide.faq.map((item) => (
-            <div key={item.question} className="space-y-2">
-              <h3 className="text-sm font-semibold text-[color:var(--foreground)]">
-                {item.question}
-              </h3>
-              <div className="space-y-2 text-sm text-[color:var(--muted)] leading-relaxed">
-                {item.answer.map((line, index) => (
-                  <p key={`${item.question}-a-${index}`}>{line}</p>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="card-shell p-8">
-        <h2 className="section-title text-2xl text-[color:var(--foreground)]">
-          {t("In sintesi", "In summary")}
+          {guide.footer.heading}
         </h2>
         <div className="mt-4 space-y-3 text-sm text-[color:var(--muted)] leading-relaxed">
-          {guide.summary.map((line) => (
-            <p key={line}>{line}</p>
+          {guide.footer.lines.map((line, index) => (
+            <p key={`footer-${index}`}>{line}</p>
           ))}
         </div>
       </section>
