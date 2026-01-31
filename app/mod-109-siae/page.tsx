@@ -69,7 +69,7 @@ const guideData: Record<"it" | "en", GuideContent> = {
           .
         </>,
         <>
-          Mirror Drive (opzionale, potrebbe non essere aggiornato):{" "}
+          Copia di comodo (opzionale, potrebbe non essere aggiornato):{" "}
           <a href={driveUrl} target="_blank" rel="noreferrer">
             Cartella Drive
           </a>
@@ -260,7 +260,7 @@ const guideData: Record<"it" | "en", GuideContent> = {
           .
         </>,
         <>
-          Drive mirror (optional, may be out of date):{" "}
+          Convenience copy (optional, may be out of date):{" "}
           <a href={driveUrl} target="_blank" rel="noreferrer">
             Drive folder
           </a>
