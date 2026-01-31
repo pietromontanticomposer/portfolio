@@ -2,9 +2,7 @@
 
 import Link from "next/link";
 import ContactPopover from "../../components/ContactPopover";
-import { projects } from "../../data/projects";
 import { useLanguage } from "../../lib/LanguageContext";
-import { getText, getTagTranslation } from "../../lib/translations";
 
 const stepsData = {
   it: [
@@ -77,44 +75,11 @@ const mod109CtaData = {
   },
 };
 
-const activeProjects = projects.filter((project) => !project.isDraft);
-const caseStudyProjects = activeProjects.filter((project) => project.description).slice(2, 4);
-const fallbackCaseStudies = activeProjects.slice(0, 2);
-const producerCaseStudies =
-  caseStudyProjects.length > 0 ? caseStudyProjects : fallbackCaseStudies;
-
 export default function ForProducersPage() {
   const { t, language } = useLanguage();
   const steps = language === "it" ? stepsData.it : stepsData.en;
   const deliveryChecklist = language === "it" ? deliveryChecklistData.it : deliveryChecklistData.en;
   const mod109Cta = mod109CtaData[language];
-  const caseStudies = producerCaseStudies.map((project) => {
-    const description = getText(project.description, language);
-    const lines = description
-      .split("\n")
-      .map((line) => line.trim())
-      .filter(Boolean);
-    const tagLabel = project.tag ? getTagTranslation(project.tag, language) : t("Progetto", "Project");
-    const briefFallback = t(
-      `${project.title} (${tagLabel}) con perimetro di consegna chiaro.`,
-      `${project.title} (${tagLabel}) with clear delivery scope.`
-    );
-    const musicalChoiceFallback = t(
-      "Focus su timing stabile e dinamiche pulite per workflow di post prevedibili.",
-      "Focused on stable timing and clean dynamics for predictable post workflows."
-    );
-    const deliverablesFallback = t(
-      "Export versionati, naming, stem su richiesta, cue sheet.",
-      "Versioned exports, naming, stems on request, cue sheet."
-    );
-
-    return {
-      title: project.title,
-      brief: lines[0] || briefFallback,
-      musicalChoice: lines[1] || musicalChoiceFallback,
-      deliverables: deliverablesFallback,
-    };
-  });
 
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-16 lg:px-20">
@@ -164,41 +129,6 @@ export default function ForProducersPage() {
             <li key={item}>{item}</li>
           ))}
         </ul>
-      </section>
-
-      <section className="card-shell p-8">
-        <h2 className="section-title text-2xl text-[color:var(--foreground)]">
-          {t("Case study delivery", "Delivery case studies")}
-        </h2>
-        <div className="mt-6 grid gap-8 md:grid-cols-2">
-          {caseStudies.map((study) => (
-            <div key={study.title}>
-              <h3 className="text-lg font-semibold text-[color:var(--foreground)]">
-                {study.title}
-              </h3>
-              <div className="mt-4 space-y-3 text-sm text-[color:var(--muted)]">
-                <div>
-                  <span className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
-                    Brief
-                  </span>
-                  <p className="mt-1">{study.brief}</p>
-                </div>
-                <div>
-                  <span className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
-                    {t("Scelta musicale", "Musical choice")}
-                  </span>
-                  <p className="mt-1">{study.musicalChoice}</p>
-                </div>
-                <div>
-                  <span className="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)]">
-                    Deliverables
-                  </span>
-                  <p className="mt-1">{study.deliverables}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
       </section>
 
       <section className="card-shell p-8">
