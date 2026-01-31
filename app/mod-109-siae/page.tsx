@@ -40,6 +40,8 @@ type GuideContent = {
 const driveUrl =
   "https://drive.google.com/drive/folders/1CRbEA4gRUjnmiTKNlgZZkGX4l_4QOcmv?usp=sharing";
 const moduliUrl = "https://www.siae.it/it/moduli/";
+const videoCinemaTvUrl =
+  "https://www.siae.it/it/utilizzatori/chiedere-licenza/servizi/cd-dvd/video-cinema-tv";
 
 const guideData: Record<"it" | "en", GuideContent> = {
   it: {
@@ -51,11 +53,20 @@ const guideData: Record<"it" | "en", GuideContent> = {
       heading: "Prima regola",
       lines: [
         <>
-          Usa sempre l'ultima versione ufficiale dei moduli SIAE. Link:{" "}
+          Usa sempre l'ultima versione ufficiale dei moduli SIAE. Pagina Moduli
+          SIAE (Deposito Opere Audiovisive: Mod. 109 e Mod. 109TF):{" "}
           <a href={moduliUrl} target="_blank" rel="noreferrer">
             {moduliUrl}
-          </a>{" "}
-          (Deposito Opere Audiovisive: Mod. 109 e Mod. 109TF).
+          </a>
+          .
+        </>,
+        <>
+          Pagina Video cinema-tv SIAE (stessi modelli linkati nel contesto
+          video):{" "}
+          <a href={videoCinemaTvUrl} target="_blank" rel="noreferrer">
+            {videoCinemaTvUrl}
+          </a>
+          .
         </>,
         <>
           Mirror Drive (opzionale, potrebbe non essere aggiornato):{" "}
@@ -77,7 +88,7 @@ const guideData: Record<"it" | "en", GuideContent> = {
           "Compila il foglio \"All.1 - Elenco composizioni\" con TUTTI i brani presenti nell'opera.",
           "Controlla che le durate siano in secondi interi.",
           "Esporta e invia via PEC in Excel oppure PDF digitale (non scansione) a MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
-          "Archivia: file inviato, ricevuta di accettazione PEC, ricevuta di consegna PEC.",
+          "Archivia: File finale inviato. Ricevuta accettazione PEC. Ricevuta consegna PEC.",
         ],
       },
       {
@@ -125,11 +136,11 @@ const guideData: Record<"it" | "en", GuideContent> = {
           "Come compilare \"All.1 - Elenco composizioni\" (questa e' la parte che decide i compensi)",
         paragraphs: ["In All.1 devi inserire, una riga per brano:"],
         bullets: [
-          "Numero d'ordine della scena.",
-          "Titolo della composizione musicale.",
-          "Compositore (scrivi i nomi come risultano nel deposito SIAE dell'opera).",
+          "N° d'ordine delle scene (un numero progressivo).",
+          "Titolo della composizione (come risulta dal deposito, se gia' depositata).",
+          "Compositore (ed eventuale elaboratore solo per pubblico dominio).",
           "Editore (se esiste, altrimenti lascia vuoto).",
-          "Durata in secondi (solo numeri interi, esempio 120).",
+          "Durata in secondi (solo numero intero, niente testo).",
         ],
         blocks: [
           {
@@ -148,9 +159,27 @@ const guideData: Record<"it" | "en", GuideContent> = {
         title: "Regole anti errore",
         bullets: [
           'Non scrivere "2:00". Scrivi "120".',
-          'Non scrivere "da definire" in campi numerici. Lascia vuoto.',
+          "TBD va bene solo nei campi testuali dove ha senso.",
+          "Mai nella durata: deve essere un numero intero in secondi.",
           "Non cambiare i nomi dei fogli. Non rompere le formule.",
           'Se usi brani preesistenti, inserisci titolo e autore reali, non "track 3".',
+        ],
+      },
+      {
+        title: "Cosa determina che la musica venga pagata",
+        bullets: [
+          "Ogni brano originale deve essere depositato correttamente a SIAE (titolo, autori, eventuale editore, quote).",
+          "Prima di compilare l'Allegato 1, verifica i dati nel Repertorio (titolo, autori, editore, codici).",
+          "Il cue list deve usare gli stessi nomi del deposito, non varianti creative.",
+        ],
+      },
+      {
+        title: "Invio (blindato)",
+        paragraphs: ["Il modello va trasmesso dal produttore esclusivamente via PEC."],
+        bullets: [
+          "File finale inviato.",
+          "Ricevuta accettazione PEC.",
+          "Ricevuta consegna PEC.",
         ],
       },
       {
@@ -216,9 +245,17 @@ const guideData: Record<"it" | "en", GuideContent> = {
       heading: "First rule",
       lines: [
         <>
-          Always use the latest official SIAE forms. Link:{" "}
+          Always use the latest official SIAE forms. Moduli SIAE page (Deposito
+          Opere Audiovisive: Mod. 109 and Mod. 109TF):{" "}
           <a href={moduliUrl} target="_blank" rel="noreferrer">
-            SIAE forms (Deposito Opere Audiovisive: Mod. 109 and Mod. 109TF)
+            {moduliUrl}
+          </a>
+          .
+        </>,
+        <>
+          Video cinema-tv SIAE page (same forms linked in the video context):{" "}
+          <a href={videoCinemaTvUrl} target="_blank" rel="noreferrer">
+            {videoCinemaTvUrl}
           </a>
           .
         </>,
@@ -242,7 +279,7 @@ const guideData: Record<"it" | "en", GuideContent> = {
           "Fill in the \"Annex 1 - List of compositions\" sheet with ALL the tracks used in the work.",
           "Make sure durations are whole seconds.",
           "Export and send via PEC in Excel or digital PDF (not scanned) to MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
-          "Archive: sent file, PEC acceptance receipt, PEC delivery receipt.",
+          "Archive: Final file sent. PEC acceptance receipt. PEC delivery receipt.",
         ],
       },
       {
@@ -290,11 +327,11 @@ const guideData: Record<"it" | "en", GuideContent> = {
           "How to fill \"Annex 1 - List of compositions\" (this is what decides royalties)",
         paragraphs: ["In Annex 1 you must enter one row per track:"],
         bullets: [
-          "Scene order number.",
-          "Title of the musical composition.",
-          "Composer (use the names as filed in the SIAE deposit for the work).",
+          "Scene order number (progressive number).",
+          "Title of the composition (as filed in the deposit, if already deposited).",
+          "Composer (and arranger only for public domain works).",
           "Publisher (if any, otherwise leave blank).",
-          "Duration in seconds (whole numbers only, example: 120).",
+          "Duration in seconds (whole number only, no text).",
         ],
         blocks: [
           {
@@ -313,9 +350,27 @@ const guideData: Record<"it" | "en", GuideContent> = {
         title: "Anti-error rules",
         bullets: [
           'Do not write "2:00". Write "120".',
-          'Do not write "to be defined" in numeric fields. Leave blank.',
+          "TBD is only for text fields where it makes sense.",
+          "Never in duration: it must be a whole number in seconds.",
           "Do not rename the sheets. Do not break the formulas.",
           'If you use pre-existing tracks, enter the real title and author, not "track 3".',
+        ],
+      },
+      {
+        title: "What determines whether music gets paid",
+        bullets: [
+          "Every original track must be correctly deposited with SIAE (title, authors, publisher if any, splits).",
+          "Before filling Annex 1, verify the data in the Repertoire (title, authors, publisher, codes).",
+          "The cue list must use the same names as the deposit, not creative variants.",
+        ],
+      },
+      {
+        title: "Submission (locked down)",
+        paragraphs: ["The form must be submitted by the producer exclusively via PEC."],
+        bullets: [
+          "Final file sent.",
+          "PEC acceptance receipt.",
+          "PEC delivery receipt.",
         ],
       },
       {
