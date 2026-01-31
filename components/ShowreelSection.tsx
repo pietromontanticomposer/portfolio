@@ -15,7 +15,8 @@ type ShowreelSectionProps = {
 export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
   const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
-  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
+  const portalTarget =
+    typeof document === "undefined" ? null : document.body;
   const showreelLabel = t("Showreel", "Showreel");
   const { isHls, isMp4, src, mp4Fallback } = getMediaSources(embedUrl ?? undefined);
   const hasEmbed = !!src;
@@ -66,10 +67,6 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
       document.body.classList.remove("showreel-open");
     };
   }, [isOpen]);
-
-  useEffect(() => {
-    setPortalTarget(document.body);
-  }, []);
 
   const autoplayEmbedUrl = useMemo(() => {
     if (!src || isHls || isMp4) return src;

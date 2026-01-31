@@ -54,7 +54,7 @@ const guideData: Record<"it" | "en", GuideContent> = {
       heading: "Prima regola",
       lines: [
         <>
-          Usa sempre l'ultima versione ufficiale dei moduli SIAE. Pagina Moduli
+          Usa sempre l&apos;ultima versione ufficiale dei moduli SIAE. Pagina Moduli
           SIAE (Deposito Opere Audiovisive: Mod. 109 e Mod. 109TF):{" "}
           <a href={moduliUrl} target="_blank" rel="noreferrer">
             {moduliUrl}
@@ -160,34 +160,20 @@ const guideData: Record<"it" | "en", GuideContent> = {
         ],
       },
       {
-        title:
-          "Come compilare \"All.1 - Elenco composizioni\" (questa e' la parte che decide i compensi)",
-        paragraphs: ["In All.1 devi inserire, una riga per brano:"],
-        bullets: [
-          "N° d'ordine delle scene (un numero progressivo).",
-          "Titolo della composizione (come risulta dal deposito, se gia' depositata).",
-          "Compositore (ed eventuale elaboratore solo per pubblico dominio).",
-          "Editore (se esiste, altrimenti lascia vuoto).",
-          "Durata in secondi (solo numero intero, niente testo).",
-          "Genere di utilizzazione della musica (di fondo, vocale, strumentale, visibile sullo schermo).",
+        title: "B) Allegato 1, elenco musiche",
+        paragraphs: [
+          "Compila solo le colonne presenti nel file ufficiale SIAE (Mod. 109 o Mod. 109TF). Non si aggiungono campi.",
+          "Per ogni musica inserisci una riga. La durata va inserita in secondi come numero.",
         ],
         blocks: [
           {
             heading: "Esempio conversione durata",
-            bullets: ["2:00 = 120", "0:35 = 35", "3:12 = 192"],
+            bullets: ["2:00 = 120", "0:35 = 35"],
           },
           {
-            heading: "Esempio riga All.1",
+            heading: "Esempio riga Allegato 1",
             bullets: [
-              'Scena 12 | "Braga Theme" | Pietro Montanti | (vuoto) | 34 | di fondo',
-            ],
-          },
-          {
-            heading: "Non fare mai",
-            variant: "warning",
-            bullets: [
-              "Non inserire percentuali in Allegato 1.",
-              "Non usare categorie tipo background o main title: usa solo \"di fondo, vocale, strumentale, visibile sullo schermo\".",
+              'Scena 12 | "Braga Theme" | Pietro Montanti | (vuoto) | 34',
             ],
           },
         ],
@@ -196,8 +182,8 @@ const guideData: Record<"it" | "en", GuideContent> = {
         title: "Regole anti errore",
         bullets: [
           'Non scrivere "2:00". Scrivi "120".',
-          "Se un campo e' ignoto, lascia vuoto.",
-          "Non scrivere mai \"to be defined\" nei campi numerici, soprattutto nelle durate.",
+          "Se un dato non e' noto, lascia vuoto.",
+          "\"To be defined\" solo nei campi testuali. Mai nelle durate, perche' devono essere numeri.",
           "Non cambiare i nomi dei fogli. Non rompere le formule.",
           'Se usi brani preesistenti, inserisci titolo e autore reali, non "track 3".',
         ],
@@ -403,33 +389,20 @@ const guideData: Record<"it" | "en", GuideContent> = {
       },
       {
         title:
-          "How to fill \"Annex 1 - List of compositions\" (this is what decides royalties)",
-        paragraphs: ["In Annex 1 you must enter one row per track:"],
-        bullets: [
-          "Scene order number (progressive number).",
-          "Title of the composition (as filed in the deposit, if already deposited).",
-          "Composer (and arranger only for public domain works).",
-          "Publisher (if any, otherwise leave blank).",
-          "Duration in seconds (whole number only, no text).",
-          "Genere di utilizzazione della musica (di fondo, vocale, strumentale, visibile sullo schermo).",
+          "B) Annex 1, music list",
+        paragraphs: [
+          "Fill only the columns present in the official SIAE file (Mod. 109 or Mod. 109TF). Do not add fields.",
+          "One row per music cue. Duration must be seconds, number only.",
         ],
         blocks: [
           {
             heading: "Example duration conversion",
-            bullets: ["2:00 = 120", "0:35 = 35", "3:12 = 192"],
+            bullets: ["2:00 = 120", "0:35 = 35"],
           },
           {
             heading: "Example Annex 1 row",
             bullets: [
-              'Scene 12 | "Braga Theme" | Pietro Montanti | (blank) | 34 | di fondo',
-            ],
-          },
-          {
-            heading: "Never do this",
-            variant: "warning",
-            bullets: [
-              "Do not insert percentages in Annex 1.",
-              "Do not use categories like background or main title: use only \"di fondo, vocale, strumentale, visibile sullo schermo\".",
+              'Scene 12 | "Braga Theme" | Pietro Montanti | (blank) | 34',
             ],
           },
         ],
@@ -439,7 +412,7 @@ const guideData: Record<"it" | "en", GuideContent> = {
         bullets: [
           'Do not write "2:00". Write "120".',
           "If a field is unknown, leave it blank.",
-          'Never write "to be defined" in numeric fields, especially durations.',
+          "\"To be defined\" only for text fields. Never in durations, because they must be numbers.",
           "Do not rename the sheets. Do not break the formulas.",
           'If you use pre-existing tracks, enter the real title and author, not "track 3".',
         ],
