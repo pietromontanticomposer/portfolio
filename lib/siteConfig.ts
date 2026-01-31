@@ -4,6 +4,12 @@ export const getSiteUrl = (): string => {
   const resolved =
     process.env.NEXT_PUBLIC_SITE_URL ??
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
+  const shouldRequire =
+    process.env.NODE_ENV === "production" &&
+    (process.env.VERCEL === "1" || process.env.CI === "true");
+  if (shouldRequire && !resolved) {
+    throw new Error("Missing NEXT_PUBLIC_SITE_URL or VERCEL_URL in production.");
+  }
   return resolved ?? "http://localhost:3000";
 };
 

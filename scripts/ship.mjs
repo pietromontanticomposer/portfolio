@@ -157,14 +157,14 @@ run('git', ['add', '-A', '--', ...toAdd]);
 
 if (dryRun) {
   console.log('[dry-run] git commit -m', JSON.stringify(msg), '--allow-empty');
-  console.log('[dry-run] git push --force');
+  console.log('[dry-run] git push --force-with-lease');
 } else {
   // Sempre crea commit (anche se vuoto) per triggerare deploy
   run('git', ['commit', '-m', msg, '--allow-empty']);
 
   // Push sempre, anche se identico
   console.log('Push to GitHub...');
-  run('git', ['push', '--force']);
+  run('git', ['push', '--force-with-lease']);
 
   console.log('✅ Push completed! Deploy will be triggered automatically by Vercel.');
 }

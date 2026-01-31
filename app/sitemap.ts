@@ -4,9 +4,15 @@ import { projects } from "../data/projects";
 const resolvedSiteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
+const shouldRequire =
+  process.env.NODE_ENV === "production" &&
+  (process.env.VERCEL === "1" || process.env.CI === "true");
+if (shouldRequire && !resolvedSiteUrl) {
+  throw new Error("Missing NEXT_PUBLIC_SITE_URL or VERCEL_URL in production.");
+}
 const siteUrl = resolvedSiteUrl ?? "http://localhost:3000";
 
-if (!resolvedSiteUrl && process.env.NODE_ENV !== "production") {
+if (!resolvedSiteUrl && !shouldRequire) {
   console.warn(
     "NEXT_PUBLIC_SITE_URL is not set. Using http://localhost:3000 for sitemap."
   );
