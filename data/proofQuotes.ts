@@ -50,3 +50,21 @@ export const proofQuotes: ProofQuote[] = [
     attribution: claudioReAttribution,
   },
 ];
+
+export const proofQuotesByProjectSlug: Record<string, ProofQuote[]> = {
+  "i-veneti-antichi": [proofQuotes[0]],
+  "soggetto-obsoleto": [proofQuotes[1]],
+  "claudio-re": [proofQuotes[2]],
+};
+
+export const proofQuotesByCaseStudyId: Record<string, ProofQuote[]> = {
+  "i-veneti-antichi-battle-with-the-spartans": [proofQuotes[0]],
+  "soggetto-obsoleto-sitting-on-the-seashore": [proofQuotes[1]],
+  "claudio-re-opening-titles-storm-theme": [proofQuotes[2]],
+};
+
+export const getProofQuotesForProjectSlug = (slug: string): ProofQuote[] =>
+  proofQuotesByProjectSlug[slug] ?? [];
+
+export const getProofQuotesForCaseStudyId = (id: string): ProofQuote[] =>
+  proofQuotesByCaseStudyId[id] ?? [];

@@ -12,7 +12,7 @@ import LazyIframe from "../../components/LazyIframe";
 import ProofQuotes from "../../components/ProofQuotes";
 import TrackPlayerClient from "../../components/TrackPlayerClient";
 import { caseStudiesNormalized, type CaseStudy } from "../../data/caseStudies";
-import { proofQuotes } from "../../data/proofQuotes";
+import { getProofQuotesForCaseStudyId } from "../../data/proofQuotes";
 import { useLanguage, type Language } from "../../lib/LanguageContext";
 import { getText, getTagTranslation, formatTimingEntry } from "../../lib/translations";
 import { parseDurationToSeconds, getMediaSources } from "../../lib/mediaUtils";
@@ -217,7 +217,8 @@ function CaseStudyCard({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const videoAnchorId = `video-${item.id}`;
-  const showProofQuotes = item.id.startsWith("i-veneti-antichi");
+  const proofQuotesForItem = getProofQuotesForCaseStudyId(item.id);
+  const showProofQuotes = proofQuotesForItem.length > 0;
   const musicalLanguageText = getText(item.musicalLanguage ?? item.musicChoices, language)?.trim();
   const trackTitle = item.trackTitle?.trim();
   const durationMarkup = item.duration ? (
@@ -318,7 +319,7 @@ function CaseStudyCard({
 
         {showProofQuotes ? (
           <div className="mt-6">
-            <ProofQuotes quotes={proofQuotes} />
+            <ProofQuotes quotes={proofQuotesForItem} />
           </div>
         ) : null}
 

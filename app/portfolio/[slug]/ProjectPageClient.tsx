@@ -6,7 +6,7 @@ import LazyIframe from "../../../components/LazyIframe";
 import AudioPlayer from "../../../components/AudioPlayer";
 import TrackPlayer from "../../../components/TrackPlayerClient";
 import ProofQuotes from "../../../components/ProofQuotes";
-import { proofQuotes } from "../../../data/proofQuotes";
+import { getProofQuotesForProjectSlug } from "../../../data/proofQuotes";
 import { useLanguage } from "../../../lib/LanguageContext";
 import { getTagTranslation, getText } from "../../../lib/translations";
 
@@ -29,7 +29,6 @@ type Project = {
   tracks?: Track[];
   tag?: string;
   year?: string | number;
-  proofQuotes?: boolean;
 };
 
 const labelsData = {
@@ -77,7 +76,8 @@ export default function ProjectPageClient({ project }: Props) {
   const coverSrc = project.image ?? project.largeImage ?? "";
   const tagLabel = project.tag ? getTagTranslation(project.tag, language) : labels.project;
   const yearLabel = project.year ? getTagTranslation(String(project.year), language) : "—";
-  const showProofQuotes = !!project.proofQuotes;
+  const proofQuotesForProject = getProofQuotesForProjectSlug(project.slug);
+  const showProofQuotes = proofQuotesForProject.length > 0;
 
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-16 lg:px-20">
@@ -122,7 +122,7 @@ export default function ProjectPageClient({ project }: Props) {
               />
             </div>
           </section>
-          {showProofQuotes ? <ProofQuotes quotes={proofQuotes} /> : null}
+          {showProofQuotes ? <ProofQuotes quotes={proofQuotesForProject} /> : null}
         </>
       ) : null}
 
@@ -164,7 +164,9 @@ export default function ProjectPageClient({ project }: Props) {
         </section>
       ) : null}
 
-      {!project.videoEmbed && showProofQuotes ? <ProofQuotes quotes={proofQuotes} /> : null}
+      {!project.videoEmbed && showProofQuotes ? (
+        <ProofQuotes quotes={proofQuotesForProject} />
+      ) : null}
 
       {project.largeImage ? (
         <section className="card-shell p-6 sm:p-8">

@@ -80,7 +80,6 @@ export const projects = [
     year: "2024",
     tag: "Documentary",
     featured: true,
-    proofQuotes: true,
     image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20i%20veneti%20antichi.avif",
     largeImage: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20i%20veneti%20antichi.avif",
     description: {
