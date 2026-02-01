@@ -51,15 +51,35 @@ export const proofQuotes: ProofQuote[] = [
   },
 ];
 
+export const soggettoObsoletoExtraQuotes: ProofQuote[] = [
+  {
+    quote: {
+      it: "\"Pietro ha capito subito la scena e ha consegnato cue che si incastravano nel montaggio con pochissime revisioni.\"",
+      en: "\"Pietro understood the scene immediately and delivered cues that fit the edit with minimal revisions.\"",
+    },
+    attribution: soggettoObsoletoAttribution,
+  },
+  {
+    quote: {
+      it: "\"Comunicazione rapida e precisa, consegna organizzata e puntuale.\"",
+      en: "\"Fast, precise communication and an organized, on-time delivery.\"",
+    },
+    attribution: soggettoObsoletoAttribution,
+  },
+];
+
 export const proofQuotesByProjectSlug: Record<string, ProofQuote[]> = {
   "i-veneti-antichi": [proofQuotes[0]],
-  "soggetto-obsoleto": [proofQuotes[1]],
+  "soggetto-obsoleto": [proofQuotes[1], ...soggettoObsoletoExtraQuotes],
   "claudio-re": [proofQuotes[2]],
 };
 
 export const proofQuotesByCaseStudyId: Record<string, ProofQuote[]> = {
   "i-veneti-antichi-battle-with-the-spartans": [proofQuotes[0]],
-  "soggetto-obsoleto-sitting-on-the-seashore": [proofQuotes[1]],
+  "soggetto-obsoleto-sitting-on-the-seashore": [
+    proofQuotes[1],
+    ...soggettoObsoletoExtraQuotes,
+  ],
   "claudio-re-opening-titles-storm-theme": [proofQuotes[2]],
 };
 
