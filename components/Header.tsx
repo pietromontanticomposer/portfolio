@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { memo, useEffect, useRef, useState, type MouseEvent } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { animationCoordinator } from "../lib/AnimationCoordinator";
 import { useLanguage } from "../lib/LanguageContext";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -54,12 +54,11 @@ function Header() {
     };
   }, []);
 
-  const handleShowreelClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    if (isHome) {
-      event.preventDefault();
-      window.dispatchEvent(new Event("showreel:open"));
-      return;
-    }
+  const openShowreel = () => {
+    window.dispatchEvent(new Event("showreel:open"));
+  };
+
+  const handleShowreelClick = () => {
     try {
       window.sessionStorage.setItem("openShowreel", "1");
     } catch {
@@ -93,13 +92,23 @@ function Header() {
           )}
         </div>
         <nav className="flex h-full items-center gap-6 text-sm text-[color:var(--muted)]">
-          <Link
-            href="/#showreel"
-            className="transition hover:text-[color:var(--foreground)]"
-            onClick={handleShowreelClick}
-          >
-            {t("Showreel", "Showreel")}
-          </Link>
+          {isHome ? (
+            <button
+              type="button"
+              onClick={openShowreel}
+              className="bg-transparent p-0 transition hover:text-[color:var(--foreground)]"
+            >
+              {t("Showreel", "Showreel")}
+            </button>
+          ) : (
+            <Link
+              href="/#showreel"
+              className="transition hover:text-[color:var(--foreground)]"
+              onClick={handleShowreelClick}
+            >
+              {t("Showreel", "Showreel")}
+            </Link>
+          )}
           <Link href="/portfolio" prefetch={false} className="transition hover:text-[color:var(--foreground)]">
             {t("Portfolio", "Portfolio")}
           </Link>
