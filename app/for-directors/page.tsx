@@ -17,9 +17,9 @@ import { parseDurationToSeconds, getMediaSources } from "../../lib/mediaUtils";
 const stepsData = {
   it: [
     {
-      title: "Spotting (entrate/uscite)",
+      title: "Dove entra la musica",
       detail:
-        "Definisco dove entra/esce la musica, i punti chiave e cosa evitare.",
+        "Decidiamo insieme entrate/uscite e i momenti che la musica deve sostenere.",
     },
     {
       title: "Opzioni A/B/C",
@@ -27,21 +27,21 @@ const stepsData = {
         "2–3 direzioni distinte sullo stesso montaggio, per decisioni rapide e chiare.",
     },
     {
-      title: "Chiusura montaggio (lock)",
+      title: "Montaggio definitivo",
       detail:
-        "Prima fissiamo tempi e intento, poi orchestrazione e mix senza cambi continui.",
+        "Quando la scena è definitiva, rifinisco musica e mix senza cambi continui.",
     },
     {
-      title: "Consegna",
+      title: "Consegna file",
       detail:
-        "File ordinati e versioni per la post; se serve includo tracce separate (stems).",
+        "File ordinati e versioni alternative quando servono.",
     },
   ],
   en: [
     {
-      title: "Spotting (music in/out)",
+      title: "Where music starts and stops",
       detail:
-        "We decide where music starts/stops, key moments, and what to avoid.",
+        "We decide music in/out and the key moments it should support.",
     },
     {
       title: "Options A/B/C",
@@ -49,14 +49,14 @@ const stepsData = {
         "2–3 distinct directions on the same cut, so decisions stay fast and clean.",
     },
     {
-      title: "Picture lock (final cut)",
+      title: "Final cut",
       detail:
-        "We lock timing and intent first, then finish orchestration and mix without moving targets.",
+        "Once the cut is final, I finish music and mix without moving targets.",
     },
     {
-      title: "Delivery",
+      title: "File delivery",
       detail:
-        "Organized files and versions for post; separate stems when needed.",
+        "Organized files and alternate versions when needed.",
     },
   ],
 };
@@ -65,15 +65,15 @@ const deliveryChecklistData = {
   it: [
     "Mix stereo principale",
     "Versione con dialoghi più leggibili quando serve",
-    "Tracce separate (stems) su richiesta, con nomi chiari",
-    "Lista brani con entrate/uscite per il montaggio",
+    "Tracce separate su richiesta, con nomi chiari",
+    "Lista brani con entrate/uscite",
     "Una cartella ordinata con versioni chiare",
   ],
   en: [
     "Main stereo mix",
     "Dialogue-friendly alternate when needed",
-    "Separate stems on request, clearly labeled",
-    "Cue sheet with in/out timings",
+    "Separate tracks on request, clearly labeled",
+    "Cue list with in/out timings",
     "One clean delivery folder with clear versions",
   ],
 };
@@ -96,23 +96,23 @@ const labelsData = {
     // CaseStudyCard labels
     goal: "Obiettivo",
     result: "Risultato",
-    delivery: "Consegna (file per la post)",
+    delivery: "Consegna file",
     video: "Video",
     context: "Contesto",
-    timing: "Timing (entrate/uscite musica)",
+    timing: "Entrate/uscite della musica",
     timingIn: "Entra:",
     timingShift: "Shift:",
     timingOut: "Esce:",
     timingNote: "Nota:",
     timingNoteDefault: "Entra per supportare la scena senza invadere.",
-    brief: "Brief (cosa serviva)",
+    brief: "Cosa serviva",
     wanted: "Desiderato:",
     avoid: "Evitare:",
-    direction: "Direzione (opzioni provate)",
+    direction: "Opzioni provate",
     finalChoice: "Scelta finale:",
-    musicalLanguage: "Scelta musicale (come suona)",
+    musicalLanguage: "Come suona la musica",
     track: "Traccia:",
-    technicalNotes: "Note tecniche (file e formati)",
+    technicalNotes: "Dettagli di consegna",
     loadClip: "Carica clip",
     embedNotSet:
       "Embed URL non impostato. Incolla l'URL HLS (.m3u8) o embed Vimeo/YouTube in data/caseStudies.ts (embedUrl).",
@@ -134,23 +134,23 @@ const labelsData = {
     // CaseStudyCard labels
     goal: "Goal",
     result: "Result",
-    delivery: "Delivery (files for post)",
+    delivery: "File delivery",
     video: "Video",
     context: "Context",
-    timing: "Timing (music in/out)",
+    timing: "Music in/out",
     timingIn: "In:",
     timingShift: "Shift:",
     timingOut: "Out:",
     timingNote: "Note:",
     timingNoteDefault: "Enters to support the scene without getting in the way.",
-    brief: "Brief (what was needed)",
+    brief: "What was needed",
     wanted: "Wanted:",
     avoid: "Avoid:",
-    direction: "Direction (options tested)",
+    direction: "Options tested",
     finalChoice: "Final choice:",
-    musicalLanguage: "Musical choices (sound and feel)",
+    musicalLanguage: "How the music sounds",
     track: "Track:",
-    technicalNotes: "Technical notes (files/formats)",
+    technicalNotes: "Delivery details",
     loadClip: "Load clip",
     embedNotSet:
       "Embed URL not set yet. Paste the HLS playlist (.m3u8) or Vimeo/YouTube embed URL in data/caseStudies.ts (embedUrl).",

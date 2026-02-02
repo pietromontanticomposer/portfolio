@@ -8,54 +8,54 @@ const stepsData = {
   it: [
     {
       title: "Spotting e brief",
-      detail: "Perimetro chiaro, elenco dei brani/scene e aspettative di consegna dal primo giorno.",
+      detail: "Definiamo cosa serve scena per scena e come sarà la consegna.",
     },
     {
       title: "Opzioni A/B/C",
-      detail: "Scelte di direzione rapide che riducono il rischio di schedule.",
+      detail: "2–3 direzioni diverse, poi scegliamo quella giusta.",
     },
     {
       title: "Finestra di lock",
-      detail: "Breve finestra di revisione per chiudere tempi e intento.",
+      detail: "Breve finestra di revisione per chiudere tempi e decisioni.",
     },
     {
       title: "Pack di delivery",
-      detail: "File ordinati, versioni chiare e consegna organizzata per la post.",
+      detail: "File ordinati, versioni chiare e consegna organizzata.",
     },
   ],
   en: [
     {
       title: "Spotting and brief",
-      detail: "Clear scope, list of cues, and delivery expectations from day one.",
+      detail: "We define what each scene needs and how delivery will work.",
     },
     {
       title: "Options A/B/C",
-      detail: "Fast direction choices that reduce schedule risk.",
+      detail: "2–3 directions, then we pick the right one.",
     },
     {
       title: "Lock window",
-      detail: "Short revision window to lock timing and intent.",
+      detail: "Short revision window to lock timing and decisions.",
     },
     {
       title: "Delivery pack",
-      detail: "Organized files with clear versions and handoff to post.",
+      detail: "Organized files with clear versions.",
     },
   ],
 };
 
 const deliveryChecklistData = {
   it: [
-    "Mix stereo + tracce separate (stems) su richiesta",
-    "Nomi file chiari e versioni coerenti",
-    "Varianti mix per dialogo ed effetti quando servono",
-    "Lista brani con timing (entrate/uscite)",
+    "Mix principale",
+    "Tracce separate su richiesta",
+    "Versioni per dialogo/effetti quando servono",
+    "Lista brani con entrate/uscite",
     "Un solo link di consegna con cartelle ordinate",
   ],
   en: [
-    "Stereo mix plus separate stems on request",
-    "Clear file names and versioning",
-    "Mix variants for dialogue and effects when needed",
-    "Cue sheet with in/out timings",
+    "Main stereo mix",
+    "Separate tracks on request",
+    "Mix variants for dialogue/effects when needed",
+    "Cue list with in/out timings",
     "Single delivery link with organized folders",
   ],
 };
@@ -89,8 +89,8 @@ export default function ForProducersPage() {
         </h1>
         <p className="mt-3 text-sm text-[color:var(--muted)]">
           {t(
-            "Musica solida sulle tempistiche, con consegna pulita e passaggio semplice alla post. Revisioni chiare e file organizzati per far lavorare la post senza rallentamenti.",
-            "Schedule-safe scoring with clean delivery and a smooth handoff to post. Clear revisions and organized files so post can move fast."
+            "Musica solida nei tempi, consegna pulita e passaggio semplice alla post‑produzione. Revisioni chiare e file organizzati.",
+            "Schedule-safe scoring, clean delivery, and a smooth handoff to post. Clear revisions and organized files."
           )}
         </p>
         <div className="mt-6">
@@ -151,7 +151,7 @@ export default function ForProducersPage() {
         </h2>
         <p className="mt-2 text-sm text-[color:var(--muted)]">
           {t(
-            "Condividi tempistiche, formati e requisiti della post. Ti risponderò con un piano di consegna.",
+            "Condividi tempistiche, formati e requisiti della post‑produzione. Ti risponderò con un piano di consegna.",
             "Share timeline, formats, and post requirements. I will reply with a delivery plan."
           )}
         </p>
