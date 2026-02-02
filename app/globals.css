@@ -288,6 +288,22 @@ main {
   box-shadow: none;
 }
 
+.card-inset-btn {
+  transition: transform 120ms ease-out, border-color 120ms ease, background 120ms ease;
+}
+
+.card-inset-btn:hover,
+.card-inset-btn:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.26);
+  background: rgba(5, 8, 14, 0.3);
+}
+
+.card-inset-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 .card-overlay {
   background: var(--card-overlay);
 }

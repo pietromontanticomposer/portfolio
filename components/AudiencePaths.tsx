@@ -22,7 +22,7 @@ function AudiencePaths() {
           <Link
             href="/for-directors"
             prefetch={false}
-            className="card-inset rounded-2xl p-8 text-center transition hover:-translate-y-[1px] hover:border-[color:rgba(255,255,255,0.26)] hover:bg-[color:rgba(5,8,14,0.3)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent)]"
+            className="card-inset card-inset-btn rounded-2xl p-8 text-center"
           >
             <span className="section-title text-2xl text-[color:var(--foreground)]">
               {t("Creativo", "Creative")}
@@ -37,7 +37,7 @@ function AudiencePaths() {
           <Link
             href="/for-producers"
             prefetch={false}
-            className="card-inset rounded-2xl p-8 text-center transition hover:-translate-y-[1px] hover:border-[color:rgba(255,255,255,0.26)] hover:bg-[color:rgba(5,8,14,0.3)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent)]"
+            className="card-inset card-inset-btn rounded-2xl p-8 text-center"
           >
             <span className="section-title text-2xl text-[color:var(--foreground)]">
               {t("Delivery", "Delivery")}
