@@ -36,7 +36,11 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
   const coverTimeoutRef = useRef<number | null>(null);
   const showreelLabel = t("Showreel", "Showreel");
   const { isHls, isMp4, src, mp4Fallback } = getMediaSources(embedUrl ?? undefined);
-  const hasEmbed = !!src;
+  const preferMp4 = !!mp4Fallback && isHls;
+  const effectiveSrc = preferMp4 ? mp4Fallback : src;
+  const effectiveIsMp4 = preferMp4 || isMp4;
+  const effectiveIsHls = !preferMp4 && isHls;
+  const hasEmbed = !!effectiveSrc;
   const showreelPoster =
     "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Showreel%20Sito.jpg";
   const showreelPosterAlt = t("Showreel", "Showreel");
@@ -123,17 +127,17 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
   }, [isOpen]);
 
   const autoplayEmbedUrl = useMemo(() => {
-    if (!src || isHls || isMp4) return src;
+    if (!effectiveSrc || effectiveIsHls || effectiveIsMp4) return effectiveSrc;
     try {
-      const url = new URL(src);
+      const url = new URL(effectiveSrc);
       url.searchParams.set("autoplay", "1");
       url.searchParams.set("muted", "0");
       url.searchParams.set("playsinline", "1");
       return url.toString();
     } catch {
-      return src;
+      return effectiveSrc;
     }
-  }, [isHls, isMp4, src]);
+  }, [effectiveIsHls, effectiveIsMp4, effectiveSrc]);
 
   const modalContent = isOpen ? (
     <div className="modal-overlay showreel-modal-overlay" role="dialog" aria-modal="true" aria-label={showreelLabel} onClick={closeModal}>
@@ -147,16 +151,16 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
         <div className="showreel-modal-body">
           {hasEmbed ? (
             <div className="video-wrapper">
-              {isHls ? (
+              {effectiveIsHls ? (
                 <CaseStudyVideo
-                  hlsUrl={src ?? ""}
+                  hlsUrl={effectiveSrc ?? ""}
                   mp4Url={mp4Fallback}
                   title={showreelLabel}
                   poster={showreelPoster}
                   autoPlay
                   onFirstFrame={hideCover}
                 />
-              ) : isMp4 ? (
+              ) : effectiveIsMp4 ? (
                 <KeepPlayingVideo
                   className="case-study-video absolute inset-0 h-full w-full rounded-xl"
                   controls
@@ -167,7 +171,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
                   aria-label={t("Video showreel", "Showreel video")}
                   onFirstFrame={hideCover}
                 >
-                  <source src={encodeURI(src ?? "")} type="video/mp4" />
+                  <source src={encodeURI(effectiveSrc ?? "")} type="video/mp4" />
                   {t("Il tuo browser non supporta il tag video.", "Your browser does not support the video tag.")}
                 </KeepPlayingVideo>
               ) : (
