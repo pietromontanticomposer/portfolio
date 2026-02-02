@@ -23,9 +23,23 @@ function BackgroundVideo() {
   useEffect(() => {
     if (hasLoadedRef.current) return;
     hasLoadedRef.current = true;
-    // Minimal delay to let critical content render first
-    const timer = setTimeout(() => setShouldLoadSrc(true), 50);
-    return () => clearTimeout(timer);
+    let idleId: number | null = null;
+    let timerId: ReturnType<typeof setTimeout> | null = null;
+    const startLoading = () => setShouldLoadSrc(true);
+
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      idleId = window.requestIdleCallback(startLoading, { timeout: 1500 });
+    } else {
+      // Small delay to let critical content render first
+      timerId = setTimeout(startLoading, 300);
+    }
+
+    return () => {
+      if (idleId !== null && typeof window !== "undefined" && "cancelIdleCallback" in window) {
+        window.cancelIdleCallback(idleId);
+      }
+      if (timerId) clearTimeout(timerId);
+    };
   }, []);
 
   // Attach sources and attempt playback
