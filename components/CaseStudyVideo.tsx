@@ -30,6 +30,7 @@ type CaseStudyVideoProps = {
   title: string;
   poster?: string | null;
   autoPlay?: boolean;
+  onFirstFrame?: () => void;
 };
 
 export default function CaseStudyVideo({
@@ -38,10 +39,12 @@ export default function CaseStudyVideo({
   title,
   poster,
   autoPlay = false,
+  onFirstFrame,
 }: CaseStudyVideoProps) {
   const { t } = useLanguage();
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
+  const firstFrameFired = useRef(false);
 
   useResumeVideoOnVisibility(videoRef, { keepPlayingWhenHidden: true });
 
@@ -143,9 +146,16 @@ export default function CaseStudyVideo({
       timeoutIds.push(id);
     };
 
+    const handleFirstFrame = () => {
+      if (!onFirstFrame || firstFrameFired.current) return;
+      firstFrameFired.current = true;
+      onFirstFrame();
+    };
+
     const handlePlaying = () => {
       lastAdvance = performance.now();
       stallCount = 0;
+      handleFirstFrame();
     };
 
     const handleWaiting = () => {
@@ -163,6 +173,9 @@ export default function CaseStudyVideo({
         lastTime = video.currentTime;
         lastAdvance = performance.now();
         stallCount = 0;
+        if (video.currentTime > 0.05) {
+          handleFirstFrame();
+        }
       }
     };
 
@@ -357,7 +370,7 @@ export default function CaseStudyVideo({
         hlsRef.current = null;
       }
     };
-  }, [normalizedHls, normalizedMp4, autoPlay]);
+  }, [normalizedHls, normalizedMp4, autoPlay, onFirstFrame]);
 
   return (
     <video

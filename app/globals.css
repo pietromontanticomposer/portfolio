@@ -1778,15 +1778,13 @@ body.showreel-open .bg-video-toggle {
   z-index: 2;
   background-size: cover;
   background-position: center;
-  opacity: 1;
+  opacity: 0;
   pointer-events: none;
-  animation: showreelCoverFade 360ms ease 180ms forwards;
+  transition: opacity 320ms ease;
 }
 
-@keyframes showreelCoverFade {
-  to {
-    opacity: 0;
-  }
+.showreel-start-cover.is-active {
+  opacity: 1;
 }
 
 .video-wrapper {

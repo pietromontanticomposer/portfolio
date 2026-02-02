@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import CaseStudyVideo from "./CaseStudyVideo";
 import KeepPlayingVideo from "./KeepPlayingVideo";
@@ -32,6 +32,8 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
   });
   const portalTarget =
     typeof document === "undefined" ? null : document.body;
+  const coverRef = useRef<HTMLDivElement>(null);
+  const coverTimeoutRef = useRef<number | null>(null);
   const showreelLabel = t("Showreel", "Showreel");
   const { isHls, isMp4, src, mp4Fallback } = getMediaSources(embedUrl ?? undefined);
   const hasEmbed = !!src;
@@ -39,21 +41,57 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
     "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Showreel%20Sito.jpg";
   const showreelPosterAlt = t("Showreel", "Showreel");
 
+  const hideCover = useCallback(() => {
+    if (coverTimeoutRef.current) {
+      window.clearTimeout(coverTimeoutRef.current);
+      coverTimeoutRef.current = null;
+    }
+    coverRef.current?.classList.remove("is-active");
+  }, []);
+
+  const showCover = useCallback(() => {
+    const cover = coverRef.current;
+    if (!cover) return;
+    cover.classList.add("is-active");
+    if (coverTimeoutRef.current) {
+      window.clearTimeout(coverTimeoutRef.current);
+    }
+    coverTimeoutRef.current = window.setTimeout(() => {
+      cover.classList.remove("is-active");
+      coverTimeoutRef.current = null;
+    }, 1200);
+  }, []);
+
+  const armCover = useCallback(() => {
+    requestAnimationFrame(() => {
+      showCover();
+    });
+  }, [showCover]);
+
   const openModal = useCallback(() => {
     setIsOpen(true);
-  }, []);
+    armCover();
+  }, [armCover]);
 
   const closeModal = useCallback(() => {
     setIsOpen(false);
   }, []);
 
   useEffect(() => {
-    const handleOpen = () => setIsOpen(true);
+    const handleOpen = () => {
+      setIsOpen(true);
+      armCover();
+    };
     window.addEventListener("showreel:open", handleOpen);
     return () => {
       window.removeEventListener("showreel:open", handleOpen);
     };
-  }, []);
+  }, [armCover]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    armCover();
+  }, [armCover, isOpen]);
 
 
   useEffect(() => {
@@ -116,6 +154,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
                   title={showreelLabel}
                   poster={showreelPoster}
                   autoPlay
+                  onFirstFrame={hideCover}
                 />
               ) : isMp4 ? (
                 <KeepPlayingVideo
@@ -126,6 +165,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
                   preload="auto"
                   poster={showreelPoster}
                   aria-label={t("Video showreel", "Showreel video")}
+                  onFirstFrame={hideCover}
                 >
                   <source src={encodeURI(src ?? "")} type="video/mp4" />
                   {t("Il tuo browser non supporta il tag video.", "Your browser does not support the video tag.")}
@@ -140,6 +180,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
                 />
               )}
               <div
+                ref={coverRef}
                 className="showreel-start-cover"
                 style={{ backgroundImage: `url(${showreelPoster})` }}
                 aria-hidden="true"
