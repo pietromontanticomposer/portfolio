@@ -3,6 +3,7 @@ import ShowreelSection from "../components/ShowreelSection";
 import AudiencePaths from "../components/AudiencePaths";
 import HeroSection from "../components/HeroSection";
 import HomeSections from "../components/HomeSections";
+import LeadQuote from "../components/LeadQuote";
 import ProofQuotes from "../components/ProofQuotes";
 import { heroCredits } from "../data/homeContent";
 import { proofQuotes, proofQuotesLead } from "../data/proofQuotes";
@@ -59,7 +60,9 @@ export default function Home() {
         />
         <HeroSection heroCredits={heroCredits} />
 
-        <ProofQuotes quotes={proofQuotes} leadQuote={proofQuotesLead} />
+        <LeadQuote quote={proofQuotesLead.quote} attribution={proofQuotesLead.attribution} />
+
+        <ProofQuotes quotes={proofQuotes} />
 
         <ShowreelSection embedUrl={showreelEmbedUrl} />
 

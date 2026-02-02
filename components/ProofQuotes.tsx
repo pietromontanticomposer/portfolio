@@ -6,19 +6,13 @@ import { useLanguage } from "../lib/LanguageContext";
 type ProofQuotesProps = {
   quotes: ProofQuote[];
   heading?: string;
-  leadQuote?: {
-    quote: ProofQuote["quote"];
-    attribution: ProofQuote["attribution"][number];
-  };
   variant?: "default" | "compact";
 };
 
-export default function ProofQuotes({ quotes, heading, leadQuote, variant = "default" }: ProofQuotesProps) {
+export default function ProofQuotes({ quotes, heading, variant = "default" }: ProofQuotesProps) {
   const { t, language } = useLanguage();
   const headingText = heading ?? t("Testimonianze", "Proof Quotes");
   const sectionPadding = variant === "compact" ? "p-5 sm:p-6" : "p-6 sm:p-8";
-  const leadPadding = variant === "compact" ? "p-4 sm:p-5" : "p-5 sm:p-6";
-  const leadTextSize = variant === "compact" ? "text-base sm:text-lg" : "text-xl sm:text-2xl";
   const gridSpacing = variant === "compact" ? "mt-4 gap-4" : "mt-6 gap-6";
   const cardPadding = variant === "compact" ? "p-4 sm:p-5" : "p-5 sm:p-6";
   const gridCols =
@@ -44,18 +38,6 @@ export default function ProofQuotes({ quotes, heading, leadQuote, variant = "def
             {headingText}
           </h3>
         </div>
-      ) : null}
-      {leadQuote ? (
-        <figure className={`mt-5 rounded-2xl card-inset ${leadPadding}`}>
-          <blockquote className={`${leadTextSize} leading-relaxed text-[color:var(--foreground)]`}>
-            {language === "it" ? leadQuote.quote.it : leadQuote.quote.en}
-          </blockquote>
-          <figcaption className="mt-4 text-xs text-[color:var(--muted)]">
-            <span className="block font-semibold text-[color:var(--foreground)]">
-              {language === "it" ? leadQuote.attribution.it : leadQuote.attribution.en}
-            </span>
-          </figcaption>
-        </figure>
       ) : null}
       <div className={`${gridWidth} mx-auto`}>
         <div className={`grid ${gridSpacing} ${gridCols}`}>
