@@ -27,6 +27,14 @@ export const claudioReAttribution = [
   { it: "Progetto: Claudio Re", en: "Project: Claudio Re" },
 ] as const;
 
+export const proofQuotesLead = {
+  quote: {
+    it: "\"Credo che la colonna sonora sia il 50% di un film\"",
+    en: "\"I believe the soundtrack is 50% of a film.\"",
+  },
+  attribution: { it: "George Lucas", en: "George Lucas" },
+} as const;
+
 export const proofQuotes: ProofQuote[] = [
   {
     quote: {
