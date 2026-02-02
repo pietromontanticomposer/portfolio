@@ -14,7 +14,7 @@ export default function LeadQuote({ quote, attribution }: LeadQuoteProps) {
   const attributionText = language === "it" ? attribution.it : attribution.en;
 
   return (
-    <section className="max-w-4xl text-left">
+    <section className="max-w-4xl text-center mx-auto">
       <figure className="border-l-2 border-[color:var(--accent)] pl-5 py-2">
         <blockquote className="text-xl sm:text-2xl leading-relaxed text-[color:var(--foreground)]">
           {quoteText}
