@@ -8,7 +8,7 @@ const stepsData = {
   it: [
     {
       title: "Spotting e brief",
-      detail: "Scope chiaro, cue list e aspettative di delivery dal primo giorno.",
+      detail: "Perimetro chiaro, elenco dei brani/scene e aspettative di consegna dal primo giorno.",
     },
     {
       title: "Opzioni A/B/C",
@@ -16,17 +16,17 @@ const stepsData = {
     },
     {
       title: "Finestra di lock",
-      detail: "Breve finestra di revisione per finalizzare timing e intento.",
+      detail: "Breve finestra di revisione per chiudere tempi e intento.",
     },
     {
       title: "Pack di delivery",
-      detail: "Export versionati con naming pulito e handoff organizzato.",
+      detail: "File ordinati, versioni chiare e consegna organizzata per la post.",
     },
   ],
   en: [
     {
       title: "Spotting and brief",
-      detail: "Clear scope, cue list, and delivery expectations from day one.",
+      detail: "Clear scope, list of cues, and delivery expectations from day one.",
     },
     {
       title: "Options A/B/C",
@@ -34,29 +34,29 @@ const stepsData = {
     },
     {
       title: "Lock window",
-      detail: "Short revision window to finalize timing and intent.",
+      detail: "Short revision window to lock timing and intent.",
     },
     {
       title: "Delivery pack",
-      detail: "Versioned exports with clean naming and organized handoff.",
+      detail: "Organized files with clear versions and handoff to post.",
     },
   ],
 };
 
 const deliveryChecklistData = {
   it: [
-    "Mix stereo più stem su richiesta",
-    "Naming e versioning consistenti",
-    "Varianti mix per dialogo ed effetti",
-    "Cue sheet e timings",
-    "Link di delivery unico con cartelle strutturate",
+    "Mix stereo + tracce separate (stems) su richiesta",
+    "Nomi file chiari e versioni coerenti",
+    "Varianti mix per dialogo ed effetti quando servono",
+    "Lista brani con timing (entrate/uscite)",
+    "Un solo link di consegna con cartelle ordinate",
   ],
   en: [
-    "Stereo mix plus stems on request",
-    "Consistent naming and versioning",
-    "Mix variants for dialogue and effects",
-    "Cue sheet and timings",
-    "Single delivery link with structured folders",
+    "Stereo mix plus separate stems on request",
+    "Clear file names and versioning",
+    "Mix variants for dialogue and effects when needed",
+    "Cue sheet with in/out timings",
+    "Single delivery link with organized folders",
   ],
 };
 
@@ -89,8 +89,8 @@ export default function ForProducersPage() {
         </h1>
         <p className="mt-3 text-sm text-[color:var(--muted)]">
           {t(
-            "Scoring sicuro per la schedule con delivery pulita e handoff prevedibile. Tengo le revisioni strette e gli export organizzati per far muovere la post velocemente.",
-            "Schedule-safe scoring with clean delivery and predictable handoff. I keep revisions tight and exports organized so post can move fast."
+            "Musica solida sulle tempistiche, con consegna pulita e passaggio semplice alla post. Revisioni chiare e file organizzati per far lavorare la post senza rallentamenti.",
+            "Schedule-safe scoring with clean delivery and a smooth handoff to post. Clear revisions and organized files so post can move fast."
           )}
         </p>
         <div className="mt-6">
@@ -151,8 +151,8 @@ export default function ForProducersPage() {
         </h2>
         <p className="mt-2 text-sm text-[color:var(--muted)]">
           {t(
-            "Condividi la schedule, i formati e i requisiti post. Ti risponderò con un piano di delivery.",
-            "Share the schedule, formats, and post requirements. I will reply with a delivery plan."
+            "Condividi tempistiche, formati e requisiti della post. Ti risponderò con un piano di consegna.",
+            "Share timeline, formats, and post requirements. I will reply with a delivery plan."
           )}
         </p>
         <div className="mt-4 flex flex-wrap items-center gap-4">

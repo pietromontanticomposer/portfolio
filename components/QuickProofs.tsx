@@ -10,11 +10,11 @@ const proofs = {
     },
     {
       title: "Opzioni rapide, revisioni pulite",
-      description: "Direzioni A, B, C, poi lock decisivi.",
+      description: "Direzioni A, B, C, poi chiusura rapida delle decisioni.",
     },
     {
       title: "Pronto per la post-produzione",
-      description: "Stem, naming, versioning, export puliti.",
+      description: "Tracce separate (stems), nomi file chiari, versioni ordinate.",
     },
   ],
   en: [
@@ -24,11 +24,11 @@ const proofs = {
     },
     {
       title: "Fast options, clean revisions",
-      description: "A, B, C directions, then decisive locks.",
+      description: "A, B, C directions, then a clear final lock.",
     },
     {
       title: "Delivery ready for post",
-      description: "Stems, naming, versioning, clean exports.",
+      description: "Separate stems, clear file names, and clean versions.",
     },
   ],
 };

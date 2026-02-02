@@ -17,9 +17,9 @@ import { parseDurationToSeconds, getMediaSources } from "../../lib/mediaUtils";
 const stepsData = {
   it: [
     {
-      title: "Spotting",
+      title: "Spotting (entrate/uscite)",
       detail:
-        "Definisco in/out delle cue, hit point, e il ruolo della scena, oltre a cosa evitare.",
+        "Definisco dove entra/esce la musica, i punti chiave e cosa evitare.",
     },
     {
       title: "Opzioni A/B/C",
@@ -27,21 +27,21 @@ const stepsData = {
         "2–3 direzioni distinte sullo stesso montaggio, per decisioni rapide e chiare.",
     },
     {
-      title: "Lock",
+      title: "Chiusura montaggio (lock)",
       detail:
-        "Timing e intento approvati prima, poi orchestrazione e mix senza obiettivi mobili.",
+        "Prima fissiamo tempi e intento, poi orchestrazione e mix senza cambi continui.",
     },
     {
       title: "Consegna",
       detail:
-        "Export organizzati e versioni per la post, con stem quando necessario.",
+        "File ordinati e versioni per la post; se serve includo tracce separate (stems).",
     },
   ],
   en: [
     {
-      title: "Spotting",
+      title: "Spotting (music in/out)",
       detail:
-        "Define cue in/out, hit points, and the scene's job, plus what to avoid.",
+        "We decide where music starts/stops, key moments, and what to avoid.",
     },
     {
       title: "Options A/B/C",
@@ -49,14 +49,14 @@ const stepsData = {
         "2–3 distinct directions on the same cut, so decisions stay fast and clean.",
     },
     {
-      title: "Lock",
+      title: "Picture lock (final cut)",
       detail:
-        "Timing and intent approved first, then orchestration and mix without moving targets.",
+        "We lock timing and intent first, then finish orchestration and mix without moving targets.",
     },
     {
       title: "Delivery",
       detail:
-        "Organized exports and versions for post, with stems when needed.",
+        "Organized files and versions for post; separate stems when needed.",
     },
   ],
 };
@@ -64,17 +64,17 @@ const stepsData = {
 const deliveryChecklistData = {
   it: [
     "Mix stereo principale",
-    "Alternativa dialogue-friendly quando serve",
-    "Stem su richiesta, chiaramente nominati",
-    "Cue sheet con timing per il montaggio",
-    "Una cartella di consegna pulita, versionata",
+    "Versione con dialoghi più leggibili quando serve",
+    "Tracce separate (stems) su richiesta, con nomi chiari",
+    "Lista brani con entrate/uscite per il montaggio",
+    "Una cartella ordinata con versioni chiare",
   ],
   en: [
     "Main stereo mix",
     "Dialogue-friendly alternate when needed",
-    "Stems on request, clearly named",
-    "Cue sheet timings for the cut",
-    "One clean delivery folder, versioned",
+    "Separate stems on request, clearly labeled",
+    "Cue sheet with in/out timings",
+    "One clean delivery folder with clear versions",
   ],
 };
 
@@ -82,7 +82,7 @@ const labelsData = {
   it: {
     pageTitle: "Per Registi",
     heroDescription:
-      "Compongo su immagine, performance e punto di vista. Ricevi opzioni A/B/C veloci, revisioni chiare, e cue che supportano il montaggio senza competere con esso.",
+      "Compongo su immagine, performance e punto di vista. Ricevi opzioni A/B/C veloci, revisioni chiare, e brani che supportano il montaggio senza competere con esso.",
     howIWork: "Come lavoro",
     deliveryReady: "Consegna pronta per la post",
     sceneCaseStudies: "Case study delle scene",
@@ -96,23 +96,23 @@ const labelsData = {
     // CaseStudyCard labels
     goal: "Obiettivo",
     result: "Risultato",
-    delivery: "Consegna",
+    delivery: "Consegna (file per la post)",
     video: "Video",
     context: "Contesto",
-    timing: "Timing",
+    timing: "Timing (entrate/uscite musica)",
     timingIn: "Entra:",
     timingShift: "Shift:",
     timingOut: "Esce:",
     timingNote: "Nota:",
     timingNoteDefault: "Entra per supportare la scena senza invadere.",
-    brief: "Brief",
+    brief: "Brief (cosa serviva)",
     wanted: "Desiderato:",
     avoid: "Evitare:",
-    direction: "Direzione",
+    direction: "Direzione (opzioni provate)",
     finalChoice: "Scelta finale:",
-    musicalLanguage: "Linguaggio musicale",
+    musicalLanguage: "Scelta musicale (come suona)",
     track: "Traccia:",
-    technicalNotes: "Note tecniche (post)",
+    technicalNotes: "Note tecniche (file e formati)",
     loadClip: "Carica clip",
     embedNotSet:
       "Embed URL non impostato. Incolla l'URL HLS (.m3u8) o embed Vimeo/YouTube in data/caseStudies.ts (embedUrl).",
@@ -120,7 +120,7 @@ const labelsData = {
   en: {
     pageTitle: "For Directors",
     heroDescription:
-      "I score to picture, performance, and point of view. You get fast A/B/C options early, clear revision passes, and cues that support your cut without competing with it.",
+      "I score to picture, performance, and point of view. You get fast A/B/C options early, clear revision passes, and music that supports your cut without competing with it.",
     howIWork: "How I work",
     deliveryReady: "Delivery ready for post",
     sceneCaseStudies: "Scene case studies",
@@ -134,23 +134,23 @@ const labelsData = {
     // CaseStudyCard labels
     goal: "Goal",
     result: "Result",
-    delivery: "Delivery",
+    delivery: "Delivery (files for post)",
     video: "Video",
     context: "Context",
-    timing: "Timing",
+    timing: "Timing (music in/out)",
     timingIn: "In:",
     timingShift: "Shift:",
     timingOut: "Out:",
     timingNote: "Note:",
     timingNoteDefault: "Enters to support the scene without getting in the way.",
-    brief: "Brief",
+    brief: "Brief (what was needed)",
     wanted: "Wanted:",
     avoid: "Avoid:",
-    direction: "Direction",
+    direction: "Direction (options tested)",
     finalChoice: "Final choice:",
-    musicalLanguage: "Musical language",
+    musicalLanguage: "Musical choices (sound and feel)",
     track: "Track:",
-    technicalNotes: "Technical notes (post)",
+    technicalNotes: "Technical notes (files/formats)",
     loadClip: "Load clip",
     embedNotSet:
       "Embed URL not set yet. Paste the HLS playlist (.m3u8) or Vimeo/YouTube embed URL in data/caseStudies.ts (embedUrl).",
