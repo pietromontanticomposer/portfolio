@@ -139,6 +139,11 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
                   allowFullScreen
                 />
               )}
+              <div
+                className="showreel-start-cover"
+                style={{ backgroundImage: `url(${showreelPoster})` }}
+                aria-hidden="true"
+              />
             </div>
           ) : (
             <div className="text-sm text-[color:var(--muted)]">

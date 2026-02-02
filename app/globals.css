@@ -1768,6 +1768,26 @@ body.showreel-open .bg-video-toggle {
 .showreel-modal-body .case-study-video {
   border-radius: 0;
 }
+.showreel-modal-body .showreel-start-cover {
+  border-radius: 0;
+}
+
+.showreel-start-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background-size: cover;
+  background-position: center;
+  opacity: 1;
+  pointer-events: none;
+  animation: showreelCoverFade 360ms ease 180ms forwards;
+}
+
+@keyframes showreelCoverFade {
+  to {
+    opacity: 0;
+  }
+}
 
 .video-wrapper {
   position: relative;
