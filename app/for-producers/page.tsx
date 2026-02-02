@@ -7,37 +7,37 @@ import { useLanguage } from "../../lib/LanguageContext";
 const stepsData = {
   it: [
     {
-      title: "Spotting e brief",
+      title: "Brief e momenti musicali",
       detail: "Definiamo cosa serve scena per scena e come sarà la consegna.",
     },
     {
-      title: "Opzioni A/B/C",
-      detail: "2–3 direzioni diverse, poi scegliamo quella giusta.",
+      title: "2–3 proposte",
+      detail: "Ti mando 2–3 proposte, poi scegliamo quella giusta.",
     },
     {
-      title: "Finestra di lock",
+      title: "Revisione finale",
       detail: "Breve finestra di revisione per chiudere tempi e decisioni.",
     },
     {
-      title: "Pack di delivery",
+      title: "Consegna finale",
       detail: "File ordinati, versioni chiare e consegna organizzata.",
     },
   ],
   en: [
     {
-      title: "Spotting and brief",
+      title: "Brief and music moments",
       detail: "We define what each scene needs and how delivery will work.",
     },
     {
-      title: "Options A/B/C",
-      detail: "2–3 directions, then we pick the right one.",
+      title: "2–3 proposals",
+      detail: "I send 2–3 proposals, then we pick the right one.",
     },
     {
-      title: "Lock window",
+      title: "Final revision",
       detail: "Short revision window to lock timing and decisions.",
     },
     {
-      title: "Delivery pack",
+      title: "Final delivery",
       detail: "Organized files with clear versions.",
     },
   ],
@@ -52,10 +52,10 @@ const deliveryChecklistData = {
     "Un solo link di consegna con cartelle ordinate",
   ],
   en: [
-    "Main stereo mix",
+    "Main mix",
     "Separate tracks on request",
     "Mix variants for dialogue/effects when needed",
-    "Cue list with in/out timings",
+    "Music list with in/out times",
     "Single delivery link with organized folders",
   ],
 };
@@ -89,8 +89,8 @@ export default function ForProducersPage() {
         </h1>
         <p className="mt-3 text-sm text-[color:var(--muted)]">
           {t(
-            "Musica solida nei tempi, consegna pulita e passaggio semplice alla post‑produzione. Revisioni chiare e file organizzati.",
-            "Schedule-safe scoring, clean delivery, and a smooth handoff to post. Clear revisions and organized files."
+            "Musica solida nei tempi, consegna pulita e passaggio semplice alla post-produzione. Revisioni chiare e file organizzati.",
+            "On-time scoring, clean delivery, and a smooth handoff to post-production. Clear revisions and organized files."
           )}
         </p>
         <div className="mt-6">
@@ -151,7 +151,7 @@ export default function ForProducersPage() {
         </h2>
         <p className="mt-2 text-sm text-[color:var(--muted)]">
           {t(
-            "Condividi tempistiche, formati e requisiti della post‑produzione. Ti risponderò con un piano di consegna.",
+            "Condividi tempistiche, formati e requisiti della post-produzione. Ti risponderò con un piano di consegna.",
             "Share timeline, formats, and post requirements. I will reply with a delivery plan."
           )}
         </p>
