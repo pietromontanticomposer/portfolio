@@ -1,13 +1,14 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { memo, useEffect, useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { memo, useEffect, useRef, useState, type MouseEvent } from "react";
 import { animationCoordinator } from "../lib/AnimationCoordinator";
 import { useLanguage } from "../lib/LanguageContext";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const isHome = pathname === "/";
   const { t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
@@ -53,6 +54,20 @@ function Header() {
     };
   }, []);
 
+  const handleShowreelClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (isHome) {
+      event.preventDefault();
+      window.dispatchEvent(new Event("showreel:open"));
+      return;
+    }
+    try {
+      window.sessionStorage.setItem("openShowreel", "1");
+    } catch {
+      // no-op if storage unavailable
+    }
+    router.push("/#showreel");
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 z-50 w-full bg-transparent/60 transition ${scrolled && isDesktop && canBlur ? "backdrop-blur-sm" : ""}`}
@@ -78,7 +93,11 @@ function Header() {
           )}
         </div>
         <nav className="flex h-full items-center gap-6 text-sm text-[color:var(--muted)]">
-          <Link href="/#showreel" className="transition hover:text-[color:var(--foreground)]">
+          <Link
+            href="/#showreel"
+            className="transition hover:text-[color:var(--foreground)]"
+            onClick={handleShowreelClick}
+          >
             {t("Showreel", "Showreel")}
           </Link>
           <Link href="/portfolio" prefetch={false} className="transition hover:text-[color:var(--foreground)]">

@@ -14,7 +14,22 @@ type ShowreelSectionProps = {
 
 export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
   const { t } = useLanguage();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(() => {
+    if (typeof window === "undefined") return false;
+    let shouldOpen = false;
+    try {
+      if (window.sessionStorage.getItem("openShowreel") === "1") {
+        window.sessionStorage.removeItem("openShowreel");
+        shouldOpen = true;
+      }
+    } catch {
+      // ignore storage errors
+    }
+    if (!shouldOpen && window.location.hash === "#showreel") {
+      shouldOpen = true;
+    }
+    return shouldOpen;
+  });
   const portalTarget =
     typeof document === "undefined" ? null : document.body;
   const showreelLabel = t("Showreel", "Showreel");
@@ -39,6 +54,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
       window.removeEventListener("showreel:open", handleOpen);
     };
   }, []);
+
 
   useEffect(() => {
     if (!isOpen) return;
