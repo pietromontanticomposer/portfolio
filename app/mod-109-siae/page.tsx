@@ -43,358 +43,335 @@ const moduliUrl =
 
 const guideData: Record<"it" | "en", GuideContent> = {
   it: {
-    title: "Guida SIAE ai Mod. 109 e Mod. 109TF (programma musicale opere audiovisive)",
+    title: "Guida alla compilazione e all'invio del Mod. 109 e Mod. 109 TF",
     subtitle:
-      "Per produzioni e registi. Spiegazione chiara e corretta per evitare errori che bloccano o deviano i compensi.",
+      "Questa guida descrive come compilare correttamente i moduli Mod. 109 e Mod. 109 TF per la dichiarazione delle musiche utilizzate in un'opera audiovisiva presso SIAE.",
     intro: [],
     highlight: {
-      heading: "Prima regola",
+      heading: "Principio fondamentale di compilazione",
       lines: [
-        <>
-          Moduli (Drive):{" "}
-          <a href={moduliUrl} target="_blank" rel="noreferrer">
-            {moduliUrl}
-          </a>
-          .
-        </>,
-        "Dopo la compilazione, l'invio avviene solo via PEC.",
-        "PEC SIAE per l'invio dei moduli: MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
-        "Se usi un template vecchio, rischi di compilare campi sbagliati.",
+        "Ogni utilizzo effettivo di una composizione musicale deve essere indicato con una riga separata nell'elenco musiche.",
+        "Se la stessa composizione compare piu' volte nell'opera, deve essere inserita piu' volte, una per ciascun utilizzo, con la relativa durata.",
       ],
     },
     sections: [
       {
-        title: "Checklist veloce (10 minuti)",
-        ordered: true,
+        title: "1. A cosa servono i moduli",
+        paragraphs: [
+          "Il Mod. 109 e il Mod. 109 TF costituiscono il programma musicale ufficiale dell'opera audiovisiva.",
+          "Servono a dichiarare:",
+        ],
         bullets: [
-          "Scegli il modulo giusto: Mod. 109 (opera cinematografica) oppure Mod. 109TF (opera televisiva e/o Video On Demand).",
-          "Compila il foglio \"Dichiarazione\" con i dati certi.",
-          "Compila il foglio \"All.1 - Elenco composizioni\" con TUTTI i brani presenti nell'opera.",
-          "Le durate devono essere in secondi interi.",
-          "Esporta e invia via PEC in Excel oppure PDF digitale (non scansione) a MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
-          "Archivia: file inviato + ricevuta accettazione PEC + ricevuta consegna PEC.",
+          "le composizioni musicali utilizzate,",
+          "il numero di utilizzi,",
+          "la durata effettiva di ciascun utilizzo.",
+        ],
+        closing: [
+          "Queste informazioni sono la base per la corretta attribuzione e ripartizione dei diritti d'autore.",
         ],
       },
       {
-        title: "Download moduli (Drive)",
+        title: "2. Quale modulo utilizzare",
+        bullets: [
+          "Mod. 109: film e opere cinematografiche.",
+          "Mod. 109 TF: opere televisive, serie, episodi, programmi e contenuti destinati a TV o piattaforme VOD.",
+        ],
+      },
+      {
+        title: "3. Dove scaricare i moduli",
         paragraphs: [
           <>
-            Moduli (Drive):{" "}
+            I moduli ufficiali Mod. 109 e Mod. 109 TF in formato Excel possono essere scaricati da questo link:{" "}
             <a href={moduliUrl} target="_blank" rel="noreferrer">
               {moduliUrl}
             </a>
             .
           </>,
+          "E' necessario utilizzare esclusivamente i file Excel originali, senza modificarne la struttura, e verificare di avere la versione aggiornata prima della compilazione.",
         ],
       },
       {
-        title: "Chi fa cosa",
-        blocks: [
-          {
-            heading: "Produzione",
-            bullets: [
-              "Compila e invia il modulo via PEC.",
-              "E' responsabilita' della produzione.",
-            ],
-          },
-          {
-            heading: "Compositore",
-            bullets: [
-              "Fornisce un elenco pulito dei brani e i dati corretti (titoli, nomi, durate, editore se esiste).",
-            ],
-          },
-        ],
-      },
-      {
-        title: "Quando farlo",
+        title: "4. Principio fondamentale di compilazione",
         paragraphs: [
-          "Fallo quando montaggio e musica sono definitivi, e comunque prima della prima uscita o diffusione.",
+          "Ogni utilizzo effettivo di una composizione musicale deve essere indicato con una riga separata nell'elenco musiche.",
+          "Se la stessa composizione compare piu' volte nell'opera, deve essere inserita piu' volte, una per ciascun utilizzo, con la relativa durata.",
         ],
       },
       {
-        title: "Come compilare \"Dichiarazione\" (solo i campi importanti)",
-        paragraphs: ["Campi tipici (compila solo quelli richiesti):"],
+        title: "5. Materiale necessario prima della compilazione",
         bullets: [
-          "Titolo dell'opera.",
-          "Genere.",
-          "Dati della produzione e contatti.",
-          "Prima diffusione: se non disponibile, lascia vuoto o compila solo cio' che e' certo.",
-          "Responsabile della sincronizzazione: la persona che ha gestito autorizzazioni o la parte musica lato produzione.",
-          "Compositore o editore della musica: nominativo e contatti.",
-        ],
-        closing: [
-          "Nota importante: la \"Durata musica\" non va scritta a mano. Si calcola automaticamente sommando le durate in All.1.",
-          "Nota Mod. 109 (cinema): la \"Lunghezza\" del film va inserita come ore, minuti, secondi, oppure solo in secondi (numero intero).",
+          "una versione dell'opera con montaggio definitivo o picture lock operativo,",
+          "l'elenco completo delle musiche utilizzate,",
+          "la durata in secondi di ogni utilizzo musicale,",
+          "i dati completi della produzione,",
+          "per il Mod. 109 TF, i dati relativi alla prima diffusione o pubblicazione.",
         ],
       },
       {
-        title: "B) Allegato 1: elenco musiche",
+        title: "6. Regole tecniche generali",
+        bullets: [
+          "Il modulo deve essere inviato dal produttore.",
+          "L'invio deve avvenire esclusivamente tramite PEC.",
+          "Il file deve essere in formato Excel originale o PDF digitale, non scannerizzato.",
+          "Le durate delle musiche devono essere indicate solo in secondi, come numeri interi.",
+          "La durata totale della musica viene calcolata automaticamente dal modulo.",
+        ],
+      },
+      {
+        title: "7. Compilazione del foglio \"Dichiarazione\"",
         paragraphs: [
-          "E' il foglio dove elenchi tutte le musiche usate (originali e preesistenti).",
-          "Compila solo le colonne presenti nel file ufficiale SIAE (Mod. 109 o Mod. 109TF). Non aggiungere campi.",
-          "Per ogni musica inserisci una riga. La durata va inserita in secondi, come numero.",
+          "Nel foglio \"Dichiarazione\" devono essere compilati, secondo quanto richiesto dal modulo:",
         ],
-        blocks: [
-          {
-            heading: "Esempio conversione durata",
-            bullets: ["2:00 = 120", "0:35 = 35"],
-          },
-          {
-            heading: "Esempio riga Allegato 1",
-            bullets: [
-              'Scena 12 | "Braga Theme" | Pietro Montanti | (vuoto) | 34',
-            ],
-          },
-        ],
-      },
-      {
-        title: "Regole anti errore",
         bullets: [
-          'Non scrivere "2:00". Scrivi "120".',
-          "Se un dato non e' noto, lascia vuoto.",
-          "\"To be defined\" solo nei campi testuali. Mai nelle durate, perche' devono essere numeri.",
-          "Non cambiare i nomi dei fogli. Non rompere le formule.",
-          'Se usi brani preesistenti, inserisci titolo e autore reali, non "track 3".',
+          "titolo dell'opera audiovisiva,",
+          "genere,",
+          "durata totale dell'opera,",
+          "dati del produttore e contatti,",
+          "eventuale distributore,",
+          "nome del regista,",
+          "per il Mod. 109 TF, dati relativi alla prima diffusione o pubblicazione.",
         ],
+        closing: ["Il foglio deve essere firmato e datato dai soggetti indicati nel modello."],
       },
       {
-        title: "Per non perdere soldi",
+        title: "8. Compilazione del foglio \"All. 1 - Elenco composizioni\"",
+        paragraphs: ["Per ogni utilizzo musicale compilare una riga indicando:"],
         bullets: [
-          "Titoli e nominativi devono combaciare tra deposito SIAE e Mod. 109 (All.1).",
-          "Le quote (percentuali) depositate devono essere corrette e coerenti con i crediti reali.",
-          "Chiedi sempre alla produzione copia del Mod. 109 inviato e delle ricevute PEC.",
-          "Se la produzione compila, chiedi un controllo incrociato prima dell'invio (titoli, autori, editore, durate).",
+          "numero progressivo o riferimento di scena,",
+          "titolo della composizione musicale,",
+          "nome e cognome del compositore,",
+          "editore, se presente,",
+          "durata dell'utilizzo in secondi,",
+          "eventuali ulteriori campi richiesti dal modulo, come il tipo di utilizzazione.",
         ],
-        blocks: [
-          {
-            heading: "Link utili (moduli SIAE)",
-            paragraphs: [
-              <>
-                Moduli SIAE:{" "}
-                <a href={moduliUrl} target="_blank" rel="noreferrer">
-                  {moduliUrl}
-                </a>
-                .
-              </>,
-            ],
-          },
-        ],
+        closing: ["Le righe devono seguire l'ordine di apparizione delle musiche nell'opera."],
       },
       {
-        title: "Invio (solo PEC)",
+        title: "9. Calcolo delle durate",
         paragraphs: [
-          "Il modello va trasmesso dal produttore esclusivamente via PEC (non email normale).",
-          "PEC SIAE per l'invio dei moduli: MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
+          "La durata di ciascun utilizzo deve corrispondere al tempo reale in cui la musica e' udibile nell'opera.",
+          "Procedura consigliata:",
         ],
-        bullets: [
-          "File finale inviato.",
-          "Ricevuta accettazione PEC.",
-          "Ricevuta consegna PEC.",
-        ],
-      },
-      {
-        title: "Errori che ti fanno perdere soldi",
         ordered: true,
         bullets: [
-          "Titoli in All.1 diversi dai titoli depositati in SIAE.",
-          "Brani non depositati (original score) oppure depositati con quote sbagliate.",
-          "Durate non in secondi, o con testo invece di numeri.",
-          "Mancano brani presenti nel film, quindi non risultano dichiarati.",
-          "Invio non via PEC o invio di scansione (file \"immagine\").",
-          "Produzione non conserva le ricevute PEC, poi non prova l'invio.",
+          "individuare il punto di ingresso della musica,",
+          "individuare il punto di uscita,",
+          "calcolare la differenza temporale,",
+          "convertire il valore in secondi.",
+        ],
+        closing: [
+          "Utilizzi separati, anche della stessa composizione, devono essere indicati separatamente.",
         ],
       },
-      
+      {
+        title: "10. Coerenza dei titoli musicali",
+        paragraphs: [
+          "E' consigliato utilizzare, nell'elenco composizioni, titoli coerenti con quelli delle opere musicali depositate nel repertorio, per evitare errori di attribuzione o ritardi nella ripartizione.",
+        ],
+      },
+      {
+        title: "11. Invio tramite PEC",
+        paragraphs: [
+          <>
+            Il produttore deve inviare il modulo compilato via PEC all&apos;indirizzo indicato nel modello SIAE:{" "}
+            <a href="mailto:music.copyright.repertoire@pec.siae.it">
+              music.copyright.repertoire@pec.siae.it
+            </a>
+            .
+          </>,
+          "Allegare il file Excel originale o il PDF digitale e conservare le ricevute PEC di accettazione e consegna.",
+        ],
+      },
+      {
+        title: "12. Controlli finali",
+        paragraphs: ["Prima dell'invio verificare che:"],
+        bullets: [
+          "tutte le musiche utilizzate siano state inserite,",
+          "ogni utilizzo abbia una riga dedicata,",
+          "tutte le durate siano espresse in secondi,",
+          "il file sia in formato digitale corretto,",
+          "firme e dati richiesti siano presenti,",
+          "una copia del file inviato e delle ricevute PEC sia archiviata.",
+        ],
+      },
+      {
+        title: "13. Moduli aggiuntivi",
+        paragraphs: [
+          "In presenza dei requisiti previsti, possono essere compilati anche moduli specifici per richieste di maggiorazione o provvidenze relative alle colonne sonore, disponibili nella modulistica SIAE.",
+        ],
+      },
     ],
     footer: {
-      heading: "Chiusura breve",
-      lines: [
-        "Se vuoi, posso fornire alla produzione un file All.1 gia' pronto (titoli e durate in secondi). Loro devono solo copiare e inviare via PEC.",
-        <>
-          Contatto:{" "}
-          <a href="mailto:pietromontanticomposer@gmail.com">
-            pietromontanticomposer@gmail.com
-          </a>
-        </>,
-      ],
+      heading: "",
+      lines: [],
     },
   },
   en: {
-    title: "SIAE Guide to Mod. 109 and Mod. 109TF (music program for audiovisual works)",
+    title: "Guide to filling out and submitting Mod. 109 and Mod. 109 TF",
     subtitle:
-      "For productions and directors. Clear, correct instructions to avoid errors that block or divert royalties.",
+      "This guide explains how to correctly fill in Mod. 109 and Mod. 109 TF to declare the music used in an audiovisual work with SIAE.",
     intro: [],
     highlight: {
-      heading: "First rule",
+      heading: "Fundamental principle of compilation",
       lines: [
-        <>
-          Forms (Drive):{" "}
-          <a href={moduliUrl} target="_blank" rel="noreferrer">
-            {moduliUrl}
-          </a>
-          .
-        </>,
-        "After you fill the forms, submission is PEC only.",
-        "SIAE PEC for submission: MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
-        "If you use an old template, you may fill the wrong fields.",
+        "Each actual use of a musical composition must be listed with a separate row in the music list.",
+        "If the same composition appears more than once in the work, it must be listed multiple times, one per use, with its duration.",
       ],
     },
     sections: [
       {
-        title: "Quick checklist (10 minutes)",
-        ordered: true,
+        title: "1. What the forms are for",
+        paragraphs: [
+          "Mod. 109 and Mod. 109 TF are the official music program of the audiovisual work.",
+          "They are used to declare:",
+        ],
         bullets: [
-          "Choose the right form: Mod. 109 (cinema) or Mod. 109TF (TV and/or Video On Demand).",
-          "Fill in the \"Declaration\" sheet with confirmed data.",
-          "Fill in the \"Annex 1 - List of compositions\" sheet with ALL the tracks used in the work.",
-          "Durations must be whole seconds.",
-          "Export and send via PEC in Excel or digital PDF (not scanned) to MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
-          "Archive: sent file + PEC acceptance receipt + PEC delivery receipt.",
+          "the musical compositions used,",
+          "the number of uses,",
+          "the actual duration of each use.",
+        ],
+        closing: [
+          "This information is the basis for the correct attribution and distribution of authors' rights.",
         ],
       },
       {
-        title: "Download the forms (Drive)",
+        title: "2. Which form to use",
+        bullets: [
+          "Mod. 109: films and cinematic works.",
+          "Mod. 109 TF: television works, series, episodes, programs, and content for TV or VOD platforms.",
+        ],
+      },
+      {
+        title: "3. Where to download the forms",
         paragraphs: [
           <>
-            Forms (Drive):{" "}
+            The official Mod. 109 and Mod. 109 TF Excel forms can be downloaded from this link:{" "}
             <a href={moduliUrl} target="_blank" rel="noreferrer">
               {moduliUrl}
             </a>
             .
           </>,
+          "You must use only the original Excel files, without changing their structure, and make sure you have the latest version before filling them out.",
         ],
       },
       {
-        title: "Who does what",
-        blocks: [
-          {
-            heading: "Production",
-            bullets: [
-              "Completes and submits the form via PEC.",
-              "Responsibility stays with the production.",
-            ],
-          },
-          {
-            heading: "Composer",
-            bullets: [
-              "Provides a clean list of tracks and correct data (titles, names, durations, publisher if any).",
-            ],
-          },
-        ],
-      },
-      {
-        title: "When to do it",
+        title: "4. Fundamental principle of compilation",
         paragraphs: [
-          "Do it when the edit and the music are final, and in any case before the first release or broadcast.",
+          "Each actual use of a musical composition must be listed with a separate row in the music list.",
+          "If the same composition appears more than once in the work, it must be listed multiple times, one per use, with its duration.",
         ],
       },
       {
-        title: "How to fill \"Declaration\" (only the key fields)",
-        paragraphs: ["Typical fields (fill only what is required):"],
+        title: "5. What you need before filling out",
         bullets: [
-          "Title of the work.",
-          "Genre.",
-          "Production details and contacts.",
-          "First release: if not available, leave blank or fill only what is certain.",
-          "Synchronization manager: the person who handled clearances or the music on the production side.",
-          "Composer or publisher of the music: name and contacts.",
+          "a version of the work with a final edit or operational picture lock,",
+          "the complete list of music used,",
+          "the duration in seconds of each musical use,",
+          "full production details,",
+          "for Mod. 109 TF, data related to first broadcast or publication.",
+        ],
+      },
+      {
+        title: "6. General technical rules",
+        bullets: [
+          "The form must be submitted by the producer.",
+          "Submission must be exclusively via PEC.",
+          "The file must be the original Excel format or a digital PDF, not scanned.",
+          "Music durations must be indicated only in seconds, as whole numbers.",
+          "Total music duration is calculated automatically by the form.",
+        ],
+      },
+      {
+        title: "7. Filling in the \"Declaration\" sheet",
+        paragraphs: [
+          "In the \"Declaration\" sheet, the following must be filled in as required by the form:",
+        ],
+        bullets: [
+          "title of the audiovisual work,",
+          "genre,",
+          "total duration of the work,",
+          "producer details and contacts,",
+          "any distributor,",
+          "director's name,",
+          "for Mod. 109 TF, data related to first broadcast or publication.",
         ],
         closing: [
-          "Important note: the \"Music duration\" must not be typed manually. It is calculated automatically by summing the durations in Annex 1.",
-          "Mod. 109 (cinema) note: the film \"Length\" should be entered as hours, minutes, seconds, or only seconds (whole number).",
+          "The sheet must be signed and dated by the people indicated in the form.",
         ],
       },
       {
-        title:
-          "B) Annex 1: music list",
+        title: "8. Filling in the \"Annex 1 - List of compositions\" sheet",
+        paragraphs: ["For each musical use, fill one row indicating:"],
+        bullets: [
+          "progressive number or scene reference,",
+          "title of the musical composition,",
+          "composer's first and last name,",
+          "publisher, if any,",
+          "duration of the use in seconds,",
+          "any additional fields required by the form, such as type of use.",
+        ],
+        closing: [
+          "Rows must follow the order in which the music appears in the work.",
+        ],
+      },
+      {
+        title: "9. Calculating durations",
         paragraphs: [
-          "This is the sheet where you list all the music used (original and pre-existing).",
-          "Fill only the columns present in the official SIAE file (Mod. 109 or Mod. 109TF). Do not add fields.",
-          "One row per music cue. Duration must be seconds, numbers only.",
+          "The duration of each use must match the real time the music is audible in the work.",
+          "Recommended procedure:",
         ],
-        blocks: [
-          {
-            heading: "Example duration conversion",
-            bullets: ["2:00 = 120", "0:35 = 35"],
-          },
-          {
-            heading: "Example Annex 1 row",
-            bullets: [
-              'Scene 12 | "Braga Theme" | Pietro Montanti | (blank) | 34',
-            ],
-          },
-        ],
-      },
-      {
-        title: "Anti-error rules",
-        bullets: [
-          'Do not write "2:00". Write "120".',
-          "If a field is unknown, leave it blank.",
-          "\"To be defined\" only for text fields. Never in durations, because they must be numbers.",
-          "Do not rename the sheets. Do not break the formulas.",
-          'If you use pre-existing tracks, enter the real title and author, not "track 3".',
-        ],
-      },
-      {
-        title: "To avoid losing money",
-        bullets: [
-          "Titles and names must match between the SIAE deposit and Mod. 109 (Annex 1).",
-          "The deposited splits (percentages) must be correct and consistent with the actual credits.",
-          "Always ask the production for a copy of the submitted Mod. 109 and the PEC receipts.",
-          "If production fills it out, ask for a cross-check before sending (titles, authors, publisher, durations).",
-        ],
-        blocks: [
-          {
-            heading: "Useful links (SIAE forms)",
-            paragraphs: [
-              <>
-                Moduli SIAE:{" "}
-                <a href={moduliUrl} target="_blank" rel="noreferrer">
-                  {moduliUrl}
-                </a>
-                .
-              </>,
-            ],
-          },
-        ],
-      },
-      {
-        title: "Submission (PEC only)",
-        paragraphs: [
-          "The form must be submitted by the producer exclusively via PEC (not regular email).",
-          "SIAE PEC for submission: MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
-        ],
-        bullets: [
-          "Final file sent.",
-          "PEC acceptance receipt.",
-          "PEC delivery receipt.",
-        ],
-      },
-      {
-        title: "Errors that make you lose money",
         ordered: true,
         bullets: [
-          "Titles in Annex 1 differ from titles filed with SIAE.",
-          "Tracks not deposited (original score) or deposited with wrong splits.",
-          "Durations not in seconds, or text instead of numbers.",
-          "Missing tracks used in the film, so they are not declared.",
-          "Submission not via PEC or a scanned submission (image file).",
-          "Production does not keep PEC receipts and cannot prove submission.",
+          "identify the music entry point,",
+          "identify the exit point,",
+          "calculate the time difference,",
+          "convert the value into seconds.",
+        ],
+        closing: [
+          "Separate uses, even of the same composition, must be listed separately.",
         ],
       },
-      
+      {
+        title: "10. Consistency of music titles",
+        paragraphs: [
+          "It is recommended to use titles consistent with those of the works deposited in the repertoire, to avoid attribution errors or delays in distribution.",
+        ],
+      },
+      {
+        title: "11. PEC submission",
+        paragraphs: [
+          <>
+            The producer must send the completed form via PEC to the address indicated in the SIAE form:{" "}
+            <a href="mailto:music.copyright.repertoire@pec.siae.it">
+              music.copyright.repertoire@pec.siae.it
+            </a>
+            .
+          </>,
+          "Attach the original Excel file or the digital PDF and keep the PEC acceptance and delivery receipts.",
+        ],
+      },
+      {
+        title: "12. Final checks",
+        paragraphs: ["Before sending, verify that:"],
+        bullets: [
+          "all music used has been entered,",
+          "each use has its own dedicated row,",
+          "all durations are expressed in seconds,",
+          "the file is in the correct digital format,",
+          "required signatures and data are present,",
+          "a copy of the sent file and the PEC receipts is archived.",
+        ],
+      },
+      {
+        title: "13. Additional forms",
+        paragraphs: [
+          "If the requirements are met, additional forms for requests for \"maggiorazione\" or \"provvidenze\" related to soundtracks can also be filled out, available in the SIAE forms.",
+        ],
+      },
     ],
     footer: {
-      heading: "Short closing",
-      lines: [
-        "If you want, I can provide the production with an All.1 file already filled (titles and durations in seconds). They only need to copy and send via PEC.",
-        <>
-          Contact:{" "}
-          <a href="mailto:pietromontanticomposer@gmail.com">
-            pietromontanticomposer@gmail.com
-          </a>
-        </>,
-      ],
+      heading: "",
+      lines: [],
     },
   },
 };
@@ -506,16 +483,20 @@ export default function Mod109SiaePage() {
         </section>
       ))}
 
-      <section className="card-shell p-8">
-        <h2 className="section-title text-2xl text-[color:var(--foreground)]">
-          {guide.footer.heading}
-        </h2>
-        <div className="mt-4 space-y-3 text-sm text-[color:var(--muted)] leading-relaxed">
-          {guide.footer.lines.map((line, index) => (
-            <p key={`footer-${index}`}>{line}</p>
-          ))}
-        </div>
-      </section>
+      {guide.footer.lines.length > 0 ? (
+        <section className="card-shell p-8">
+          {guide.footer.heading ? (
+            <h2 className="section-title text-2xl text-[color:var(--foreground)]">
+              {guide.footer.heading}
+            </h2>
+          ) : null}
+          <div className="mt-4 space-y-3 text-sm text-[color:var(--muted)] leading-relaxed">
+            {guide.footer.lines.map((line, index) => (
+              <p key={`footer-${index}`}>{line}</p>
+            ))}
+          </div>
+        </section>
+      ) : null}
     </main>
   );
 }
