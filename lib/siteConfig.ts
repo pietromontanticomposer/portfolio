@@ -23,5 +23,6 @@ export const getShowreelUrl = (): string => {
 export const siteMetadata = {
   title: "Pietro Montanti",
   description: "Composer for Film and Media. Music that supports edit, tension, and character.",
-  ogImage: "/showreel-preview.jpg",
+  ogImage:
+    "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/foto-sito.webp",
 } as const;
