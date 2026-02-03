@@ -46,9 +46,9 @@ const videoCinemaTvUrl =
 
 const guideData: Record<"it" | "en", GuideContent> = {
   it: {
-    title: "Guida SIAE. Mod. 109 e Mod. 109TF (programma musicale opere audiovisive)",
+    title: "Guida SIAE ai Mod. 109 e Mod. 109TF (programma musicale opere audiovisive)",
     subtitle:
-      "Per produzioni e registi. Compilazione semplice, corretta, senza errori che bloccano o deviano i compensi.",
+      "Per produzioni e registi. Spiegazione chiara e corretta per evitare errori che bloccano o deviano i compensi.",
     intro: [],
     highlight: {
       heading: "Prima regola",
@@ -70,7 +70,7 @@ const guideData: Record<"it" | "en", GuideContent> = {
           .
         </>,
         <>
-          Copia di comodo (opzionale, potrebbe non essere aggiornato):{" "}
+          Copia di comodo (opzionale, potrebbe non essere aggiornata):{" "}
           <a href={driveUrl} target="_blank" rel="noreferrer">
             Cartella Drive
           </a>
@@ -84,12 +84,12 @@ const guideData: Record<"it" | "en", GuideContent> = {
         title: "Checklist veloce (10 minuti)",
         ordered: true,
         bullets: [
-          "Scegli il modulo: Mod. 109 (opera cinematografica) o Mod. 109TF (opera televisiva e/o Video On Demand).",
+          "Scegli il modulo giusto: Mod. 109 (opera cinematografica) oppure Mod. 109TF (opera televisiva e/o Video On Demand).",
           "Compila il foglio \"Dichiarazione\" con i dati certi.",
           "Compila il foglio \"All.1 - Elenco composizioni\" con TUTTI i brani presenti nell'opera.",
-          "Controlla che le durate siano in secondi interi.",
+          "Le durate devono essere in secondi interi.",
           "Esporta e invia via PEC in Excel oppure PDF digitale (non scansione) a MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
-          "Archivia: File finale inviato. Ricevuta accettazione PEC. Ricevuta consegna PEC.",
+          "Archivia: file inviato + ricevuta accettazione PEC + ricevuta consegna PEC.",
         ],
       },
       {
@@ -144,26 +144,27 @@ const guideData: Record<"it" | "en", GuideContent> = {
         ],
       },
       {
-        title: "Come compilare \"Dichiarazione\" (solo quello che conta)",
-        paragraphs: ["Campi tipici:"],
+        title: "Come compilare \"Dichiarazione\" (solo i campi importanti)",
+        paragraphs: ["Campi tipici (compila solo quelli richiesti):"],
         bullets: [
           "Titolo dell'opera.",
           "Genere.",
-          "Dati produzione e contatti.",
+          "Dati della produzione e contatti.",
           "Prima diffusione: se non disponibile, lascia vuoto o compila solo cio' che e' certo.",
-          "Responsabile della sincronizzazione: la persona che ha gestito le autorizzazioni o la parte musica lato produzione.",
+          "Responsabile della sincronizzazione: la persona che ha gestito autorizzazioni o la parte musica lato produzione.",
           "Compositore o editore della musica: nominativo e contatti.",
         ],
         closing: [
-          "Nota importante: la \"Durata musica\" non va inserita a mano. Si calcola automaticamente sommando le durate in All.1.",
-          "Nota specifica Mod. 109 (cinema): la \"Lunghezza\" del film va inserita come ore, minuti, secondi, oppure solo in secondi (numero intero).",
+          "Nota importante: la \"Durata musica\" non va scritta a mano. Si calcola automaticamente sommando le durate in All.1.",
+          "Nota Mod. 109 (cinema): la \"Lunghezza\" del film va inserita come ore, minuti, secondi, oppure solo in secondi (numero intero).",
         ],
       },
       {
-        title: "B) Allegato 1, elenco musiche",
+        title: "B) Allegato 1: elenco musiche",
         paragraphs: [
-          "Compila solo le colonne presenti nel file ufficiale SIAE (Mod. 109 o Mod. 109TF). Non si aggiungono campi.",
-          "Per ogni musica inserisci una riga. La durata va inserita in secondi come numero.",
+          "E' il foglio dove elenchi tutte le musiche usate (originali e preesistenti).",
+          "Compila solo le colonne presenti nel file ufficiale SIAE (Mod. 109 o Mod. 109TF). Non aggiungere campi.",
+          "Per ogni musica inserisci una riga. La durata va inserita in secondi, come numero.",
         ],
         blocks: [
           {
@@ -192,8 +193,8 @@ const guideData: Record<"it" | "en", GuideContent> = {
         title: "Per non perdere soldi",
         bullets: [
           "Deposita le opere musicali in SIAE e mantieni titoli e nominativi coerenti fra deposito e Mod. 109.",
-          "Chiedi sempre alla produzione copia del Mod. 109 inviato e ricevute PEC.",
-          "Bonus: nella pagina Moduli SIAE esistono moduli per maggiorazione e provvidenze. Non e' automatico ne' garantito, ma e' utile saperlo.",
+          "Chiedi sempre alla produzione copia del Mod. 109 inviato e delle ricevute PEC.",
+          "Bonus: nella pagina Moduli SIAE ci sono moduli per maggiorazione e provvidenze. Non e' automatico ne' garantito, ma e' utile saperlo.",
         ],
         blocks: [
           {
@@ -211,9 +212,9 @@ const guideData: Record<"it" | "en", GuideContent> = {
         ],
       },
       {
-        title: "Invio (blindato)",
+        title: "Invio (solo PEC)",
         paragraphs: [
-          "Il modello va trasmesso dal produttore esclusivamente via PEC.",
+          "Il modello va trasmesso dal produttore esclusivamente via PEC (non email normale).",
         ],
         bullets: [
           "File finale inviato.",
@@ -263,9 +264,9 @@ const guideData: Record<"it" | "en", GuideContent> = {
       },
     ],
     footer: {
-      heading: "Footer breve",
+      heading: "Chiusura breve",
       lines: [
-        "Se vuoi, posso fornire alla produzione un file All.1 gia' pronto con titoli e durate in secondi, cosi' devono solo copiare e inviare via PEC.",
+        "Se vuoi, posso fornire alla produzione un file All.1 gia' pronto (titoli e durate in secondi). Loro devono solo copiare e inviare via PEC.",
         <>
           Contatto:{" "}
           <a href="mailto:pietromontanticomposer@gmail.com">
@@ -276,9 +277,9 @@ const guideData: Record<"it" | "en", GuideContent> = {
     },
   },
   en: {
-    title: "SIAE Guide. Mod. 109 and Mod. 109TF (music program for audiovisual works)",
+    title: "SIAE Guide to Mod. 109 and Mod. 109TF (music program for audiovisual works)",
     subtitle:
-      "For productions and directors. Simple, correct completion, without errors that block or divert royalties.",
+      "For productions and directors. Clear, correct instructions to avoid errors that block or divert royalties.",
     intro: [],
     highlight: {
       heading: "First rule",
@@ -305,7 +306,7 @@ const guideData: Record<"it" | "en", GuideContent> = {
           </a>
           .
         </>,
-        "If you use an old Drive or a template saved months ago, you risk filling the wrong fields.",
+        "If you use an old Drive or a template saved months ago, you may fill the wrong fields.",
       ],
     },
     sections: [
@@ -313,12 +314,12 @@ const guideData: Record<"it" | "en", GuideContent> = {
         title: "Quick checklist (10 minutes)",
         ordered: true,
         bullets: [
-          "Choose the form: Mod. 109 (cinema) or Mod. 109TF (TV and/or Video On Demand).",
+          "Choose the right form: Mod. 109 (cinema) or Mod. 109TF (TV and/or Video On Demand).",
           "Fill in the \"Declaration\" sheet with confirmed data.",
           "Fill in the \"Annex 1 - List of compositions\" sheet with ALL the tracks used in the work.",
-          "Make sure durations are whole seconds.",
+          "Durations must be whole seconds.",
           "Export and send via PEC in Excel or digital PDF (not scanned) to MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
-          "Archive: Final file sent. PEC acceptance receipt. PEC delivery receipt.",
+          "Archive: sent file + PEC acceptance receipt + PEC delivery receipt.",
         ],
       },
       {
@@ -372,8 +373,8 @@ const guideData: Record<"it" | "en", GuideContent> = {
         ],
       },
       {
-        title: "How to fill \"Declaration\" (only what matters)",
-        paragraphs: ["Typical fields:"],
+        title: "How to fill \"Declaration\" (only the key fields)",
+        paragraphs: ["Typical fields (fill only what is required):"],
         bullets: [
           "Title of the work.",
           "Genre.",
@@ -389,10 +390,11 @@ const guideData: Record<"it" | "en", GuideContent> = {
       },
       {
         title:
-          "B) Annex 1, music list",
+          "B) Annex 1: music list",
         paragraphs: [
+          "This is the sheet where you list all the music used (original and pre-existing).",
           "Fill only the columns present in the official SIAE file (Mod. 109 or Mod. 109TF). Do not add fields.",
-          "One row per music cue. Duration must be seconds, number only.",
+          "One row per music cue. Duration must be seconds, numbers only.",
         ],
         blocks: [
           {
@@ -440,8 +442,8 @@ const guideData: Record<"it" | "en", GuideContent> = {
         ],
       },
       {
-        title: "Submission (locked down)",
-        paragraphs: ["The form must be submitted by the producer exclusively via PEC."],
+        title: "Submission (PEC only)",
+        paragraphs: ["The form must be submitted by the producer exclusively via PEC (not regular email)."],
         bullets: [
           "Final file sent.",
           "PEC acceptance receipt.",
@@ -490,9 +492,9 @@ const guideData: Record<"it" | "en", GuideContent> = {
       },
     ],
     footer: {
-      heading: "Footer",
+      heading: "Short closing",
       lines: [
-        "If you want, I can provide the production with an All.1 file already filled with titles and durations in seconds, so they only need to copy and send via PEC.",
+        "If you want, I can provide the production with an All.1 file already filled (titles and durations in seconds). They only need to copy and send via PEC.",
         <>
           Contact:{" "}
           <a href="mailto:pietromontanticomposer@gmail.com">
