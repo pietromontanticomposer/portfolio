@@ -38,11 +38,8 @@ type GuideContent = {
   footer: GuideFooter;
 };
 
-const driveUrl =
+const moduliUrl =
   "https://drive.google.com/drive/folders/1CRbEA4gRUjnmiTKNlgZZkGX4l_4QOcmv?usp=sharing";
-const moduliUrl = "https://www.siae.it/it/moduli/";
-const videoCinemaTvUrl =
-  "https://www.siae.it/it/utilizzatori/chiedere-licenza/servizi/cd-dvd/video-cinema-tv";
 
 const guideData: Record<"it" | "en", GuideContent> = {
   it: {
@@ -54,29 +51,13 @@ const guideData: Record<"it" | "en", GuideContent> = {
       heading: "Prima regola",
       lines: [
         <>
-          Usa sempre l&apos;ultima versione ufficiale dei moduli SIAE. Pagina Moduli
-          SIAE (Deposito Opere Audiovisive: Mod. 109 e Mod. 109TF):{" "}
+          Moduli (usa solo questo link):{" "}
           <a href={moduliUrl} target="_blank" rel="noreferrer">
             {moduliUrl}
           </a>
           .
         </>,
-        <>
-          Pagina Video cinema-tv SIAE (stessi modelli linkati nel contesto
-          video):{" "}
-          <a href={videoCinemaTvUrl} target="_blank" rel="noreferrer">
-            {videoCinemaTvUrl}
-          </a>
-          .
-        </>,
-        <>
-          Copia di comodo (opzionale, potrebbe non essere aggiornata):{" "}
-          <a href={driveUrl} target="_blank" rel="noreferrer">
-            Cartella Drive
-          </a>
-          .
-        </>,
-        "Se usi un Drive o un template salvato mesi fa, rischi di compilare campi sbagliati.",
+        "Se usi un template vecchio, rischi di compilare campi sbagliati.",
       ],
     },
     sections: [
@@ -96,24 +77,9 @@ const guideData: Record<"it" | "en", GuideContent> = {
         title: "Download moduli (fonte primaria)",
         paragraphs: [
           <>
-            Pagina Moduli SIAE (Mod. 109 e Mod. 109TF):{" "}
+            Moduli (usa solo questo link):{" "}
             <a href={moduliUrl} target="_blank" rel="noreferrer">
               {moduliUrl}
-            </a>
-            .
-          </>,
-          <>
-            Pagina Video cinema-tv SIAE (stessi modelli linkati nel contesto
-            video):{" "}
-            <a href={videoCinemaTvUrl} target="_blank" rel="noreferrer">
-              {videoCinemaTvUrl}
-            </a>
-            .
-          </>,
-          <>
-            Copia di comodo (opzionale, potrebbe non essere aggiornata):{" "}
-            <a href={driveUrl} target="_blank" rel="noreferrer">
-              Cartella Drive
             </a>
             .
           </>,
@@ -259,28 +225,13 @@ const guideData: Record<"it" | "en", GuideContent> = {
       heading: "First rule",
       lines: [
         <>
-          Always use the latest official SIAE forms. Moduli SIAE page (Deposito
-          Opere Audiovisive: Mod. 109 and Mod. 109TF):{" "}
+          Forms (use only this link):{" "}
           <a href={moduliUrl} target="_blank" rel="noreferrer">
             {moduliUrl}
           </a>
           .
         </>,
-        <>
-          Video cinema-tv SIAE page (same forms linked in the video context):{" "}
-          <a href={videoCinemaTvUrl} target="_blank" rel="noreferrer">
-            {videoCinemaTvUrl}
-          </a>
-          .
-        </>,
-        <>
-          Convenience copy (optional, may be out of date):{" "}
-          <a href={driveUrl} target="_blank" rel="noreferrer">
-            Drive folder
-          </a>
-          .
-        </>,
-        "If you use an old Drive or a template saved months ago, you may fill the wrong fields.",
+        "If you use an old template, you may fill the wrong fields.",
       ],
     },
     sections: [
@@ -300,23 +251,9 @@ const guideData: Record<"it" | "en", GuideContent> = {
         title: "Download the forms (primary source)",
         paragraphs: [
           <>
-            Moduli SIAE page (Mod. 109 and Mod. 109TF):{" "}
+            Forms (use only this link):{" "}
             <a href={moduliUrl} target="_blank" rel="noreferrer">
               {moduliUrl}
-            </a>
-            .
-          </>,
-          <>
-            Video cinema-tv SIAE page (same forms linked in the video context):{" "}
-            <a href={videoCinemaTvUrl} target="_blank" rel="noreferrer">
-              {videoCinemaTvUrl}
-            </a>
-            .
-          </>,
-          <>
-            Convenience copy (optional, may be out of date):{" "}
-            <a href={driveUrl} target="_blank" rel="noreferrer">
-              Drive folder
             </a>
             .
           </>,
