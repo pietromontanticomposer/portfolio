@@ -86,11 +86,15 @@ const sharedGuide: GuideContent = {
       title: "3. Dove scaricare i moduli",
       paragraphs: [
         "I moduli ufficiali Mod. 109 e Mod. 109 TF in formato Excel possono essere scaricati da questo link:",
-        <strong key="sec-3-link">
-          <a href={moduliUrl} target="_blank" rel="noreferrer">
-            {moduliUrl}
-          </a>
-        </strong>,
+        <span key="sec-3-link" className="inline-flex">
+          <button
+            type="button"
+            className="hero-btn hero-btn-secondary btn-compact"
+            onClick={() => window.open(moduliUrl, "_blank", "noopener,noreferrer")}
+          >
+            Apri moduli (Drive)
+          </button>
+        </span>,
         "E' necessario utilizzare esclusivamente i file Excel originali, senza modificarne la struttura, e verificare di avere la versione aggiornata prima della compilazione.",
       ],
     },
@@ -200,11 +204,17 @@ const sharedGuide: GuideContent = {
       title: "11. Invio tramite PEC",
       paragraphs: [
         "Il produttore deve inviare il modulo compilato via PEC all'indirizzo indicato nel modello SIAE:",
-        <strong key="sec-11-pec">
-          <a href="mailto:music.copyright.repertoire@pec.siae.it">
+        <span key="sec-11-pec" className="inline-flex">
+          <button
+            type="button"
+            className="hero-btn hero-btn-secondary btn-compact"
+            onClick={() => {
+              window.location.href = "mailto:music.copyright.repertoire@pec.siae.it";
+            }}
+          >
             music.copyright.repertoire@pec.siae.it
-          </a>
-        </strong>,
+          </button>
+        </span>,
         "Allegare il file Excel originale o il PDF digitale e conservare le ricevute PEC di accettazione e consegna.",
       ],
     },
