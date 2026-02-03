@@ -92,7 +92,7 @@ const sharedGuide: GuideContent = {
             className="hero-btn hero-btn-secondary btn-compact"
             onClick={() => window.open(moduliUrl, "_blank", "noopener,noreferrer")}
           >
-            Apri moduli (Drive)
+            Scarica moduli
           </button>
         </span>,
         "E' necessario utilizzare esclusivamente i file Excel originali, senza modificarne la struttura, e verificare di avere la versione aggiornata prima della compilazione.",
@@ -212,7 +212,7 @@ const sharedGuide: GuideContent = {
               window.location.href = "mailto:music.copyright.repertoire@pec.siae.it";
             }}
           >
-            music.copyright.repertoire@pec.siae.it
+            Invia PEC
           </button>
         </span>,
         "Allegare il file Excel originale o il PDF digitale e conservare le ricevute PEC di accettazione e consegna.",
