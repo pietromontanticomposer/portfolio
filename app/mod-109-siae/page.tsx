@@ -40,6 +40,7 @@ type GuideContent = {
 
 const moduliUrl =
   "https://drive.google.com/drive/folders/1CRbEA4gRUjnmiTKNlgZZkGX4l_4QOcmv";
+const pecEmail = "music.copyright.repertoire@pec.siae.it";
 
 const sharedGuide: GuideContent = {
   title: "Guida alla compilazione e all'invio del Mod. 109 e Mod. 109 TF",
@@ -204,15 +205,20 @@ const sharedGuide: GuideContent = {
       title: "11. Invio tramite PEC",
       paragraphs: [
         "Il produttore deve inviare il modulo compilato via PEC all'indirizzo indicato nel modello SIAE:",
-        <span key="sec-11-pec" className="inline-flex">
+        <span key="sec-11-pec" className="inline-flex flex-wrap items-center gap-3">
+          <span className="font-mono text-sm text-[color:var(--foreground)]">
+            {pecEmail}
+          </span>
           <button
             type="button"
-            className="hero-btn hero-btn-secondary btn-compact"
+            className="inline-flex text-xs uppercase tracking-wider text-[color:var(--muted)] transition hover:text-[color:var(--foreground)] underline underline-offset-4"
             onClick={() => {
-              window.location.href = "mailto:music.copyright.repertoire@pec.siae.it";
+              if (navigator.clipboard?.writeText) {
+                navigator.clipboard.writeText(pecEmail).catch(() => {});
+              }
             }}
           >
-            Invia PEC
+            Copia mail
           </button>
         </span>,
         "Allegare il file Excel originale o il PDF digitale e conservare le ricevute PEC di accettazione e consegna.",
