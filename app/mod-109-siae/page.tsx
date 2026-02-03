@@ -57,7 +57,8 @@ const guideData: Record<"it" | "en", GuideContent> = {
           </a>
           .
         </>,
-        "PEC invio moduli compilati: MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
+        "Dopo la compilazione, l'invio avviene solo via PEC.",
+        "PEC SIAE per l'invio dei moduli: MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
         "Se usi un template vecchio, rischi di compilare campi sbagliati.",
       ],
     },
@@ -183,7 +184,7 @@ const guideData: Record<"it" | "en", GuideContent> = {
         title: "Invio (solo PEC)",
         paragraphs: [
           "Il modello va trasmesso dal produttore esclusivamente via PEC (non email normale).",
-          "PEC: MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
+          "PEC SIAE per l'invio dei moduli: MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
         ],
         bullets: [
           "File finale inviato.",
@@ -233,7 +234,8 @@ const guideData: Record<"it" | "en", GuideContent> = {
           </a>
           .
         </>,
-        "PEC submission: MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
+        "After you fill the forms, submission is PEC only.",
+        "SIAE PEC for submission: MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
         "If you use an old template, you may fill the wrong fields.",
       ],
     },
@@ -360,7 +362,7 @@ const guideData: Record<"it" | "en", GuideContent> = {
         title: "Submission (PEC only)",
         paragraphs: [
           "The form must be submitted by the producer exclusively via PEC (not regular email).",
-          "PEC: MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
+          "SIAE PEC for submission: MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
         ],
         bullets: [
           "Final file sent.",
