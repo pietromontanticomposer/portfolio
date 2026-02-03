@@ -16,11 +16,20 @@ export const metadata: Metadata = {
     title: siteMetadata.title,
     description: siteMetadata.description,
     type: "website",
+    images: [
+      {
+        url: siteMetadata.ogImage,
+        width: 1200,
+        height: 630,
+        alt: siteMetadata.title,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: siteMetadata.title,
     description: siteMetadata.description,
+    images: [siteMetadata.ogImage],
   },
 };
 
