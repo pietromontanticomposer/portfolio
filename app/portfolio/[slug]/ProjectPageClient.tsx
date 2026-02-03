@@ -6,7 +6,9 @@ import LazyIframe from "../../../components/LazyIframe";
 import AudioPlayer from "../../../components/AudioPlayer";
 import TrackPlayer from "../../../components/TrackPlayerClient";
 import ProofQuotes from "../../../components/ProofQuotes";
+import ProjectCaseStudies from "../../../components/ProjectCaseStudies";
 import { getProofQuotesForProjectSlug } from "../../../data/proofQuotes";
+import { caseStudiesNormalized } from "../../../data/caseStudies";
 import { useLanguage } from "../../../lib/LanguageContext";
 import { getTagTranslation, getText } from "../../../lib/translations";
 
@@ -60,6 +62,12 @@ const getParagraphs = (text: string) =>
     .map((line) => line.trim())
     .filter(Boolean);
 
+const normalizeCaseStudyKey = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
 type Props = {
   project: Project;
 };
@@ -78,6 +86,13 @@ export default function ProjectPageClient({ project }: Props) {
   const yearLabel = project.year ? getTagTranslation(String(project.year), language) : "—";
   const proofQuotesForProject = getProofQuotesForProjectSlug(project.slug);
   const showProofQuotes = proofQuotesForProject.length > 0;
+  const projectKey = normalizeCaseStudyKey(project.slug);
+  const projectTitleKey = normalizeCaseStudyKey(project.title);
+  const relatedCaseStudies = caseStudiesNormalized.filter((item) => {
+    const labelKey = normalizeCaseStudyKey(item.projectLabel);
+    return labelKey === projectKey || labelKey === projectTitleKey;
+  });
+  const showCaseStudies = relatedCaseStudies.length > 0;
 
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-16 lg:px-20">
@@ -166,6 +181,10 @@ export default function ProjectPageClient({ project }: Props) {
 
       {!project.videoEmbed && showProofQuotes ? (
         <ProofQuotes quotes={proofQuotesForProject} />
+      ) : null}
+
+      {showCaseStudies ? (
+        <ProjectCaseStudies items={relatedCaseStudies} />
       ) : null}
 
       {project.largeImage ? (
