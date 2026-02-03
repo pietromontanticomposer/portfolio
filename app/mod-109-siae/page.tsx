@@ -192,9 +192,10 @@ const guideData: Record<"it" | "en", GuideContent> = {
       {
         title: "Per non perdere soldi",
         bullets: [
-          "Deposita le opere musicali in SIAE e mantieni titoli e nominativi coerenti fra deposito e Mod. 109.",
+          "Titoli e nominativi devono combaciare tra deposito SIAE e Mod. 109 (All.1).",
+          "Le quote (percentuali) depositate devono essere corrette e coerenti con i crediti reali.",
           "Chiedi sempre alla produzione copia del Mod. 109 inviato e delle ricevute PEC.",
-          "Bonus: nella pagina Moduli SIAE ci sono moduli per maggiorazione e provvidenze. Non e' automatico ne' garantito, ma e' utile saperlo.",
+          "Se la produzione compila, chiedi un controllo incrociato prima dell'invio (titoli, autori, editore, durate).",
         ],
         blocks: [
           {
@@ -234,34 +235,7 @@ const guideData: Record<"it" | "en", GuideContent> = {
           "Produzione non conserva le ricevute PEC, poi non prova l'invio.",
         ],
       },
-      {
-        title: "Massimizzare i compensi (senza fantasia)",
-        ordered: true,
-        bullets: [
-          "Deposita le opere musicali in SIAE con titoli coerenti al cue list e quote corrette (percentuali nei depositi).",
-          "Verifica nel Repertorio SIAE che titolo, autori, editore siano corretti prima dell'invio del Mod. 109.",
-          "Bonus: esistono richieste SIAE di \"maggiorazione\" e \"provvidenze\" per musiche da film. Non e' automatico ne' garantito, ma se hai i requisiti e' una leva concreta.",
-        ],
-        blocks: [
-          {
-            heading: "Link moduli (nei moduli SIAE)",
-            paragraphs: [
-              <>
-                Moduli SIAE (Deposito Opere Audiovisive):{" "}
-                <a href={moduliUrl} target="_blank" rel="noreferrer">
-                  Moduli SIAE
-                </a>
-                .
-              </>,
-            ],
-            bullets: [
-              "Domanda di attribuzione della maggiorazione per opere musicali composte per film, telefilm e opere drammatiche.",
-              "Domanda di attribuzione delle provvidenze per opere musicali inserite nelle colonne sonore di film di produzione o coproduzione italiana.",
-              "Domanda di attribuzione delle provvidenze per l'identita' culturale italiana.",
-            ],
-          },
-        ],
-      },
+      
     ],
     footer: {
       heading: "Chiusura breve",
@@ -422,9 +396,10 @@ const guideData: Record<"it" | "en", GuideContent> = {
       {
         title: "To avoid losing money",
         bullets: [
-          "Deposit the musical works with SIAE and keep titles and names consistent between the deposit and Mod. 109.",
+          "Titles and names must match between the SIAE deposit and Mod. 109 (Annex 1).",
+          "The deposited splits (percentages) must be correct and consistent with the actual credits.",
           "Always ask the production for a copy of the submitted Mod. 109 and the PEC receipts.",
-          "Bonus: the Moduli SIAE page includes forms for maggiorazione and provvidenze. It is not automatic or guaranteed, but it is useful to know.",
+          "If production fills it out, ask for a cross-check before sending (titles, authors, publisher, durations).",
         ],
         blocks: [
           {
@@ -462,34 +437,7 @@ const guideData: Record<"it" | "en", GuideContent> = {
           "Production does not keep PEC receipts and cannot prove submission.",
         ],
       },
-      {
-        title: "Maximize royalties (no hype)",
-        ordered: true,
-        bullets: [
-          "Deposit the musical works with SIAE using titles consistent with the cue list and correct splits (percentages in deposits).",
-          "Check in the SIAE Repertoire that title, authors, publisher are correct before sending Mod. 109.",
-          "Bonus: there are SIAE requests for \"maggiorazione\" and \"provvidenze\" for film music. It is not automatic or guaranteed, but if you meet the requirements it is a real lever.",
-        ],
-        blocks: [
-          {
-            heading: "Forms link (within SIAE forms)",
-            paragraphs: [
-              <>
-                SIAE forms (Deposito Opere Audiovisive):{" "}
-                <a href={moduliUrl} target="_blank" rel="noreferrer">
-                  SIAE forms
-                </a>
-                .
-              </>,
-            ],
-            bullets: [
-              "Domanda di attribuzione della maggiorazione per opere musicali composte per film, telefilm e opere drammatiche.",
-              "Domanda di attribuzione delle provvidenze per opere musicali inserite nelle colonne sonore di film di produzione o coproduzione italiana.",
-              "Domanda di attribuzione delle provvidenze per l'identita' culturale italiana.",
-            ],
-          },
-        ],
-      },
+      
     ],
     footer: {
       heading: "Short closing",
