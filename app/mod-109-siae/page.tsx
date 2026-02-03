@@ -51,12 +51,13 @@ const guideData: Record<"it" | "en", GuideContent> = {
       heading: "Prima regola",
       lines: [
         <>
-          Moduli (usa solo questo link):{" "}
+          Moduli (Drive):{" "}
           <a href={moduliUrl} target="_blank" rel="noreferrer">
             {moduliUrl}
           </a>
           .
         </>,
+        "PEC invio moduli compilati: MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
         "Se usi un template vecchio, rischi di compilare campi sbagliati.",
       ],
     },
@@ -74,10 +75,10 @@ const guideData: Record<"it" | "en", GuideContent> = {
         ],
       },
       {
-        title: "Download moduli (fonte primaria)",
+        title: "Download moduli (Drive)",
         paragraphs: [
           <>
-            Moduli (usa solo questo link):{" "}
+            Moduli (Drive):{" "}
             <a href={moduliUrl} target="_blank" rel="noreferrer">
               {moduliUrl}
             </a>
@@ -182,6 +183,7 @@ const guideData: Record<"it" | "en", GuideContent> = {
         title: "Invio (solo PEC)",
         paragraphs: [
           "Il modello va trasmesso dal produttore esclusivamente via PEC (non email normale).",
+          "PEC: MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
         ],
         bullets: [
           "File finale inviato.",
@@ -225,12 +227,13 @@ const guideData: Record<"it" | "en", GuideContent> = {
       heading: "First rule",
       lines: [
         <>
-          Forms (use only this link):{" "}
+          Forms (Drive):{" "}
           <a href={moduliUrl} target="_blank" rel="noreferrer">
             {moduliUrl}
           </a>
           .
         </>,
+        "PEC submission: MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
         "If you use an old template, you may fill the wrong fields.",
       ],
     },
@@ -248,10 +251,10 @@ const guideData: Record<"it" | "en", GuideContent> = {
         ],
       },
       {
-        title: "Download the forms (primary source)",
+        title: "Download the forms (Drive)",
         paragraphs: [
           <>
-            Forms (use only this link):{" "}
+            Forms (Drive):{" "}
             <a href={moduliUrl} target="_blank" rel="noreferrer">
               {moduliUrl}
             </a>
@@ -355,7 +358,10 @@ const guideData: Record<"it" | "en", GuideContent> = {
       },
       {
         title: "Submission (PEC only)",
-        paragraphs: ["The form must be submitted by the producer exclusively via PEC (not regular email)."],
+        paragraphs: [
+          "The form must be submitted by the producer exclusively via PEC (not regular email).",
+          "PEC: MUSIC.COPYRIGHT.REPERTOIRE@PEC.SIAE.IT.",
+        ],
         bullets: [
           "Final file sent.",
           "PEC acceptance receipt.",
