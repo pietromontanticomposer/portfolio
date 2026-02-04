@@ -52,14 +52,14 @@ export const metadata: Metadata = {
     images: [
       {
         url: siteMetadata.ogImage,
-        width: 1200,
-        height: 630,
+        width: 400,
+        height: 400,
         alt: siteMetadata.title,
       },
     ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: siteMetadata.title,
     description: siteMetadata.description,
     images: [siteMetadata.ogImage],

@@ -55,6 +55,18 @@ const sharedGuide: GuideContent = {
       {"."}
     </>
   ),
+  highlight: {
+    heading: "Prassi professionale standard",
+    lines: [
+      <span key="highlight-1">
+        {"La compilazione conforme del Mod. 109 / Mod. 109 TF e' una "}
+        <strong>prassi professionale standard</strong>
+        {" per regie e produzioni audiovisive."}
+      </span>,
+      "Seguirla riduce richieste di integrazione, ritardi di lavorazione e contestazioni.",
+      "Scostarsi dalle procedure ufficiali non e' in linea con gli standard professionali attesi dalla filiera.",
+    ],
+  },
   intro: [],
   sections: [
     {
