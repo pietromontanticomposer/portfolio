@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { spawnSync } from 'child_process';
 import dotenv from 'dotenv';
+import { safeRoots } from './ship-roots.mjs';
 
 const DEFAULT_REMOTE = 'https://github.com/pietromontanticomposer/portfolio.git';
 
@@ -123,30 +124,6 @@ if (ensureRemote.status !== 0) {
 }
 
 // Aggiungi solo codice e configurazione del progetto.
-const safeRoots = [
-  'app',
-  'components',
-  'lib',
-  'data',
-  'public',
-  'scripts',
-  '.github',
-  '.gitignore',
-  '.lighthouseci',
-  'check-token.cjs',
-  'content',
-  'privacy.config.json',
-  'package.json',
-  'package-lock.json',
-  'next.config.ts',
-  'next-env.d.ts',
-  'tsconfig.json',
-  'postcss.config.mjs',
-  'eslint.config.mjs',
-  '.lighthouserc.json',
-  '.vercelignore',
-  'README.md'
-];
 const toAdd = safeRoots.filter((p) => fs.existsSync(path.join(root, p)));
 if (toAdd.length === 0) {
   console.log('Nessun file "sicuro" da aggiungere. Annullamento commit.');

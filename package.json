@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node node_modules/next/dist/bin/next dev -p 3000",
+    "dev": "node scripts/dev.mjs",
+    "dev:plain": "node node_modules/next/dist/bin/next dev -p 3000",
     "build": "next build",
     "start": "node node_modules/next/dist/bin/next start -p 3000",
     "lint": "eslint",
@@ -13,6 +14,7 @@
     "blob:replace": "node scripts/replace-blob-urls.mjs",
     "blob:verify": "node scripts/verify-blob-urls.mjs",
     "ship": "node scripts/ship.mjs",
+    "ship:watch": "node scripts/auto-ship.mjs",
     "inbox:add": "node scripts/inbox-add.mjs",
     "ship:media": "node scripts/ship-all.mjs"
   },

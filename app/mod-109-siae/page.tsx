@@ -261,9 +261,25 @@ const sharedGuide: GuideContent = {
   },
 };
 
+const enGuide: GuideContent = {
+  ...sharedGuide,
+  highlight: {
+    heading: "Standard professional practice",
+    lines: [
+      <span key="highlight-1-en">
+        {"Proper completion of Mod. 109 / Mod. 109 TF is "}
+        <strong>standard professional practice</strong>
+        {" for directors and audiovisual productions."}
+      </span>,
+      "Following it reduces requests for additional information, processing delays, and disputes.",
+      "Deviating from the official procedures is not aligned with the professional standards expected across the production chain.",
+    ],
+  },
+};
+
 const guideData: Record<"it" | "en", GuideContent> = {
   it: sharedGuide,
-  en: sharedGuide,
+  en: enGuide,
 };
 
 export default function Mod109SiaePage() {
