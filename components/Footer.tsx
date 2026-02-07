@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import ContactPopover from "./ContactPopover";
-import NewsletterSignup from "./NewsletterSignup";
 import { useLanguage } from "../lib/LanguageContext";
 
 const CONTACT_EMAIL = "pietromontanticomposer@gmail.com";
@@ -95,11 +94,6 @@ export default function Footer() {
               </svg>
             </a>
           </div>
-        </div>
-
-        {/* Newsletter signup */}
-        <div className="mt-8 pt-6 border-t border-black/10">
-          <NewsletterSignup />
         </div>
 
         {/* Legal row (centered) */}
