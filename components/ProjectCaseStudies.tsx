@@ -8,7 +8,7 @@ import KeepPlayingVideo from "./KeepPlayingVideo";
 import LazyIframe from "./LazyIframe";
 import CaseStudyDuration from "./CaseStudyDuration";
 import { useLanguage, type Language } from "../lib/LanguageContext";
-import { getText, getTagTranslation, formatTimingEntry } from "../lib/translations";
+import { getText, formatTimingEntry } from "../lib/translations";
 import { getMediaSources } from "../lib/mediaUtils";
 import type { CaseStudy } from "../data/caseStudies";
 
@@ -221,16 +221,6 @@ function CaseStudyCard({
           <MediaThumbnail item={item} language={language} />
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
-          {item.tags.map((tag) => (
-            <span
-              key={`${item.id}-${tag}`}
-              className="rounded-full border border-[color:var(--card-border)] bg-[color:var(--card-inset-bg)] px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-[color:var(--muted)]"
-            >
-              {getTagTranslation(tag, language)}
-            </span>
-          ))}
-        </div>
       </summary>
 
       <div className="px-6 pb-6 sm:px-8 sm:pb-8">
