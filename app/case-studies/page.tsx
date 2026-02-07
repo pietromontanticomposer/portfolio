@@ -230,7 +230,7 @@ function CaseStudyCard({
 
   return (
     <details
-      className="card-shell case-study-card group overflow-hidden"
+      className="card-shell case-study-card group overflow-visible"
       suppressHydrationWarning
       onToggle={(event) => setIsOpen(event.currentTarget.open)}
     >

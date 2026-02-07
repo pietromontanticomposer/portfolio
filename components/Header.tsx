@@ -69,7 +69,7 @@ function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 z-50 w-full bg-transparent/60 transition ${scrolled && isDesktop && canBlur ? "backdrop-blur-sm" : ""}`}
+      className={`site-header fixed top-0 left-0 z-50 w-full bg-transparent/60 transition ${scrolled && isDesktop && canBlur ? "backdrop-blur-sm" : ""}`}
       style={{
         height: "var(--header-height)",
         contain: "layout style paint",

@@ -1653,7 +1653,7 @@ body.is-scrolling .bg-video {
   padding: 2rem;
 }
 
-body.showreel-open header {
+body.showreel-open .site-header {
   pointer-events: none;
   opacity: 0;
 }

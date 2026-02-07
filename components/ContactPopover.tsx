@@ -122,6 +122,10 @@ function ContactPopover({
 
   const buttonClasses = buttonClassName ?? "hero-btn hero-btn-secondary";
 
+  const handleToggle = () => {
+    setOpen(open ? false : true);
+  };
+
   return (
     <div className="relative inline-flex contact-popover" ref={wrapperRef}>
       <button
@@ -130,7 +134,7 @@ function ContactPopover({
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls={resolvedPanelId}
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={handleToggle}
       >
         {buttonLabel}
       </button>
@@ -164,9 +168,14 @@ function ContactPopover({
             >
               {t("Apri Gmail", "Open Gmail")}
             </a>
-            <p className="pt-2 text-center text-xs text-[color:var(--muted)]" aria-live="polite">
-              {EMAIL}
-            </p>
+            <div className="pt-2 text-center text-xs text-[color:var(--muted)]">
+              <a
+                href={buildMailtoHref(language)}
+                className="block break-all transition hover:text-[color:var(--foreground)]"
+              >
+                {EMAIL}
+              </a>
+            </div>
           </div>
         </div>
       ) : null}

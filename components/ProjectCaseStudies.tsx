@@ -188,7 +188,7 @@ function CaseStudyCard({
 
   return (
     <details
-      className="group overflow-hidden case-study-card card-inset rounded-[20px]"
+      className="group overflow-visible case-study-card card-inset rounded-[20px]"
       suppressHydrationWarning
       onToggle={(event) => setIsOpen(event.currentTarget.open)}
     >

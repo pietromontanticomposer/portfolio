@@ -119,8 +119,8 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
   }, [isOpen]);
 
   useEffect(() => {
-    if (!isOpen) return;
-    document.body.classList.add("showreel-open");
+    if (typeof document === "undefined") return;
+    document.body.classList.toggle("showreel-open", isOpen);
     return () => {
       document.body.classList.remove("showreel-open");
     };
