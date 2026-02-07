@@ -39,24 +39,24 @@ const stepsData = {
   ],
   en: [
     {
-      title: "Where music starts and stops",
+      title: "Spotting: where music enters",
       detail:
-        "We decide music in/out and the key moments it should support.",
+        "We watch the scene and decide what the music must do, where it enters, where it exits, and what it should avoid. It supports the direction, not cover it.",
     },
     {
-      title: "Options A/B/C",
+      title: "Options A, B, and C",
       detail:
-        "2–3 distinct directions on the same cut, so decisions stay fast and clean.",
+        "Three solutions, same cut, same timecode. The intent changes, not the confusion. You compare, choose, move on.",
     },
     {
       title: "Final cut",
       detail:
-        "Once the cut is final, I finish music and mix without moving targets.",
+        "Once the cut stabilizes, I lock sync points, transitions, and mix. Numbered revisions and a short changelog, so the thread never gets lost.",
     },
     {
       title: "File delivery",
       detail:
-        "Organized files and alternate versions when needed.",
+        "Ordered WAVs and stems, consistent naming, approved versions. If post needs materials, I prepare them in the right format.",
     },
   ],
 };
@@ -120,7 +120,7 @@ const labelsData = {
   en: {
     pageTitle: "For Directors",
     heroDescription:
-      "I score to picture, performance, and point of view. You get fast A/B/C options early, clear revision passes, and music that supports your cut without competing with it.",
+      "I write music that clarifies the rhythm of the scene and leaves room for your cut. I start from the emotional function, then bring you 2 or 3 directions on the same cut, with clear notes and tracked revisions. You choose fast. I close and deliver cleanly.",
     howIWork: "How I work",
     deliveryReady: "Delivery ready for post",
     sceneCaseStudies: "Scene case studies",
@@ -130,7 +130,7 @@ const labelsData = {
     readyToSend: "Ready to send a cut?",
     readyToSendDesc:
       "Send the scene, your references, and what it must do. I will reply with options, timings, and next steps.",
-    contact: "Contact",
+    contact: "Send a scene",
     // CaseStudyCard labels
     goal: "Goal",
     result: "Result",
