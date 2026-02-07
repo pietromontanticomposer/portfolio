@@ -17,24 +17,24 @@ import { parseDurationToSeconds, getMediaSources } from "../../lib/mediaUtils";
 const stepsData = {
   it: [
     {
-      title: "Dove entra la musica",
+      title: "Spotting: dove entra la musica",
       detail:
-        "Decidiamo insieme entrate/uscite e i momenti che la musica deve sostenere.",
+        "Guardiamo la scena e decidiamo cosa deve fare la musica, dove entra, dove esce e cosa deve evitare. Così sostiene la regia, non la copre.",
     },
     {
-      title: "Opzioni A/B/C",
+      title: "Opzioni A, B e C",
       detail:
-        "2–3 direzioni distinte sullo stesso montaggio, per decisioni rapide e chiare.",
+        "Tre soluzioni, stesso montaggio, stesso timecode. Cambia l'intento, non la confusione. Compari, scegli, vai avanti.",
     },
     {
       title: "Montaggio definitivo",
       detail:
-        "Quando la scena è definitiva, rifinisco musica e mix senza cambi continui.",
+        "Quando il cut si stabilizza, chiudo sincronismi, transizioni e mix. Revisioni numerate e un changelog breve, così non si perde mai il filo.",
     },
     {
       title: "Consegna file",
       detail:
-        "File ordinati e versioni alternative quando servono.",
+        "WAV e stems ordinati, naming coerente, versioni approvate. Se servono materiali per la post, li preparo nel formato giusto.",
     },
   ],
   en: [
@@ -82,7 +82,7 @@ const labelsData = {
   it: {
     pageTitle: "Per Registi",
     heroDescription:
-      "Compongo su immagine, performance e punto di vista. Ricevi opzioni A/B/C veloci, revisioni chiare, e brani che supportano il montaggio senza competere con esso.",
+      "Scrivo musica che chiarisce il ritmo della scena e lascia spazio al tuo montaggio. Parto dalla funzione emotiva, poi ti porto 2 o 3 direzioni sullo stesso cut, con note chiare e revisioni tracciate. Tu scegli in fretta. Io chiudo e consegno pulito.",
     howIWork: "Come lavoro",
     deliveryReady: "Consegna pronta per la post",
     sceneCaseStudies: "Case study delle scene",
@@ -92,7 +92,7 @@ const labelsData = {
     readyToSend: "Pronto a inviare un montaggio?",
     readyToSendDesc:
       "Invia la scena, i tuoi riferimenti, e cosa deve ottenere. Rispondo con opzioni, timing e prossimi passi.",
-    contact: "Contattami",
+    contact: "Invia una scena",
     // CaseStudyCard labels
     goal: "Obiettivo",
     result: "Risultato",
