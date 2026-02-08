@@ -21,7 +21,7 @@ export const comingSoonPosters = [
     slug: "coming-soon-freefall",
     title: "Freefall",
     tag: "Coming Soon",
-    image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/placeholders/poster-4.jpg",
+    image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster%2520freefall.avif",
   },
   {
     slug: "coming-soon-polvere-sotto-al-tappeto",

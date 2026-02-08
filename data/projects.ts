@@ -296,6 +296,8 @@ export const projects = [
     year: "Coming Soon",
     tag: "Coming Soon",
     featured: false,
+    image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster%2520freefall.avif",
+    largeImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster%2520freefall.avif",
     isDraft: true,
     description: {
       it: `Free / Fall è un cortometraggio diretto da Francesco La Barbera e Daniele Murgia, che esplora la dipendenza dal gioco d'azzardo attraverso il crollo soggettivo di un giovane intrappolato in un ciclo ripetitivo di compulsione ed evitamento.
