@@ -98,7 +98,7 @@ export default function Footer() {
 
         {/* Legal row (centered) */}
         <div className="mt-6 border-t pt-4 text-xs text-[color:var(--muted)] flex flex-col items-center gap-3 text-center">
-          <div className="font-medium">VAT 04593080239</div>
+          <div className="font-medium">{t("P.IVA 04593080239", "VAT 04593080239")}</div>
           <div className="font-medium">© 2025 Pietro Montanti</div>
           <div className="flex gap-4 justify-center">
             <Link href="/privacy-policy" prefetch={false} className="hover:underline">{t("Informativa Privacy", "Privacy Policy")}</Link>

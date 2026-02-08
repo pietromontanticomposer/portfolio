@@ -29,6 +29,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  // Keep document language in sync after hydration
+  useEffect(() => {
+    if (!mounted) return;
+    document.documentElement.lang = language;
+  }, [mounted, language]);
+
   const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);
     localStorage.setItem("lang", lang);

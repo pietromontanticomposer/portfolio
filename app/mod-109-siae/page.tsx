@@ -42,7 +42,7 @@ const moduliUrl =
   "https://drive.google.com/drive/folders/1CRbEA4gRUjnmiTKNlgZZkGX4l_4QOcmv";
 const pecEmail = "music.copyright.repertoire@pec.siae.it";
 
-const sharedGuide: GuideContent = {
+const itGuide: GuideContent = {
   title: "Guida alla compilazione e all'invio del Mod. 109 e Mod. 109 TF",
   subtitle: (
     <>
@@ -262,7 +262,18 @@ const sharedGuide: GuideContent = {
 };
 
 const enGuide: GuideContent = {
-  ...sharedGuide,
+  title: "Guide to completing and submitting Mod. 109 and Mod. 109 TF",
+  subtitle: (
+    <>
+      {"This guide explains how to correctly complete the "}
+      <strong>Mod. 109</strong>
+      {" and "}
+      <strong>Mod. 109 TF</strong>
+      {" forms for declaring the music used in an audiovisual work with "}
+      <strong>SIAE</strong>
+      {"."}
+    </>
+  ),
   highlight: {
     heading: "Standard professional practice",
     lines: [
@@ -275,10 +286,202 @@ const enGuide: GuideContent = {
       "Deviating from the official procedures is not aligned with the professional standards expected across the production chain.",
     ],
   },
+  intro: [],
+  sections: [
+    {
+      title: "1. What the forms are for",
+      paragraphs: [
+        <span key="sec-1-para-1-en">
+          {"Mod. 109 and Mod. 109 TF are the "}
+          <strong>official music cue sheet</strong>
+          {" for the audiovisual work."}
+        </span>,
+        "They are used to declare:",
+      ],
+      bullets: [
+        "the musical compositions used,",
+        "the number of uses,",
+        "the effective duration of each use.",
+      ],
+      closing: [
+        "This information is the basis for the correct attribution and distribution of authors' rights.",
+      ],
+    },
+    {
+      title: "2. Which form to use",
+      bullets: [
+        "Mod. 109: films and cinematic works.",
+        "Mod. 109 TF: television works, series, episodes, programs, and content intended for TV or VOD platforms.",
+      ],
+    },
+    {
+      title: "3. Where to download the forms",
+      paragraphs: [
+        "The official Mod. 109 and Mod. 109 TF Excel forms can be downloaded from this link:",
+        <span key="sec-3-link-en" className="inline-flex">
+          <button
+            type="button"
+            className="hero-btn hero-btn-secondary btn-compact"
+            onClick={() => window.open(moduliUrl, "_blank", "noopener,noreferrer")}
+          >
+            Download forms
+          </button>
+        </span>,
+        "You must use only the original Excel files, without altering their structure, and make sure you have the latest version before filling them in.",
+      ],
+    },
+    {
+      title: "4. Core completion principle",
+      paragraphs: [
+        <span key="sec-4-para-1-en">
+          {"Each "}
+          <strong>actual use</strong>
+          {" of a musical composition must be listed on "}
+          <strong>a separate line</strong>
+          {" in the music list."}
+        </span>,
+        "If the same composition appears multiple times in the work, it must be entered multiple times, one for each use, with the corresponding duration.",
+      ],
+    },
+    {
+      title: "5. Materials needed before filling in",
+      paragraphs: ["Before filling in the form, you must have:"],
+      bullets: [
+        "a version of the work with final edit or an operational picture lock,",
+        "the complete list of music used,",
+        "the duration in seconds of each music use,",
+        "full production details,",
+        "for Mod. 109 TF, details of the first broadcast or publication.",
+      ],
+    },
+    {
+      title: "6. General technical rules",
+      bullets: [
+        <span key="sec-6-bullet-1-en">
+          {"The form must be submitted "}
+          <strong>by the producer</strong>
+          {"."}
+        </span>,
+        <span key="sec-6-bullet-2-en">
+          {"Submission must be "}
+          <strong>exclusively via PEC</strong>
+          {"."}
+        </span>,
+        <span key="sec-6-bullet-3-en">
+          {"The file must be in "}
+          <strong>original Excel format or a digital PDF</strong>
+          {", not scanned."}
+        </span>,
+        <span key="sec-6-bullet-4-en">
+          {"Music durations must be indicated "}
+          <strong>only in seconds</strong>
+          {", as whole numbers."}
+        </span>,
+        "Total music duration is calculated automatically by the form.",
+      ],
+    },
+    {
+      title: "7. Completing the \"Declaration\" sheet",
+      paragraphs: [
+        "In the \"Declaration\" sheet, according to the form, you must fill in:",
+      ],
+      bullets: [
+        "title of the audiovisual work,",
+        "genre,",
+        "total duration of the work,",
+        "producer details and contacts,",
+        "any distributor,",
+        "director name,",
+        "for Mod. 109 TF, details of the first broadcast or publication.",
+      ],
+      closing: ["The sheet must be signed and dated by the parties indicated in the form."],
+    },
+    {
+      title: "8. Completing the \"Annex 1 - List of compositions\" sheet",
+      paragraphs: ["For each music use, fill in a row indicating:"],
+      bullets: [
+        "progressive number or scene reference,",
+        "title of the musical composition,",
+        "composer first and last name,",
+        "publisher, if present,",
+        "duration of the use in seconds,",
+        "any additional fields required by the form, such as the type of use.",
+      ],
+      closing: ["Rows must follow the order in which the music appears in the work."],
+    },
+    {
+      title: "9. Calculating durations",
+      paragraphs: [
+        "The duration of each use must match the actual time the music is audible in the work.",
+        "Recommended procedure:",
+      ],
+      ordered: true,
+      bullets: [
+        "identify the entry point of the music,",
+        "identify the exit point,",
+        "calculate the time difference,",
+        "convert the value into seconds.",
+      ],
+      closing: [
+        "Separate uses, even of the same composition, must be listed separately.",
+      ],
+    },
+    {
+      title: "10. Consistency of music titles",
+      paragraphs: [
+        "It is recommended to use, in the list of compositions, titles consistent with those of musical works registered in the repertoire, to avoid attribution errors or delays in distribution.",
+      ],
+    },
+    {
+      title: "11. Submission via PEC",
+      paragraphs: [
+        "The producer must send the completed form via PEC to the address indicated in the SIAE form:",
+        <span key="sec-11-pec-en" className="inline-flex flex-wrap items-center gap-3">
+          <span className="font-mono text-sm text-[color:var(--foreground)]">
+            {pecEmail}
+          </span>
+          <button
+            type="button"
+            className="inline-flex text-xs uppercase tracking-wider text-[color:var(--muted)] transition hover:text-[color:var(--foreground)] underline underline-offset-4"
+            onClick={() => {
+              if (navigator.clipboard?.writeText) {
+                navigator.clipboard.writeText(pecEmail).catch(() => {});
+              }
+            }}
+          >
+            Copy email
+          </button>
+        </span>,
+        "Attach the original Excel file or the digital PDF and keep the PEC acceptance and delivery receipts.",
+      ],
+    },
+    {
+      title: "12. Final checks",
+      paragraphs: ["Before sending, verify that:"],
+      bullets: [
+        "all music used has been entered,",
+        "each use has its own row,",
+        "all durations are expressed in seconds,",
+        "the file is in the correct digital format,",
+        "signatures and required data are present,",
+        "a copy of the submitted file and PEC receipts is archived.",
+      ],
+    },
+    {
+      title: "13. Additional forms",
+      paragraphs: [
+        "If the requirements apply, specific forms can also be completed for requests for increases or grants related to soundtracks, available in the SIAE forms.",
+      ],
+    },
+  ],
+  footer: {
+    heading: "",
+    lines: [],
+  },
 };
 
 const guideData: Record<"it" | "en", GuideContent> = {
-  it: sharedGuide,
+  it: itGuide,
   en: enGuide,
 };
 

@@ -23,7 +23,7 @@ const claudioReHref = "/portfolio/claudio-re";
 
 const labelsData = {
   it: {
-    pageTitle: "Case Studies",
+    pageTitle: "Casi studio",
     pageDescription:
       "Cosa serviva alla scena, cosa ho provato e cosa ha funzionato.",
     goal: "Obiettivo",
@@ -50,7 +50,7 @@ const labelsData = {
     loadClip: "Carica clip",
     clipLabel: "clip",
     videoFallback: "Il tuo browser non supporta il tag video.",
-    caseStudiesAria: "Case studies",
+    caseStudiesAria: "Casi studio",
     claudioReAria: "Vedi case study di Claudio Re",
     claudioReAlt: "Poster di Claudio Re",
     embedNotSet:

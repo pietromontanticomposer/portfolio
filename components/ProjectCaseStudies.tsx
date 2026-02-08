@@ -14,7 +14,7 @@ import type { CaseStudy } from "../data/caseStudies";
 
 const labelsData = {
   it: {
-    sectionTitle: "Case Studies",
+    sectionTitle: "Casi studio",
     goal: "Obiettivo",
     result: "Risultato",
     delivery: "Consegna file",

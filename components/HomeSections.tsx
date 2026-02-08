@@ -12,7 +12,7 @@ function HomeSections() {
       <section className="card-shell p-6 sm:p-8">
         <div className="section-header flex items-center justify-between">
           <h3 className="section-title text-2xl text-[color:var(--foreground)]">
-            {t("Case Studies", "Case Studies")}
+            {t("Casi studio", "Case Studies")}
           </h3>
         </div>
         <p className="mt-2 text-sm text-[color:var(--muted)]">
@@ -23,7 +23,7 @@ function HomeSections() {
         </p>
         <div className="mt-4">
           <a href="/case-studies" className="hero-btn hero-btn-secondary">
-            {t("Vedi case studies", "View case studies")}
+            {t("Vedi casi studio", "View case studies")}
           </a>
         </div>
       </section>

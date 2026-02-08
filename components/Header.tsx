@@ -113,7 +113,7 @@ function Header() {
             {t("Portfolio", "Portfolio")}
           </Link>
           <Link href="/case-studies" prefetch={false} className="transition hover:text-[color:var(--foreground)]">
-            {t("Case Studies", "Case Studies")}
+            {t("Casi studio", "Case Studies")}
           </Link>
           <Link href="/about" prefetch={false} className="transition hover:text-[color:var(--foreground)]">
             {t("Chi sono", "About")}

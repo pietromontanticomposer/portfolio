@@ -966,7 +966,10 @@ export const caseStudies: CaseStudyInput[] = [
   },
   {
     id: "claudio-re-opening-titles-storm-theme",
-    title: "Opening Titles, Glass Resonance and the Storm Theme (Main Titles)",
+    title: {
+      it: "Titoli di testa, risonanza di vetro e Storm Theme (Main Titles)",
+      en: "Opening Titles, Glass Resonance and the Storm Theme (Main Titles)"
+    },
     projectLabel: "Claudio re",
     sceneType: "Modern orchestral",
     duration: "01:48",
@@ -976,57 +979,109 @@ export const caseStudies: CaseStudyInput[] = [
     embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/Claudio%20Re/Claudio%20Re%20The%20Storm%20Case%20Study/index.m3u8",
     posterImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/Claudio%20Re%20The%20Storm%20Case%20Study.jpg",
 
-    context:
-      "Claudio re is inspired by Hamlet. Claudio murders his own brother to take the crown and the queen, then rules under a surface of stability while the crime keeps echoing through the court. His guilt is real, but his repentance is not: he refuses the price of redemption because he will not give up what he stole. That split turns into paranoia, a cold logic of power: if he rose through blood, he can be taken by blood.\n\nThe opening titles introduce the film’s core idea, the “storm”: not weather, but the irreversible disturbance Claudio has unleashed, moral, political, and psychological. The score’s job here is to make the world feel cracked from the first frame, and to establish the storm theme as consequence advancing, not as decorative mood.",
-    goal: "Set the film’s moral and political fracture from the first frame: a world that looks stable but vibrates with guilt and paranoia. Establish the “storm” theme as the engine of consequence, and frame Claudio as a man with real guilt but no repentance, trapped in the logic of power.",
+    context: {
+      it: "Claudio re e' ispirato ad Amleto. Claudio uccide il fratello per prendere la corona e la regina, poi governa sotto una superficie di stabilita' mentre il crimine continua a riecheggiare a corte. La sua colpa e' reale, ma il pentimento no: rifiuta il prezzo della redenzione perche' non vuole rinunciare a cio' che ha rubato. Quella frattura diventa paranoia, una fredda logica di potere: se e' salito col sangue, col sangue puo' essere tolto.\n\nI titoli di testa introducono l'idea centrale del film, la \"tempesta\": non il meteo, ma la perturbazione irreversibile che Claudio ha scatenato, morale, politica e psicologica. Qui la musica deve far sentire un mondo gia' incrinato dal primo fotogramma e fissare lo Storm Theme come conseguenza che avanza, non come atmosfera decorativa.",
+      en: "Claudio re is inspired by Hamlet. Claudio murders his own brother to take the crown and the queen, then rules under a surface of stability while the crime keeps echoing through the court. His guilt is real, but his repentance is not: he refuses the price of redemption because he will not give up what he stole. That split turns into paranoia, a cold logic of power: if he rose through blood, he can be taken by blood.\n\nThe opening titles introduce the film’s core idea, the “storm”: not weather, but the irreversible disturbance Claudio has unleashed, moral, political, and psychological. The score’s job here is to make the world feel cracked from the first frame, and to establish the storm theme as consequence advancing, not as decorative mood."
+    },
+    goal: {
+      it: "Fissare fin dal primo fotogramma la frattura morale e politica del film: un mondo che appare stabile ma vibra di colpa e paranoia. Stabilire lo Storm Theme come motore delle conseguenze e inquadrare Claudio come un uomo con colpa reale ma senza pentimento, intrappolato nella logica del potere.",
+      en: "Set the film’s moral and political fracture from the first frame: a world that looks stable but vibrates with guilt and paranoia. Establish the “storm” theme as the engine of consequence, and frame Claudio as a man with real guilt but no repentance, trapped in the logic of power."
+    },
     chosen: {
       key: "B",
-      summary: "Modern orchestra + synth pressure with bowed-glass resonance, then storm theme introduced as a slow advance.",
-      reason: "Delivers inevitability without losing tragic weight or clarity."
+      summary: {
+        it: "Orchestra moderna + pressione dei synth con risonanza di vetro sfregato, poi lo Storm Theme introdotto come un'avanzata lenta.",
+        en: "Modern orchestra + synth pressure with bowed-glass resonance, then storm theme introduced as a slow advance."
+      },
+      reason: {
+        it: "Trasmette inevitabilita' senza perdere peso tragico o chiarezza.",
+        en: "Delivers inevitability without losing tragic weight or clarity."
+      }
     },
-    result: "The titles land with immediate tension and inevitability. The glass-like resonance reads as a crack in the world, and the storm theme feels like an advancing force rather than decorative atmosphere, aligning the viewer with Claudio’s unstable inner control.",
+    result: {
+      it: "I titoli arrivano con tensione immediata e inevitabilita'. La risonanza vitrea si percepisce come una crepa nel mondo, e lo Storm Theme appare come una forza che avanza piu' che come atmosfera decorativa, allineando lo spettatore al controllo interno instabile di Claudio.",
+      en: "The titles land with immediate tension and inevitability. The glass-like resonance reads as a crack in the world, and the storm theme feels like an advancing force rather than decorative atmosphere, aligning the viewer with Claudio’s unstable inner control."
+    },
     trackTitle: "Storm Theme (Opening Titles)",
     timing: {
       in: {
         time: "00:00",
-        label: "Opening titles begin. The bowed-glass resonance hits only on the title reveal."
+        label: {
+          it: "Iniziano i titoli di testa. La risonanza di vetro sfregato entra solo sulla comparsa del titolo.",
+          en: "Opening titles begin. The bowed-glass resonance hits only on the title reveal."
+        }
       },
-      turn: { time: "01:12", label: "After a brief strings-and-brass crescendo, the storm theme detonates." },
-      out: { time: "01:48", label: "End of opening titles cue." }
+      turn: {
+        time: "01:12",
+        label: {
+          it: "Dopo un breve crescendo di archi e ottoni, esplode lo Storm Theme.",
+          en: "After a brief strings-and-brass crescendo, the storm theme detonates."
+        }
+      },
+      out: {
+        time: "01:48",
+        label: {
+          it: "Fine del cue dei titoli di testa.",
+          en: "End of opening titles cue."
+        }
+      }
     },
-    spottingNote:
-      "The bowed-glass resonance is a signature hit tied to the title reveal, not a continuous bed. The cue holds tension under the surface, then a short crescendo in strings and brass detonates into the storm theme. The storm must feel like a sudden rupture in control, not a gradual swell, and it should remain premium and legible rather than trailer-like.",
+    spottingNote: {
+      it: "La risonanza di vetro sfregato e' un colpo firma legato alla comparsa del titolo, non un tappeto continuo. Il cue mantiene la tensione sotto la superficie, poi un breve crescendo di archi e ottoni detona nello Storm Theme. La tempesta deve sembrare una rottura improvvisa del controllo, non un crescendo graduale, e deve restare di classe e leggibile, non da trailer.",
+      en: "The bowed-glass resonance is a signature hit tied to the title reveal, not a continuous bed. The cue holds tension under the surface, then a short crescendo in strings and brass detonates into the storm theme. The storm must feel like a sudden rupture in control, not a gradual swell, and it should remain premium and legible rather than trailer-like."
+    },
 
-    directorWanted:
-      "Inevitable tension. Modern orchestral weight with controlled synth pressure. A clear thematic identity from the start.",
-    directorAvoid:
-      "Generic trailer hits. Over-the-top horror. Anything that feels like copied Batman rather than a tailored language.",
+    directorWanted: {
+      it: "Tensione inevitabile. Peso orchestrale moderno con pressione dei synth controllata. Identita' tematica chiara fin dall'inizio.",
+      en: "Inevitable tension. Modern orchestral weight with controlled synth pressure. A clear thematic identity from the start."
+    },
+    directorAvoid: {
+      it: "Colpi da trailer generici. Horror sopra le righe. Qualsiasi cosa che sembri un Batman copiato invece di un linguaggio su misura.",
+      en: "Generic trailer hits. Over-the-top horror. Anything that feels like copied Batman rather than a tailored language."
+    },
 
     versionsTested: {
-      A: "Orchestra-only. Too period, lacked psychological edge.",
-      B: "Modern orchestra + synth pressure with bowed-glass resonance, then storm theme introduced as a slow advance.",
-      C: "Heavier synth dominance. Felt less cinematic and reduced the tragic weight."
+      A: {
+        it: "Solo orchestra. Troppo d'epoca, mancava il taglio psicologico.",
+        en: "Orchestra-only. Too period, lacked psychological edge."
+      },
+      B: {
+        it: "Orchestra moderna + pressione dei synth con risonanza di vetro sfregato, poi lo Storm Theme introdotto come un'avanzata lenta.",
+        en: "Modern orchestra + synth pressure with bowed-glass resonance, then storm theme introduced as a slow advance."
+      },
+      C: {
+        it: "Dominanza synth piu' pesante. Meno cinematografico e riduceva il peso tragico.",
+        en: "Heavier synth dominance. Felt less cinematic and reduced the tragic weight."
+      }
     },
-    finalChoice: "B",
+    finalChoice: { it: "B", en: "B" },
 
-    delivered: "Final mix plus alternates, clearly labelled. Revisions tracked.",
+    delivered: {
+      it: "Mix finale piu' alternate, etichettate chiaramente. Revisioni tracciate.",
+      en: "Final mix plus alternates, clearly labelled. Revisions tracked."
+    },
     technicalDeliverables: [
-      "Delivery format: WAV (linear PCM)",
-      "Specs: 48 kHz, 24-bit",
-      "Sync: aligned to final picture"
+      { it: "Formato delivery: WAV (PCM lineare)", en: "Delivery format: WAV (linear PCM)" },
+      { it: "Specifiche: 48 kHz, 24-bit", en: "Specs: 48 kHz, 24-bit" },
+      { it: "Sync: allineato al picture finale", en: "Sync: aligned to final picture" }
     ],
-    musicalLanguage:
-      "Hybrid modern orchestra and synth. The bowed-glass resonant colour is used as a signature hit only when the title appears, a brief, cutting vibration that reads as a crack in the world. Underneath, tension is held back until a short crescendo in strings and brass builds pressure, then the storm theme breaks in suddenly, like control snapping into consequence. The reference behaviour from Giacchino’s The Batman is used as a model for weight and clarity (low-register authority, simple thematic identity), but the impact here is defined by contrast: restraint first, then a sharp thematic eruption. The storm is not weather. It is Claudio’s irreversible disturbance made audible.",
+    musicalLanguage: {
+      it: "Orchestra moderna ibrida e synth. Il colore risonante del vetro sfregato e' usato come colpo firma solo quando appare il titolo, una vibrazione breve e tagliente che si legge come una crepa nel mondo. Sotto, la tensione resta trattenuta finche' un breve crescendo di archi e ottoni accumula pressione, poi lo Storm Theme irrompe all'improvviso, come il controllo che si spezza in conseguenza. Il comportamento di riferimento da Giacchino in The Batman e' usato come modello di peso e chiarezza (autorita' nel registro grave, identita' tematica semplice), ma l'impatto qui e' definito dal contrasto: prima contenimento, poi un'eruzione tematica netta. La tempesta non e' meteo. E' la perturbazione irreversibile di Claudio resa udibile.",
+      en: "Hybrid modern orchestra and synth. The bowed-glass resonant colour is used as a signature hit only when the title appears, a brief, cutting vibration that reads as a crack in the world. Underneath, tension is held back until a short crescendo in strings and brass builds pressure, then the storm theme breaks in suddenly, like control snapping into consequence. The reference behaviour from Giacchino’s The Batman is used as a model for weight and clarity (low-register authority, simple thematic identity), but the impact here is defined by contrast: restraint first, then a sharp thematic eruption. The storm is not weather. It is Claudio’s irreversible disturbance made audible."
+    },
 
     technicalNotes: [
-      "Delivery format: WAV (linear PCM)",
-      "Specs: 48 kHz, 24-bit",
-      "Sync: aligned to final picture"
+      { it: "Formato delivery: WAV (PCM lineare)", en: "Delivery format: WAV (linear PCM)" },
+      { it: "Specifiche: 48 kHz, 24-bit", en: "Specs: 48 kHz, 24-bit" },
+      { it: "Sync: allineato al picture finale", en: "Sync: aligned to final picture" }
     ]
   },
   {
     id: "claudio-re-my-sin-is-rotten",
-    title: "My Sin is Rotten, The Crown Trap (Dialogue)",
+    title: {
+      it: "My Sin is Rotten, la trappola della corona (Dialogo)",
+      en: "My Sin is Rotten, The Crown Trap (Dialogue)"
+    },
     projectLabel: "Claudio re",
     sceneType: "Dialogue",
     duration: "01:27",
@@ -1048,60 +1103,102 @@ export const caseStudies: CaseStudyInput[] = [
     embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/Claudio%20Re/Claudio%20Re%20My%20Sin%20Is%20Rotten/index.m3u8",
     posterImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/Claudio%20Re%20My%20Sin%20Is%20Rotten.jpg",
 
-    context:
-      "Claudio re is inspired by Hamlet. Claudio murders his own brother to take the crown and the queen, then rules under a surface of stability while the crime keeps echoing through the court. His guilt is real, but he refuses the price of repentance because he will not give up what he stole.\n\nIn this monologue he names the sin as rotten and admits it is the oldest curse, the murder of a brother, then exposes the trap: forgiveness cannot ‘go through’ while he remains in possession of the fruits of the murder, the crown, ambition, and the queen. The cue mirrors that contradiction: a veneer of nobility struggling to stand over something fundamentally corrupt.",
-    goal:
-      "Support Claudio’s confession without granting him redemption. Keep the dialogue pristine while making the ‘rottenness’ feel physical and inescapable: real guilt, no repentance, and paranoia as the logic of power.",
+    context: {
+      it: "Claudio re e' ispirato ad Amleto. Claudio uccide il fratello per prendere la corona e la regina, poi governa sotto una superficie di stabilita' mentre il crimine continua a riecheggiare a corte. La sua colpa e' reale, ma rifiuta il prezzo del pentimento perche' non vuole rinunciare a cio' che ha rubato.\n\nIn questo monologo definisce il peccato come marcio e ammette che e' la piu' antica maledizione, l'uccisione di un fratello, poi rivela la trappola: il perdono non puo' \"passare\" finche' resta in possesso dei frutti dell'omicidio, la corona, l'ambizione e la regina. Il cue rispecchia questa contraddizione: una patina di nobilta' che fatica a reggere sopra qualcosa di fondamentalmente corrotto.",
+      en: "Claudio re is inspired by Hamlet. Claudio murders his own brother to take the crown and the queen, then rules under a surface of stability while the crime keeps echoing through the court. His guilt is real, but he refuses the price of repentance because he will not give up what he stole.\n\nIn this monologue he names the sin as rotten and admits it is the oldest curse, the murder of a brother, then exposes the trap: forgiveness cannot ‘go through’ while he remains in possession of the fruits of the murder, the crown, ambition, and the queen. The cue mirrors that contradiction: a veneer of nobility struggling to stand over something fundamentally corrupt."
+    },
+    goal: {
+      it: "Sostenere la confessione di Claudio senza concedergli redenzione. Tenere il dialogo intatto mentre la \"marcescenza\" deve essere fisica e ineludibile: colpa reale, nessun pentimento, paranoia come logica del potere.",
+      en: "Support Claudio’s confession without granting him redemption. Keep the dialogue pristine while making the ‘rottenness’ feel physical and inescapable: real guilt, no repentance, and paranoia as the logic of power."
+    },
     chosen: {
       key: "B",
-      summary:
-        "Piano motif surrounded by dark ambient synth, with restrained orchestral shadows and controlled harmonic ‘rot’ via non-chord tones.",
-      reason: "Keeps the confession intimate while embedding unease without melodrama."
+      summary: {
+        it: "Motivo di piano circondato da synth ambientali scuri, con ombre orchestrali contenute e \"marciume\" armonico controllato tramite note estranee.",
+        en: "Piano motif surrounded by dark ambient synth, with restrained orchestral shadows and controlled harmonic ‘rot’ via non-chord tones."
+      },
+      reason: {
+        it: "Rende la confessione intima, ma innesta inquietudine senza melodramma.",
+        en: "Keeps the confession intimate while embedding unease without melodrama."
+      }
     },
-    result:
-      "The monologue lands as self-awareness trapped in denial. The cue reads as inner corrosion rather than sadness, and the tension stays under the speech without masking it.",
+    result: {
+      it: "Il monologo arriva come autoconsapevolezza intrappolata nel diniego. Il cue suona come corrosione interna piu' che tristezza, e la tensione resta sotto le parole senza coprirle.",
+      en: "The monologue lands as self-awareness trapped in denial. The cue reads as inner corrosion rather than sadness, and the tension stays under the speech without masking it."
+    },
     trackTitle: "My Crown, My Ambition, My Queen",
     timing: {
       in: {
         time: "00:00",
-        label: "Claudio: “My sin is rotten and its stench reaches heaven.”"
+        label: {
+          it: "Claudio: \"Il mio peccato e' marcio e il suo lezzo arriva al cielo.\"",
+          en: "Claudio: “My sin is rotten and its stench reaches heaven.”"
+        }
       },
       out: {
         time: "01:27",
-        label: "End of the confession beat. Music releases without redemption."
+        label: {
+          it: "Fine del beat di confessione. La musica si scioglie senza redenzione.",
+          en: "End of the confession beat. Music releases without redemption."
+        }
       }
     },
-    spottingNote:
-      "Dialogue-first, but the cue has a clear thematic reveal. Claudio’s real theme appears in D minor on the ‘Light! Light!’ section. Before the line “My queen?” the melody is carried by viola da gamba to introduce historical colour. On “my queen” the full orchestra joins, reinforced by the historical instruments and a dark synth bed: it reads as epic self-mythologising, then the mask slips. The ending uses intentionally dissonant chords and a rotten brass aftertaste, with trombones staining the final words, as a narrative bridge into the following sequence where Claudio confronts the spectre in an imagined duel and is killed.",
+    spottingNote: {
+      it: "Dialogo in primo piano, ma il cue ha un chiaro reveal tematico. Il vero tema di Claudio appare in re minore nella sezione \"Light! Light!\". Prima della battuta \"My queen?\" la melodia e' affidata alla viola da gamba per introdurre un colore storico. Su \"my queen\" entra l'orchestra completa, sostenuta dagli strumenti storici e da un letto di synth scuro: suona come auto-mitizzazione epica, poi la maschera scivola. Il finale usa accordi volutamente dissonanti e un retrogusto \"marcio\" degli ottoni, con i tromboni che macchiano le ultime parole, come ponte narrativo verso la sequenza successiva in cui Claudio affronta The Spectre in un duello immaginato e viene ucciso.",
+      en: "Dialogue-first, but the cue has a clear thematic reveal. Claudio’s real theme appears in D minor on the ‘Light! Light!’ section. Before the line “My queen?” the melody is carried by viola da gamba to introduce historical colour. On “my queen” the full orchestra joins, reinforced by the historical instruments and a dark synth bed: it reads as epic self-mythologising, then the mask slips. The ending uses intentionally dissonant chords and a rotten brass aftertaste, with trombones staining the final words, as a narrative bridge into the following sequence where Claudio confronts the spectre in an imagined duel and is killed."
+    },
 
-    directorWanted: "Dialogue-safe psychological decay. Noble veneer with corruption underneath.",
-    directorAvoid: "Redemptive cadences, big swells, anything that masks the words.",
+    directorWanted: {
+      it: "Decadenza psicologica compatibile col dialogo. Patina nobile con corruzione sotto.",
+      en: "Dialogue-safe psychological decay. Noble veneer with corruption underneath."
+    },
+    directorAvoid: {
+      it: "Cadenze redentive, grandi swell, qualsiasi cosa che copra le parole.",
+      en: "Redemptive cadences, big swells, anything that masks the words."
+    },
 
     versionsTested: {
-      A: "Only synth ambience. Too flat, lacked character identity.",
-      B: "Piano motif + dark ambient contamination, then D minor theme reveal with historical colour and rotten brass tail.",
-      C: "More orchestral emotion. Felt sympathetic and reduced the rot."
+      A: {
+        it: "Solo ambiente synth. Troppo piatto, mancava l'identita' del personaggio.",
+        en: "Only synth ambience. Too flat, lacked character identity."
+      },
+      B: {
+        it: "Motivo di piano + contaminazione ambient scura, poi reveal del tema in re minore con colore storico e coda di ottoni marcia.",
+        en: "Piano motif + dark ambient contamination, then D minor theme reveal with historical colour and rotten brass tail."
+      },
+      C: {
+        it: "Piu' emozione orchestrale. Sembrava empatico e riduceva il marcio.",
+        en: "More orchestral emotion. Felt sympathetic and reduced the rot."
+      }
     },
-    finalChoice: "B",
+    finalChoice: { it: "B", en: "B" },
 
-    delivered: "Final mix plus alternates, clearly labelled. Revisions tracked.",
+    delivered: {
+      it: "Mix finale piu' alternate, etichettate chiaramente. Revisioni tracciate.",
+      en: "Final mix plus alternates, clearly labelled. Revisions tracked."
+    },
     technicalDeliverables: [
-      "Delivery format: WAV (linear PCM)",
-      "Specs: 48 kHz, 24-bit",
-      "Sync: aligned to final picture"
+      { it: "Formato delivery: WAV (PCM lineare)", en: "Delivery format: WAV (linear PCM)" },
+      { it: "Specifiche: 48 kHz, 24-bit", en: "Specs: 48 kHz, 24-bit" },
+      { it: "Sync: allineato al picture finale", en: "Sync: aligned to final picture" }
     ],
-    musicalLanguage:
-      "The harmonic language is built around Claudio’s piano motif, kept exposed and intimate, then surrounded by dark ambient synth layers as if the camera is entering his sick mind and distorted emotional space. The piano carries the ‘human’ confession, while the synth bed acts like an internal fog that never clears.\n\nTo underline the rot, the harmony is deliberately contaminated: non-chord tones, chromatic neighbours and foreign notes sit against the implied chordal centre, creating a controlled discomfort that reads as thought decay rather than jump-scare dissonance. These tensions must stay small and persistent, never turning into a dramatic gesture, so the audience feels the stench as something embedded in him.\n\nOrchestral elements appear sparingly as shadows, adding weight without stealing speech. The cue ends at 01:27 without a redemptive resolution, leaving Claudio suspended between confession and refusal.",
+    musicalLanguage: {
+      it: "Il linguaggio armonico e' costruito attorno al motivo di pianoforte di Claudio, tenuto esposto e intimo, poi circondato da strati di synth ambientali scuri come se la camera entrasse nella sua mente malata e nel suo spazio emotivo distorto. Il piano porta la confessione \"umana\", mentre il letto di synth agisce come una nebbia interna che non si dissolve.\n\nPer sottolineare il marciume, l'armonia e' volutamente contaminata: note estranee, cromatismi di vicinanza e note fuori accordo si appoggiano al centro armonico implicito, creando un disagio controllato che suona come decomposizione del pensiero piu' che dissonanza da jump-scare. Queste tensioni devono restare piccole e persistenti, senza diventare gesto drammatico, cosi' il pubblico sente il lezzo come qualcosa di incorporato in lui.\n\nGli elementi orchestrali appaiono con parsimonia, come ombre, aggiungendo peso senza rubare parola. Il cue finisce a 01:27 senza risoluzione redentiva, lasciando Claudio sospeso tra confessione e rifiuto.",
+      en: "The harmonic language is built around Claudio’s piano motif, kept exposed and intimate, then surrounded by dark ambient synth layers as if the camera is entering his sick mind and distorted emotional space. The piano carries the ‘human’ confession, while the synth bed acts like an internal fog that never clears.\n\nTo underline the rot, the harmony is deliberately contaminated: non-chord tones, chromatic neighbours and foreign notes sit against the implied chordal centre, creating a controlled discomfort that reads as thought decay rather than jump-scare dissonance. These tensions must stay small and persistent, never turning into a dramatic gesture, so the audience feels the stench as something embedded in him.\n\nOrchestral elements appear sparingly as shadows, adding weight without stealing speech. The cue ends at 01:27 without a redemptive resolution, leaving Claudio suspended between confession and refusal."
+    },
 
     technicalNotes: [
-      "Delivery format: WAV (linear PCM)",
-      "Specs: 48 kHz, 24-bit",
-      "Sync: aligned to final picture"
+      { it: "Formato delivery: WAV (PCM lineare)", en: "Delivery format: WAV (linear PCM)" },
+      { it: "Specifiche: 48 kHz, 24-bit", en: "Specs: 48 kHz, 24-bit" },
+      { it: "Sync: allineato al picture finale", en: "Sync: aligned to final picture" }
     ]
   },
   {
     id: "scene-09",
-    title: "My Crown, My Ambition, My Queen. The Crown Trap (Dialogue)",
+    title: {
+      it: "My Crown, My Ambition, My Queen. La trappola della corona (Dialogo)",
+      en: "My Crown, My Ambition, My Queen. The Crown Trap (Dialogue)"
+    },
     projectLabel: "Claudio re",
     sceneType: "Dialogue",
     duration: "01:27",
@@ -1123,60 +1220,102 @@ export const caseStudies: CaseStudyInput[] = [
     embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/Claudio%20Re/Claudio%20Re%20My%20Crown%2C%20My%20Ambition%2C%20My%20Queen%20Case%20St/index.m3u8",
     posterImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/Claudio%20Re%20My%20Crown%2C%20My%20Ambition%2C%20My%20Queen%20Case%20St.jpg",
 
-    context:
-      "Claudio re is inspired by Hamlet. Claudio murders his own brother to take the crown and the queen, then rules under a surface of stability while the crime keeps echoing through the court. His guilt is real, but he refuses the price of repentance because he will not give up what he stole.\n\nIn this monologue he names the sin as rotten and admits it is the oldest curse, the murder of a brother, then exposes the trap: forgiveness cannot ‘go through’ while he remains in possession of the fruits of the murder, the crown, ambition, and the queen. The cue mirrors that contradiction: a veneer of nobility struggling to stand over something fundamentally corrupt.",
-    goal:
-      "Support Claudio’s confession without granting him redemption. Keep the dialogue pristine while making the ‘rottenness’ feel physical and inescapable: real guilt, no repentance, and paranoia as the logic of power.",
+    context: {
+      it: "Claudio re e' ispirato ad Amleto. Claudio uccide il fratello per prendere la corona e la regina, poi governa sotto una superficie di stabilita' mentre il crimine continua a riecheggiare a corte. La sua colpa e' reale, ma rifiuta il prezzo del pentimento perche' non vuole rinunciare a cio' che ha rubato.\n\nIn questo monologo definisce il peccato come marcio e ammette che e' la piu' antica maledizione, l'uccisione di un fratello, poi rivela la trappola: il perdono non puo' \"passare\" finche' resta in possesso dei frutti dell'omicidio, la corona, l'ambizione e la regina. Il cue rispecchia questa contraddizione: una patina di nobilta' che fatica a reggere sopra qualcosa di fondamentalmente corrotto.",
+      en: "Claudio re is inspired by Hamlet. Claudio murders his own brother to take the crown and the queen, then rules under a surface of stability while the crime keeps echoing through the court. His guilt is real, but he refuses the price of repentance because he will not give up what he stole.\n\nIn this monologue he names the sin as rotten and admits it is the oldest curse, the murder of a brother, then exposes the trap: forgiveness cannot ‘go through’ while he remains in possession of the fruits of the murder, the crown, ambition, and the queen. The cue mirrors that contradiction: a veneer of nobility struggling to stand over something fundamentally corrupt."
+    },
+    goal: {
+      it: "Sostenere la confessione di Claudio senza concedergli redenzione. Tenere il dialogo intatto mentre la \"marcescenza\" deve essere fisica e ineludibile: colpa reale, nessun pentimento, paranoia come logica del potere.",
+      en: "Support Claudio’s confession without granting him redemption. Keep the dialogue pristine while making the ‘rottenness’ feel physical and inescapable: real guilt, no repentance, and paranoia as the logic of power."
+    },
     chosen: {
       key: "B",
-      summary:
-        "Piano motif + dark ambient contamination, then D minor theme reveal with historical colour and rotten brass tail.",
-      reason: "Preserves dialogue while revealing Claudio’s true theme and decay."
+      summary: {
+        it: "Motivo di piano + contaminazione ambient scura, poi reveal del tema in re minore con colore storico e coda di ottoni marcia.",
+        en: "Piano motif + dark ambient contamination, then D minor theme reveal with historical colour and rotten brass tail."
+      },
+      reason: {
+        it: "Preserva il dialogo mentre rivela il vero tema di Claudio e il suo decadimento.",
+        en: "Preserves dialogue while revealing Claudio’s true theme and decay."
+      }
     },
-    result:
-      "The monologue lands as self-awareness trapped in denial. The cue reads as inner corrosion rather than sadness, and the tension stays under the speech without masking it.",
+    result: {
+      it: "Il monologo arriva come autoconsapevolezza intrappolata nel diniego. Il cue suona come corrosione interna piu' che tristezza, e la tensione resta sotto le parole senza coprirle.",
+      en: "The monologue lands as self-awareness trapped in denial. The cue reads as inner corrosion rather than sadness, and the tension stays under the speech without masking it."
+    },
     trackTitle: "My Crown, My Ambition, My Queen",
     timing: {
       in: {
         time: "00:00",
-        label: "Claudio: “My sin is rotten and its stench reaches heaven.”"
+        label: {
+          it: "Claudio: \"Il mio peccato e' marcio e il suo lezzo arriva al cielo.\"",
+          en: "Claudio: “My sin is rotten and its stench reaches heaven.”"
+        }
       },
       out: {
         time: "01:27",
-        label: "End of the confession beat. Music releases without redemption."
+        label: {
+          it: "Fine del beat di confessione. La musica si scioglie senza redenzione.",
+          en: "End of the confession beat. Music releases without redemption."
+        }
       }
     },
-    spottingNote:
-      "Dialogue-first, but the cue has a clear thematic reveal. Claudio’s real theme appears in D minor on the ‘Light! Light!’ section. Before the line “My queen?” the melody is carried by viola da gamba to introduce historical colour. Monochord and hurdy gurdy enter as ancient-texture markers, while trombones add a rotten aftertaste. The ending uses intentionally dissonant chords as a narrative bridge into the following sequence, where Claudio confronts the spectre in an imagined duel and is killed.",
+    spottingNote: {
+      it: "Dialogo in primo piano, ma il cue ha un chiaro reveal tematico. Il vero tema di Claudio appare in re minore nella sezione \"Light! Light!\". Prima della battuta \"My queen?\" la melodia e' affidata alla viola da gamba per introdurre un colore storico. Monocordo e ghironda entrano come marcatori di texture antica, mentre i tromboni aggiungono un retrogusto marcio. Il finale usa accordi volutamente dissonanti come ponte narrativo verso la sequenza successiva, in cui Claudio affronta The Spectre in un duello immaginato e viene ucciso.",
+      en: "Dialogue-first, but the cue has a clear thematic reveal. Claudio’s real theme appears in D minor on the ‘Light! Light!’ section. Before the line “My queen?” the melody is carried by viola da gamba to introduce historical colour. Monochord and hurdy gurdy enter as ancient-texture markers, while trombones add a rotten aftertaste. The ending uses intentionally dissonant chords as a narrative bridge into the following sequence, where Claudio confronts the spectre in an imagined duel and is killed."
+    },
 
-    directorWanted: "Dialogue-safe psychological decay. Noble veneer with corruption underneath.",
-    directorAvoid: "Redemptive cadences, big swells, anything that masks the words.",
+    directorWanted: {
+      it: "Decadenza psicologica compatibile col dialogo. Patina nobile con corruzione sotto.",
+      en: "Dialogue-safe psychological decay. Noble veneer with corruption underneath."
+    },
+    directorAvoid: {
+      it: "Cadenze redentive, grandi swell, qualsiasi cosa che copra le parole.",
+      en: "Redemptive cadences, big swells, anything that masks the words."
+    },
 
     versionsTested: {
-      A: "Only synth ambience. Too flat, lacked character identity.",
-      B: "Piano motif + dark ambient contamination, then D minor theme reveal with historical colour and rotten brass tail.",
-      C: "More orchestral emotion. Felt sympathetic and reduced the rot."
+      A: {
+        it: "Solo ambiente synth. Troppo piatto, mancava l'identita' del personaggio.",
+        en: "Only synth ambience. Too flat, lacked character identity."
+      },
+      B: {
+        it: "Motivo di piano + contaminazione ambient scura, poi reveal del tema in re minore con colore storico e coda di ottoni marcia.",
+        en: "Piano motif + dark ambient contamination, then D minor theme reveal with historical colour and rotten brass tail."
+      },
+      C: {
+        it: "Piu' emozione orchestrale. Sembrava empatico e riduceva il marcio.",
+        en: "More orchestral emotion. Felt sympathetic and reduced the rot."
+      }
     },
-    finalChoice: "B",
+    finalChoice: { it: "B", en: "B" },
 
-    delivered: "Final mix plus alternates, clearly labelled. Revisions tracked.",
+    delivered: {
+      it: "Mix finale piu' alternate, etichettate chiaramente. Revisioni tracciate.",
+      en: "Final mix plus alternates, clearly labelled. Revisions tracked."
+    },
     technicalDeliverables: [
-      "Delivery format: WAV (linear PCM)",
-      "Specs: 48 kHz, 24-bit",
-      "Sync: aligned to final picture"
+      { it: "Formato delivery: WAV (PCM lineare)", en: "Delivery format: WAV (linear PCM)" },
+      { it: "Specifiche: 48 kHz, 24-bit", en: "Specs: 48 kHz, 24-bit" },
+      { it: "Sync: allineato al picture finale", en: "Sync: aligned to final picture" }
     ],
-    musicalLanguage:
-      "The harmonic language is built around Claudio’s piano motif, kept exposed and intimate, then surrounded by dark ambient synth layers as if we are entering his sick mind and distorted emotional space. Non-chord tones and foreign notes contaminate the implied centre, creating a controlled, persistent discomfort that reads as moral rot rather than theatrical dissonance.\n\nOn the ‘Light! Light!’ section the cue reveals Claudio’s theme in full, in D minor. It carries a dramatic, almost ‘noble’ contour, but the nobility is a veneer: trombones stain the tail of phrases with a rotten aftertaste, and cadences refuse clean closure. Before “My queen?” the line is entrusted to viola da gamba, and historical colours (monochord, hurdy gurdy) enter to evoke the antique weight of the tale without turning it into pastiche.\n\nOn the words “my queen” the orchestration blooms: full orchestra joins, the ancient instruments remain present, and the synth bed deepens, creating an epic surge of self-justification. The cue then undercuts that grandeur: final chords are deliberately dissonant and the trombones bring the corruption to the surface on Claudio’s last words. It does not resolve as repentance. It hangs as consequence, designed to connect seamlessly into the following section where Claudio’s guilt turns into confrontation and he is killed.",
+    musicalLanguage: {
+      it: "Il linguaggio armonico e' costruito attorno al motivo di pianoforte di Claudio, tenuto esposto e intimo, poi circondato da strati di synth ambientali scuri come se entrassimo nella sua mente malata e nel suo spazio emotivo distorto. Note estranee e non accordali contaminano il centro implicito, creando un disagio controllato e persistente che si legge come marciume morale piu' che dissonanza teatrale.\n\nNella sezione \"Light! Light!\" il cue rivela il tema di Claudio in pieno, in re minore. Ha un profilo drammatico, quasi \"nobile\", ma la nobilta' e' una patina: i tromboni sporcano la coda delle frasi con un retrogusto marcio, e le cadenze rifiutano una chiusura pulita. Prima di \"My queen?\" la linea e' affidata alla viola da gamba, e i colori storici (monocordo, ghironda) entrano per evocare il peso antico del racconto senza trasformarlo in pastiche.\n\nSulle parole \"my queen\" l'orchestrazione sboccia: entra l'orchestra completa, gli strumenti antichi restano presenti e il letto di synth si approfondisce, creando un'ondata epica di auto-giustificazione. Il cue poi smonta quella grandezza: gli accordi finali sono deliberatamente dissonanti e i tromboni portano la corruzione in superficie sulle ultime parole di Claudio. Non risolve come pentimento. Resta sospeso come conseguenza, progettato per collegarsi senza soluzione di continuita' alla sezione successiva in cui la colpa di Claudio diventa confronto e lui viene ucciso.",
+      en: "The harmonic language is built around Claudio’s piano motif, kept exposed and intimate, then surrounded by dark ambient synth layers as if we are entering his sick mind and distorted emotional space. Non-chord tones and foreign notes contaminate the implied centre, creating a controlled, persistent discomfort that reads as moral rot rather than theatrical dissonance.\n\nOn the ‘Light! Light!’ section the cue reveals Claudio’s theme in full, in D minor. It carries a dramatic, almost ‘noble’ contour, but the nobility is a veneer: trombones stain the tail of phrases with a rotten aftertaste, and cadences refuse clean closure. Before “My queen?” the line is entrusted to viola da gamba, and historical colours (monochord, hurdy gurdy) enter to evoke the antique weight of the tale without turning it into pastiche.\n\nOn the words “my queen” the orchestration blooms: full orchestra joins, the ancient instruments remain present, and the synth bed deepens, creating an epic surge of self-justification. The cue then undercuts that grandeur: final chords are deliberately dissonant and the trombones bring the corruption to the surface on Claudio’s last words. It does not resolve as repentance. It hangs as consequence, designed to connect seamlessly into the following section where Claudio’s guilt turns into confrontation and he is killed."
+    },
 
     technicalNotes: [
-      "Delivery format: WAV (linear PCM)",
-      "Specs: 48 kHz, 24-bit",
-      "Sync: aligned to final picture"
+      { it: "Formato delivery: WAV (PCM lineare)", en: "Delivery format: WAV (linear PCM)" },
+      { it: "Specifiche: 48 kHz, 24-bit", en: "Specs: 48 kHz, 24-bit" },
+      { it: "Sync: allineato al picture finale", en: "Sync: aligned to final picture" }
     ]
   },
   {
     id: "scene-07",
-    title: "No Shuffling Up There, The Spectre Wins (Vision Fight)",
+    title: {
+      it: "Nessun trucco lassu', The Spectre vince (Scontro visionario)",
+      en: "No Shuffling Up There, The Spectre Wins (Vision Fight)"
+    },
     projectLabel: "Claudio re",
     sceneType: "Action",
     duration: null,
@@ -1194,63 +1333,105 @@ export const caseStudies: CaseStudyInput[] = [
     embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/Claudio%20Re/Claudio%20Re%20The%20Spectre/index.m3u8",
     posterImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/Claudio%20Re%20The%20Spectre.jpg",
 
-    context:
-      "“But not up there? Ah no. Up there there is no trickery, eh? There, action exists in its true nature. And we ourselves are compelled to bear witness, as beggars, on the forehead of our guilt. Anyone. And then, what remains? [Music]”\n\nClaudio enters the imagined duel with the Spectre, is dominated and stabbed. The music starts when the words end.",
-    goal:
-      "Turn Claudio’s guilt into a physical event: anxiety, fear, loss of control. Make the defeat inevitable.",
+    context: {
+      it: "\"Ma non lassu'? Ah no. Lassu' non c'e' inganno, eh? Li' l'azione esiste nella sua vera natura. E noi siamo costretti ad assistere, come mendicanti, sulla fronte della nostra colpa. Chiunque. E poi, cosa resta? [Musica]\"\n\nClaudio entra nel duello immaginato con The Spectre, viene dominato e pugnalato. La musica inizia quando finiscono le parole.",
+      en: "“But not up there? Ah no. Up there there is no trickery, eh? There, action exists in its true nature. And we ourselves are compelled to bear witness, as beggars, on the forehead of our guilt. Anyone. And then, what remains? [Music]”\n\nClaudio enters the imagined duel with the Spectre, is dominated and stabbed. The music starts when the words end."
+    },
+    goal: {
+      it: "Trasformare la colpa di Claudio in un evento fisico: ansia, paura, perdita di controllo. Rendere la sconfitta inevitabile.",
+      en: "Turn Claudio’s guilt into a physical event: anxiety, fear, loss of control. Make the defeat inevitable."
+    },
     chosen: {
       key: "C",
-      summary:
-        "Braams plus benders plus a kick that accelerates, then slows to a stop on the stab.",
-      reason: "Makes the panic physical and closes the scene with a clean narrative stop."
+      summary: {
+        it: "Braams piu' benders piu' un kick che accelera, poi rallenta fino allo stop sulla pugnalata.",
+        en: "Braams plus benders plus a kick that accelerates, then slows to a stop on the stab."
+      },
+      reason: {
+        it: "Rende il panico fisico e chiude la scena con uno stop narrativo netto.",
+        en: "Makes the panic physical and closes the scene with a clean narrative stop."
+      }
     },
-    result:
-      "The kick becomes a heartbeat. It accelerates with anxiety and fear, then slows to a precise stop on the stab. The defeat reads as collapse.",
+    result: {
+      it: "Il kick diventa un battito. Accelera con ansia e paura, poi rallenta fino a fermarsi precisamente sulla pugnalata. La sconfitta si legge come collasso.",
+      en: "The kick becomes a heartbeat. It accelerates with anxiety and fear, then slows to a precise stop on the stab. The defeat reads as collapse."
+    },
     trackTitle: "The Spectre",
     timing: {
       in: {
         time: "00:00",
-        label: "Music enters right after ‘And then, what remains?’"
+        label: {
+          it: "La musica entra subito dopo \"E poi, cosa resta?\"",
+          en: "Music enters right after ‘And then, what remains?’"
+        }
       },
       out: {
         time: null,
-        label: "The Spectre stabs Claudio. The kick stops."
+        label: {
+          it: "The Spectre pugnala Claudio. Il kick si ferma.",
+          en: "The Spectre stabs Claudio. The kick stops."
+        }
       }
     },
-    spottingNote:
-      "The kick must feel like a heartbeat, not a trailer beat.\nAcceleration equals panic.\nSlowdown equals collapse.\nStop on the stab equals narrative punctuation.\nBraams equal the pressure of guilt.\nBenders equal mental distortion.\nNo heroism, no “cool” aesthetic.",
+    spottingNote: {
+      it: "Il kick deve sembrare un battito, non un colpo da trailer.\nAccelerazione = panico.\nRallentamento = crollo.\nStop sulla pugnalata = punteggiatura narrativa.\nBraams = pressione della colpa.\nBenders = distorsione mentale.\nNiente eroismo, niente estetica \"cool\".",
+      en: "The kick must feel like a heartbeat, not a trailer beat.\nAcceleration equals panic.\nSlowdown equals collapse.\nStop on the stab equals narrative punctuation.\nBraams equal the pressure of guilt.\nBenders equal mental distortion.\nNo heroism, no “cool” aesthetic."
+    },
 
-    directorWanted:
-      "Claustrophobic anxiety. Physical fear. Inevitability. Heartbeat realism. Hard sync to the stab.",
-    directorAvoid:
-      "Epic action feel. Trailer risers. Constant tempo. “Cool” aesthetics. Any sense of victory.",
+    directorWanted: {
+      it: "Ansia claustrofobica. Paura fisica. Inevitabilita'. Realismo del battito. Sync duro sulla pugnalata.",
+      en: "Claustrophobic anxiety. Physical fear. Inevitability. Heartbeat realism. Hard sync to the stab."
+    },
+    directorAvoid: {
+      it: "Sensazione di azione epica. Risers da trailer. Tempo costante. Estetica \"cool\". Qualsiasi senso di vittoria.",
+      en: "Epic action feel. Trailer risers. Constant tempo. “Cool” aesthetics. Any sense of victory."
+    },
 
     versionsTested: {
-      A: "Dissonant braams only, no kick.",
-      B: "Kick at a constant tempo, no slowdown and no stop.",
-      C: "Braams plus benders plus a kick that accelerates, then slows to a stop on the stab."
+      A: {
+        it: "Solo braams dissonanti, nessun kick.",
+        en: "Dissonant braams only, no kick."
+      },
+      B: {
+        it: "Kick a tempo costante, senza rallentamento e senza stop.",
+        en: "Kick at a constant tempo, no slowdown and no stop."
+      },
+      C: {
+        it: "Braams piu' benders piu' un kick che accelera, poi rallenta fino allo stop sulla pugnalata.",
+        en: "Braams plus benders plus a kick that accelerates, then slows to a stop on the stab."
+      }
     },
-    finalChoice: "C, because the heartbeat accelerates and collapses on the strike, making the defeat inevitable.",
+    finalChoice: {
+      it: "C, perche' il battito accelera e crolla sul colpo, rendendo la sconfitta inevitabile.",
+      en: "C, because the heartbeat accelerates and collapses on the strike, making the defeat inevitable."
+    },
 
-    delivered:
-      "Final mix, dialogue-safe alternate, and stems delivered with clear post labels (Braams, Benders, Kick, FX).",
+    delivered: {
+      it: "Mix finale, alternate dialogue-safe e stems consegnati con etichette chiare per la post (Braams, Benders, Kick, FX).",
+      en: "Final mix, dialogue-safe alternate, and stems delivered with clear post labels (Braams, Benders, Kick, FX)."
+    },
     technicalDeliverables: [
-      "Delivery: WAV, 48 kHz, 24-bit",
-      "Stems: Braams, Benders, Kick, FX (labelled for post)",
-      "Sync: kick stop aligned to the stab"
+      { it: "Delivery: WAV, 48 kHz, 24-bit", en: "Delivery: WAV, 48 kHz, 24-bit" },
+      { it: "Stems: Braams, Benders, Kick, FX (etichettati per la post)", en: "Stems: Braams, Benders, Kick, FX (labelled for post)" },
+      { it: "Sync: stop del kick allineato alla pugnalata", en: "Sync: kick stop aligned to the stab" }
     ],
-    musicalLanguage:
-      "Dissonant synth braams and unstable benders. Kick with tempo automation that mimics a heartbeat: it accelerates with anxiety and fear, then progressively slows until it stops when the Spectre stabs Claudio.",
+    musicalLanguage: {
+      it: "Braams synth dissonanti e benders instabili. Kick con automazione di tempo che imita un battito: accelera con ansia e paura, poi rallenta progressivamente fino a fermarsi quando The Spectre pugnala Claudio.",
+      en: "Dissonant synth braams and unstable benders. Kick with tempo automation that mimics a heartbeat: it accelerates with anxiety and fear, then progressively slows until it stops when the Spectre stabs Claudio."
+    },
 
     technicalNotes: [
-      "Delivery: WAV, 48 kHz, 24-bit",
-      "Stems: Braams, Benders, Kick, FX (labelled for post)",
-      "Sync: kick stop aligned to the stab"
+      { it: "Delivery: WAV, 48 kHz, 24-bit", en: "Delivery: WAV, 48 kHz, 24-bit" },
+      { it: "Stems: Braams, Benders, Kick, FX (etichettati per la post)", en: "Stems: Braams, Benders, Kick, FX (labelled for post)" },
+      { it: "Sync: stop del kick allineato alla pugnalata", en: "Sync: kick stop aligned to the stab" }
     ]
   },
   {
     id: "scene-10",
-    title: "What If A Man Can't Regret, The Prayer That Fails (Dialogue)",
+    title: {
+      it: "What If A Man Can't Regret, la preghiera che fallisce (Dialogo)",
+      en: "What If A Man Can't Regret, The Prayer That Fails (Dialogue)"
+    },
     projectLabel: "Claudio re",
     sceneType: "Modern orchestral",
     duration: "01:03",
@@ -1260,52 +1441,88 @@ export const caseStudies: CaseStudyInput[] = [
     embedUrl: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/_hls/Claudio%20Re/Claudio%20Re%20What%20If%20A%20Man%20Can_t%20Regret%20Case%20Study/index.m3u8",
     posterImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/Claudio%20Re%20What%20If%20A%20Man%20Can_t%20Regret%20Case%20Study.jpg",
 
-    context:
-      "“...try what repentance can do. What can it not do? Yet what can it do if a man cannot repent? To die, to sleep, and heart attack. And with a sleep, to say we end the heartache and the thousand natural shocks of flesh. This is a consummation to be wished, devoutly to be wished. To die, to sleep—do we not dream ahead? bent close, stubborn, and you, heart of steel snares. Yes, but I orbit, like muscles in a child, just gone. Everything can end... ...repenting. [Music]”\n\nClaudio searches for a path to repentance but remains trapped by the real price of redemption. The scene works as a distorted echo of Hamlet’s central knots: conscience, guilt, the impossibility of action, and the desire for an end as escape.",
-    goal:
-      "Make repentance feel like an impossible invocation. Make judgment inevitable and fate perceptible in strikes, without catharsis.",
+    context: {
+      it: "\"...prova cosa puo' fare il pentimento. Cosa non puo' fare? Eppure cosa puo' fare se un uomo non puo' pentirsi? Morire, dormire, e un infarto. E con un sonno, dire che poniamo fine al dolore del cuore e ai mille naturali colpi della carne. E' una conclusione da desiderare, devotamente da desiderare. Morire, dormire—e non sogniamo forse? piegati, ostinati, e tu, cuore d'acciaio alle strette. Si', ma io orbito, come muscoli in un bambino, appena finito. Tutto puo' finire... ...pentendosi. [Musica]\"\n\nClaudio cerca un varco al pentimento ma resta intrappolato nel prezzo reale della redenzione. La scena funziona come un'eco distorta dei nodi centrali di Amleto: coscienza, colpa, l'impossibilita' dell'azione e il desiderio di una fine come fuga.",
+      en: "“...try what repentance can do. What can it not do? Yet what can it do if a man cannot repent? To die, to sleep, and heart attack. And with a sleep, to say we end the heartache and the thousand natural shocks of flesh. This is a consummation to be wished, devoutly to be wished. To die, to sleep—do we not dream ahead? bent close, stubborn, and you, heart of steel snares. Yes, but I orbit, like muscles in a child, just gone. Everything can end... ...repenting. [Music]”\n\nClaudio searches for a path to repentance but remains trapped by the real price of redemption. The scene works as a distorted echo of Hamlet’s central knots: conscience, guilt, the impossibility of action, and the desire for an end as escape."
+    },
+    goal: {
+      it: "Far percepire il pentimento come un'invocazione impossibile. Rendere il giudizio inevitabile e il destino percepibile negli strike, senza catarsi.",
+      en: "Make repentance feel like an impossible invocation. Make judgment inevitable and fate perceptible in strikes, without catharsis."
+    },
     chosen: {
       key: "C",
-      summary:
-        "Drone + ostinato + trombones + theme entrance on sparse sampled violins + hit.",
-      reason: "Keeps judgment in the foreground and moves fate forward without catharsis."
+      summary: {
+        it: "Drone + ostinato + tromboni + ingresso del tema su violini campionati sparsi + colpo.",
+        en: "Drone + ostinato + trombones + theme entrance on sparse sampled violins + hit."
+      },
+      reason: {
+        it: "Mantiene il giudizio in primo piano e spinge avanti il destino senza catarsi.",
+        en: "Keeps judgment in the foreground and moves fate forward without catharsis."
+      }
     },
-    result:
-      "Judgment starts distant, then closes in and becomes internal. String ostinato as a prison. Ascending dissonant trombones as escalation without salvation. Theme on sparse violins as inner rot and tragedy. Hits as fate advancing.",
+    result: {
+      it: "Il giudizio parte distante, poi si avvicina e diventa interno. Ostinato degli archi come prigione. Tromboni dissonanti ascendenti come escalation senza salvezza. Tema sui violini sparsi come marciume interiore e tragedia. Colpi come destino che avanza.",
+      en: "Judgment starts distant, then closes in and becomes internal. String ostinato as a prison. Ascending dissonant trombones as escalation without salvation. Theme on sparse violins as inner rot and tragedy. Hits as fate advancing."
+    },
     trackTitle: "What Can Repentance Do",
     timing: {
-      in: { time: "00:00", label: "Music enters right after ‘…repenting.’" },
-      out: { time: null, label: "End of cue." }
+      in: {
+        time: "00:00",
+        label: { it: "La musica entra subito dopo \"...pentendosi.\"", en: "Music enters right after ‘…repenting.’" }
+      },
+      out: { time: null, label: { it: "Fine del cue.", en: "End of cue." } }
     },
-    spottingNote:
-      "No trailer language. Drone as judgment, not groove. Strings as prison. Trombones as escalation without redemption. Hits as a system advancing, not “cool” accents.",
+    spottingNote: {
+      it: "Niente linguaggio da trailer. Drone come giudizio, non groove. Archi come prigione. Tromboni come escalation senza redenzione. Colpi come sistema che avanza, non accenti \"cool\".",
+      en: "No trailer language. Drone as judgment, not groove. Strings as prison. Trombones as escalation without redemption. Hits as a system advancing, not “cool” accents."
+    },
 
-    directorWanted:
-      "Judgement, inevitability, tragic interior rot, tightening tension, fate advances in strikes, no catharsis.",
-    directorAvoid:
-      "Easy risers, noble melodies, hope, recognizable modern groove, romanticizing repentance.",
+    directorWanted: {
+      it: "Giudizio, inevitabilita', marciume interiore tragico, tensione che si stringe, destino che avanza in colpi, niente catarsi.",
+      en: "Judgement, inevitability, tragic interior rot, tightening tension, fate advances in strikes, no catharsis."
+    },
+    directorAvoid: {
+      it: "Risers facili, melodie nobili, speranza, groove moderno riconoscibile, romanticizzare il pentimento.",
+      en: "Easy risers, noble melodies, hope, recognizable modern groove, romanticizing repentance."
+    },
 
     versionsTested: {
-      A: "Distant drone + hit, no theme.",
-      B: "String ostinato + ascending trombones, no theme.",
-      C: "Drone + ostinato + trombones + theme entrance on sparse sampled violins + hit."
+      A: { it: "Drone distante + colpo, senza tema.", en: "Distant drone + hit, no theme." },
+      B: { it: "Ostinato degli archi + tromboni ascendenti, senza tema.", en: "String ostinato + ascending trombones, no theme." },
+      C: {
+        it: "Drone + ostinato + tromboni + ingresso del tema su violini campionati sparsi + colpo.",
+        en: "Drone + ostinato + trombones + theme entrance on sparse sampled violins + hit."
+      }
     },
-    finalChoice: "C, because it structures judgment and fate without catharsis.",
+    finalChoice: {
+      it: "C, perche' struttura giudizio e destino senza catarsi.",
+      en: "C, because it structures judgment and fate without catharsis."
+    },
 
-    delivered:
-      "Final mix ready, alternates on request, stems organized and labeled for post.",
+    delivered: {
+      it: "Mix finale pronto, alternate su richiesta, stems organizzati e etichettati per la post.",
+      en: "Final mix ready, alternates on request, stems organized and labeled for post."
+    },
     technicalDeliverables: [
-      "48 kHz, 24 bit stereo master",
-      "Alt: no-music",
-      "Stems: pads, textures"
+      { it: "Master stereo 48 kHz, 24 bit", en: "48 kHz, 24 bit stereo master" },
+      { it: "Alt: senza musica", en: "Alt: no-music" },
+      { it: "Stems: pads, texture", en: "Stems: pads, textures" }
     ],
-    musicalLanguage:
-      "Distant drum drone as judgment. Repetitive ostinato violins. Ascending dissonant trombones. Theme entrance on sparse sampled violins with intertwined aching lines. Trombones and percussion hits as fate advancing.",
+    musicalLanguage: {
+      it: "Drone di tamburo distante come giudizio. Violini in ostinato ripetitivo. Tromboni dissonanti ascendenti. Ingresso del tema su violini campionati sparsi con linee intrecciate e dolenti. Tromboni e colpi di percussione come destino che avanza.",
+      en: "Distant drum drone as judgment. Repetitive ostinato violins. Ascending dissonant trombones. Theme entrance on sparse sampled violins with intertwined aching lines. Trombones and percussion hits as fate advancing."
+    },
 
     technicalNotes: [
-      "Delivery: WAV, 48 kHz, 24-bit",
-      "Stems: Drone, Violins (ostinato), Trombones, Theme strings, Percussion hits (labelled for post)",
-      "Mix: dialogue safe, low end controlled, hits kept short for editorial flexibility"
+      { it: "Delivery: WAV, 48 kHz, 24-bit", en: "Delivery: WAV, 48 kHz, 24-bit" },
+      {
+        it: "Stems: Drone, Violini (ostinato), Tromboni, Archi tema, Colpi di percussione (etichettati per la post)",
+        en: "Stems: Drone, Violins (ostinato), Trombones, Theme strings, Percussion hits (labelled for post)"
+      },
+      {
+        it: "Mix: dialogo safe, basse frequenze controllate, colpi tenuti corti per flessibilita' editoriale",
+        en: "Mix: dialogue safe, low end controlled, hits kept short for editorial flexibility"
+      }
     ]
   }
 ];

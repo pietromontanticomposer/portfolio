@@ -49,6 +49,11 @@ export const tagTranslations: Record<string, { it: string; en: string }> = {
   "Orchestral climb": { it: "Crescendo orchestrale", en: "Orchestral climb" },
   "Running rhythm": { it: "Ritmo di corsa", en: "Running rhythm" },
   "Hard stop": { it: "Stop secco", en: "Hard stop" },
+  "Battle rhythm": { it: "Ritmo di battaglia", en: "Battle rhythm" },
+  "Harmonic corrosion": { it: "Corrosione armonica", en: "Harmonic corrosion" },
+  "Monologue": { it: "Monologo", en: "Monologue" },
+  "Tempo automation": { it: "Automazione del tempo", en: "Tempo automation" },
+  "Timbri antichi": { it: "Timbri antichi", en: "Ancient timbres" },
   // Project tags
   "Short": { it: "Corto", en: "Short" },
   "Feature": { it: "Lungometraggio", en: "Feature" },
