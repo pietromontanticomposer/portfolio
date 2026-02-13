@@ -2,7 +2,7 @@
 
 import ContactPopover from "../../components/ContactPopover";
 import ChiSonoSection from "../../components/ChiSonoSection";
-import { bioFull, bioQuote, bioStats, bioSkills } from "../../data/bio";
+import { bioFull, bioQuote, bioSkills } from "../../data/bio";
 import { useLanguage } from "../../lib/LanguageContext";
 
 const PORTRAIT_SRC = "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/uploads/foto-sito.webp";
@@ -16,7 +16,6 @@ export default function AboutPage() {
         imageSrc={PORTRAIT_SRC}
         bio={bioFull}
         quote={bioQuote}
-        stats={bioStats}
         skills={bioSkills}
         priorityImage
       />
