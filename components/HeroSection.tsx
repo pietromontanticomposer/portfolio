@@ -21,8 +21,8 @@ function HeroSection({ heroCredits }: HeroSectionProps) {
           <span className="hero-kicker-line" aria-hidden="true" />
           <span className="hero-kicker-text">
             {t(
-              "Colonne Sonore Originali · Sound Design · Musica Narrativa",
-              "Original Scores · Sound Design · Narrative Music"
+              "Composizione per film, documentari e teatro · Sound design",
+              "Scoring for film, documentaries, and theatre · Sound design"
             )}
           </span>
           <span className="hero-kicker-line" aria-hidden="true" />
@@ -31,12 +31,12 @@ function HeroSection({ heroCredits }: HeroSectionProps) {
           Pietro Montanti
         </h1>
         <p className="hero-subtitle mt-4 max-w-2xl mx-auto text-lg md:text-xl text-[color:var(--foreground)] font-semibold tracking-wide">
-          {t("Compositore per Film e Media", "Composer for Film and Media")}
+          {t("Compositore per film, documentari e teatro", "Composer for film, documentaries, and theatre")}
         </p>
         <p className="hero-logline mt-3 max-w-2xl mx-auto text-sm md:text-base text-[color:var(--muted)]">
           {t(
-            "Musica che supporta montaggio, tensione e personaggio.",
-            "Music that supports edit, tension, and character."
+            "Composizione su cut con consegna professionale: stems ordinati, versioni dialogue-safe e file cue-ready.",
+            "Scoring on cut with professional delivery: ordered stems, dialogue-safe versions, and cue-ready files."
           )}
         </p>
         <div className="hero-actions">

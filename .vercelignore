@@ -4,6 +4,11 @@ _blob_inbox/
 _blob_inbox_done/
 node_modules/
 public/optimized/
+!public/optimized/
+public/optimized/*
+!public/optimized/posters/
+public/optimized/posters/*
+!public/optimized/posters/poster freefall.avif
 public/hls/
 public/uploads/
 public/posters/

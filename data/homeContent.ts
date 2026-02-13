@@ -83,14 +83,14 @@ export const selectedTracks = [
 
 export const quickProofs = {
   it: [
-    "Prima la scena, poi la musica",
-    "Opzioni rapide, revisioni pulite",
-    "Pronto per la post-produzione",
+    "Lettura scena e montaggio",
+    "Revisioni tracciate",
+    "Consegna ordinata per la post",
   ],
   en: [
-    "Scene first, music second",
-    "Fast options, clean revisions",
-    "Delivery ready for post",
+    "Scene and edit review first",
+    "Tracked revisions",
+    "Organized post-ready delivery",
   ],
 };
 
@@ -149,12 +149,6 @@ export const processSteps = {
 };
 
 export const heroCredits = {
-  it: "UNA PRODUZIONE DI PIETRO MONTANTI  COLONNA SONORA ORIGINALE E SOUND DESIGN  COMPOSITORE PER FILM E MEDIA " +
-    "LAVORI IN EVIDENZA  CLAUDIO RE  SOGGETTO OBSOLETO  I VENETI ANTICHI  I FOUND YOU " +
-    "L'APPARTAMENTO  LA SONATA DEL CAOS  MERIDIANA  FREAK SHAKESPEARE " +
-    "UNA PICCOLA, STUPIDA, INUTILE STORIA D'AMORE  FREE / FALL",
-  en: "A PIETRO MONTANTI PRODUCTION  ORIGINAL SCORE AND SOUND DESIGN  COMPOSER FOR FILM AND MEDIA " +
-    "FEATURED WORKS INCLUDE  CLAUDIO RE  SOGGETTO OBSOLETO  I VENETI ANTICHI  I FOUND YOU " +
-    "L'APPARTAMENTO  LA SONATA DEL CAOS  MERIDIANA  FREAK SHAKESPEARE " +
-    "UNA PICCOLA, STUPIDA, INUTILE STORIA D'AMORE  FREE / FALL",
+  it: "Crediti selezionati: Claudio Re, Soggetto Obsoleto, I Veneti Antichi, I Found You, L'Appartamento, La Sonata del Caos, Meridiana, Freak Shakespeare, Una Piccola, Stupida, Inutile Storia d'Amore, Free / Fall.",
+  en: "Selected credits: Claudio Re, Soggetto Obsoleto, I Veneti Antichi, I Found You, L'Appartamento, La Sonata del Caos, Meridiana, Freak Shakespeare, Una Piccola, Stupida, Inutile Storia d'Amore, Free / Fall.",
 };

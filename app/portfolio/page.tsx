@@ -31,18 +31,18 @@ export default function PortfolioPage() {
           {t("Portfolio", "Portfolio")}
         </h1>
         <p className="mt-3 text-sm text-[color:var(--muted)]">
-          {t("Lavori in evidenza e lista completa dei progetti.", "Curated highlights and full project list.")}
+          {t("Crediti selezionati e lista completa dei progetti pubblicati.", "Selected credits and full list of published projects.")}
         </p>
       </header>
 
       <section id="selected-work" className="card-shell p-6 sm:p-8">
         <div className="section-header flex items-center justify-between">
           <h3 className="section-title text-2xl text-[color:var(--foreground)]">
-            {t("Lavori selezionati", "Selected Work")}
+            {t("Crediti selezionati", "Selected credits")}
           </h3>
         </div>
         <p className="mt-2 text-sm text-[color:var(--muted)]">
-          {t("Lavori in evidenza. Lista completa sotto.", "Curated highlights. Full list below.")}
+          {t("Titoli realizzati. Lista completa sotto.", "Released titles. Full list below.")}
         </p>
         <AutoScrollStrip posters={posters} />
         <div className="mt-6 aspect-video w-full overflow-hidden rounded-lg">

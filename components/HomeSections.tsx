@@ -36,8 +36,8 @@ function HomeSections() {
         </div>
         <p className="mt-2 text-sm text-[color:var(--muted)]">
           {t(
-            "Lavori selezionati, collaborazioni e lista completa dei progetti.",
-            "Selected work, collaborations, and full project list."
+            "Crediti selezionati e lista completa dei progetti pubblicati.",
+            "Selected credits and full list of published projects."
           )}
         </p>
         <div className="mt-4">
@@ -53,8 +53,8 @@ function HomeSections() {
         </div>
         <p className="mt-2 text-sm text-[color:var(--muted)]">
           {t(
-            "Bio, background e approccio alla composizione.",
-            "Bio, background, and approach to composing."
+            "Bio, workflow con regia/post e standard di consegna.",
+            "Bio, director/post workflow, and delivery standards."
           )}
         </p>
         <div className="mt-4">

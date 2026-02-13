@@ -44,6 +44,11 @@ scripts/translations.json
 public/posters/
 public/partners/
 public/optimized/
+!public/optimized/
+public/optimized/*
+!public/optimized/posters/
+public/optimized/posters/*
+!public/optimized/posters/poster freefall.avif
 public/media/
 public/background*.mp4
 public/background*.webm

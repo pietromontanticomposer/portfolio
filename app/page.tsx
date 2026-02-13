@@ -50,7 +50,7 @@ export default function Home() {
       "@context": "https://schema.org",
       "@type": "Person",
       name: siteMetadata.title,
-      jobTitle: "Composer for Film and Media",
+      jobTitle: "Composer for film, documentaries, and theatre",
       url: siteUrl,
       description: siteMetadata.description,
     },

@@ -26,7 +26,7 @@ export default function ProjectsPage() {
           {t("Progetti", "Projects")}
         </h1>
         <p className="mt-3 text-sm text-[color:var(--muted)]">
-          {t("Lista completa dei progetti e poster selezionati.", "Full list of projects and curated poster work.")}
+          {t("Lista completa dei progetti pubblicati.", "Full list of published projects.")}
         </p>
       </header>
 

@@ -1,52 +1,56 @@
 export const bioShort = {
-  it: "Pietro Montanti compone musica per film e media visivi—dove il suono diventa storia.",
-  en: "Pietro Montanti composes music for film and visual media—where sound becomes story.",
+  it: "Pietro Montanti compone per film, documentari e teatro.",
+  en: "Pietro Montanti composes for film, documentaries, and theatre.",
 };
 
 export const bioFull = {
-  it: `Pietro Montanti compone musica per film e media visivi—dove il suono diventa storia.
+  it: `Pietro Montanti compone per film, documentari e teatro.
 
-Clarinettista di formazione classica diventato compositore, si specializza nell'arte invisibile: colonne sonore che elevano la narrazione senza rubare la scena. Il suo lavoro spazia da cortometraggi a produzioni teatrali e library musicali internazionali, sempre guidato da un principio: servire la storia, rispettare il montaggio, fidarsi del silenzio.
+Nel portfolio attuale sono pubblicati 11 lavori: 5 cortometraggi, 2 documentari, 2 lungometraggi, 1 produzione teatrale e 1 progetto musicale.
 
-Basato tra l'Italia e gli studi di post-produzione di tutto il mondo, Pietro lavora dalla sessione di spotting al mix finale—veloce, concentrato e ossessivamente organizzato. Perché quando l'immagine è locked, la musica deve già essere lì.`,
-  en: `Pietro Montanti composes music for film and visual media—where sound becomes story.
+Lavora con regia e montaggio dallo spotting al mix finale, con revisioni tracciate e confronto diretto sul cut.
 
-A classically-trained clarinetist turned composer, he specializes in the invisible art: scores that elevate narrative without stealing focus. His work spans short films, theatre productions, and international music libraries, always guided by one principle: serve the story, honor the cut, trust the silence.
+Opera da remoto con workflow condiviso: consegna stems ordinati, versioni dialogue-safe quando richieste, cue list con in/out e naming coerente per la post-produzione.`,
+  en: `Pietro Montanti composes for film, documentaries, and theatre.
 
-Based between Italy and the world's post-production suites, Pietro works from spotting sessions to final mix—fast, focused, and obsessively organized. Because when picture locks, the music must already be there.`,
+The current portfolio includes 11 published works: 5 short films, 2 documentaries, 2 features, 1 theatre production, and 1 music project.
+
+He works with directors and editors from spotting to final mix, with tracked revisions and direct review on cut.
+
+He works remotely with a shared workflow: ordered stems, dialogue-safe versions when needed, cue lists with in/out timings, and consistent naming for post.`,
 };
 
 export const bioStats = {
   it: [
-    { label: "Esperienza", value: "10+ anni" },
-    { label: "Progetti", value: "50+" },
+    { label: "Lavori pubblicati", value: "11" },
+    { label: "Tipologie", value: "Corti · Doc · Teatro" },
   ],
   en: [
-    { label: "Experience", value: "10+ years" },
-    { label: "Projects", value: "50+" },
+    { label: "Published works", value: "11" },
+    { label: "Main formats", value: "Shorts · Docs · Theatre" },
   ],
 };
 
 export const bioQuote = {
-  it: "Musica che serve la storia, non l'ego.",
-  en: "Music that serves the story, not the ego.",
+  it: "Spotting chiaro, revisioni tracciate, consegna pronta per la post.",
+  en: "Clear spotting, tracked revisions, post-ready delivery.",
 };
 
 export const bioSkills = {
   it: [
-    "Colonne Sonore",
-    "Produzione Musicale",
-    "Post-Produzione",
-    "Composizione Classica",
-    "Timing Editoriale",
-    "Library Musicali",
+    "Composizione per film e documentari",
+    "Composizione teatrale",
+    "Produzione musicale e sound design",
+    "Revisioni su montaggio",
+    "Consegna tecnica per la post-produzione",
+    "Cue list e versioning",
   ],
   en: [
-    "Film Scoring",
-    "Music Production",
-    "Post-Production",
-    "Classical Composition",
-    "Editorial Timing",
-    "Production Libraries",
+    "Scoring for film and documentaries",
+    "Theatre scoring",
+    "Music production and sound design",
+    "Edit-based revisions",
+    "Technical delivery for post-production",
+    "Cue lists and versioning",
   ],
 };
