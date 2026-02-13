@@ -293,11 +293,11 @@ export const projects = [
   {
     slug: "free-fall",
     title: "Free / Fall",
-    year: "Coming Soon",
-    tag: "Coming Soon",
+    year: "2025",
+    tag: "Short",
     featured: false,
-    image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster%2520freefall.avif",
-    largeImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster%2520freefall.avif",
+    image: "/optimized/posters/poster%20freefall.avif",
+    largeImage: "/optimized/posters/poster%20freefall.avif",
     description: {
       it: `Free / Fall è un cortometraggio diretto da Francesco La Barbera e Daniele Murgia, che esplora la dipendenza dal gioco d'azzardo attraverso il crollo soggettivo di un giovane intrappolato in un ciclo ripetitivo di compulsione ed evitamento.
   La colonna sonora è costruita su synth, pianoforte e archi, oscillando tra tonalità maggiori e minori per rispecchiare i picchi dopaminici e i crolli emotivi tipici della dipendenza. Nei momenti di maggiore conflitto interno, questi spostamenti armonici risultano volutamente dissonanti rispetto al materiale melodico circostante, generando attrito che riflette l'instabilità psicologica del personaggio.
@@ -320,65 +320,6 @@ export const projects = [
         context: "The Responsibilities We All Have",
       },
     ],
-  },
-  {
-    slug: "polvere-sotto-al-tappeto",
-    title: "Polvere Sotto Al Tappeto",
-    year: "Coming Soon",
-    tag: "Coming Soon",
-    featured: false,
-    isDraft: true,
-    description: {
-      it: `Polvere sotto al tappeto è un cortometraggio horror drammatico diretto da Gianluca Volpe, centrato su un uomo che uccide la propria compagna dopo aver scoperto il tradimento e costruisce una rete di giustificazioni narcisistiche per legittimare il gesto.
-  La narrazione si svolge interamente dal punto di vista soggettivo del protagonista, con la voce nella sua testa che prende la forma della compagna uccisa, comprimendo colpa, negazione e autoassoluzione in un unico dialogo interiore distorto.
-  La colonna sonora si allinea a questo punto di vista corrotto: la musica appare ordinata, controllata e ingannevolmente positiva, suggerendo chiarezza ed equilibrio emotivo dove non esistono davvero. Adottando la logica interna del protagonista, la musica amplifica l'orrore psicologico, mostrando la frattura tra razionalità apparente e collasso morale.`,
-      en: `Polvere sotto al tappeto is a dramatic horror short film directed by Gianluca Volpe, centered on a man who murders his partner after discovering her betrayal and constructs a network of narcissistic justifications to legitimize his act.
-  The narrative unfolds entirely from the protagonist's subjective perspective, with the voice in his head taking the form of his murdered partner, collapsing guilt, denial and self-absolution into a single distorted inner dialogue.
-  The score aligns with this corrupted point of view: the music appears ordered, controlled and deceptively positive, suggesting clarity and emotional balance where none truly exist. By adopting the protagonist's internal logic, the music amplifies the psychological horror, exposing the fracture between apparent rationality and moral collapse.`,
-    },
-    tracks: [
-      {
-        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-polvere-sotto-al-tappeto/Dust-Under-the-Rug.mp3",
-        context: "Dust Under the Rug",
-      },
-      {
-        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-polvere-sotto-al-tappeto/Good-Morning-Love.mp3",
-        context: "Good Morning, Love",
-      },
-      {
-        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-polvere-sotto-al-tappeto/Projection-Reflection.mp3",
-        context: "Projection ⧸ Reflection",
-      },
-      {
-        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-polvere-sotto-al-tappeto/Rationalization.mp3",
-        context: "Rationalization",
-      },
-      {
-        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/uploads/tracks/musiche%20polvere%20sotto%20al%20tappeto/She%E2%80%99s%20Not%20Here%20Anymore.mp3",
-        context: "She's Not Here Anymore",
-      },
-      {
-        file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-polvere-sotto-al-tappeto/Trigger-Point.mp3",
-        context: "Trigger Point",
-      },
-    ],
-  },
-  {
-    slug: "non-ce-casa-in-paradiso",
-    title: "Non c'è Casa in Paradiso",
-    year: "Coming Soon",
-    tag: "Coming Soon",
-    featured: false,
-    isDraft: true,
-    description: {
-      it: `Non c'è casa in paradiso è un cortometraggio documentario diretto da Federico Scienza e Manuela Boezio, che affronta l'emergenza abitativa in Trentino e il suo impatto concreto su persone e famiglie escluse dal sistema abitativo.
-  La colonna sonora è concepita come un supporto narrativo misurato, pensato per accompagnare testimonianze e situazioni senza amplificarle o drammatizzarle. La musica opera sullo sfondo, rafforzando continuità e ancoraggio emotivo mentre lascia spazio a voci, silenzi e tensioni reali.
-  Più che offrire commento o risoluzione, la musica mantiene una presenza calibrata che sostiene l'approccio osservativo del documentario, permettendo alla realtà sociale rappresentata di restare centrale.`,
-      en: `Non c'è casa in paradiso is a documentary short film directed by Federico Scienza and Manuela Boezio, addressing the housing emergency in Trentino and its concrete impact on individuals and families excluded from the housing system.
-  The score is conceived as a restrained narrative support, designed to accompany testimonies and situations without amplifying or dramatizing them. Music operates in the background, reinforcing continuity and emotional grounding while leaving space for voices, silence and real-life tension.
-  Rather than offering commentary or resolution, the music maintains a measured presence that supports the documentary's observational approach, allowing the social reality portrayed on screen to remain central.`,
-    },
-    tracks: [],
   },
 ];
 
