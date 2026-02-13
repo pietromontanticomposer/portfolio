@@ -20,22 +20,3 @@ export const bioQuote = {
   it: "Spotting chiaro, revisioni tracciate, consegna pronta per la post.",
   en: "Clear spotting, tracked revisions, post-ready delivery.",
 };
-
-export const bioSkills = {
-  it: [
-    "Composizione per film e documentari",
-    "Composizione teatrale",
-    "Produzione musicale e sound design",
-    "Revisioni su montaggio",
-    "Consegna tecnica per la post-produzione",
-    "Cue list e versioning",
-  ],
-  en: [
-    "Scoring for film and documentaries",
-    "Theatre scoring",
-    "Music production and sound design",
-    "Edit-based revisions",
-    "Technical delivery for post-production",
-    "Cue lists and versioning",
-  ],
-};
