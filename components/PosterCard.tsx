@@ -45,6 +45,7 @@ function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
               width={400}
               height={600}
               className="poster-img poster-img-coming-soon"
+              unoptimized
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               loading="lazy"
               decoding="async"
@@ -66,6 +67,7 @@ function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
             width={400}
             height={600}
             className="poster-img"
+            unoptimized
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             loading="lazy"
             decoding="async"
