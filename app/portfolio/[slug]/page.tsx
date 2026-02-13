@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { projects } from "../../../data/projects";
+import { isDraftProject, projects } from "../../../data/projects";
 import { getText } from "../../../lib/translations";
 import ProjectPageClient from "./ProjectPageClient";
 
 type Params = { params: { slug: string } | Promise<{ slug: string }> };
 
 export function generateStaticParams() {
-  return projects.filter((project) => !project.isDraft).map((project) => ({ slug: project.slug }));
+  return projects.filter((project) => !isDraftProject(project)).map((project) => ({ slug: project.slug }));
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const resolvedParams = await Promise.resolve(params);
-  const project = projects.find((p) => p.slug === resolvedParams.slug && !p.isDraft);
+  const project = projects.find((p) => p.slug === resolvedParams.slug && !isDraftProject(p));
   if (!project) return {};
 
   const title = `${project.title} — Pietro Montanti`;
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 export default async function ProjectPage({ params }: Params) {
   const resolvedParams = await Promise.resolve(params);
-  const project = projects.find((p) => p.slug === resolvedParams.slug && !p.isDraft);
+  const project = projects.find((p) => p.slug === resolvedParams.slug && !isDraftProject(p));
   if (!project) return notFound();
 
   return <ProjectPageClient project={project} />;

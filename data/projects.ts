@@ -325,5 +325,9 @@ export const projects = [
 
 export type Project = typeof projects[number];
 
+export function isDraftProject(project: Project): boolean {
+  return "isDraft" in project && project.isDraft === true;
+}
+
 // Derive featured projects from main array (avoids data duplication)
-export const featuredProjects = projects.filter((p) => p.featured && !p.isDraft);
+export const featuredProjects = projects.filter((p) => p.featured && !isDraftProject(p));

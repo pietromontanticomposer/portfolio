@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { projects } from "../data/projects";
+import { isDraftProject, projects } from "../data/projects";
 
 const resolvedSiteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
@@ -52,7 +52,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  const projectEntries = projects.filter((project) => !project.isDraft).map(
+  const projectEntries = projects.filter((project) => !isDraftProject(project)).map(
     (project): MetadataRoute.Sitemap[number] => ({
       url: `${siteUrl}/portfolio/${project.slug}`,
       lastModified: new Date(),

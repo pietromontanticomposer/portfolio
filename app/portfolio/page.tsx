@@ -5,10 +5,10 @@ import PosterCard from "../../components/PosterCard";
 import AutoScrollStrip from "../../components/AutoScrollStrip";
 import CollaborationsSection from "../../components/CollaborationsSection";
 import TrackPlayerSection from "../../components/TrackPlayerSection";
-import { projects } from "../../data/projects";
+import { isDraftProject, projects } from "../../data/projects";
 import { partners, selectedTracks } from "../../data/homeContent";
 import { useLanguage } from "../../lib/LanguageContext";
-const activeProjects = projects.filter((p) => !p.isDraft);
+const activeProjects = projects.filter((p) => !isDraftProject(p));
 const posters = activeProjects
   .map((p) => ({
     slug: p.slug,

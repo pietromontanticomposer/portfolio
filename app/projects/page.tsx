@@ -1,10 +1,10 @@
 "use client";
 
 import StripToggle from "../../components/StripToggle";
-import { projects } from "../../data/projects";
+import { isDraftProject, projects } from "../../data/projects";
 import { useLanguage } from "../../lib/LanguageContext";
 
-const activeProjects = projects.filter((p) => !p.isDraft);
+const activeProjects = projects.filter((p) => !isDraftProject(p));
 const posters = activeProjects
   .map((p) => ({
     slug: p.slug,
