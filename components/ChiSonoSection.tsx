@@ -38,6 +38,21 @@ export default function ChiSonoSection({
   const statsColumns =
     currentStats && currentStats.length <= 2 ? "grid-cols-2" : "grid-cols-3";
   const currentSkills = skills ? (language === "it" ? skills.it : skills.en) : undefined;
+  const renderParagraph = (paragraph: string) => {
+    const segments = paragraph.split(/(\*\*[^*]+\*\*)/g).filter(Boolean);
+
+    return segments.map((segment, index) => {
+      const isEmphasis = segment.startsWith("**") && segment.endsWith("**") && segment.length > 4;
+      if (!isEmphasis) {
+        return <span key={`text-${index}`}>{segment}</span>;
+      }
+      return (
+        <strong key={`strong-${index}`} className="font-semibold text-[color:var(--foreground)]">
+          {segment.slice(2, -2)}
+        </strong>
+      );
+    });
+  };
 
   return (
     <section id={id} className="w-full">
@@ -95,12 +110,12 @@ export default function ChiSonoSection({
                   key={`${paragraph.slice(0, 20)}-${index}`}
                   className="bio-text text-sm leading-relaxed text-[color:var(--muted-strong)]"
                 >
-                  {paragraph}
+                  {renderParagraph(paragraph)}
                 </p>
               ))
             ) : (
               <p className="bio-text text-sm leading-relaxed text-[color:var(--muted-strong)]">
-                {bioText}
+                {renderParagraph(bioText)}
               </p>
             )}
           </div>

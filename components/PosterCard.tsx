@@ -37,7 +37,7 @@ function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
 
     if (isComingSoon) {
       return (
-        <div className="poster-image mt-4 relative poster-placeholder" aria-hidden>
+        <div className="poster-image relative poster-placeholder" aria-hidden>
           {safeImage ? (
             <Image
               src={safeImage}
@@ -59,7 +59,7 @@ function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
 
     if (safeImage) {
       return (
-        <div className="poster-image mt-4 relative">
+        <div className="poster-image relative">
           <Image
             src={safeImage}
             alt={title}
@@ -75,7 +75,7 @@ function PosterCard({ title, year, tag, image, href, onClick }: PosterProps) {
     }
 
     return (
-      <div className="poster-image mt-4 poster-placeholder">
+      <div className="poster-image poster-placeholder">
         <div className="poster-placeholder-inner">
           <div className="poster-placeholder-title">{title}</div>
           <div className="poster-placeholder-tag">{displayTag ?? t("Prossimamente", "Coming Soon")}</div>

@@ -296,8 +296,8 @@ export const projects = [
     year: "2025",
     tag: "Short",
     featured: false,
-    image: "/optimized/posters/poster%20freefall.avif",
-    largeImage: "/optimized/posters/poster%20freefall.avif",
+    image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-freefall-clean.avif",
+    largeImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-freefall-clean.avif",
     description: {
       it: `Free / Fall è un cortometraggio diretto da Francesco La Barbera e Daniele Murgia, che esplora la dipendenza dal gioco d'azzardo attraverso il crollo soggettivo di un giovane intrappolato in un ciclo ripetitivo di compulsione ed evitamento.
   La colonna sonora è costruita su synth, pianoforte e archi, oscillando tra tonalità maggiori e minori per rispecchiare i picchi dopaminici e i crolli emotivi tipici della dipendenza. Nei momenti di maggiore conflitto interno, questi spostamenti armonici risultano volutamente dissonanti rispetto al materiale melodico circostante, generando attrito che riflette l'instabilità psicologica del personaggio.
