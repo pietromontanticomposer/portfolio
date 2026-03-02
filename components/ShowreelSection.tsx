@@ -34,6 +34,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
     typeof document === "undefined" ? null : document.body;
   const coverRef = useRef<HTMLDivElement>(null);
   const coverTimeoutRef = useRef<number | null>(null);
+  const prewarmedRef = useRef(false);
   const showreelLabel = t("Showreel", "Showreel");
   const { isHls, isMp4, src, mp4Fallback } = getMediaSources(embedUrl ?? undefined);
   const effectiveSrc = src;
@@ -62,7 +63,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
     coverTimeoutRef.current = window.setTimeout(() => {
       cover.classList.remove("is-active");
       coverTimeoutRef.current = null;
-    }, 1200);
+    }, 650);
   }, []);
 
   const armCover = useCallback(() => {
@@ -71,10 +72,52 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
     });
   }, [showCover]);
 
+  const prewarmShowreel = useCallback(() => {
+    if (prewarmedRef.current) return;
+    prewarmedRef.current = true;
+
+    if (!effectiveSrc) return;
+
+    if (effectiveIsHls) {
+      import("hls.js").catch(() => {});
+      fetch(effectiveSrc, { cache: "force-cache", mode: "cors" })
+        .then((response) => (response.ok ? response.text() : ""))
+        .then((playlistText) => {
+          const firstSegment = playlistText
+            .split(/\r?\n/)
+            .find((line) => line.length > 0 && !line.startsWith("#"));
+          if (!firstSegment) return;
+          const firstSegmentUrl = new URL(firstSegment, effectiveSrc).toString();
+          fetch(firstSegmentUrl, { cache: "force-cache", mode: "cors" }).catch(() => {});
+        })
+        .catch(() => {});
+      return;
+    }
+
+    if (effectiveIsMp4) {
+      fetch(effectiveSrc, { cache: "force-cache", mode: "cors" }).catch(() => {});
+    }
+  }, [effectiveIsHls, effectiveIsMp4, effectiveSrc]);
+
+  useEffect(() => {
+    prewarmedRef.current = false;
+  }, [effectiveSrc]);
+
+  useEffect(() => {
+    if (!effectiveIsHls) return;
+    const preloadId = window.setTimeout(() => {
+      import("hls.js").catch(() => {});
+    }, 150);
+    return () => {
+      window.clearTimeout(preloadId);
+    };
+  }, [effectiveIsHls]);
+
   const openModal = useCallback(() => {
+    prewarmShowreel();
     setIsOpen(true);
     armCover();
-  }, [armCover]);
+  }, [armCover, prewarmShowreel]);
 
   const closeModal = useCallback(() => {
     setIsOpen(false);
@@ -82,6 +125,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
 
   useEffect(() => {
     const handleOpen = () => {
+      prewarmShowreel();
       setIsOpen(true);
       armCover();
     };
@@ -89,7 +133,7 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
     return () => {
       window.removeEventListener("showreel:open", handleOpen);
     };
-  }, [armCover]);
+  }, [armCover, prewarmShowreel]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -215,6 +259,9 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
             <button
               type="button"
               onClick={openModal}
+              onPointerEnter={prewarmShowreel}
+              onTouchStart={prewarmShowreel}
+              onFocus={prewarmShowreel}
               className="group absolute inset-0 overflow-hidden rounded-xl border border-[color:var(--card-border)] bg-[color:var(--card-inset-bg)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--accent)]"
               aria-label={t("Apri showreel", "Open showreel")}
             >
