@@ -36,10 +36,9 @@ export default function ShowreelSection({ embedUrl }: ShowreelSectionProps) {
   const coverTimeoutRef = useRef<number | null>(null);
   const showreelLabel = t("Showreel", "Showreel");
   const { isHls, isMp4, src, mp4Fallback } = getMediaSources(embedUrl ?? undefined);
-  const preferMp4 = !!mp4Fallback && isHls;
-  const effectiveSrc = preferMp4 ? mp4Fallback : src;
-  const effectiveIsMp4 = preferMp4 || isMp4;
-  const effectiveIsHls = !preferMp4 && isHls;
+  const effectiveSrc = src;
+  const effectiveIsMp4 = isMp4;
+  const effectiveIsHls = isHls;
   const hasEmbed = !!effectiveSrc;
   const showreelPoster =
     "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/video/Showreel%20Sito.jpg";
