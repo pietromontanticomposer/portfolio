@@ -5,8 +5,8 @@ export const projects = [
     year: "2020",
     tag: "Short",
     featured: true,
-    image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20claudio%20re.avif",
-    largeImage: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20claudio%20re.avif",
+    image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-claudio-re.avif",
+    largeImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-claudio-re.avif",
     description: {
       it: `Claudio Re è un cortometraggio diretto da Marco Martini, ispirato ad Amleto e incentrato sul crollo psicologico di Re Claudio dopo aver commesso un omicidio per assicurarsi il trono.
   La colonna sonora usa un linguaggio orchestrale ibrido e scuro, fondendo orchestrazione tradizionale e strumenti antichi per creare un'atmosfera tesa e senza tempo.
@@ -48,8 +48,8 @@ export const projects = [
     year: "2021",
     tag: "Short",
     featured: true,
-    image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20soggetto%20obsoleto.webp",
-    largeImage: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20soggetto%20obsoleto.webp",
+    image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-soggetto-obsoleto.avif",
+    largeImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-soggetto-obsoleto.avif",
     description: {
       it: `Soggetto Obsoleto è un cortometraggio diretto da Nicola Pegg, ambientato in una società distopica in cui gli individui vengono valutati periodicamente in base alla loro utilità sociale e rischiano di essere dichiarati \"obsoleti\".
   La musica è volutamente assente per gran parte del film e entra solo nella sezione finale, durante il dialogo conclusivo tra padre e figlio.
@@ -80,8 +80,8 @@ export const projects = [
     year: "2024",
     tag: "Documentary",
     featured: true,
-    image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20i%20veneti%20antichi.avif",
-    largeImage: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20i%20veneti%20antichi.avif",
+    image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-i-veneti-antichi.avif",
+    largeImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-i-veneti-antichi.avif",
     description: {
       it: `I Veneti Antichi – Riding the Myth è un docu-film storico diretto da Tommaso Giusto e prodotto da Akeron Film, dedicato alla civiltà dei Veneti antichi e al loro immaginario mitico e culturale.
   Ho composto la musica per le sequenze di battaglia e per le scene del banchetto rituale, lavorando su due registri distinti: da un lato una scrittura più serrata e ritmica a supporto del conflitto, dall'altro un impianto più cerimoniale ed evocativo per i momenti collettivi.
@@ -114,8 +114,8 @@ export const projects = [
     year: "2020",
     tag: "Short",
     featured: true,
-    image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20i%20found%20you.webp",
-    largeImage: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20i%20found%20you.webp",
+    image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-i-found-you.avif",
+    largeImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-i-found-you.avif",
     description: {
       it: `I Found You è un film horror indipendente diretto da Diego Carli, ambientato in una villa abbandonata dove due ragazze iniziano un gioco apparentemente innocente che rivela gradualmente la propria natura pericolosa.
   La colonna sonora segue un approccio classico di underscore horror, pensato per sostenere il lento passaggio dall'innocenza all'inquietudine, puntando sulla tensione sotterranea più che sugli shock espliciti.
@@ -132,8 +132,8 @@ export const projects = [
     year: "2022",
     tag: "Feature",
     featured: true,
-    image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20l%27appartamento.webp",
-    largeImage: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20l%27appartamento.webp",
+    image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-l%27appartamento.avif",
+    largeImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-l%27appartamento.avif",
     description: {
       it: `L'Appartamento è un docu-film sociale diretto da Federico Scienza e Manuela Boezio, che racconta l'esperienza del progetto Io Abito e i percorsi verso l'autonomia di persone in situazione di fragilità nella vita quotidiana in appartamento.
   La colonna sonora è concepita come un supporto discreto e non invasivo, pensato per accompagnare momenti reali senza guidare o amplificare l'emozione. La musica lavora per sottrazione, rispettando il ritmo del racconto e lasciando spazio a voci, silenzi e dimensione comunitaria del film.`,
@@ -177,8 +177,8 @@ export const projects = [
     year: "2023",
     tag: "Documentary",
     featured: true,
-    image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20la%20sonata%20del%20caos.avif",
-    largeImage: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20la%20sonata%20del%20caos.avif",
+    image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-la-sonata-del-caos.avif",
+    largeImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-la-sonata-del-caos.avif",
     description: {
       it: `La Sonata del Caos è un cortometraggio fantasy diretto da Eleonora Valentino, ambientato in uno spazio sospeso tra realtà e folklore, dove la presenza della Banshee incarna il tema della morte e dell'inevitabile.
   La colonna sonora è costruita attorno a un leitmotiv principale associato alla Banshee, che ritorna nel film in forme e orchestrazioni diverse, adattandosi ai cambi narrativi e psicologici della protagonista.
@@ -231,8 +231,8 @@ export const projects = [
     year: "2021",
     tag: "Short",
     featured: false,
-    image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20meridiana.avif",
-    largeImage: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20meridiana.avif",
+    image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-meridiana.avif",
+    largeImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-meridiana.avif",
     description: {
       it: "Cortometraggio poetico con suoni acustici e ambient. Musica concepita per ampie aperture visive.",
       en: "Poetic short film with acoustic and ambient sounds. Music conceived for wide visual openings.",
@@ -245,8 +245,8 @@ export const projects = [
     year: "2019",
     tag: "Theatre",
     featured: false,
-    image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20freak%20shakespeare.avif",
-    largeImage: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20freak%20shakespeare.avif",
+    image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-freak-shakespeare.avif",
+    largeImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-freak-shakespeare.avif",
     description: {
       it: "Produzione teatrale con musiche originali. Stile ibrido tra strumenti elettronici e classici.",
       en: "Theatre production with original music. Hybrid style between electronic and classical instruments.",
@@ -259,8 +259,8 @@ export const projects = [
     year: "2022",
     tag: "Feature",
     featured: false,
-    image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20%20una%20piccola%2C%20stupida%2C%20inutile%20storia%20d%27amore.webp",
-    largeImage: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20%20una%20piccola%2C%20stupida%2C%20inutile%20storia%20d%27amore.webp",
+    image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster--una-piccola%2C-stupida%2C-inutile-storia-d%27amore.avif",
+    largeImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster--una-piccola%2C-stupida%2C-inutile-storia-d%27amore.avif",
     description: {
       it: "Lungometraggio con arrangiamenti intimi e ritmi leggeri. Focus sulle relazioni tra i personaggi.",
       en: "Feature film with intimate arrangements and light rhythms. Focus on the relationships between characters.",
@@ -282,8 +282,8 @@ export const projects = [
     year: "2025",
     tag: "Music",
     featured: false,
-    image: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20samba%20e%20bossa%20nova.png",
-    largeImage: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/optimized/posters/poster%20samba%20e%20bossa%20nova.png",
+    image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-samba-e-bossa-nova.avif",
+    largeImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-samba-e-bossa-nova.avif",
     description: {
       it: "Poster per progetti in stile samba e bossa nova. Aggiungere tracce o dettagli se necessario.",
       en: "Poster for Samba and Bossa Nova style projects. Add tracks or details if needed.",
@@ -296,8 +296,8 @@ export const projects = [
     year: "2025",
     tag: "Short",
     featured: false,
-    image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-freefall-clean.avif",
-    largeImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-freefall-clean.avif",
+    image: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-freefall.avif",
+    largeImage: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/optimized/posters/poster-freefall.avif",
     description: {
       it: `Free / Fall è un cortometraggio diretto da Francesco La Barbera e Daniele Murgia, che esplora la dipendenza dal gioco d'azzardo attraverso il crollo soggettivo di un giovane intrappolato in un ciclo ripetitivo di compulsione ed evitamento.
   La colonna sonora è costruita su synth, pianoforte e archi, oscillando tra tonalità maggiori e minori per rispecchiare i picchi dopaminici e i crolli emotivi tipici della dipendenza. Nei momenti di maggiore conflitto interno, questi spostamenti armonici risultano volutamente dissonanti rispetto al materiale melodico circostante, generando attrito che riflette l'instabilità psicologica del personaggio.
@@ -310,14 +310,17 @@ export const projects = [
       {
         file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-freefall/Ludopathy.mp3",
         context: "Ludopathy",
+        cover: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/copertina-album/copertina-freefall.webp",
       },
       {
         file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-freefall/Restarting-The-Loop.mp3",
         context: "Restarting The Loop",
+        cover: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/copertina-album/copertina-freefall.webp",
       },
       {
         file: "https://4glkq64bdlmmple5.public.blob.vercel-storage.com/tracks/musiche-freefall/The-Responsibilities-We-All-Have.mp3",
         context: "The Responsibilities We All Have",
+        cover: "https://ui0he7mtsmc0vwcb.public.blob.vercel-storage.com/uploads/copertina-album/copertina-freefall.webp",
       },
     ],
   },

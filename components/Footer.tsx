@@ -39,7 +39,7 @@ export default function Footer() {
           </div>
 
           <div className="col-span-1 text-right">
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-end gap-4">
               <a
                 href="https://www.instagram.com/pietro_montanti_composer"
                 aria-label="Instagram"
@@ -52,6 +52,19 @@ export default function Footer() {
                   <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" strokeWidth="1.2"/>
                   <circle cx="12" cy="12" r="3.2" stroke="currentColor" strokeWidth="1.2"/>
                   <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/>
+                </svg>
+              </a>
+              <a
+                href="https://www.imdb.com/it/name/nm14528995/?ref_=fn_t_1"
+                aria-label="IMDb"
+                className="text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <svg width="28" height="22" viewBox="0 0 64 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="imdb-title">
+                  <title id="imdb-title">IMDb</title>
+                  <rect x="0" y="0" width="64" height="32" rx="4" fill="currentColor"/>
+                  <text x="32" y="23" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="18" fontWeight="bold" fill="var(--background, #fff)">IMDb</text>
                 </svg>
               </a>
             </div>
@@ -78,7 +91,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center gap-4">
             <a
               href="https://www.instagram.com/pietro_montanti_composer"
               aria-label="Instagram"
@@ -91,6 +104,19 @@ export default function Footer() {
                 <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" strokeWidth="1.2"/>
                 <circle cx="12" cy="12" r="3.2" stroke="currentColor" strokeWidth="1.2"/>
                 <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/>
+              </svg>
+            </a>
+            <a
+              href="https://www.imdb.com/it/name/nm14528995/?ref_=fn_t_1"
+              aria-label="IMDb"
+              className="text-[color:var(--muted)] hover:text-[color:var(--foreground)]"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <svg width="28" height="22" viewBox="0 0 64 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="imdb-title-mobile">
+                <title id="imdb-title-mobile">IMDb</title>
+                <rect x="0" y="0" width="64" height="32" rx="4" fill="currentColor"/>
+                <text x="32" y="23" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="18" fontWeight="bold" fill="var(--background, #fff)">IMDb</text>
               </svg>
             </a>
           </div>

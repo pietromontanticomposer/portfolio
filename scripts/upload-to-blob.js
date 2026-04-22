@@ -61,6 +61,13 @@ const MEDIA_FILES = [
   { local: "public/uploads/tracks/musiche soggetto obsoleto/Sitting On The Seashore.mp3", blob: "tracks/musiche-soggetto-obsoleto/Sitting-On-The-Seashore.mp3" },
   { local: "public/uploads/tracks/musiche soggetto obsoleto/Ending Titles.mp3", blob: "tracks/musiche-soggetto-obsoleto/Ending-Titles.mp3" },
 
+  // Poster - Freefall (re-upload to main blob)
+  { local: "public/optimized/posters/poster freefall.avif", blob: "optimized/posters/poster-freefall.avif" },
+  { local: "public/optimized/posters/poster freefall.webp", blob: "optimized/posters/poster-freefall.webp" },
+
+  // Copertina Album - Freefall
+  { local: "public/uploads/copertina album/copertina freefall.webp", blob: "uploads/copertina-album/copertina-freefall.webp" },
+
   // Tracks - Selected
   { local: "public/uploads/tracks/selected tracks/The Battle.mp3", blob: "tracks/selected-tracks/The-Battle.mp3" },
   { local: "public/uploads/tracks/selected tracks/Obsolete Subject And Past Times.mp3", blob: "tracks/selected-tracks/Obsolete-Subject-And-Past-Times.mp3" },
