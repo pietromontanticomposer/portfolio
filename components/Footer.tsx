@@ -47,7 +47,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="insta-title">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="insta-title">
                   <title id="insta-title">Instagram</title>
                   <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" strokeWidth="1.2"/>
                   <circle cx="12" cy="12" r="3.2" stroke="currentColor" strokeWidth="1.2"/>
@@ -61,10 +61,10 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <svg width="28" height="22" viewBox="0 0 64 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="imdb-title">
+                <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="imdb-title">
                   <title id="imdb-title">IMDb</title>
-                  <rect x="0" y="0" width="64" height="32" rx="4" fill="currentColor"/>
-                  <text x="32" y="23" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="18" fontWeight="bold" fill="var(--background, #fff)">IMDb</text>
+                  <rect width="32" height="32" rx="4" fill="currentColor"/>
+                  <path d="M5 8h2.4v16H5V8zm4.8 0l1.9 8.9.8-4.5.8-4.4h3.6v16h-2.4v-10.2l-1.7 7.2H11l-1.6-7.2v10.2H7V8h2.8zm9.2 0h3.6c1.2 0 2.1.4 2.7 1.1.5.6.8 1.7.9 3.2v9.4c-.1 1.5-.4 2.6-.9 3.2-.6.7-1.5 1.1-2.7 1.1H19V8zm2.4 2.2v11.6c.8.1 1.3-.1 1.5-.7.1-.3.2-1.1.2-2.3V13c0-1.4-.1-2.3-.2-2.7-.2-.5-.7-.8-1.5-.7v.6zm5.2-2.2h3.2c1 0 1.8.3 2.3.8.4.4.6 1.1.6 2.2v2.6c0 1-.3 1.7-.9 2.1.8.5 1.2 1.4 1.2 2.7v3.2c0 1.1-.2 1.9-.7 2.4-.5.5-1.3.8-2.4.8h-3.3V8zm2.4 2v4.6c.7 0 1.1-.4 1.1-1.2V11c0-.7-.4-1-1.1-1zm0 6.4v5.4c.8.1 1.2-.3 1.2-1.2v-2.8c0-1-.4-1.4-1.2-1.4z" fill="var(--background)"/>
                 </svg>
               </a>
             </div>
@@ -99,7 +99,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               target="_blank"
             >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="insta-title-mobile">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="insta-title-mobile">
                 <title id="insta-title-mobile">Instagram</title>
                 <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" strokeWidth="1.2"/>
                 <circle cx="12" cy="12" r="3.2" stroke="currentColor" strokeWidth="1.2"/>
@@ -113,10 +113,10 @@ export default function Footer() {
               rel="noopener noreferrer"
               target="_blank"
             >
-              <svg width="28" height="22" viewBox="0 0 64 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="imdb-title-mobile">
+              <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="imdb-title-mobile">
                 <title id="imdb-title-mobile">IMDb</title>
-                <rect x="0" y="0" width="64" height="32" rx="4" fill="currentColor"/>
-                <text x="32" y="23" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="18" fontWeight="bold" fill="var(--background, #fff)">IMDb</text>
+                <rect width="32" height="32" rx="4" fill="currentColor"/>
+                <path d="M5 8h2.4v16H5V8zm4.8 0l1.9 8.9.8-4.5.8-4.4h3.6v16h-2.4v-10.2l-1.7 7.2H11l-1.6-7.2v10.2H7V8h2.8zm9.2 0h3.6c1.2 0 2.1.4 2.7 1.1.5.6.8 1.7.9 3.2v9.4c-.1 1.5-.4 2.6-.9 3.2-.6.7-1.5 1.1-2.7 1.1H19V8zm2.4 2.2v11.6c.8.1 1.3-.1 1.5-.7.1-.3.2-1.1.2-2.3V13c0-1.4-.1-2.3-.2-2.7-.2-.5-.7-.8-1.5-.7v.6zm5.2-2.2h3.2c1 0 1.8.3 2.3.8.4.4.6 1.1.6 2.2v2.6c0 1-.3 1.7-.9 2.1.8.5 1.2 1.4 1.2 2.7v3.2c0 1.1-.2 1.9-.7 2.4-.5.5-1.3.8-2.4.8h-3.3V8zm2.4 2v4.6c.7 0 1.1-.4 1.1-1.2V11c0-.7-.4-1-1.1-1zm0 6.4v5.4c.8.1 1.2-.3 1.2-1.2v-2.8c0-1-.4-1.4-1.2-1.4z" fill="var(--background)"/>
               </svg>
             </a>
           </div>
