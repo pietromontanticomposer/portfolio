@@ -3,6 +3,7 @@ import path from 'path';
 import { spawnSync } from 'child_process';
 import dotenv from 'dotenv';
 import { safeRoots } from './ship-roots.mjs';
+import { archiveDoneDir } from './media-archive-paths.mjs';
 
 const DEFAULT_REMOTE = 'https://github.com/pietromontanticomposer/portfolio.git';
 
@@ -48,7 +49,7 @@ function hasInboxFiles(dir) {
   return false;
 }
 
-const doneDir = path.join(root, '_blob_done');
+const doneDir = archiveDoneDir;
 const hasInbox = hasInboxFiles(inbox);
 
 if (hasInbox) {

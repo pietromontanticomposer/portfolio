@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { spawnSync } from 'child_process';
 import { head, put, BlobNotFoundError } from '@vercel/blob';
+import { doneDirs } from './media-archive-paths.mjs';
 
 const root = process.cwd();
 
@@ -80,13 +81,14 @@ async function getRemote(pathname) {
 let sourceDir = INBOX;
 let files = fs.existsSync(INBOX) ? walk(INBOX) : [];
 if (!files.length) {
-  const fallback = path.join(root, '_blob_done');
-  if (fs.existsSync(fallback)) {
+  for (const fallback of doneDirs()) {
+    if (!fs.existsSync(fallback)) continue;
     const fallbackFiles = walk(fallback);
     if (fallbackFiles.length) {
       sourceDir = fallback;
       files = fallbackFiles;
-      console.log('asset_inbox vuota: ricostruisco manifest da _blob_done.');
+      console.log(`asset_inbox vuota: ricostruisco manifest da ${fallback}.`);
+      break;
     }
   }
 }

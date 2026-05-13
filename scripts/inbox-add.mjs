@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import { doneDirs } from './media-archive-paths.mjs';
 
 const ROOT = process.cwd();
 const INBOX = path.join(ROOT, 'asset_inbox');
-const DONE = path.join(ROOT, '_blob_done');
 
 const EXTENSIONS = new Set([
   '.mp3', '.wav', '.aiff', '.flac',
@@ -94,7 +94,9 @@ fs.mkdirSync(INBOX, { recursive: true });
 
 const existingHashes = new Map();
 collectHashes(INBOX, existingHashes);
-collectHashes(DONE, existingHashes);
+for (const doneDir of doneDirs()) {
+  collectHashes(doneDir, existingHashes);
+}
 
 let copied = 0;
 let skipped = 0;
